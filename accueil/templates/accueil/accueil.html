@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block head %}{{ block.super }}
+
+<title>EDEM - Accueil</title>
+
+{% endblock head %}
+
+
+
+{% block header %}{{ block.super }}
+
+<div class="jumbotron">
+    <div class="container">
+        <h1>Élan Démocrate</h1>
+        <p>Ce site rassemble des outils à destination des militants et des administrateurs de notre mouvement.</p>
+    </div>
+</div>
+
+{% endblock header %}
+
+{% block content %}
+
+
+
+{{ block.super }}
+
+<div class="col-md-3">
+
+    <h3>Téléverser un nouveau fichier adhérents</h1>
+    <p>Mettre à jour la base de donnée à partir d'un fichier CSV.</p>
+    <a href="{% url 'televersement_du_fichier_adhérent' %}"class="btn btn-default">Téléverser</a>
+    <div class="container"></div>
+
+</div>
+
+{% endblock content %}

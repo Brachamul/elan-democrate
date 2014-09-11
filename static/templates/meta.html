@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    {% block head %}{% endblock head %}
+</head>
+
+<body style="padding-top: 50px">
+
+<header>
+    {% block header %}{% endblock header %}
+</header>
+
+<div class="container">
+    {% block content %}{% endblock content %}
+</div>
+
+<footer>
+    {% block footer %}{% endblock footer %}
+</footer>
+
+</body>
+
+</html>
