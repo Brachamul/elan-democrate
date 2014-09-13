@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+
+{% block head %}{{ block.super }}
+
+<title>Log in</title>
+
+{% endblock head %}
+
+
+
+{% block content %}
+
+		<form id="login_form"  class="classic" method="POST" action="/u/login/">
+			{% csrf_token %}
+			<p><label>username:</label><input type="text" name="username" value="" size="50" /></p>
+			<p><label>password:</label><input type="password" name="password" value="" size="50" /></p>
+			<input type="submit" value="Log in !" />
+			<br><br>
+		</form>
+
+{% endblock content %}

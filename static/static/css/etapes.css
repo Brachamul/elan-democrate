@@ -1,0 +1,32 @@
+[id*="etape-"] {
+    position: absolute;
+    top: 0;
+}
+
+[class*="etape-"]:not(.etape-1), /* Cache toutes les étapes, sauf la première */
+[id*="etape-"]:target ~ .etape-1 { /* Cache la première étape quand une autre est sélectionnée */
+    visibility: hidden;
+    opacity:0;
+    transition: visibility 0s linear 0.5s, opacity 0.5s linear;
+}
+
+[class*="etape-"]:not(.etape-1) div, /* Réduit le contenu */
+[id*="etape-"]:target ~ .etape-1 div {
+    display: none;
+}
+
+#etape-2:target ~ .etape-2,
+#etape-3:target ~ .etape-3,
+#etape-4:target ~ .etape-4,
+#etape-5:target ~ .etape-5 {
+    visibility: visible;
+    opacity:1;
+    transition-delay:0s;
+}
+
+#etape-2:target ~ .etape-2 div,
+#etape-3:target ~ .etape-3 div,
+#etape-4:target ~ .etape-4 div,
+#etape-5:target ~ .etape-5 div {
+    display: inherit;
+}

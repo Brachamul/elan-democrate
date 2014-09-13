@@ -36,7 +36,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'fichier-adhérent',
+    'fichiers_adhérents',
+    'profils_adhérents',
     'accueil',
 )
 

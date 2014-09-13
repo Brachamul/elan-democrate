@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+
+{% block head %}{{ block.super }}
+
+<title>Téléverser un fichier adhérents</title>
+
+{% endblock head %}
+
+
+
+{% block content %}{{ block.super }}
+
+<h1>Téléverser un fichier adhérents</h1>
+<br>
+<p>Attention, il est nécessaire que ce fichier soit au format <strong>CSV</strong>, délimité par des <strong>points-virgule</strong>.<p>
+<p>C'est indispensable, parce que de nombreux champs d'adresses contiennent des virgules : "25, rue des platanes"</p>
+<p>Vous pouvez enregistrer au format CSV depuis Excel.</p>
+<br>
+
+
+<form id="upload_form" method="post" action="" enctype="multipart/form-data">
+    <div class="panel panel-primary">
+        <div class="panel-body">
+            {% csrf_token %}
+            {{ upload_form.as_p }}
+            <p>Le fichier sera nommé <strong>{% now 'Y-m-d' %}_{% now 'H\hi' %}_{{ user.username }}</strong>.</p>
+        </div>
+        <div class="panel-footer">
+            <input type="hidden" class="small button" name="slug" value="{% now 'Y-m-d' %}_{% now 'H-i' %}_{{ user.username }}">
+            <input type="submit" name="submit" value="Téléverser" class="btn btn-primary">
+        </div>
+    </div>
+
+</form>
+
+
+
+{% endblock content %}
+
+<input type="hidden" class="small button" name="town_to_join" value="{{ town.slug }}">
