@@ -22,19 +22,19 @@ def televersement_du_fichier_adherent(request):
 				nouveau_fichier = FichierAdhérents(importateur=importateur, fichier_csv=fichier, slug=slug) # rattache le fichier à la base des fichiers importés
 				nouveau_fichier.save()
 
-				traitement_du_fichier(nouveau_fichier) # Importe les données du fichier dans la base "AdhérentDuFichier"
+				contenu_du_fichier = traitement_du_fichier(nouveau_fichier)
 
-				adhérents_importés = AdhérentDuFichier.objects.filter(fichier=nouveau_fichier) # prend tous les adhérents présents dans le nouveau fichier
-				for adhérent in adhérents_importés:
-					try:
-						query = Adhérent.objects.get(num_adhérent=adhérent.num_adhérent) # regarde si le numéro d'adhérent existe déjà dans la base
-					except Adhérent.DoesNotExist:
-						creer_un_nouvel_adherent(adhérent) # sinon, ajoute le nouvel adhérent à la base
-					else:
-						# si oui, vérifier qu'il n'y a pas de mise à jour à faire ?
-						adhérent.adhérent = Adhérent.objects.get(num_adhérent=adhérent.num_adhérent) # rattacher l'instance AdhérentDuFichier à son instance Adhérent
+#				adhérents_importés = AdhérentDuFichier.objects.filter(fichier=nouveau_fichier) # prend tous les adhérents présents dans le nouveau fichier
+#				for adhérent in adhérents_importés:
+#					try:
+#						query = Adhérent.objects.get(num_adhérent=adhérent.num_adhérent) # regarde si le numéro d'adhérent existe déjà dans la base
+#					except Adhérent.DoesNotExist:
+#						creer_un_nouvel_adherent(adhérent) # sinon, ajoute le nouvel adhérent à la base
+#					else:
+#						# si oui, vérifier qu'il n'y a pas de mise à jour à faire ?
+#						adhérent.adhérent = Adhérent.objects.get(num_adhérent=adhérent.num_adhérent) # rattacher l'instance AdhérentDuFichier à son instance Adhérent
 
-				return render(request, 'fichiers_adhérents/traitement.html', {'fichier': nouveau_fichier})
+				return render(request, 'fichiers_adhérents/traitement.html', {'fichier': contenu_du_fichier})
 
 			else:
 				print (upload_form.errors)
@@ -54,32 +54,102 @@ def traitement_du_fichier(fichier):
 	import datetime
 	with open(settings.MEDIA_ROOT + '/' + fichier.fichier_csv.name) as fichier_ouvert:
 		lecteur = csv.DictReader(fichier_ouvert, delimiter=";", quotechar='|')
+		contenu_du_fichier = [{} for row in range(len(list(lecteur)))] # établit une liste de dictionnaires, chaque dictionnaire correspondant à un adhérent
+		count = 0
 		for row in lecteur:
-			nouvel_adhérent = AdhérentDuFichier(fichier=fichier)
-			nouvel_adhérent.fédération = row['Fédération']
-			nouvel_adhérent.date_première_adhésion = datetime.datetime.strptime(row['Date première adhésion'], '%m/%d/%Y').date()
-			nouvel_adhérent.date_dernière_cotisation = datetime.datetime.strptime(row['Date dernière cotisation'], '%m/%d/%Y').date()
-			nouvel_adhérent.num_adhérent = row['Num adhérent']
-			nouvel_adhérent.genre = row['Genre']
-			nouvel_adhérent.nom = row['Nom']
-			nouvel_adhérent.prénom = row['Prénom']
-			nouvel_adhérent.adresse_1 = row['Adresse 1']
-			nouvel_adhérent.adresse_2 = row['Adresse 2']
-			nouvel_adhérent.adresse_3 = row['Adresse 3']
-			nouvel_adhérent.adresse_4 = row['Adresse 4']
-			nouvel_adhérent.code_postal = row['Code postal']
-			nouvel_adhérent.ville = row['Ville']
-			nouvel_adhérent.pays = row['Pays']
-#			nouvel_adhérent.npai = row['NPAI'] # Ca sert à rien et le boolean marche pas, ça m'emmerde.
-			nouvel_adhérent.date_de_naissance = datetime.datetime.strptime(row['Date de naissance'], '%m/%d/%Y').date()
-			nouvel_adhérent.profession = row['Profession']
-			nouvel_adhérent.tel_portable = row['Tel portable']
-			nouvel_adhérent.tel_bureau = row['Tel bureau']
-			nouvel_adhérent.tel_domicile = row['Tel domicile']
-			nouvel_adhérent.email = row['Email']
-			nouvel_adhérent.mandats = row['Mandats']
-			nouvel_adhérent.commune = row['Commune']
-			nouvel_adhérent.save()
+			contenu_du_fichier[count] = {
+			'fédération' : row['Fédération'],
+			'date_première_adhésion' : datetime.datetime.strptime(row['Date première adhésion'], '%m/%d/%Y').date(),
+			'date_dernière_cotisation' : datetime.datetime.strptime(row['Date dernière cotisation'], '%m/%d/%Y').date(),
+			'num_adhérent' : row['Num adhérent'],
+			'genre' : row['Genre'],
+			'nom' : row['Nom'],
+			'prénom' : row['Prénom'],
+			'adresse_1' : row['Adresse 1'],
+			'adresse_2' : row['Adresse 2'],
+			'adresse_3' : row['Adresse 3'],
+			'adresse_4' : row['Adresse 4'],
+			'code_postal' : row['Code postal'],
+			'ville' : row['Ville'],
+			'pays' : row['Pays'],
+#			'npai' : row['NPAI'] # Ca sert à rien et le boolean marche pas, ça m'emmerde.,
+			'date_de_naissance' : datetime.datetime.strptime(row['Date de naissance'], '%m/%d/%Y').date(),
+			'profession' : row['Profession'],
+			'tel_portable' : row['Tel portable'],
+			'tel_bureau' : row['Tel bureau'],
+			'tel_domicile' : row['Tel domicile'],
+			'email' : row['Email'],
+			'mandats' : row['Mandats'],
+			'commune' : row['Commune']
+			}
+			count +=1
+			if count == len(list(lecteur)): # si on a passé autant de lignes qu'il y a dans le fichier, on s'arrête
+				break
+		return contenu_du_fichier
+
+
+#def televersement_du_fichier_adherent(request):
+#	if request.user.has_perm('fichiers_adhérents.peut_televerser'):
+#		if request.method == "POST":
+#			upload_form = TéléversementDuFichierAdhérentForm(request.POST, request.FILES)
+#			if upload_form.is_valid():
+#				fichier = request.FILES['fichier_csv'].read().decode('utf-8')
+#				contenu_du_fichier = extraction_des_adherents(fichier)
+#				return render(request, 'fichiers_adhérents/traitement.html', {'fichier': contenu_du_fichier})
+#
+#			else:
+#				print (upload_form.errors)
+#				print (request.FILES)
+#				return render(request, 'fichiers_adhérents/téléverser.html', {'upload_form': upload_form})
+#		else:
+#			upload_form = TéléversementDuFichierAdhérentForm()
+#			return render(request, 'fichiers_adhérents/téléverser.html', {'upload_form': upload_form})
+#	else:
+#		return HttpResponse("Vous n'avez pas les droits d'accès au téléversement du fichier adhérents.")
+#
+#
+#
+#def extraction_des_adherents(fichier):
+#	import csv
+#	import datetime
+#	lecteur = csv.DictReader(fichier, delimiter=";", quotechar='|')
+#	contenu_du_fichier = [{} for row in range(len(list(lecteur)))] # établit une liste de dictionnaires, chaque dictionnaire correspondant à un adhérent
+#	count = 0
+#	for row in lecteur:
+#		contenu_du_fichier[count] = {
+#		'fédération' : row['Fédération'],
+#		'date_première_adhésion' : datetime.datetime.strptime(row['Date première adhésion'], '%m/%d/%Y').date(),
+#		'date_dernière_cotisation' : datetime.datetime.strptime(row['Date dernière cotisation'], '%m/%d/%Y').date(),
+#		'num_adhérent' : row['Num adhérent'],
+#		'genre' : row['Genre'],
+#		'nom' : row['Nom'],
+#		'prénom' : row['Prénom'],
+#		'adresse_1' : row['Adresse 1'],
+#		'adresse_2' : row['Adresse 2'],
+#		'adresse_3' : row['Adresse 3'],
+#		'adresse_4' : row['Adresse 4'],
+#		'code_postal' : row['Code postal'],
+#		'ville' : row['Ville'],
+#		'pays' : row['Pays'],
+##		'npai' : row['NPAI'] # Ca sert à rien et le boolean marche pas, ça m'emmerde.,
+#		'date_de_naissance' : datetime.datetime.strptime(row['Date de naissance'], '%m/%d/%Y').date(),
+#		'profession' : row['Profession'],
+#		'tel_portable' : row['Tel portable'],
+#		'tel_bureau' : row['Tel bureau'],
+#		'tel_domicile' : row['Tel domicile'],
+#		'email' : row['Email'],
+#		'mandats' : row['Mandats'],
+#		'commune' : row['Commune']
+#		}
+#		count +=1
+#		if count == len(list(lecteur)): # si on a passé autant de lignes qu'il y a dans le fichier, on s'arrête
+#			break
+#	return contenu_du_fichier
+
+
+
+
+
 
 def creer_un_nouvel_adherent(adherent_du_fichier):
 	# Ajoute les nouveaux adhérents au fichier Adhérent
