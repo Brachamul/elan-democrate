@@ -27,11 +27,11 @@ def televersement_du_fichier_adherent(request):
 				adhérents_importés = AdhérentDuFichier.objects.filter(fichier=nouveau_fichier) # prend tous les adhérents présents dans le nouveau fichier
 				for adhérent in adhérents_importés:
 					try:
-						adhérent.num_adhérent in Adhérent # regarde si le numéro d'adhérent existe déjà dans la base
-					except:
+						query = Adhérent.objects.get(num_adhérent=adhérent.num_adhérent) # regarde si le numéro d'adhérent existe déjà dans la base
+					except Adhérent.DoesNotExist:
 						creer_un_nouvel_adherent(adhérent) # sinon, ajoute le nouvel adhérent à la base
 					else:
-						# si oui, vérifier qu'il n'y a pas de mise à jour à faire
+						# si oui, vérifier qu'il n'y a pas de mise à jour à faire ?
 						adhérent.adhérent = Adhérent.objects.get(num_adhérent=adhérent.num_adhérent) # rattacher l'instance AdhérentDuFichier à son instance Adhérent
 
 				return render(request, 'fichiers_adhérents/traitement.html', {'fichier': nouveau_fichier})

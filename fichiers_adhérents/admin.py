@@ -21,6 +21,6 @@ admin.site.register(AdhérentDuFichier, AdhérentDuFichierAdmin)
 
 class AdhérentAdmin(admin.ModelAdmin):
     model = Adhérent
-    list_display = ("num_adhérent", "nom", "prénom", "fédération")
+    list_display = ("num_adhérent", "nom", "prénom", "fédération", "importé_par_le_fichier")
 
 admin.site.register(Adhérent, AdhérentAdmin)
