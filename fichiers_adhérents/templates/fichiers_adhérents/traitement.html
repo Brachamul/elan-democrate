@@ -29,9 +29,9 @@
 
 <a style="float: right" class="btn btn-primary" href="#etape-2">Continuer</a>
 
-    <h2>Analyse du fichier : {{ fichier.slug }}</h2>
+    <h2>Analyse du fichier : </h2>
     
-    <p>Ce fichier contient les données de <strong>{{ fichier.adhérentdufichier_set.all.count }}</strong> adhérents :</p>
+    <p>Ce fichier contient les données de <strong>()</strong> adhérents :</p>
     
     <table class="table">
         <tr>
@@ -39,7 +39,7 @@
             <th>Nom</th>
             <th>Prénom</th>
         </tr>
-        {% for adhérent in fichier.adhérentdufichier_set.all %}
+        {% for adhérent in fichier %}
         <tr>
             <td>{{ adhérent.num_adhérent }}</td>
             <td>{{ adhérent.nom }}</td>
