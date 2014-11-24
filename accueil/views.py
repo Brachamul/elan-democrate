@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 
 def accueil(request):
-	return render_to_response('accueil/accueil.html')
+    return render(request, 'accueil/accueil.html')

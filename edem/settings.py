@@ -99,3 +99,12 @@ if DEBUG:
     STATICFILES_DIRS = (
         os.path.join((BASE_DIR), "static", "static"),
     )
+
+from django.contrib import messages
+from django.contrib.messages import constants as message_constants
+MESSAGE_LEVEL = messages.DEBUG
+
+MESSAGE_TAGS = { messages.ERROR: 'danger' }
+
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'

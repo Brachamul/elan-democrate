@@ -4,6 +4,7 @@
 {% block head %}
 
 <link rel="stylesheet" href="{% get_static_prefix %}bootstrap/css/bootstrap.min.css" >
+<link rel="stylesheet" href="{% get_static_prefix %}css/base.css" >
 
 {% endblock head %}
 
@@ -12,36 +13,45 @@
 {% block header %}
 
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="/">EDEM <sup>{ le réseau <strong>Élan Démocrate</strong> }</sup></a>
-    </div>
-    <div class="navbar-collapse collapse">
-      <form class="navbar-form navbar-right" role="form">
-        <div class="form-group">
-          <input type="text" placeholder="Email" class="form-control">
-        </div>
-        <div class="form-group">
-          <input type="password" placeholder="Mot de passe" class="form-control">
-        </div>
-        <a class="btn btn-success" href="/admin/">Connexion</a>
-      </form>
-    </div><!--/.navbar-collapse -->
-  </div>
+	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="/"><strong>EDEM</strong> <sup class="small">{ le réseau <strong>Élan Démocrate</strong> }</sup></a>
+		</div>
+		{% if not user.is_authenticated %}
+		<div class="navbar-collapse collapse">
+			<form class="navbar-form navbar-right" role="form">
+<!--				<div class="form-group">
+					<input type="text" placeholder="Email" class="form-control">
+				</div>
+				<div class="form-group">
+					<input type="password" placeholder="Mot de passe" class="form-control">
+				</div>-->
+		 <a class="btn btn-success" href="/admin/">Connexion</a>
+			</form>
+		</div><!--/.navbar-collapse -->
+		{% endif %}
+	</div>
 </div>
-
 
 {% endblock header %}
 
 
 
 {% block content %}
+
+{% if messages %}
+	<div class="messages">
+	{% for message in messages %}
+		<div{% if message.tags %} class="alert alert-{{message.tags}}"{% endif %}>{{ message }}</div>
+	{% endfor %}
+	</div>
+{% endif %}
 
 <!-- Main content displayed here -->
 

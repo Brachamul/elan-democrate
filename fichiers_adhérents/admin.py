@@ -4,8 +4,15 @@ from .models import *
 
 
 
+class AdherentDuFichierInline(admin.TabularInline):
+	# For each feature, display development projects that can improve it
+	model = AdhérentDuFichier
+	fk_name = 'fichier'
+	extra = 0
+
 class FichierAdhérentsAdmin(admin.ModelAdmin):
 	model = FichierAdhérents
+	inlines = [AdherentDuFichierInline, ]
 
 admin.site.register(FichierAdhérents, FichierAdhérentsAdmin)
 

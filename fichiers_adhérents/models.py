@@ -13,6 +13,9 @@ class FichierAdhérents(models.Model):
 	slug = models.SlugField(max_length=255)
 	fichier_csv = models.FileField(upload_to='fichiers_adherents/')
 
+	nombre_nouveaux_adherents = models.PositiveSmallIntegerField(null=True, blank=True, default=0)
+	nombre_réadhésions = models.PositiveSmallIntegerField(null=True, blank=True, default=0)
+
 	def __str__(self):
 		return self.slug
 
