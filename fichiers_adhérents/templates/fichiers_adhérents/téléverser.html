@@ -25,8 +25,7 @@
         <div class="panel-body">
             {% csrf_token %}
             {{ upload_form.as_p }}
-            <p>Le fichier sera nommé <strong>{% now 'Y-m-d' %}_{% now 'H\hi' %}_{{ user.username }}</strong>.</p>
-        </div>
+         </div>
         <div class="panel-footer">
             <input type="hidden" class="small button" name="slug" value="{% now 'Y-m-d' %}_{% now 'H-i' %}_{{ user.username }}">
             <input type="submit" name="submit" value="Téléverser" class="btn btn-primary">
