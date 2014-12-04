@@ -68,7 +68,7 @@ def traitement_du_fichier(fichier):
 	# Lis le fichier CSV importé et crée une instance AdhérentDuFichier pour chacun d'entre eux
 	import csv
 	import datetime
-	with open(settings.MEDIA_ROOT + '/' + fichier.fichier_csv.name) as fichier_ouvert:
+	with open(settings.MEDIA_ROOT + '/' + fichier.fichier_csv.name, encoding="cp1252") as fichier_ouvert:
 		lecteur = csv.DictReader(fichier_ouvert, delimiter=";", quotechar='|')
 		for row in lecteur:
 			nouvel_adhérent = AdhérentDuFichier(fichier=fichier)

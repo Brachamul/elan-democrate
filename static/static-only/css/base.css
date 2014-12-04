@@ -1,0 +1,8 @@
+.small { font-size: .6em; }
+
+footer { margin-top: 4em; }
+
+.navbar-inverse .navbar-brand:hover { color: #EC7C34; }
+
+.btn.orange { background-color: #222; border-color: #777; color: #777; }
+.btn.orange:hover { border-color: #EC7C34; color: #EC7C34; }
