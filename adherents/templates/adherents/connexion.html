@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block head %}{{ block.super }}
+
+<title>Connexion</title>
+
+{% endblock head %}
+
+
+
+{% block content %}{{ block.super }}
+
+{% if not user.is_authenticated %}
+
+<h2>Connexion</h2>
+<form class="form-vertical" method="POST" action="" role="form" enctype="multipart/form-data">
+	{% csrf_token %}
+	<div class="form-group">
+		<label class="control-label">Votre numéro adhérent :</label>
+		<input type="text" name="numero_adherent_ou_email" value="{{ username }}" placeholder="N° adhérent" class="form-control">
+	</div>
+	<div class="form-group">
+		<label class="control-label">Votre mot de passe :</label>
+		<input type="password" name="mot_de_passe" placeholder="Mot de passe" class="form-control">
+	</div>
+	<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span> Se connecter</button>
+</form>
+
+{% else %}
+
+<br><br>
+<p>Vous êtes déjà connecté !</p>
+<a class="btn btn-primary" href="/"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span> Retour à l'accueil</a>
+
+{% endif %}
+
+{% endblock content %}

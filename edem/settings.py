@@ -30,25 +30,25 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'fichiers_adhérents',
-    'profils_adhérents',
-    'accueil',
+	'django.contrib.admin',
+	'django.contrib.auth',
+	'django.contrib.contenttypes',
+	'django.contrib.sessions',
+	'django.contrib.messages',
+	'django.contrib.staticfiles',
+	'accueil',
+	'adherents',
+	'fichiers_adherents',
 )
 
 MIDDLEWARE_CLASSES = (
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+	'django.contrib.sessions.middleware.SessionMiddleware',
+	'django.middleware.common.CommonMiddleware',
+	'django.middleware.csrf.CsrfViewMiddleware',
+	'django.contrib.auth.middleware.AuthenticationMiddleware',
+	'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+	'django.contrib.messages.middleware.MessageMiddleware',
+	'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
 ROOT_URLCONF = 'edem.urls'
@@ -60,10 +60,10 @@ WSGI_APPLICATION = 'edem.wsgi.application'
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+	'default': {
+		'ENGINE': 'django.db.backends.sqlite3',
+		'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+	}
 }
 
 # Internationalization
@@ -89,16 +89,16 @@ MEDIA_URL = '/media/'
 # Template location
 
 TEMPLATE_DIRS = (
-    os.path.join((BASE_DIR), "static", "templates"),
+	os.path.join((BASE_DIR), "static", "templates"),
 )
 
 if DEBUG:
-    
-    STATIC_ROOT = os.path.join((BASE_DIR), "static", "static-only")
-    MEDIA_ROOT = os.path.join((BASE_DIR), "static", "media")
-    STATICFILES_DIRS = (
-        os.path.join((BASE_DIR), "static", "static"),
-    )
+	
+	STATIC_ROOT = os.path.join((BASE_DIR), "static", "static-only")
+	MEDIA_ROOT = os.path.join((BASE_DIR), "static", "media")
+	STATICFILES_DIRS = (
+		os.path.join((BASE_DIR), "static", "static"),
+	)
 
 from django.contrib import messages
 from django.contrib.messages import constants as message_constants
@@ -106,5 +106,5 @@ MESSAGE_LEVEL = messages.DEBUG
 
 MESSAGE_TAGS = { messages.ERROR: 'danger' }
 
-LOGIN_URL = 'login'
-LOGOUT_URL = 'logout'
+LOGIN_URL = 'connexion'
+LOGOUT_URL = 'deconnexion'

@@ -3,14 +3,15 @@ from django.contrib import admin
 from django.views.generic.base import RedirectView
 
 urlpatterns = patterns('',
-    url(r'^$', RedirectView.as_view(permanent=False, url='/accueil/')),
-    url(r'^accueil/', include('accueil.urls'), name='accueil'),
-    url(r'^fichiers-adherents/', include('fichiers_adhérents.urls'), name='fichiers_adhérents'),
-    url(r'^admin/', include(admin.site.urls)),
+	url(r'^$', RedirectView.as_view(permanent=False, url='/accueil/')),
+	url(r'^accueil/', include('accueil.urls'), name='accueil'),
+	url(r'^adherent/', include('adherents.urls'), name='mon_profil'),
+	url(r'^fichiers-adherents/', include('fichiers_adherents.urls'), name='fichiers_adherents'),
+	url(r'^admin/', include(admin.site.urls)),
 )
 
 from django.conf import settings
 if settings.DEBUG:
-    urlpatterns += patterns('',
-        (r'^media/(?P<path>.*)$', 'django.views.static.serve', {
-        'document_root': settings.MEDIA_ROOT}))
+	urlpatterns += patterns('',
+		(r'^media/(?P<path>.*)$', 'django.views.static.serve', {
+		'document_root': settings.MEDIA_ROOT}))
