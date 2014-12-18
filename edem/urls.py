@@ -2,9 +2,11 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.views.generic.base import RedirectView
 
+admin.site.site_header = 'Élan Démocrate - Administration'
+
 urlpatterns = patterns('',
 	url(r'^$', RedirectView.as_view(permanent=False, url='/accueil/')),
-	url(r'^accueil/', include('accueil.urls'), name='accueil'),
+	url(r'^accueil/', include('accueil.urls')),
 	url(r'^adherent/', include('adherents.urls'), name='mon_profil'),
 	url(r'^fichiers-adherents/', include('fichiers_adherents.urls'), name='fichiers_adherents'),
 	url(r'^admin/', include(admin.site.urls)),

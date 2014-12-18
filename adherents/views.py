@@ -71,46 +71,71 @@ def enregistrement(request):
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
 
+from auth_with_one_time_code import backend
+
 def connexion(request):
 	context = RequestContext(request)
 
-	# If the request is a HTTP POST, try to pull out the relevant information.
-	if request.method == 'POST':
-		# Gather the username and password provided by the user.
-		# This information is obtained from the login form.
-		numero_adherent_ou_email = request.POST['numero_adherent_ou_email']
-		adherent = numero_adherent_ou_email
-		mot_de_passe = request.POST['mot_de_passe']
+	if request.method == 'POST' :
 
-		# Use Django's machinery to attempt to see if the username/password combination is valid.
-		# - a User object is returned if it is.
-		user = authenticate(username=adherent, password=mot_de_passe)
+		username = None # default to no username
+		code_sent = False
+		numero_adherent_ou_email = request.POST.get('numero_adherent_ou_email')
+		# regardons si c'est un numéro adhérent (dong isdigit) ou une adresse mail (avec un @)
+		if numero_adherent_ou_email.isdigit() :
+			username = numero_adherent_ou_email
+		elif "@" in numero_adherent_ou_email :
+			email = numero_adherent_ou_email
+			try : user = User.objects.get(email=email)
+			except User.DoesNotExist :
+				messages.error(request, "Nous ne connaissons pas cette adresse email.")
+			else : username = user.username
+		elif numero_adherent_ou_email == "" : pass
+		# on ne met pas de message d'erreur si l'utilisateur a directement cliqué sur le bouton de connexion sans remplir le champs
+		else : messages.error(request, "Vous semblez avoir entré quelque chose qui n'est ni un numéro adhérent, ni une adresse mail...")
 
-		# If we have a User object, the details are correct.
-		# If None (Python's way of representing the absence of a value), no user
-		# with matching credentials was found.
-		if user:
-			# Is the account active? It could have been disabled.
-			if user.is_active:
-				# If the account is valid and active, we can log the user in.
-				# We'll send the user back to the homepage.
-				login(request, user)
-				messages.success(request, "Vous êtes maintenant connecté.")
-				return redirect('accueil')
-			else:
-				# An inactive account was used - no logging in!
-				messages.error(request, "Votre compte est désactivé !")
-		elif adherent == "" and mot_de_passe == "" :
-			# On ne met pas de message d'erreur si l'utilisateur a directement cliqué sur le bouton de connexion sans écrire dans les champs
-			pass
-		else :
-			# Bad login details were provided. So we can't log the user in.
-			messages.error(request, "Vérifiez vos données, elles ne correspondent pas à un compte existant.")
+		if request.POST.get('form_type') == "send_code" and username != None :
+			# l'utilisateur demande l'envoi d'un code d'authentification
+			try : user = User.objects.get(username=username)
+			except User.DoesNotExist : messages.error(request, "Nous avons essayé de vous envoyer un code d'accès par mail, mais cela semble n'avoir pas fonctionné.")
+			else : code_sent = backend.AskForAuthCode(request, user)
 
-		return render_to_response('adherents/connexion.html', {'username': numero_adherent_ou_email}, context)
+		elif request.POST.get('form_type') == "login" and username != None  :
+			# l'utilisateur demande à être authentifié
+			code = request.POST.get('code', False)
+			if code == False : messages.error(request, "Merci d'entrer un code, ou d'en demander un nouveau.")
+			else : custom_login(request, username, code)
+			if request.user.is_authenticated : return redirect('accueil')
+			else : messages.error(request, "Quelque chose n'a pas fonctionné.")
+		
+		return render_to_response('adherents/connexion.html', {'username': numero_adherent_ou_email, 'code_sent': code_sent}, context)
 
+	return render_to_response('adherents/connexion.html', {}, context) # if something fails, reload page with messages
+
+def custom_login (request, username, code) :
+	user = authenticate(username=username, code=code)
+	if user :
+		# Is the account active? It could have been disabled.
+		if user.is_active :
+			# If the account is valid and active, we can log the user in.
+			# We'll send the user back to the homepage.
+			login(request, user)
+			messages.success(request, "Vous êtes maintenant connecté.")
+			return redirect('accueil')
+		else:
+			# An inactive account was used - no logging in!
+			messages.error(request, "Votre compte est désactivé !")
 	else :
-		return render_to_response('adherents/connexion.html', {}, context)
+		# Bad login details were provided. So we can't log the user in.
+		messages.error(request, "L'authentification n'a pas fonctionné.")
+
+def url_connexion(request, username, code):
+	context = RequestContext(request)
+	custom_login(request, username, code)
+	# normalement, on est automatiquement redirigé vers l'accueil
+	# si la ligne suivante se déclenche, c'est qu'il y a eu un problème d'authentification
+	print("AFTER")
+	return render_to_response('adherents/connexion.html', {'username': username, 'code_sent': False}, context)
 
 
 
@@ -127,3 +152,5 @@ def deconnexion(request):
 
 	# Take the user back to the homepage.
 	return HttpResponseRedirect('/')
+
+

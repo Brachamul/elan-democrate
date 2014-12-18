@@ -3,6 +3,22 @@
 footer { margin-top: 4em; }
 
 .navbar-inverse .navbar-brand:hover { color: #EC7C34; }
+.navbar-inverse .navbar-brand:focus { color: #ccc; }
+.navbar-inverse .navbar-toggle .icon-bar { background-color: #777;}
+.navbar-inverse .navbar-toggle:hover { background-color: inherit; border-color: #EC7C34;}
+.navbar-inverse .navbar-toggle:hover .icon-bar { background-color: #EC7C34;}
 
-.btn.orange { background-color: #222; border-color: #777; color: #777; }
-.btn.orange:hover { border-color: #EC7C34; color: #EC7C34; }
+.navbar-inverse .form-control { background-color: #444; border-color: #444; color: #EC7C34; }
+
+.navbar-inverse .form-control:focus {
+		border-color: #ccc;
+        -moz-box-shadow:    none;
+        -webkit-box-shadow: none;
+        box-shadow:         none;
+}
+
+.navbar-inverse .btn.orange { background-color: #222; border-color: #777; color: #777; }
+.navbar-inverse .btn.orange:hover { border-color: #EC7C34; color: #EC7C34; }
+.navbar-inverse .btn.orange:focus { border-color: #ccc; color: #ccc; }
+
+input:invalid:not(:focus) { border-color: red; }

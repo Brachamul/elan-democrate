@@ -30,6 +30,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
+	'django_admin_bootstrapped', # bootstrap that admin !
 	'django.contrib.admin',
 	'django.contrib.auth',
 	'django.contrib.contenttypes',
@@ -39,6 +40,7 @@ INSTALLED_APPS = (
 	'accueil',
 	'adherents',
 	'fichiers_adherents',
+	'auth_with_one_time_code',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -108,3 +110,16 @@ MESSAGE_TAGS = { messages.ERROR: 'danger' }
 
 LOGIN_URL = 'connexion'
 LOGOUT_URL = 'deconnexion'
+LOGIN_REDIRECT_URL = 'accueil'
+
+AUTHENTICATION_BACKENDS = ('auth_with_one_time_code.backend.OneTimeCodeBackend',)
+
+EMAIL_SUBJECT_PREFIX = "[Élan Démocrate] "
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST_USER = "antonin.grele@gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_PASSWORD = '5Bluepotatoes'
+
+# https://github.com/django-admin-bootstrapped/django-admin-bootstrapped
+DAB_FIELD_RENDERER = 'django_admin_bootstrapped.renderers.BootstrapFieldRenderer'
