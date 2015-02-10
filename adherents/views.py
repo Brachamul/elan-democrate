@@ -68,9 +68,6 @@ def enregistrement(request):
 
 ### Connexion
 
-from django.contrib.auth import authenticate, login
-from django.http import HttpResponseRedirect, HttpResponse
-
 from auth_with_one_time_code import backend
 
 def connexion(request):
@@ -104,37 +101,19 @@ def connexion(request):
 			# l'utilisateur demande à être authentifié
 			code = request.POST.get('code', False)
 			if code == False : messages.error(request, "Merci d'entrer un code, ou d'en demander un nouveau.")
-			else : custom_login(request, username, code)
-			if request.user.is_authenticated : return redirect('accueil')
-			else : messages.error(request, "Quelque chose n'a pas fonctionné.")
+			else :
+				if backend.authenticate_and_login(request, username, code) == True :
+					return redirect('accueil')
 		
 		return render_to_response('adherents/connexion.html', {'username': numero_adherent_ou_email, 'code_sent': code_sent}, context)
 
 	return render_to_response('adherents/connexion.html', {}, context) # if something fails, reload page with messages
 
-def custom_login (request, username, code) :
-	user = authenticate(username=username, code=code)
-	if user :
-		# Is the account active? It could have been disabled.
-		if user.is_active :
-			# If the account is valid and active, we can log the user in.
-			# We'll send the user back to the homepage.
-			login(request, user)
-			messages.success(request, "Vous êtes maintenant connecté.")
-			return redirect('accueil')
-		else:
-			# An inactive account was used - no logging in!
-			messages.error(request, "Votre compte est désactivé !")
-	else :
-		# Bad login details were provided. So we can't log the user in.
-		messages.error(request, "L'authentification n'a pas fonctionné.")
-
 def url_connexion(request, username, code):
 	context = RequestContext(request)
-	custom_login(request, username, code)
+	backend.authenticate_and_login(request, username, code)
 	# normalement, on est automatiquement redirigé vers l'accueil
 	# si la ligne suivante se déclenche, c'est qu'il y a eu un problème d'authentification
-	print("AFTER")
 	return render_to_response('adherents/connexion.html', {'username': username, 'code_sent': False}, context)
 
 
