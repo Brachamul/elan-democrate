@@ -65,13 +65,15 @@ def authenticate_and_login(request, username, code) :
 			# We'll send the user back to the homepage.
 			login(request, user)
 			messages.success(request, "Vous êtes maintenant connecté.")
-			return True
+			return "connected"
 		else:
 			# An inactive account was used - no logging in!
 			messages.error(request, "Votre compte est désactivé !")
+			return "inactive"
 	else :
 		# Bad login details were provided. So we can't log the user in.
 		messages.error(request, "L'authentification n'a pas fonctionné.")
+		return "bad-details"
 
 
 

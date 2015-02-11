@@ -102,18 +102,28 @@ def connexion(request):
 			code = request.POST.get('code', False)
 			if code == False : messages.error(request, "Merci d'entrer un code, ou d'en demander un nouveau.")
 			else :
-				if backend.authenticate_and_login(request, username, code) == True :
-					return redirect('accueil')
-		
-		return render_to_response('adherents/connexion.html', {'username': numero_adherent_ou_email, 'code_sent': code_sent}, context)
+				auth_result = backend.authenticate_and_login(request, username, code)
+				print("Auth result is : ", auth_result)
+				if auth_result == "connected" :
+					print("going connected")
+					return HttpResponseRedirect('/')
+				elif auth_result == "bad-details" :
+					print("going bad-details")
+					return render_to_response('adherents/connexion.html', {'username': username, 'code_sent': True}, context)
+				else :
+					print("going to shit")
+					return render_to_response('adherents/connexion.html', {'username': username, 'code_sent': False}, context)
+
+		return render_to_response('adherents/connexion.html', {'username': username, 'code_sent': code_sent}, context)
 
 	return render_to_response('adherents/connexion.html', {}, context) # if something fails, reload page with messages
 
 def url_connexion(request, username, code):
 	context = RequestContext(request)
-	backend.authenticate_and_login(request, username, code)
-	# normalement, on est automatiquement redirigé vers l'accueil
-	# si la ligne suivante se déclenche, c'est qu'il y a eu un problème d'authentification
+	if auth_result == "connected" :
+		return HttpResponseRedirect('accueil')
+	if auth_result == "bad-details" :
+		return render_to_response('adherents/connexion.html', {'username': username, 'code_sent': True}, context)
 	return render_to_response('adherents/connexion.html', {'username': username, 'code_sent': False}, context)
 
 
