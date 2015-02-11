@@ -43,3 +43,4 @@ static/static-only/
 local_settings.py
 
 *.sqlite3
+*.pyc
