@@ -34,10 +34,10 @@ INSTALLED_APPS = (
 	'django.contrib.sessions',
 	'django.contrib.messages',
 	'django.contrib.staticfiles',
+	'auth_with_one_time_code',
 	'accueil',
 	'adherents',
 	'fichiers_adherents',
-	'auth_with_one_time_code',
 )
 
 MIDDLEWARE_CLASSES = (
