@@ -44,3 +44,4 @@ local_settings.py
 
 *.sqlite3
 *.pyc
+db.sqlite3
