@@ -1,23 +1,31 @@
 from django.db import models
 
 from django.contrib.auth.models import User
+from fichiers_adherents.models import Adhérent
 
 import string
 import random
-def randomly_generated_code():
-	return ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(6))
+def randomly_generated_code(i):
+	return ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(i))
 	# http://stackoverflow.com/questions/2257441/random-string-generation-with-upper-case-letters-and-digits-in-python
 
 class Credentials(models.Model):
 	user = models.ForeignKey(User) # credentials are linked to one specific user
 	email = models.EmailField() # we'll send them an email !
-	code = models.CharField(max_length=6, default=randomly_generated_code)
+	code = models.CharField(max_length=6, default=randomly_generated_code(6))
 	date = models.DateTimeField(auto_now=True)
 	attempts = models.PositiveSmallIntegerField(default=0)
 	# each time a user attempts to log in with a code, the "attempts" field is incremented
 
 	class Meta :
 		verbose_name_plural = "Credentials"
+
+class EmailConfirmationInstance(models.Model):
+	adherent = models.ForeignKey(Adhérent) # credentials are linked to one specific user
+	email = models.EmailField() # we'll send them an email !
+	code = models.CharField(max_length=64, default=randomly_generated_code(64))
+	date = models.DateTimeField(auto_now=True)
+
 
 ### maybe enable phone numbers at some point ?
 #   phone_regex = RegexValidator(

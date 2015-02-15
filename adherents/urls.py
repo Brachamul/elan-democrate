@@ -4,6 +4,7 @@ from . import views
 
 urlpatterns = patterns('',
 	url(r'^enregistrement/$', views.enregistrement, name='enregistrement'),
+	url(r'^enregistrement/(?P<email_confirmation_code>[A-Z0-9]+)$', views.enregistrement),
 	url(r'^connexion/$', views.connexion, name='connexion'),
 	url(r'^connexion/(?P<username>[\d]+)&(?P<code>[A-Z0-9]+)$', views.url_connexion, name='url_connexion'),
 	url(r'^deconnexion/$', views.deconnexion, name='deconnexion'),

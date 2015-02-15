@@ -38,6 +38,7 @@ INSTALLED_APPS = (
 	'accueil',
 	'adherents',
 	'fichiers_adherents',
+	'tableau_de_bord',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -117,6 +118,3 @@ EMAIL_HOST_USER = "antonin.grele@gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_PASSWORD = '5Bluepotatoes'
-
-# https://github.com/django-admin-bootstrapped/django-admin-bootstrapped
-DAB_FIELD_RENDERER = 'django_admin_bootstrapped.renderers.BootstrapFieldRenderer'

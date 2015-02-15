@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, render_to_response, redirect
 
-from .models import Credentials
+from .models import Credentials, EmailConfirmationInstance
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
 
@@ -112,4 +112,21 @@ def AskForAuthCode(request, user):
 	return True # confirm that there is now an active code
 
 
-
+def SendEmailConfirmationCode(request, adherent):
+	# used to confirm that a user owns the adress before creating registering them
+	new_email_confirmation_instance = EmailConfirmationInstance(adherent=adherent, email=adherent.email)
+	new_email_confirmation_instance.save()
+	code = new_email_confirmation_instance.code
+	lien = "http://elandemocrate.fr/adherent/enregistrement/" + code
+	send_mail(
+		"[Élan Démocrate] Création de votre compte",
+		"Bonjour,\n\n"
+		"Sur le site Élan Démocrate, quelqu'un a effectué une demande de création de compte basée sur votre numéro adhérent, ou sur votre adresse email.\n\n"
+		"Si vous êtes vous-même auteur de cette demande, cliquez sur le lien suivant pour finaliser la création de votre compte :\n\n{lien}\n\n"
+		"Attention : votre adresse email est la clé de votre compte sur Élan Démocrate. Il est de votre responsabilité de vous prémunir contre la prise de contrôle de votre adresse email, en changeant notamment votre mot de passe de manière fréquente.\n\n"
+		"À bientôt sur le réseau Élan Démocrate !\n\n".format(lien=lien),
+		'antonin.grele@gmail.com',
+		[new_email_confirmation_instance.email],
+		fail_silently=False
+		)
+	return True

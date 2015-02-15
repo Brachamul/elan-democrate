@@ -4,13 +4,13 @@
 body.authentification-body {
 	width: 100%;
 	background-color: #111;
-	color: #666;
+	color: gray;
 	font-family: "Open Sans", Arial, Helvetica, sans-serif;
 }
 
 body.authentification-body
 div.container {
-	width: 32rem;
+	width: 44rem;
 	max-width: 100%;
 	margin: 0 auto;
 	margin-top: 25%;
@@ -22,12 +22,12 @@ h1.elan-democrate {
 	color: #EC7C34;
 	font-size: 3rem;
 	text-align: center;
+	margin-bottom: 3rem;
 }
 
 body.authentification-body
 h2 {
 	font-size: 2rem;
-	text-align: center;
 	margin-bottom: 2rem;
 }
 
@@ -47,13 +47,18 @@ input.form-control:focus {
         box-shadow:         none;
 }
 
-body.authentification-body input.checkbox-hack { display: none; }
-body.authentification-body input.checkbox-hack + label { font-style: italic; font-weight: normal; margin-top: 2rem; }
-body.authentification-body input.checkbox-hack + label:hover { color: #EC7C34; cursor: pointer; }
-body.authentification-body input.checkbox-hack + label + p { display: none; }
-body.authentification-body input.checkbox-hack:checked + label + p { display: block; }
+body.authentification-body input.checkbox-hack							{ display: none; }
+body.authentification-body input.checkbox-hack 			+ label 		{ font-weight: normal; margin-top: 2rem; display: block; }
+body.authentification-body input.checkbox-hack 			+ label:before 	{ content: "+ ";}
+body.authentification-body input.checkbox-hack:checked 	+ label:before 	{ content: "- ";}
+body.authentification-body input.checkbox-hack 			+ label:hover 	{ color: #EC7C34; cursor: pointer; }
+body.authentification-body input.checkbox-hack 			+ label + p 	{ display: none; }
+body.authentification-body input.checkbox-hack:checked 	+ label + p 	{ display: block; font-size: .9em; border-left: .15em solid #333; padding-left: 1rem; }
 
+body.authentification-body a,
 body.authentification-body a:link { color: inherit; } /* override bootstrap blue links */
+body.authentification-body p a:link { font-weight: bold; } /* fat links when inside paragraphs */
+body.authentification-body a:hover { text-decoration: none; border-bottom: .1em solid #EC7C34; } /* override bootstrap blue links */
 
 body.authentification-body label { font-weight: normal; } /* override bootstrap bold labels */
 body.authentification-body p { margin-bottom: 15px;}
