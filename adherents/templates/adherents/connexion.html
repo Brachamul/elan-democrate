@@ -8,49 +8,10 @@
 
 {% endblock head %}
 
-
-
 {% block content %}{{ block.super }}
 
-{% if not user.is_authenticated %}
-
-<h2>Connexion</h2>
-<form class="form-vertical" method="POST" action="" role="form" enctype="multipart/form-data">{% csrf_token %}
-
-	<div class="form-group">
-		<label class="control-label">Votre adresse email ou numéro d'adhérent :</label>
-		<input type="text" name="numero_adherent_ou_email" value="{{ username }}" placeholder="Email ou n° adhérent" class="form-control">
-	</div>
-
-	{% if code_sent %}
-	<div class="form-group">
-		<label class="control-label">Votre code d'accès :</label>
-		<input type="text" name="code" placeholder="Code" class="form-control">
-	</div>
-	{% endif %}
-
-	{% if code_sent %}
-	<!-- informs Django that we're going to try and log someone in -->
-	<p><button type="submit" class="btn btn-primary" name="form_type" value="login">
-		<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
-		Connexion
-	</button><p>
-	{% endif %}
-
-	<!-- informs Django that we're going to send an auth code -->
-	<p><button type="submit" class="btn btn-primary" name="form_type" value="send_code">
-		<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
-		Recevoir un {% if code_sent %}nouveau{% endif %} code d'accès
-	</button><p>
-
-</form>
-
-{% else %}
-
-<br><br>
 <p>Vous êtes déjà connecté !</p>
 <a class="btn btn-primary" href="/"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span> Retour à l'accueil</a>
-
-{% endif %}
+</div>
 
 {% endblock content %}

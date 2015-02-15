@@ -1,0 +1,66 @@
+/* Styles de la page d'authentification
+***************************************/
+
+body.authentification-body {
+	width: 100%;
+	background-color: #111;
+	color: #666;
+	font-family: "Open Sans", Arial, Helvetica, sans-serif;
+}
+
+body.authentification-body
+div.container {
+	width: 32rem;
+	max-width: 100%;
+	margin: 0 auto;
+	margin-top: 25%;
+	margin-top: 15vh;
+}
+
+body.authentification-body
+h1.elan-democrate {
+	color: #EC7C34;
+	font-size: 3rem;
+	text-align: center;
+}
+
+body.authentification-body
+h2 {
+	font-size: 2rem;
+	text-align: center;
+	margin-bottom: 2rem;
+}
+
+body.authentification-body
+input#numero_adherent_ou_email {
+	margin: 2rem 0;
+}
+
+body.authentification-body
+input.form-control { background-color: #444; border-color: #444; color: #EC7C34; }
+
+body.authentification-body
+input.form-control:focus {
+		border-color: #ccc;
+        -moz-box-shadow:    none;
+        -webkit-box-shadow: none;
+        box-shadow:         none;
+}
+
+body.authentification-body input.checkbox-hack { display: none; }
+body.authentification-body input.checkbox-hack + label { font-style: italic; font-weight: normal; margin-top: 2rem; }
+body.authentification-body input.checkbox-hack + label:hover { color: #EC7C34; cursor: pointer; }
+body.authentification-body input.checkbox-hack + label + p { display: none; }
+body.authentification-body input.checkbox-hack:checked + label + p { display: block; }
+
+body.authentification-body a:link { color: inherit; } /* override bootstrap blue links */
+
+body.authentification-body label { font-weight: normal; } /* override bootstrap bold labels */
+body.authentification-body p { margin-bottom: 15px;}
+
+body.authentification-body .btn.orange { margin-top: 1rem; }
+
+
+body .btn.orange { background-color: #222; border-color: #777; color: #777; }
+body .btn.orange:hover { border-color: #EC7C34; color: #EC7C34; }
+body .btn.orange:focus { border-color: #ccc; color: #ccc; }

@@ -99,6 +99,7 @@ def SendAuthCode(user):
 
 def AskForAuthCode(request, user):
 	active_codes = count_active_codes(user)
+	print ("active codes : ", active_codes)
 	if 0 < active_codes < maximum_number_of_active_codes :
 		messages.warning(request, "Vous semblez avoir déjà reçu au moins un code, vérifiez votre boîte mail...")
 		if SendAuthCode(user) :

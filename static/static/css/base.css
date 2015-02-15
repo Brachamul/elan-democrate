@@ -22,3 +22,12 @@ footer { margin-top: 4em; }
 .navbar-inverse .btn.orange:focus { border-color: #ccc; color: #ccc; }
 
 input:invalid:not(:focus) { border-color: red; }
+
+
+/* Styles de la page d'authentification
+***************************************/
+
+body.authentification-body {
+    width: 32rem;
+    max-width: 100%;
+}

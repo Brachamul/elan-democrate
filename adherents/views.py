@@ -109,22 +109,22 @@ def connexion(request):
 					return HttpResponseRedirect('/')
 				elif auth_result == "bad-details" :
 					print("going bad-details")
-					return render_to_response('adherents/connexion.html', {'username': username, 'code_sent': True}, context)
+					return render_to_response('adherents/connexion.html', {'username': username, 'code_sent': True, 'logging_in': True}, context)
 				else :
 					print("going to shit")
-					return render_to_response('adherents/connexion.html', {'username': username, 'code_sent': False}, context)
+					return render_to_response('adherents/connexion.html', {'username': username, 'code_sent': False, 'logging_in': True}, context)
 
-		return render_to_response('adherents/connexion.html', {'username': username, 'code_sent': code_sent}, context)
+		return render_to_response('adherents/connexion.html', {'username': username, 'code_sent': code_sent, 'logging_in': True}, context)
 
-	return render_to_response('adherents/connexion.html', {}, context) # if something fails, reload page with messages
+	return render_to_response('adherents/connexion.html', {'logging_in': True}, context) # if something fails, reload page with messages
 
 def url_connexion(request, username, code):
 	context = RequestContext(request)
 	if auth_result == "connected" :
-		return HttpResponseRedirect('accueil')
+		return HttpResponseRedirect('/')
 	if auth_result == "bad-details" :
-		return render_to_response('adherents/connexion.html', {'username': username, 'code_sent': True}, context)
-	return render_to_response('adherents/connexion.html', {'username': username, 'code_sent': False}, context)
+		return render_to_response('adherents/connexion.html', {'username': username, 'code_sent': True, 'logging_in': True}, context)
+	return render_to_response('adherents/connexion.html', {'username': username, 'code_sent': False, 'logging_in': True}, context)
 
 
 
