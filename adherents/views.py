@@ -59,7 +59,7 @@ def enregistrement(request):
 						messages.error(request, "Notre fichier adhérent ne contient pas d'adresse email valide pour ce numéro adhérent. Nous ne pouvons donc pas vous authentifier.")
 			else : messages.info(request, "Cet adhérent est déjà enregistré sur Élan Démocrate.")
 
-#		elif "@" in numero_adherent_ou_email :
+# !		elif "@" in numero_adherent_ou_email :
 #			# Cela ressemble à une adresse mail
 #			email = numero_adherent_ou_email
 #			try : user = User.objects.get(email=email)
@@ -75,9 +75,46 @@ def enregistrement(request):
 
 	return render_to_response(
 			'adherents/enregistrement.html',
-			{'registering': True, 'registered': registered},
+			{'registering': True},
 			context)
 
+
+
+def url_enregistrement(request, num_adherent, email_confirmation_code):
+	# intervient lorsqu'un utilisateur clique sur le lien de validation de son adresse mail dans sa boîte de messagerie
+	context = RequestContext(request)
+	registered = False
+	try : adherent = Adhérent.objects.get(num_adhérent=num_adherent) # existe t-il bien un adhérent avec ce numéro ?
+	except Adhérent.DoesNotExist : print("[Log] Impossible d'identifier l'adhérent dont le numéro est %d." % (num_adherent))
+	else :
+		if backend.EmailConfirmationCheck(request, adherent=adherent, code=email_confirmation_code) :
+			backend.Register(request, adherent=adherent, email=adherent.email)
+			user = User.objects.get(username=adherent.num_adhérent)
+			registered = True
+	if registered :
+#		# let's do a quick and dirty authentication this first time
+#		from auth_with_one_time_code.models import Credentials
+#		new_credentials = Credentials(user=user, email=user.email)
+#		new_credentials.save()
+#		code = new_credentials.code
+#		potato = user
+#		user = False
+#		user = backend.authenticate(request=request, username=potato.username, code=code)
+#		if user :
+#			from django.contrib.auth import login
+#			login(request, user)
+#			print ("successful login !")
+#			messages.success(request, "Votre compte a été créé, et vous êtes désormais connecté.")
+#			messages.success(request, "Bienvenue sur votre profil adhérent !")
+		messages.success(request, "Votre compte a bien été créé, vous pouvez désormais vous connecter.")
+		return redirect(reverse('mon-profil'))
+#		else :
+#			print ("didn't find user credentials !")
+	else :
+		return render_to_response(
+			'adherents/enregistrement.html',
+			{'registering': True},
+			context)
 
 
 ### Connexion

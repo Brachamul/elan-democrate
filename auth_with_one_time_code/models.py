@@ -23,7 +23,7 @@ class Credentials(models.Model):
 class EmailConfirmationInstance(models.Model):
 	adherent = models.ForeignKey(Adhérent) # credentials are linked to one specific user
 	email = models.EmailField() # we'll send them an email !
-	code = models.CharField(max_length=64, default=randomly_generated_code(64))
+	code = models.CharField(max_length=32, default=randomly_generated_code(32))
 	date = models.DateTimeField(auto_now=True)
 
 

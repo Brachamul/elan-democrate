@@ -8,19 +8,27 @@ from .models import Credentials, EmailConfirmationInstance
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
 
 # Rules of the Auth :
-hours_valid = 1
-maximum_number_of_active_codes = 3
+hours_code_valid_for_authentication = 1
+maximum_number_of_active_authentication_codes = 3
 maximum_number_of_attempts = 3
+hours_code_valid_for_registration = 24
 
 # Processing the rules
 from datetime import timedelta
 from django.utils import timezone
 
-code_validity_threshold = timezone.now() - timedelta(hours=hours_valid)
+authentication_code_validity_threshold = timezone.now() - timedelta(hours=hours_code_valid_for_authentication)
+registration_code_validity_threshold = timezone.now() - timedelta(hours=hours_code_valid_for_registration)
 
-def count_active_codes(user):
-	return Credentials.objects.filter(user=user, date__gt=(code_validity_threshold)).count()
+def count_active_authentication_codes(user):
+	return Credentials.objects.filter(
+		user=user,
+		date__gt=(timezone.now() - timedelta(hours=hours_code_valid_for_authentication))).count()
 
+def count_active_registration_codes(adherent):
+	return EmailConfirmationInstance.objects.filter(
+		adherent=adherent,
+		date__gt=(timezone.now() - timedelta(hours=hours_code_valid_for_registration))).count()
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
 
@@ -37,9 +45,9 @@ class OneTimeCodeBackend :
 			i.attempts += 1
 			i.save()
 
-		if credentials.filter(date__gt=(code_validity_threshold)).count() > 0 :
+		if credentials.filter(date__gt=(authentication_code_validity_threshold)).count() > 0 :
 			# look for credentials fitting email and code, but not older than x number of hours ago
-			if credentials.filter(date__gt=(code_validity_threshold), attempts__lte=maximum_number_of_attempts).count() > 0 :
+			if credentials.filter(date__gt=(authentication_code_validity_threshold), attempts__lte=maximum_number_of_attempts).count() > 0 :
 				return user
 			else :
 				messages.error(request, "Trop de tentatives d'accès ont été réalisées dernièrement, merci d'attendre avant de renouveller l'opération.")
@@ -98,13 +106,13 @@ def SendAuthCode(user):
 
 
 def AskForAuthCode(request, user):
-	active_codes = count_active_codes(user)
+	active_codes = count_active_authentication_codes(user)
 	print ("active codes : ", active_codes)
-	if 0 < active_codes < maximum_number_of_active_codes :
+	if 0 < active_codes < maximum_number_of_active_authentication_codes :
 		messages.warning(request, "Vous semblez avoir déjà reçu au moins un code, vérifiez votre boîte mail...")
 		if SendAuthCode(user) :
 			messages.success(request, "Un nouveau code d'accès vous a été envoyé par mail.")
-	elif active_codes >= maximum_number_of_active_codes :
+	elif active_codes >= maximum_number_of_active_authentication_codes :
 		messages.error(request, "Vous avez déjà reçu {x} codes d'accès au cours de la dernière heure ! Vérifiez votre boîte mail...".format(x=active_codes))
 	else :
 		if SendAuthCode(user) :
@@ -114,10 +122,11 @@ def AskForAuthCode(request, user):
 
 def SendEmailConfirmationCode(request, adherent):
 	# used to confirm that a user owns the adress before creating registering them
+	# ! Check if there isn't already an active code for that person
 	new_email_confirmation_instance = EmailConfirmationInstance(adherent=adherent, email=adherent.email)
 	new_email_confirmation_instance.save()
 	code = new_email_confirmation_instance.code
-	lien = "http://elandemocrate.fr/adherent/enregistrement/" + code
+	lien = "http://elandemocrate.fr/adherent/enregistrement/" + str(adherent.num_adhérent) + "&" + code
 	send_mail(
 		"[Élan Démocrate] Création de votre compte",
 		"Bonjour,\n\n"
@@ -130,3 +139,18 @@ def SendEmailConfirmationCode(request, adherent):
 		fail_silently=False
 		)
 	return True
+
+def EmailConfirmationCheck(request, adherent, code):
+	# Vérifie que le code de confirmation d'une adresse mail est bon
+	try :
+		confirmation = EmailConfirmationInstance.objects.get(adherent=adherent, code=code)
+	except EmailConfirmationInstance.DoesNotExist :
+		# ! Check if code is still valid
+		print("[Log] Code de confirmation d'email incorrect pour l'ahérent n°%d." % (num_adherent))
+		messages.error(request, "Le code de confirmation est incorrect")
+	else :
+		return True
+
+def Register(request, adherent, email) :
+	new_user = User(username=adherent.num_adhérent, email=email)
+	new_user.save()
