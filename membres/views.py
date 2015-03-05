@@ -16,13 +16,12 @@ from auth_with_one_time_code import backend
 ### Card
 
 def carte_profil(request):
-	return {
-		'profil': Profil.objects.get(user=request.user),
-		'afficher': True,
-		'template': "membres/carte_profil.html",
-		}
-
-
+	if request.user.is_authenticated() :
+		try: profil = Profil.objects.get(user=request.user)
+		except Profil.DoesNotExist : return False
+		else : return { 'profil': profil, 'template': "membres/carte_profil.html", }
+	else :
+		return False
 
 ### Profile
 
