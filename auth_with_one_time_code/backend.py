@@ -72,7 +72,7 @@ def authenticate_and_login(request, username, code) :
 			# If the account is valid and active, we can log the user in.
 			# We'll send the user back to the homepage.
 			login(request, user)
-			messages.success(request, "Vous êtes maintenant connecté.")
+			messages.success(request, "Vous êtes maintenant connecté(e).")
 			return "connected"
 		else:
 			# An inactive account was used - no logging in!

@@ -8,29 +8,27 @@
 
 
 
-{% block header %}{{ block.super }}
-{% if not user.is_authenticated %}
-<div class="jumbotron">
-	<div class="container">
-		<h1 style="display: inline-block;">Bienvenue ici !</h1>
-		{# <p>Notes : {{ user.profil.notes }}</p> #}
-	</div>
-</div>
-{% endif %}
-{% endblock header %}
-
-
-
 {% block content %}
 
 {{ block.super }}
 
+
+{% if afficher_l_aggregateur %}{% include "aggregateur/carte_aggregateur.html" %}{% endif %}
+{% include "membres/carte_aggregateur.html" %}
+{% if carte_profil %}{% include carte_profil.template %}{% endif %}
+
+
 {% if perms.fichiers_adhérents.peut_televerser %}
-<div class="col-md-3">
-	<h3>Téléverser un nouveau fichier adhérents</h1>
-	<p>Mettre à jour la base de donnée à partir d'un fichier CSV.</p>
-	<a href="{% url 'televersement_du_fichier_adhérent' %}"class="btn btn-default">Téléverser</a>
-	<div class="container"></div>
+<div class="col-sm-4">
+	<div class=" panel panel-default">
+		<div class="panel-heading">
+			<h4>Téléverser un nouveau fichier adhérents</h4>
+		</div>
+		<div class="panel-body">
+			<p>Mettre à jour la base de donnée à partir d'un fichier CSV.</p>
+			<a href="{% url 'televersement_du_fichier_adhérent' %}"class="btn btn-default">Téléverser</a>
+		</div>
+	</div>
 </div>
 {% endif %}
 

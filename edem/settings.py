@@ -36,7 +36,7 @@ INSTALLED_APPS = (
 	'django.contrib.staticfiles',
 	'auth_with_one_time_code',
 	'accueil',
-	'adherents',
+	'membres',
 	'fichiers_adherents',
 	'tableau_de_bord',
 )

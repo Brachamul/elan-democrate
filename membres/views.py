@@ -7,16 +7,27 @@ from django.template import RequestContext
 from django.views import generic
 from django.views.generic.base import TemplateView
 
+from .models import *
 from django.contrib.auth.models import User
 from fichiers_adherents.models import Adhérent
 
 from auth_with_one_time_code import backend
 
+### Card
+
+def carte_profil(request):
+	return {
+		'profil': Profil.objects.get(user=request.user),
+		'afficher': True,
+		'template': "membres/carte_profil.html",
+		}
+
+
 
 ### Profile
 
 class ProfileView(TemplateView):
-	template_name = 'adherents/profil.html'
+	template_name = 'membres/profil.html'
 
 	def get_context_data(self, **kwargs):
 		context = super(ProfileView, self).get_context_data()
@@ -74,7 +85,7 @@ def enregistrement(request):
 #			messages.success(request, "Votre enregistrement est effectué !")
 
 	return render_to_response(
-			'adherents/enregistrement.html',
+			'membres/enregistrement.html',
 			{'registering': True},
 			context)
 
@@ -92,27 +103,11 @@ def url_enregistrement(request, num_adherent, email_confirmation_code):
 			user = User.objects.get(username=adherent.num_adhérent)
 			registered = True
 	if registered :
-#		# let's do a quick and dirty authentication this first time
-#		from auth_with_one_time_code.models import Credentials
-#		new_credentials = Credentials(user=user, email=user.email)
-#		new_credentials.save()
-#		code = new_credentials.code
-#		potato = user
-#		user = False
-#		user = backend.authenticate(request=request, username=potato.username, code=code)
-#		if user :
-#			from django.contrib.auth import login
-#			login(request, user)
-#			print ("successful login !")
-#			messages.success(request, "Votre compte a été créé, et vous êtes désormais connecté.")
-#			messages.success(request, "Bienvenue sur votre profil adhérent !")
 		messages.success(request, "Votre compte a bien été créé, vous pouvez désormais vous connecter.")
 		return redirect(reverse('mon-profil'))
-#		else :
-#			print ("didn't find user credentials !")
 	else :
 		return render_to_response(
-			'adherents/enregistrement.html',
+			'membres/enregistrement.html',
 			{'registering': True},
 			context)
 
@@ -158,22 +153,22 @@ def connexion(request):
 					return HttpResponseRedirect('/')
 				elif auth_result == "bad-details" :
 					print("going bad-details")
-					return render_to_response('adherents/connexion.html', {'username': username, 'code_sent': True, 'logging_in': True}, context)
+					return render_to_response('membres/connexion.html', {'username': username, 'code_sent': True, 'logging_in': True}, context)
 				else :
 					print("going to shit")
-					return render_to_response('adherents/connexion.html', {'username': username, 'code_sent': False, 'logging_in': True}, context)
+					return render_to_response('membres/connexion.html', {'username': username, 'code_sent': False, 'logging_in': True}, context)
 
-		return render_to_response('adherents/connexion.html', {'username': username, 'code_sent': code_sent, 'logging_in': True}, context)
+		return render_to_response('membres/connexion.html', {'username': username, 'code_sent': code_sent, 'logging_in': True}, context)
 
-	return render_to_response('adherents/connexion.html', {'logging_in': True}, context) # if something fails, reload page with messages
+	return render_to_response('membres/connexion.html', {'logging_in': True}, context) # if something fails, reload page with messages
 
 def url_connexion(request, username, code):
 	context = RequestContext(request)
 	if auth_result == "connected" :
 		return HttpResponseRedirect('/')
 	if auth_result == "bad-details" :
-		return render_to_response('adherents/connexion.html', {'username': username, 'code_sent': True, 'logging_in': True}, context)
-	return render_to_response('adherents/connexion.html', {'username': username, 'code_sent': False, 'logging_in': True}, context)
+		return render_to_response('membres/connexion.html', {'username': username, 'code_sent': True, 'logging_in': True}, context)
+	return render_to_response('membres/connexion.html', {'username': username, 'code_sent': False, 'logging_in': True}, context)
 
 
 
