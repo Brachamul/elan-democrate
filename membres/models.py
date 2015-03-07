@@ -10,3 +10,4 @@ class Profil(models.Model):
 	adherent = models.OneToOneField(Adhérent, blank=True, null=True)
 	nom_courant = models.CharField(max_length=255, blank=True, null=True)
 	notes = models.TextField(blank=True, null=True) # Visible uniquement par les responsables
+

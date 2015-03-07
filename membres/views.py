@@ -22,6 +22,7 @@ def carte_profil(request):
 		else : return { 'profil': profil, 'template': "membres/carte_profil.html", }
 	else :
 		return False
+		
 
 ### Profile
 

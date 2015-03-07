@@ -39,6 +39,7 @@ INSTALLED_APPS = (
 	'membres',
 	'fichiers_adherents',
 	'tableau_de_bord',
+	'aggregateur',
 )
 
 MIDDLEWARE_CLASSES = (

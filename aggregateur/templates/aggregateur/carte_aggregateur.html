@@ -1,0 +1,11 @@
+<div class="fil_info col-sm-8">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			{% for post in aggregateur.posts %}
+				<div class="post">
+					<h4 class="post-title">{{ post.title }}</h4>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+</div>

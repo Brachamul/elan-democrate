@@ -8,16 +8,15 @@
 
 
 
-{% block content %}
+{% block content %} {{ block.super }}
 
-{{ block.super }}
+{% if aggregateur %}
+	{% include aggregateur.template %}
+{% endif %}
 
-
-{% if afficher_l_aggregateur %}{% include "aggregateur/carte_aggregateur.html" %}{% endif %}
-{% include "membres/carte_aggregateur.html" %}
-
-{% if carte_profil %}{% include carte_profil.template %}{% endif %}
-
+{% if carte_profil %}
+	{% include carte_profil.template %}
+{% endif %}
 
 {% if perms.fichiers_adhérents.peut_televerser %}
 <div class="col-sm-4">
