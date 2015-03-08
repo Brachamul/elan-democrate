@@ -18,9 +18,18 @@ class Post(models.Model):
 	post_type = models.CharField(max_length=255, choices=(("LINK", "link"), ("TEXT", "text")))
 	title = models.CharField(max_length=144)
 	slug = AutoSlugField(populate_from=('title'), unique_with='date', max_length=255)
-	content = models.TextField(max_length=10000)
+	content = models.TextField(max_length=10000, null=True, blank=True)
 	author = models.ForeignKey(User)
 	tags = models.ManyToManyField(Tag)
 	date = models.DateTimeField(auto_now=True)
+	score = models.IntegerField(default=0)
+	illustration = models.URLField(max_length=2000, null=True, blank=True)
 
 	def __str__(self): return self.title
+
+
+
+class Vote(models.Model):
+	user = models.ForeignKey(User)
+	post = models.ForeignKey(Post)
+	color = models.CharField(max_length=24, choices=(("POS", "positif"), ("NEG", "négatif"), ("NEU", "neutre")))

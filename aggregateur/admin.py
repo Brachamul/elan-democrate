@@ -8,7 +8,7 @@ from .models import *
 
 class PostAdmin(admin.ModelAdmin):
 	model = Post
-	list_display = ("title", "date", "post_type", "author", "slug")
+	list_display = ("title", "score", "date", "post_type", "author", "slug")
 
 admin.site.register(Post, PostAdmin)
 

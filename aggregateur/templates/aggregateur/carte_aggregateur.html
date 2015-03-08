@@ -1,8 +1,12 @@
-<div class="fil_info panel panel-default">
+{% load static %}
+<link rel="stylesheet" href="{% get_static_prefix %}css/aggregateur.css" >
+
+<div class="fil-info panel panel-default">
 	<div class="panel-body">
 		{% for post in aggregateur.posts %}
 			<div class="post">
-				<h4 class="post-title">{{ post.title }}</h4>
+				<span class="score">{{ post.score }}</span>
+				<span class="title">{{ post.title }}</span>
 			</div>
 		{% endfor %}
 	</div>

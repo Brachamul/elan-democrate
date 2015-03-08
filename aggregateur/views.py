@@ -16,8 +16,7 @@ from .models import *
 def aggregateur(request, fil):
 	try :
 		print ("trying posts")
-		posts = Post.objects.all()[:20]
-	#.order_by('-date')
+		posts = Post.objects.all().order_by('-score')[:20]
 	#
 	except Post.DoesNotExist :
 		print ("post does not exist")
@@ -25,3 +24,10 @@ def aggregateur(request, fil):
 	else :
 		print ("ok, post exists")
 		return { 'posts': posts, 'template': "aggregateur/carte_aggregateur.html", }
+
+def scorify():
+	for post in Post.objects.all() :
+		pos = Vote.objects.filter(post=post, color="POS").count()
+		neg = Vote.objects.filter(post=post, color="NEG").count()
+		post.score = pos-neg
+		post.save()
