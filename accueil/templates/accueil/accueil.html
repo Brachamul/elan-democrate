@@ -10,17 +10,24 @@
 
 {% block content %} {{ block.super }}
 
+
+<div class="col-sm-8">
+
 {% if aggregateur %}
 	{% include aggregateur.template %}
 {% endif %}
+
+</div>
+
+
+<div class="col-sm-4">
 
 {% if carte_profil %}
 	{% include carte_profil.template %}
 {% endif %}
 
 {% if perms.fichiers_adhérents.peut_televerser %}
-<div class="col-sm-4">
-	<div class=" panel panel-default">
+	<div class="televersement-du-fichier panel panel-default">
 		<div class="panel-heading">
 			<h4>Téléverser un nouveau fichier adhérents</h4>
 		</div>
@@ -29,7 +36,9 @@
 			<a href="{% url 'televersement_du_fichier_adhérent' %}"class="btn btn-default">Téléverser</a>
 		</div>
 	</div>
-</div>
 {% endif %}
+
+</div>
+
 
 {% endblock content %}

@@ -16,9 +16,9 @@ from .models import *
 def aggregateur(request, fil):
 	try :
 		print ("trying posts")
-		posts = Post.objects.all()
+		posts = Post.objects.all()[:20]
 	#.order_by('-date')
-	#[:5]
+	#
 	except Post.DoesNotExist :
 		print ("post does not exist")
 		return False
