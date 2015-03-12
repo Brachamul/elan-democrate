@@ -5,8 +5,26 @@
 	<div class="panel-body">
 		{% for post in aggregateur.posts %}
 			<div class="post">
-				<span class="score">{{ post.score }}</span>
-				<span class="title">{{ post.title }}</span>
+				<div class="scorebox">
+					<div class="vote pos">↑</div>
+					<div class="score">{{ post.score }}</div>
+					<div class="vote neg">↓</div>
+				</div>
+				<div class="postbox">
+					<h4 class="title">{{ post.title }}</h4>
+					<span class="source">(<a href="#">loremipsum.com</a>)</span>
+				</br>
+					<span class="date">Il y a 3 heures</div>
+					<span class="author"> par <a href="#">Barnaby Brachamul</a></div>
+					<span class="channel"> dans <a href="#">/c/posts</a>
+				</br>
+					<span class="comments">34 commentaires</span>
+					<span class="share">partager</span>
+					<span class="favorite">ajouter aux favoris</span>
+					<span class="hide">cacher</span>
+					<span class="report">signaler</span>
+				</div>
+				</div>
 			</div>
 		{% endfor %}
 	</div>

@@ -1,2 +1,9 @@
-.panel.fil-info .post .score { font-size: .8em; }
-.panel.fil-info .post .title { display: inline; }
+.panel.fil-info .post { margin: 1rem 0; }
+.panel.fil-info .post .score { font-size: .8em; padding-top: .35em; }
+.panel.fil-info .post .title { margin: 0; }
+
+.panel.fil-info .post .scorebox,
+.panel.fil-info .post .postbox { float: left; }
+.panel.fil-info .post:after { clear: both; visibility: hidden; display: block; font-size: 0; content: " "; height: 0; }
+
+.panel.fil-info .post .scorebox { margin: 0 1rem; line-height: 1em; vertical-align: middle; }

@@ -6,6 +6,14 @@ from .models import *
 
 
 
+class ChannelAdmin(admin.ModelAdmin):
+    model = Channel
+    list_display = ("name", "official")
+
+admin.site.register(Channel, ChannelAdmin)
+
+
+
 class PostAdmin(admin.ModelAdmin):
 	model = Post
 	list_display = ("title", "score", "date", "post_type", "author", "slug")
@@ -14,8 +22,8 @@ admin.site.register(Post, PostAdmin)
 
 
 
-class TagAdmin(admin.ModelAdmin):
-    model = Tag
-    list_display = ("name", "official")
+class VoteAdmin(admin.ModelAdmin):
+    model = Vote
+    list_display = ("post", "color", "user")
 
-admin.site.register(Tag, TagAdmin)
+admin.site.register(Vote, VoteAdmin)
