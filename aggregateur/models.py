@@ -20,7 +20,7 @@ class Post(models.Model):
 	slug = AutoSlugField(populate_from=('title'), unique_with='date', max_length=255)
 	content = models.TextField(max_length=10000, null=True, blank=True)
 	author = models.ForeignKey(User)
-	channel = models.ManyToManyField(Channel)
+
 	date = models.DateTimeField(auto_now=True)
 	score = models.IntegerField(default=0)
 	illustration = models.URLField(max_length=2000, null=True, blank=True)

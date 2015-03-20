@@ -70,19 +70,16 @@ def enregistrement(request):
 						messages.error(request, "Notre fichier adhérent ne contient pas d'adresse email valide pour ce numéro adhérent. Nous ne pouvons donc pas vous authentifier.")
 			else : messages.info(request, "Cet adhérent est déjà enregistré sur Élan Démocrate.")
 
-# !		elif "@" in numero_ou_email :
+#		elif "@" in numero_ou_email :
 #			# Cela ressemble à une adresse mail
 #			email = numero_ou_email
 #			try : user = User.objects.get(email=email)
 #			except User.DoesNotExist :
 #				messages.error(request, "Nous ne connaissons pas cette adresse email.")
 #			else : username = user.username
-#		elif numero_ou_email == "" : pass
-#		# on ne met pas de message d'erreur si l'utilisateur a directement cliqué sur le bouton de connexion sans remplir le champs
-#		else : messages.error(request, "Vous semblez avoir entré quelque chose qui n'est ni un numéro adhérent, ni une adresse mail...")
-#			user.save()
-#			registered = True
-#			messages.success(request, "Votre enregistrement est effectué !")
+#
+		else :
+			messages.error(request, "Vous semblez avoir entré quelque chose qui n'est ni un numéro adhérent, ni une adresse mail...")
 
 	return render_to_response(
 			'membres/enregistrement.html',

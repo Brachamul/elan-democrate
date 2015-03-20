@@ -22,6 +22,9 @@ def aggregateur(request, fil):
 		print ("post does not exist")
 		return False
 	else :
+		for post in posts :
+			post.link = post.slug
+			# except if post is a LINK !
 		print ("ok, post exists")
 		return { 'posts': posts, 'template': "aggregateur/carte_aggregateur.html", }
 

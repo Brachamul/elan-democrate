@@ -10,20 +10,26 @@
 					<div class="score">{{ post.score }}</div>
 					<div class="vote neg">↓</div>
 				</div>
-				<div class="postbox">
-					<h4 class="title">{{ post.title }}</h4>
-					<span class="source">(<a href="#">loremipsum.com</a>)</span>
-				</br>
-					<span class="date">Il y a 3 heures</div>
-					<span class="author"> par <a href="#">Barnaby Brachamul</a></div>
-					<span class="channel"> dans <a href="#">/c/posts</a>
-				</br>
-					<span class="comments">34 commentaires</span>
-					<span class="share">partager</span>
-					<span class="favorite">ajouter aux favoris</span>
-					<span class="hide">cacher</span>
-					<span class="report">signaler</span>
+				<div class="illustration">
+					<!-- img goes here -->
 				</div>
+				<div class="postbox">
+						<a href="{{ post.link }}">
+							<h4 class="title">{{ post.title }}</h4>
+						</a>
+						<span class="source">(<a href="#">loremipsum.com</a>)</span>
+					<div class="meta">
+						<span class="date">Il y a 3 heures</span>
+						<span class="author"> par <a href="#">Barnaby Brachamul</a></span>
+						<span class="channel"> dans <a href="#">/c/posts</a></span>
+					</div>
+					<div class="actions">
+						<span class="comments">34 commentaires</span>
+						<span class="share">partager</span>
+						<span class="favorite">ajouter aux favoris</span>
+						<span class="hide">cacher</span>
+						<span class="report">signaler</span>
+					</div>
 				</div>
 			</div>
 		{% endfor %}

@@ -1,9 +1,24 @@
-.panel.fil-info .post { margin: 1rem 0; }
-.panel.fil-info .post .score { font-size: .8em; padding-top: .35em; }
-.panel.fil-info .post .title { margin: 0; }
+.panel.fil-info .post { margin: 1rem 0 2rem 0; }
 
 .panel.fil-info .post .scorebox,
+.panel.fil-info .post .illustration,
 .panel.fil-info .post .postbox { float: left; }
+
 .panel.fil-info .post:after { clear: both; visibility: hidden; display: block; font-size: 0; content: " "; height: 0; }
 
-.panel.fil-info .post .scorebox { margin: 0 1rem; line-height: 1em; vertical-align: middle; }
+.panel.fil-info .post .scorebox { font-size: 1.2em; margin: 0 1rem; line-height: 1em; vertical-align: middle; }
+.panel.fil-info .post .score { padding-top: .35em; }
+
+.panel.fil-info .post .title { margin: 0; display: inline; }
+
+.panel.fil-info .post .illustration { background-color: #ccc; height: 6rem; width: 6rem; margin-right: 1rem; display: none; }
+
+.panel.fil-info .post .source,
+.panel.fil-info .post .meta,
+.panel.fil-info .post .actions { color: #666; font-size: .9em; }
+
+.panel.fil-info .post .source a,
+.panel.fil-info .post .meta a,
+.panel.fil-info .post .actions a { color: inherit; }
+
+.panel.fil-info .post .actions span { margin-right: .5em; font-weight: bold; }
