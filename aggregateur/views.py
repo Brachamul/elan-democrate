@@ -11,7 +11,9 @@ from .models import *
 
 ### Card
 
-
+def all(request):
+	# temporary catch all url for posts
+	HttpResponseRedirect('/')
 
 def aggregateur(request, fil):
 	try :

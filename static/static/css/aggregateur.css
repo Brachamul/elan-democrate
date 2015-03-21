@@ -4,10 +4,17 @@
 .panel.fil-info .post .illustration,
 .panel.fil-info .post .postbox { float: left; }
 
+@media all and (max-width: 699px) {
+	.panel.fil-info .post .postbox {
+		max-width: 70%;
+		max-width: calc(100% - 4rem - 30px);
+	}
+}
+
 .panel.fil-info .post:after { clear: both; visibility: hidden; display: block; font-size: 0; content: " "; height: 0; }
 
-.panel.fil-info .post .scorebox { font-size: 1.2em; margin: 0 1rem; line-height: 1em; vertical-align: middle; }
-.panel.fil-info .post .score { padding-top: .35em; }
+.panel.fil-info .post .scorebox { font-size: 1.2em; margin-right: 1rem; line-height: 1em; vertical-align: middle; width: 4rem; text-align: center; }
+.panel.fil-info .post .score { padding-top: .35em; font-size: .8em; }
 
 .panel.fil-info .post .title { margin: 0; display: inline; }
 

@@ -11,7 +11,7 @@
 {% block content %} {{ block.super }}
 
 
-<div class="col-sm-8">
+<div class="col-sm-6">
 
 {% if aggregateur %}
 	{% include aggregateur.template %}
@@ -21,10 +21,6 @@
 
 
 <div class="col-sm-4">
-
-{% if carte_profil %}
-	{% include carte_profil.template %}
-{% endif %}
 
 {% if perms.fichiers_adhérents.peut_televerser %}
 	<div class="televersement-du-fichier panel panel-default">
@@ -40,5 +36,13 @@
 
 </div>
 
+
+<div class="col-sm-2">
+
+{% if carte_profil %}
+	{% include carte_profil.template %}
+{% endif %}
+
+</div>
 
 {% endblock content %}
