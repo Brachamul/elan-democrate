@@ -21,7 +21,7 @@
 					<div class="meta">
 						<span class="date">Il y a 3 heures</span>
 						<span class="author"> par <a href="#">Barnaby Brachamul</a></span>
-						<span class="channel"> dans <a href="#">/c/posts</a></span>
+						{% comment %}<span class="channel"> dans <a href="#">/c/posts</a></span>{% endcomment %}
 					</div>
 					<div class="actions">
 						<span class="comments">34 commentaires</span>
@@ -33,5 +33,11 @@
 				</div>
 			</div>
 		{% endfor %}
+		<div class="footer">
+			<a href="{% url 'nouveau_post' %}">
+				<span class="glyphicon glyphicon-plus"></span>
+				créer un nouveau post
+			</a>
+		</div>
 	</div>
 </div>

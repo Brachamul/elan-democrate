@@ -8,12 +8,15 @@ from django.views import generic
 from django.views.generic.base import TemplateView
 
 from .models import *
-
-### Card
+from .forms import *
 
 def all(request):
 	# temporary catch all url for posts
-	HttpResponseRedirect('/')
+	return HttpResponseRedirect('/')
+
+
+
+### Card
 
 def aggregateur(request, fil):
 	try :
@@ -36,3 +39,20 @@ def scorify():
 		neg = Vote.objects.filter(post=post, color="NEG").count()
 		post.score = pos-neg
 		post.save()
+
+def nouveau_post(request):
+	if request.method == "POST":
+		upload_form = TéléversementDuFichierAdhérentForm(request.POST, request.FILES)
+		if upload_form.is_valid():
+			messages.success(request, "Ce post aurait été valide, mais la fonction de postage n'a pas encore été activée.")
+		# 	return render(request, 'aggregateur/nouveau_post.html', {
+		#		'fichier': nouveau_fichier,
+		#		'nombre_nouveaux_adherents': nombre_nouveaux_adherents,
+		#		'nombre_réadhésions': nombre_réadhésions,
+		#			})
+			
+		else :
+			messages.error(request, "Ce post ne semble pas valide.")			
+		return HttpResponseRedirect('/')
+	else :
+		return render(request, 'aggregateur/nouveau_post.html', {'post_form': PostForm()})

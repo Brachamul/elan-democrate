@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}{{ block.super }}
+
+<title>EDEM - Accueil</title>
+
+{% endblock head %}
+
+
+
+{% block content %} {{ block.super }}
+
+
+<div class="col-sm-6">
+
+<div class="nouveau_post panel panel-default">
+	<div class="panel-body">
+		<form id="post_form" method="POST" action="" enctype="multipart/form-data">
+			<div class="form-group">
+				{% csrf_token %}
+				{{ post_form.as_p }}
+			</div>
+		 </form>
+	</div>
+</div>
+
+</div>
+
+{% endblock content %}
