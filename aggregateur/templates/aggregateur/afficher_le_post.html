@@ -3,8 +3,8 @@
 
 {% block head %}{{ block.super }}
 
-<title>EDEM - Profil</title>
-<link rel="stylesheet" href="{% get_static_prefix %}css/membres.css" >
+<title>{{ post.title }}</title>
+<link rel="stylesheet" href="{% get_static_prefix %}css/aggregateur.css" >
 
 {% endblock head %}
 
@@ -17,9 +17,9 @@
 <div class="col-md-6">
 <div class="profil panel panel-default">
 	<div class="panel-heading clearfix text-center">
-		<h1>{{ user_object.profil.nom_courant }}</h1>
+		<h1>{{ user.profil.nom_courant }}</h1>
 		{% load gravatar %}
-		<img class="gravatar img-responsive center-block" src="{% gravatar_url user_object.email 128 %}" />
+		<img class="gravatar img-responsive center-block" src="{% gravatar_url user.email 128 %}" />
 	</div>
 	<div class="panel-body">
 		<p><strong>Occupations :</strong></p>

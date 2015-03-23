@@ -34,6 +34,7 @@ INSTALLED_APPS = (
 	'django.contrib.sessions',
 	'django.contrib.messages',
 	'django.contrib.staticfiles',
+	'django_gravatar',
 	'auth_with_one_time_code',
 	'accueil',
 	'membres',

@@ -2,6 +2,12 @@
 <link rel="stylesheet" href="{% get_static_prefix %}css/aggregateur.css" >
 
 <div class="fil-info panel panel-default">
+	<div class="panel-heading">
+		<a href="{% url 'nouveau_post' %}">
+			<span class="glyphicon glyphicon-plus"></span>
+			créer un nouveau post
+		</a>
+	</div>
 	<div class="panel-body">
 		{% for post in aggregateur.posts %}
 			<div class="post">
@@ -33,11 +39,5 @@
 				</div>
 			</div>
 		{% endfor %}
-		<div class="footer">
-			<a href="{% url 'nouveau_post' %}">
-				<span class="glyphicon glyphicon-plus"></span>
-				créer un nouveau post
-			</a>
-		</div>
 	</div>
 </div>

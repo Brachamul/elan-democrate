@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse, HttpRequest, Http404
 from django.shortcuts import get_object_or_404, render, render_to_response, redirect
 from django.template import RequestContext
 from django.views import generic
-from django.views.generic.base import TemplateView
+from django.views.generic import TemplateView, DetailView
 
 from .models import *
 from django.contrib.auth.models import User
@@ -26,13 +26,16 @@ def carte_profil(request):
 
 ### Profile
 
-class ProfileView(TemplateView):
+class ProfileView(DetailView):
+
+	model = User
 	template_name = 'membres/profil.html'
 
 	def get_context_data(self, **kwargs):
-		context = super(ProfileView, self).get_context_data()
-		context['user_object'] = get_object_or_404(User, username=self.kwargs['username'])
+		context = super(ProfileView, self).get_context_data(**kwargs)
+		context['user_object'] = get_object_or_404(User, pk=self.kwargs['pk'])
 		return context
+
 
 
 ### Enregistrement

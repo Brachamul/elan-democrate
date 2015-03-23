@@ -15,6 +15,7 @@
 	<link rel="stylesheet" href="{% get_static_prefix %}bootstrap/css/bootstrap.min.css" >
 	<link rel="stylesheet" href="{% get_static_prefix %}css/base.css" >
 	<link rel="stylesheet" href="{% get_static_prefix %}css/auth.css" >
+	<link rel="shortcut icon" href="{% get_static_prefix %}images/edem.ico" type="image/x-icon" />
 </head>
 
 {% if user.is_authenticated %}
@@ -23,7 +24,7 @@
 		{% block header %}{% endblock header %}
 	</header>
 	
-	<div class="container-fluid">
+	<div class="container-fluid main-container" >
 		{% block content %}{% endblock content %}
 	</div>
 	

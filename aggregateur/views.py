@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse, HttpRequest, Http404
 from django.shortcuts import get_object_or_404, render, render_to_response, redirect
 from django.template import RequestContext
 from django.views import generic
-from django.views.generic.base import TemplateView
+from django.views.generic import TemplateView, DetailView
 
 from .models import *
 from .forms import *
@@ -14,7 +14,15 @@ def all(request):
 	# temporary catch all url for posts
 	return HttpResponseRedirect('/')
 
+class afficher_le_post(DetailView):
 
+	model = Post
+	template_name = "aggregateur/afficher_le_post.html"
+
+	def get_context_data(self, **kwargs):
+		context = super(DetailView, self).get_context_data(**kwargs)
+		context['post'] = get_object_or_404(Post, slug=self.kwargs['slug'])
+		return context
 
 ### Card
 
@@ -47,6 +55,19 @@ def nouveau_post(request):
 			print("Un nouveau texte a été posté.")
 			if PostTextForm(request.POST).is_valid() :
 				print("Il est valide !")
+				new_post = Post(
+					post_type = 'TEXT',
+					title=request.POST.get('title'),
+					content=request.POST.get('url'),
+					author=request.user,
+					channel=Channel.objects.get(pk=1), # change when adding more channels
+				#	illustration=
+					)
+				new_post.save()
+				new_post_adress = "/p/" + new_post.slug
+				messages.success(request, "Votre post est publié.")
+				print ("Nouveau texte à l'adresse" + new_post_adress)
+				return HttpResponseRedirect(new_post_adress)
 			else :
 				print("Il n'est pas valide ...")
 
@@ -54,10 +75,23 @@ def nouveau_post(request):
 			print("Un nouveau lien a été posté.")
 			if PostLinkForm(request.POST).is_valid() :
 				print("Il est valide !")
+				new_post = Post(
+					post_type = 'LINK',
+					title=request.POST.get('title'),
+					content=request.POST.get('content'),
+					author=request.user,
+					channel=Channel.objects.get(pk=1), # change when adding more channels
+				#	illustration=
+					)
+				new_post.save()
+				new_post_adress = "/p/" + new_post.slug
+				messages.success(request, "Votre post est publié.")
+				print ("Nouveau lien à l'adresse" + new_post_adress)
+				return HttpResponseRedirect(new_post_adress)
 			else :
 				print("Il n'est pas valide ...")
 		else:
-			messages.warning(request, "Bug dans la matrice !")
+			messages.warning(request, "Il y a un bug dans la matrice !")
 
 #		 upload_form.is_valid():
 #			messages.success(request, "Ce post aurait été valide, mais la fonction de postage n'a pas encore été activée.")

@@ -10,39 +10,25 @@
 
 {% block content %} {{ block.super }}
 
-
-<div class="col-sm-6">
-
 {% if aggregateur %}
+<div class="col-sm-8" style="float: right;">
 	{% include aggregateur.template %}
+</div>
 {% endif %}
 
-</div>
-
-
-<div class="col-sm-4">
-
-{% if perms.fichiers_adhérents.peut_televerser %}
-	<div class="televersement-du-fichier panel panel-default">
-		<div class="panel-heading">
-			<h4>Téléverser un nouveau fichier adhérents</h4>
-		</div>
-		<div class="panel-body">
-			<p>Mettre à jour la base de donnée à partir d'un fichier CSV.</p>
-			<a href="{% url 'televersement_du_fichier_adhérent' %}"class="btn btn-default">Téléverser</a>
-		</div>
-	</div>
-{% endif %}
-
-</div>
-
-
-<div class="col-sm-2">
 
 {% if carte_profil %}
+<div class="col-sm-4">
 	{% include carte_profil.template %}
+</div>
 {% endif %}
 
+
+{% if message_accueil %}
+<div class="col-sm-4">
+	{% include message_accueil %}
 </div>
+{% endif %}
+
 
 {% endblock content %}
