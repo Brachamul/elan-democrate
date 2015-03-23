@@ -1,3 +1,5 @@
+/*** Fil Info ***/
+
 .panel.fil-info .post { margin: 1rem 0 2rem 0; }
 
 .panel.fil-info .post .scorebox,
@@ -30,3 +32,10 @@
 .panel.fil-info .post .actions span { margin-right: .5em; font-weight: bold; }
 
 .panel.fil-info .footer { text-align: right; }
+
+
+
+/*** Nouveau Post ***/
+
+.panel.nouveau-post label { display: block; }
+.panel.nouveau-post label:after { content: " :"; }

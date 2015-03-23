@@ -3,7 +3,8 @@
 
 {% block head %}{{ block.super }}
 
-<title>EDEM - Accueil</title>
+<title>EDEM - Nouveau Post</title>
+<link rel="stylesheet" href="{% get_static_prefix %}css/aggregateur.css" >
 
 {% endblock head %}
 
@@ -11,20 +12,65 @@
 
 {% block content %} {{ block.super }}
 
+{{ post_form.non_field_errors }}
 
-<div class="col-sm-6">
+<div class="col-sm-4">
 
-<div class="nouveau_post panel panel-default">
+<div class="nouveau-post panel panel-default">
+	<div class="panel-heading">
+		<h4>Poster un nouveau texte</h4>
+	</div>
 	<div class="panel-body">
-		<form id="post_form" method="POST" action="" enctype="multipart/form-data">
+		<form id="post_text_form" method="POST" action="" enctype="multipart/form-data">
 			<div class="form-group">
 				{% csrf_token %}
-				{{ post_form.as_p }}
+				<div class="form-group">
+					{{ post_text_form.title.field.errors }}
+					<label for="{{ post_text_form.title.id_for_label }}">Titre</label>
+					{{ post_text_form.title }}
+				</div>
+				<div class="form-group">
+					{{ post_text_form.content.field.errors }}
+					<label for="{{ post_text_form.content.id_for_label }}">Texte</label>
+					{{ post_text_form.content }}
+				</div>
+				<input type="hidden" name="post-type" value="text">
+				<button type="submit" class="btn btn-primary">Poster</button>
 			</div>
 		 </form>
 	</div>
 </div>
 
 </div>
+
+<div class="col-sm-4">
+
+<div class="nouveau-post panel panel-default">
+	<div class="panel-heading">
+		<h4>Partager un nouveau lien</h4>
+	</div>
+	<div class="panel-body">
+		<form id="post_form" method="POST" action="" enctype="multipart/form-data">
+			<div class="form-group">
+				{% csrf_token %}
+				<div class="form-group">
+					{{ post_link_form.title.field.errors }}
+					<label for="{{ post_link_form.title.id_for_label }}">Titre</label>
+					{{ post_link_form.title }}
+				</div>
+				<div class="form-group">
+					{{ post_link_form.url.field.errors }}
+					<label for="{{ post_link_form.url.id_for_label }}">Lien URL</label>
+					{{ post_link_form.url }}
+				</div>
+				<input type="hidden" name="post-type" value="link">
+				<button type="submit" class="btn btn-primary">Poster</button>
+			</div>
+		 </form>
+	</div>
+</div>
+
+</div>
+
 
 {% endblock content %}
