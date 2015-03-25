@@ -1,35 +1,35 @@
 /*** Fil Info ***/
 
-.panel.fil-info .post { margin: 1rem 0 2rem 0; }
+.aggregateur .post { margin: 1rem 0 2rem 0; }
 
-.panel.fil-info .post .scorebox,
-.panel.fil-info .post .illustration,
-.panel.fil-info .post .postbox { float: left; }
+.aggregateur .post .scorebox,
+.aggregateur .post .illustration,
+.aggregateur .post .postbox { float: left; }
 
-.panel.fil-info .post .postbox {
+.aggregateur .post .postbox {
 	/* make sure postbox and scorebox are on same line by limiting postbox size */
 	max-width: 70%; /* fallback */
 	max-width: calc(100% - 4rem - 30px);
 }
 
-.panel.fil-info .post:after { clear: both; visibility: hidden; display: block; font-size: 0; content: " "; height: 0; }
+.aggregateur .post:after { clear: both; visibility: hidden; display: block; font-size: 0; content: " "; height: 0; }
 
-.panel.fil-info .post .scorebox { font-size: 1.2em; margin-right: 1rem; line-height: 1em; vertical-align: middle; width: 4rem; text-align: center; }
-.panel.fil-info .post .score { padding-top: .35em; font-size: .8em; }
+.aggregateur .post .scorebox { font-size: 1.2em; margin-right: 1rem; line-height: 1em; vertical-align: middle; width: 4rem; text-align: center; }
+.aggregateur .post .score { padding-top: .35em; font-size: .8em; }
 
-.panel.fil-info .post .title { margin: 0; display: inline; }
+.aggregateur .post .title { margin: 0; display: inline; }
 
-.panel.fil-info .post .illustration { background-color: #ccc; height: 6rem; width: 6rem; margin-right: 1rem; display: none; }
+.aggregateur .post .illustration { background-color: #ccc; height: 6rem; width: 6rem; margin-right: 1rem; display: none; }
 
-.panel.fil-info .post .source,
-.panel.fil-info .post .meta,
-.panel.fil-info .post .actions { color: #666; font-size: .9em; }
+.aggregateur .post .source,
+.aggregateur .post .meta,
+.aggregateur .post .actions { color: #666; font-size: .9em; }
 
-.panel.fil-info .post .source a,
-.panel.fil-info .post .meta a,
-.panel.fil-info .post .actions a { color: inherit; }
+.aggregateur .post .source a,
+.aggregateur .post .meta a,
+.aggregateur .post .actions a { color: inherit; }
 
-.panel.fil-info .post .actions span { margin-right: .5em; font-weight: bold; }
+.aggregateur .post .actions span { margin-right: .5em; font-weight: bold; }
 
 
 

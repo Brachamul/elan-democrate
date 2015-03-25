@@ -12,25 +12,41 @@
 
 {% block content %} {{ block.super }}
 
-<div class="col-md-3"></div>
 
-<div class="col-md-6">
-<div class="profil panel panel-default">
-	<div class="panel-heading clearfix text-center">
-		<h1>{{ user.profil.nom_courant }}</h1>
-		{% load gravatar %}
-		<img class="gravatar img-responsive center-block" src="{% gravatar_url user.email 128 %}" />
+<div class="aggregateur">
+	<div class="post">
+		<div class="scorebox">
+			<div class="vote pos">↑</div>
+			<div class="score">{{ post.score }}</div>
+			<div class="vote neg">↓</div>
+		</div>
+		<div class="illustration">
+			<!-- img goes here -->
+		</div>
+		<div class="postbox">
+				<a href="{% url 'aggregateur' %}{{ post.link }}">
+					<h1 class="title">{{ post.title }}</h1>
+				</a>
+				<span class="source">(<a href="#">loremipsum.com</a>)</span>
+			<div class="meta">
+				<span class="date">Il y a 3 heures</span>
+				<span class="author"> par <a href="#">Barnaby Brachamul</a></span>
+				{% comment %}<span class="channel"> dans <a href="#">/c/posts</a></span>{% endcomment %}
+			</div>
+			<div class="actions">
+				<span class="comments">34 commentaires</span>
+				<span class="share">partager</span>
+				<span class="favorite">ajouter aux favoris</span>
+				<span class="hide">cacher</span>
+				<span class="report">signaler</span>
+			</div>
+		</div>
 	</div>
-	<div class="panel-body">
-		<p><strong>Occupations :</strong></p>
-		<p><strong>Mandats :</strong></p>
-		<p><strong>Responsabilités internes :</strong></p>
-		<p><strong>Intérêts :</strong></p>
-		<p><strong>Compétences :</strong></p>
-	</div>
+		<div class="content panel panel-default">
+			<div class="panel-body">
+				{{ post.content }}
+			</div>
+		</div>
 </div>
-</div>
-
-<div class="col-md-3"></div>
 
 {% endblock content %}
