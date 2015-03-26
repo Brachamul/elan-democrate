@@ -10,27 +10,24 @@
 	</div>
 	<div class="panel-body">
 		{% for post in aggregateur.posts %}
-			<div class="post">
-				<div class="scorebox">
-					<div class="vote pos">↑</div>
-					<div class="score">{{ post.score }}</div>
-					<div class="vote neg">↓</div>
+			<div class="post" id="post-{{ post.id }}">
+				<div class="healthbox">
+					<div class="vote pos {% if post.color == "POS" %}active{% endif %}" data-postid="{{ post.id }}">↑</div>
+					<div class="health">{{ post.health }}</div>
+					<div class="vote neg{% if post.color == "NEG" %}active{% endif %}" data-postid="{{ post.id }}">↓</div>
 				</div>
 				<div class="illustration">
 					<!-- img goes here -->
 				</div>
 				<div class="postbox">
-						<a href="
-						{% if post.format == "TEXT" %}{% url 'aggregateur' %}{% endif %}
-						{{ post.link }}"
-						>
+						<a href="{% if post.format == "TEXT" %}{% url 'aggregateur' %}{% endif %}{{ post.link }}">
 							<h4 class="title">{{ post.title }}</h4>
 						</a>
 						<span class="source">(<a href="#">loremipsum.com</a>)</span>
 					<div class="meta">
 						<span class="date">Il y a 3 heures</span>
 						<span class="author"> par <a href="#">Barnaby Brachamul</a></span>
-						{% comment %}<span class="channel"> dans <a href="#">/c/posts</a></span>{% endcomment %}
+{% comment %}			<span class="channel"> dans <a href="#">/c/posts</a></span> {% endcomment %}
 					</div>
 					<div class="actions">
 						<span class="comments">34 commentaires</span>

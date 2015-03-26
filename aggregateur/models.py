@@ -22,7 +22,7 @@ class Post(models.Model):
 	author = models.ForeignKey(User)
 	channel = models.ForeignKey(Channel)
 	date = models.DateTimeField(auto_now=True)
-	score = models.IntegerField(default=0)
+	health = models.IntegerField(default=0)
 	illustration = models.URLField(max_length=2000, null=True, blank=True)
 
 	def __str__(self): return self.title

@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+{% load static %}
+
+
 
 {% block head %}{{ block.super }}
 
@@ -11,18 +14,10 @@
 {% block content %} {{ block.super }}
 
 {% if aggregateur %}
-<div class="col-sm-8" style="float: right;">
-	{% include aggregateur.template %}
+<div class="col-sm-8">
+    {% include aggregateur.template %}
 </div>
 {% endif %}
-
-
-{% if carte_profil %}
-<div class="col-sm-4">
-	{% include carte_profil.template %}
-</div>
-{% endif %}
-
 
 {% if message_accueil %}
 <div class="col-sm-4">
@@ -30,5 +25,12 @@
 </div>
 {% endif %}
 
-
 {% endblock content %}
+
+
+
+{% block scripts %} {{ block.super }}
+
+<script src="{% get_static_prefix %}js/aggregateur.js"></script>
+
+{% endblock scripts %}

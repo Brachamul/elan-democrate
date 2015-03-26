@@ -2,20 +2,21 @@
 
 .aggregateur .post { margin: 1rem 0 2rem 0; }
 
-.aggregateur .post .scorebox,
+.aggregateur .post .healthbox,
 .aggregateur .post .illustration,
 .aggregateur .post .postbox { float: left; }
 
 .aggregateur .post .postbox {
-	/* make sure postbox and scorebox are on same line by limiting postbox size */
+	/* make sure postbox and healthbox are on same line by limiting postbox size */
 	max-width: 70%; /* fallback */
 	max-width: calc(100% - 4rem - 30px);
 }
 
 .aggregateur .post:after { clear: both; visibility: hidden; display: block; font-size: 0; content: " "; height: 0; }
 
-.aggregateur .post .scorebox { font-size: 1.2em; margin-right: 1rem; line-height: 1em; vertical-align: middle; width: 4rem; text-align: center; }
-.aggregateur .post .score { padding-top: .35em; font-size: .8em; }
+.aggregateur .post .healthbox { font-size: 1.2em; margin-right: 1rem; line-height: 1em; vertical-align: middle; width: 4rem; text-align: center; }
+.aggregateur .post .health { padding-top: .35em; font-size: .8em; }
+.aggregateur .post .vote.active { color: #EC7C34;}
 
 .aggregateur .post .title { margin: 0; display: inline; }
 

@@ -27,26 +27,51 @@ class afficher_le_post(DetailView):
 ### Card
 
 def aggregateur(request, fil):
-	try :
-		print ("trying posts")
-		posts = Post.objects.all().order_by('-score')[:20]
-	#
-	except Post.DoesNotExist :
-		print ("post does not exist")
-		return False
+	try : posts = Post.objects.all().order_by('-health')[:20]
+	except Post.DoesNotExist : return False
 	else :
 		for post in posts :
 			if post.format == "LINK" : post.link = post.content
 			else : post.link = post.slug
-		print ("ok, post exists")
+			try : vote = Vote.objects.get(post=post, user=request.user)
+			except Vote.DoesNotExist : pass
+			else : post.color = vote.color
 		return { 'posts': posts, 'template': "aggregateur/carte_aggregateur.html", }
 
-def scorify():
+
+def vote(request, post_id, color):
+	context = RequestContext(request)
+	try : post = Post.objects.get(id=int(post_id))
+	except Post.DoesNotExist : print("\nERROR : Post.DoesNotExist - while trying to vote")
+	else:
+		try : vote = Vote.objects.get(user=request.user, post=post)
+		except Vote.DoesNotExist :
+			# no previous votes exist, so let's make a new one
+			new_vote = Vote(user=request.user, post=post, color=color)
+			new_vote.save()
+			endcolor = color
+		else :
+			# a vote exists, so let's change it
+			if   vote.color == "POS" and color == "POS" : vote.color = "NEU"
+			elif vote.color == "POS" and color == "NEG" : vote.color = "NEG"
+			elif vote.color == "NEU" and color == "POS" : vote.color = "POS"
+			elif vote.color == "NEU" and color == "NEG" : vote.color = "NEG"
+			elif vote.color == "NEG" and color == "POS" : vote.color = "POS"
+			elif vote.color == "NEG" and color == "NEG" : vote.color = "NEU"
+			vote.save()
+			endcolor = vote.color
+		print ("\n---> A %s vote was cast on post n° %s" % (endcolor, post_id))
+	# return the endcolor of the vote so that we can light up the up/down arrows
+	return HttpResponse(endcolor)
+
+
+def bilan_de_sante():
 	for post in Post.objects.all() :
 		pos = Vote.objects.filter(post=post, color="POS").count()
 		neg = Vote.objects.filter(post=post, color="NEG").count()
-		post.score = pos-neg
+		post.health = pos-neg
 		post.save()
+
 
 def nouveau_post(request):
 	if request.method == "POST":
