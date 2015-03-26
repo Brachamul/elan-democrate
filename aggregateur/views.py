@@ -14,30 +14,39 @@ def all(request):
 	# temporary catch all url for posts
 	return HttpResponseRedirect('/')
 
-class afficher_le_post(DetailView):
 
-	model = Post
-	template_name = "aggregateur/afficher_le_post.html"
 
-	def get_context_data(self, **kwargs):
-		context = super(DetailView, self).get_context_data(**kwargs)
-		context['post'] = get_object_or_404(Post, slug=self.kwargs['slug'])
-		return context
+### Affichage des Posts
 
-### Card
+def afficher_le_post(request, slug):
+	''' génère la page d'affichage d'un post '''
+	try : post = Post.objects.get(slug=slug)
+	except Post.DoesNotExist : raise Http404("Ce post n'existe pas")
+	else :
+		post = get_post_meta(request, post)
+		return render(request, 'aggregateur/afficher_le_post.html', {'post': post})
+		return { 'post': post, 'template': "aggregateur/afficher_le_post.html", }
 
 def aggregateur(request, fil):
+	''' génère une carte qui affiche les données des 20 derniers posts
+		l'argument "fil" n'est pas opérationnel '''
 	try : posts = Post.objects.all().order_by('-health')[:20]
 	except Post.DoesNotExist : return False
 	else :
-		for post in posts :
-			if post.format == "LINK" : post.link = post.content
-			else : post.link = post.slug
-			try : vote = Vote.objects.get(post=post, user=request.user)
-			except Vote.DoesNotExist : pass
-			else : post.color = vote.color
+		for post in posts : post = get_post_meta(request, post)
 		return { 'posts': posts, 'template': "aggregateur/carte_aggregateur.html", }
 
+def get_post_meta(request, post):
+	if post.format == "LINK" : post.link = post.content
+	else : post.link = post.slug
+	try : vote = Vote.objects.get(post=post, user=request.user)
+	except Vote.DoesNotExist : pass
+	else : post.color = vote.color
+	return post
+
+
+
+### Traitement des votes
 
 def vote(request, post_id, color):
 	context = RequestContext(request)
@@ -72,6 +81,8 @@ def bilan_de_sante():
 		post.health = pos-neg
 		post.save()
 
+
+### Misc
 
 def nouveau_post(request):
 	if request.method == "POST":

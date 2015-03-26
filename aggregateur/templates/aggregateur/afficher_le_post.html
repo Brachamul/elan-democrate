@@ -4,6 +4,7 @@
 {% block head %}{{ block.super }}
 
 <title>{{ post.title }}</title>
+
 <link rel="stylesheet" href="{% get_static_prefix %}css/aggregateur.css" >
 
 {% endblock head %}
@@ -12,13 +13,12 @@
 
 {% block content %} {{ block.super }}
 
-
 <div class="aggregateur">
-	<div class="post">
+	<div class="post" id="post-{{ post.id }}">
 		<div class="healthbox">
-			<a class="vote pos">↑</a>
+			<div class="vote pos {% if post.color == "POS" %}active{% endif %}" data-postid="{{ post.id }}">↑</div>
 			<div class="health">{{ post.health }}</div>
-			<a class="vote neg">↓</a>
+			<div class="vote neg {% if post.color == "NEG" %}active{% endif %}" data-postid="{{ post.id }}">↓</div>
 		</div>
 		<div class="illustration">
 			<!-- img goes here -->
@@ -49,6 +49,12 @@
 		</div>
 </div>
 
-
-
 {% endblock content %}
+
+
+
+{% block scripts %} {{ block.super }}
+
+<script src="{% get_static_prefix %}js/aggregateur.js"></script>
+
+{% endblock scripts %}
