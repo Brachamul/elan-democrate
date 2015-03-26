@@ -15,7 +15,7 @@ class Channel(models.Model):
 
 
 class Post(models.Model):
-	post_type = models.CharField(max_length=255, choices=(("LINK", "link"), ("TEXT", "text")))
+	format = models.CharField(max_length=255, choices=(("LINK", "link"), ("TEXT", "text")))
 	title = models.CharField(max_length=144)
 	slug = AutoSlugField(populate_from=('title'), unique_with='date', max_length=255)
 	content = models.TextField(max_length=10000, null=True, blank=True)

@@ -36,8 +36,8 @@ def aggregateur(request, fil):
 		return False
 	else :
 		for post in posts :
-			post.link = post.slug
-			# except if post is a LINK !
+			if post.format == "LINK" : post.link = post.content
+			else : post.link = post.slug
 		print ("ok, post exists")
 		return { 'posts': posts, 'template': "aggregateur/carte_aggregateur.html", }
 
@@ -50,15 +50,15 @@ def scorify():
 
 def nouveau_post(request):
 	if request.method == "POST":
-		post_type = request.POST.get('post-type')
-		if post_type == "text" :
+		format = request.POST.get('format')
+		if format == "TEXT" :
 			print("Un nouveau texte a été posté.")
 			if PostTextForm(request.POST).is_valid() :
 				print("Il est valide !")
 				new_post = Post(
-					post_type = 'TEXT',
+					format='TEXT',
 					title=request.POST.get('title'),
-					content=request.POST.get('url'),
+					content=request.POST.get('content'),
 					author=request.user,
 					channel=Channel.objects.get(pk=1), # change when adding more channels
 				#	illustration=
@@ -71,14 +71,14 @@ def nouveau_post(request):
 			else :
 				print("Il n'est pas valide ...")
 
-		elif post_type == "link" :
+		elif format == "LINK" :
 			print("Un nouveau lien a été posté.")
 			if PostLinkForm(request.POST).is_valid() :
 				print("Il est valide !")
 				new_post = Post(
-					post_type = 'LINK',
+					format = 'LINK',
 					title=request.POST.get('title'),
-					content=request.POST.get('content'),
+					content=request.POST.get('url'),
 					author=request.user,
 					channel=Channel.objects.get(pk=1), # change when adding more channels
 				#	illustration=

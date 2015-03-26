@@ -16,7 +16,7 @@ admin.site.register(Channel, ChannelAdmin)
 
 class PostAdmin(admin.ModelAdmin):
 	model = Post
-	list_display = ("title", "score", "date", "post_type", "author", "slug")
+	list_display = ("title", "score", "date", "format", "author", "slug")
 
 admin.site.register(Post, PostAdmin)
 
