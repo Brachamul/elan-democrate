@@ -16,9 +16,16 @@
 
 .aggregateur .post .healthbox { font-size: 1.2em; margin-right: 1rem; line-height: 1em; vertical-align: middle; width: 4rem; text-align: center; }
 .aggregateur .post .health { padding-top: .35em; font-size: .8em; }
+
 .aggregateur .post .vote.active { color: #EC7C34;}
 
-.aggregateur .post .title { margin: 0; display: inline; }
+.aggregateur .post .vote sup { float: right; position: relative; font-size: .6em;}
+.aggregateur .post .vote.pos sup { top: 1.2rem; right: .2rem; }
+.aggregateur .post .vote.neg sup { top: .8rem; right: 2.5rem;}
+.aggregateur .post .vote:not(.active) sup { display: none; }
+
+.aggregateur .post .title { margin: 0; display: inline-block; }
+.aggregateur .post h1.title { line-height: 1; }
 
 .aggregateur .post .illustration { background-color: #ccc; height: 6rem; width: 6rem; margin-right: 1rem; display: none; }
 
@@ -28,12 +35,24 @@
 
 .aggregateur .post .source a,
 .aggregateur .post .meta a,
-.aggregateur .post .actions a { color: inherit; }
+.aggregateur .actions a { color: inherit; }
 
-.aggregateur .post .actions span { margin-right: .5em; font-weight: bold; }
+.aggregateur .actions span { margin-right: .5em; font-weight: bold; }
 
 
 
+.aggregateur .post + .content { max-width: 80rem; margin-left: 5rem; }
+
+.aggregateur .comment .meta,
+.aggregateur .comment .actions { color: #666; font-size: .8em; }
+.aggregateur .comment { margin-bottom: 1rem; }
+.aggregateur .comment .content { max-width: 60rem; line-height: 1.8; margin: .5em 0; width: 100%;}
+.aggregateur .comments .panel {}
+
+
+.aggregateur .comments > .panel > .panel-body > .panel { background-color: #fafafa; }
+.aggregateur .comments > .panel > .panel-body > .panel .panel-body > .panel > .panel-body > .panel { background-color: #fafafa; }
+.aggregateur .comments > .panel > .panel-body > .panel .panel-body > .panel > .panel-body > .panel > .panel-body > .panel > .panel-body > .panel { background-color: #fafafa; }
 
 /*** Nouveau Post ***/
 

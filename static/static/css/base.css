@@ -34,3 +34,5 @@ input:invalid:not(:focus) { border-color: red; }
 .panel > .panel-heading { background-image: url('../images/bg.jpg'); background-color: white; }
 .main-container { padding: 0 10px; }
 .main-container [class^="col"] { padding: 0 10px; }
+
+.anchor { clear: both; }

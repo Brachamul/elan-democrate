@@ -1,0 +1,20 @@
+<div class="comment">
+	<div class="meta">
+		<a href="{% url 'membre' %}{{ comment.author.pk }}">
+			{{ comment.author.profil.nom_courant }}</a>
+		<span>, {{ comment.date|timesince }}</span>
+	</div>
+	
+	<div class="content">
+		{{ comment.content }}
+	</div>
+	
+	<div class="actions">
+		<span class="permalink">lien</span>
+		{% if user == comment.author %}
+		<span class="modify">modifier</span>
+		{% endif %}
+		<span class="reply">répondre</span>
+		<span class="report">signaler</span>
+	</div>
+</div>

@@ -21,10 +21,10 @@ class Post(models.Model):
 	content = models.TextField(max_length=10000, null=True, blank=True)
 	author = models.ForeignKey(User)
 	channel = models.ForeignKey(Channel)
-	date = models.DateTimeField(auto_now=True)
-	health = models.IntegerField(default=0)
+	date = models.DateTimeField(auto_now_add=True)
+	health = models.IntegerField(default=0) # votes positifs - votes négatifs
+	rank = models.IntegerField(default=0) # rang selon l'algorithme, prenant en compte le temps passé
 	illustration = models.URLField(max_length=2000, null=True, blank=True)
-
 	def __str__(self): return self.title
 
 
@@ -33,3 +33,13 @@ class Vote(models.Model):
 	user = models.ForeignKey(User)
 	post = models.ForeignKey(Post)
 	color = models.CharField(max_length=24, choices=(("POS", "positif"), ("NEG", "négatif"), ("NEU", "neutre")))
+	def __str__(self): return self.color
+
+
+class Comment(models.Model):
+	content = models.TextField(max_length=10000)
+	author = models.ForeignKey(User)
+	date = models.DateTimeField(auto_now_add=True)
+	parent_post = models.ForeignKey(Post, null=True, blank=True)
+	parent_comment = models.ForeignKey('self', null=True, blank=True)
+	def __str__(self): return self.content
