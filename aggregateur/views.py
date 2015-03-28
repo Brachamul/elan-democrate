@@ -24,8 +24,9 @@ def afficher_le_post(request, slug):
 	except Post.DoesNotExist : raise Http404("Ce post n'existe pas")
 	else :
 		post = get_post_meta(request, post)
-		return render(request, 'aggregateur/afficher_le_post.html', {'post': post})
-		return { 'post': post, 'template': "aggregateur/afficher_le_post.html", }
+		return render(request, 'aggregateur/afficher_le_post.html', {'post': post, 'comment_form': CommentForm()})
+
+		return render(request, 'aggregateur/nouveau_post.html', {'post_text_form': PostTextForm(), 'post_link_form': PostLinkForm(), })
 
 def aggregateur(request, fil):
 	''' génère une carte qui affiche les données des 20 derniers posts

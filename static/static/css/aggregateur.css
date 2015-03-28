@@ -39,7 +39,7 @@
 
 .aggregateur .actions span { margin-right: .5em; font-weight: bold; }
 
-
+.aggregateur .vote:hover { cursor: pointer; }
 
 .aggregateur .post + .content { max-width: 80rem; margin-left: 5rem; }
 
@@ -47,12 +47,15 @@
 .aggregateur .comment .actions { color: #666; font-size: .8em; }
 .aggregateur .comment { margin-bottom: 1rem; }
 .aggregateur .comment .content { max-width: 60rem; line-height: 1.8; margin: .5em 0; width: 100%;}
-.aggregateur .comments .panel {}
-
 
 .aggregateur .comments > .panel > .panel-body > .panel { background-color: #fafafa; }
 .aggregateur .comments > .panel > .panel-body > .panel .panel-body > .panel > .panel-body > .panel { background-color: #fafafa; }
 .aggregateur .comments > .panel > .panel-body > .panel .panel-body > .panel > .panel-body > .panel > .panel-body > .panel > .panel-body > .panel { background-color: #fafafa; }
+
+/*** ***/
+.comment_form_checkbox { display: none; }
+.comment_form_checkbox:not(:checked) + .comment_form { display: none; }
+.aggregateur label:hover { cursor: pointer; }
 
 /*** Nouveau Post ***/
 

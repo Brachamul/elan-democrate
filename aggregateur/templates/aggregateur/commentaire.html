@@ -14,7 +14,24 @@
 		{% if user == comment.author %}
 		<span class="modify">modifier</span>
 		{% endif %}
-		<span class="reply">répondre</span>
+		<label for="checkbox-comment-{{comment.pk}}">
+		<span class="reply">répondre</span></label>
 		<span class="report">signaler</span>
 	</div>
+</div>
+
+<input id="checkbox-comment-{{comment.pk}}" class="comment_form_checkbox" type="checkbox"/>
+<div class="comment_form panel-body">
+	<form method="POST" action="" enctype="multipart/form-data">
+		<div class="form-group">
+			{% csrf_token %}
+			<div class="form-group">
+				{{ comment_form.content.field.errors }}
+				{{ comment_form.content }}
+			</div>
+			<input type="hidden" name="format" value="comment_id">
+			<button type="submit" class="btn btn-primary">Poster</button>
+
+		</div>
+	 </form>
 </div>

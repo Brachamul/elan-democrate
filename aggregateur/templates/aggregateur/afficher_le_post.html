@@ -26,8 +26,7 @@
 		</div>
 		<div class="postbox">
 			<a href="{% url 'aggregateur' %}{{ post.link }}">
-				<h1 class="title">{{ post.title }}</h1>
-			</a>
+				<h1 class="title">{{ post.title }}</h1></a>
 			<span class="source">(<a href="#">loremipsum.com</a>)</span>
 			<div class="meta">
 				<span class="date">Il y a 3 heures</span>
@@ -51,6 +50,7 @@
 	</div>
 
 <div class="comments">
+{% include "aggregateur/nouveau_commentaire.html" %}
 {% for comment in post.comment_set.all %}
 <div class="panel panel-default">
 	<div class="panel-body">
