@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect, HttpResponse, HttpRequest, Http404
@@ -18,16 +19,26 @@ def all(request):
 
 ### Affichage des Posts
 
+@login_required
 def afficher_le_post(request, slug):
 	''' génère la page d'affichage d'un post '''
 	try : post = Post.objects.get(slug=slug)
 	except Post.DoesNotExist : raise Http404("Ce post n'existe pas")
 	else :
 		post = get_post_meta(request, post)
+		if request.method == "POST":
+			new_comment = Comment(content=request.POST.get('content'), author=request.user)
+			parent_comment = request.POST.get('parent_comment')
+			if parent_comment :
+				parent_comment = Comment.objects.get(id=parent_comment)
+				new_comment.parent_comment = parent_comment
+			else : new_comment.parent_post = post
+			new_comment.save()
+			HttpResponseRedirect('#checkbox-comment-%d' % new_comment.pk)
+
 		return render(request, 'aggregateur/afficher_le_post.html', {'post': post, 'comment_form': CommentForm()})
 
-		return render(request, 'aggregateur/nouveau_post.html', {'post_text_form': PostTextForm(), 'post_link_form': PostLinkForm(), })
-
+@login_required
 def aggregateur(request, fil):
 	''' génère une carte qui affiche les données des 20 derniers posts
 		l'argument "fil" n'est pas opérationnel '''
@@ -98,6 +109,7 @@ def healthify(post):
 
 ### Misc
 
+@login_required
 def nouveau_post(request):
 	# Si le formulaire a été rempli, on le traite. Sinon, on l'affiche.
 	if request.method == "POST":

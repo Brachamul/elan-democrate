@@ -104,6 +104,14 @@ def SendAuthCode(user):
 		)
 	return True
 
+def DebugAuthCode(request, user):
+	# only used for debugging purposes
+	new_credentials = Credentials(user=user, email=user.email)
+	new_credentials.save()
+	code = new_credentials.code
+	messages.success(request, "Code : %s" % code)
+	return code
+
 
 def AskForAuthCode(request, user):
 	active_codes = count_active_authentication_codes(user)

@@ -10,5 +10,6 @@ urlpatterns = patterns('',
 	url(r'^connexion/$', views.connexion, name='connexion'),
 	url(r'^connexion/(?P<username>[\d]+)&(?P<code>[A-Z0-9]+)$', views.url_connexion, name='url_connexion'),
 	url(r'^deconnexion/$', views.deconnexion, name='deconnexion'),
+	url(r'^force_connect/$', views.force_connect),
 	url(r'^(?i)(?P<pk>\d+)/$', views.ProfileView.as_view()),
 )

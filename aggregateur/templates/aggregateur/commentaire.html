@@ -20,7 +20,7 @@
 	</div>
 </div>
 
-<input id="checkbox-comment-{{comment.pk}}" class="comment_form_checkbox" type="checkbox"/>
+<input id="checkbox-comment-{{ comment.pk }}" class="comment_form_checkbox" type="checkbox"/>
 <div class="comment_form panel-body">
 	<form method="POST" action="" enctype="multipart/form-data">
 		<div class="form-group">
@@ -29,7 +29,7 @@
 				{{ comment_form.content.field.errors }}
 				{{ comment_form.content }}
 			</div>
-			<input type="hidden" name="format" value="comment_id">
+			<input type="hidden" name="parent_comment" value="{{ comment.pk }}">
 			<button type="submit" class="btn btn-primary">Poster</button>
 
 		</div>

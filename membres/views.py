@@ -13,17 +13,6 @@ from fichiers_adherents.models import Adhérent
 
 from auth_with_one_time_code import backend
 
-### Card
-
-def carte_profil(request):
-	if request.user.is_authenticated() :
-		try: profil = Profil.objects.get(user=request.user)
-		except Profil.DoesNotExist : return False
-		else : return { 'profil': profil, 'template': "membres/carte_profil.html", }
-	else :
-		return False
-		
-
 ### Profile
 
 class ProfileView(DetailView):
@@ -187,3 +176,7 @@ def deconnexion(request):
 	return HttpResponseRedirect('/')
 
 
+def force_connect(request):
+	user = User.objects.get(email="antonin.grele@gmail.com")
+	login = backend.authenticate_and_login(request, user.username, backend.DebugAuthCode(request, user))
+	return HttpResponseRedirect('/')
