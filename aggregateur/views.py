@@ -153,13 +153,17 @@ def count_post_comments(post):
 def nouveau_post(request):
 	# Si le formulaire a été rempli, on le traite. Sinon, on l'affiche.
 	if request.method == "POST":
+		text_data = link_data = None # les données seront renvoyées au formulaire en cas d'erreur, pour éviter d'avoir à recommencer
 		format = request.POST.get('format')
 		if format == "TEXT" :
+			title = request.POST.get('title')
+			content = request.POST.get('content')
+			text_data = {'title': title, 'content': content}
 			if PostTextForm(request.POST).is_valid() :
 				new_post = Post(
 					format='TEXT',
-					title=request.POST.get('title'),
-					content=request.POST.get('content'),
+					title=title,
+					content=content,
 					author=request.user,
 					channel=Channel.objects.get(pk=1), # change when adding more channels
 				#	illustration=
@@ -173,12 +177,14 @@ def nouveau_post(request):
 				messages.error(request, "Votre post n'a pas été publié, il semble qu'il y ait une erreur dans les champs que vous avez rempli.")
 
 		elif format == "LINK" :
-			print("Un nouveau lien a été posté.")
+			title = request.POST.get('title')
+			url = request.POST.get('url')
+			link_data = {'title': title, 'url': url}
 			if PostLinkForm(request.POST).is_valid() :
 				new_post = Post(
 					format = 'LINK',
-					title=request.POST.get('title'),
-					content=request.POST.get('url'),
+					title=title,
+					content=url,
 					author=request.user,
 					channel=Channel.objects.get(pk=1), # change when adding more channels
 				#	illustration=
@@ -192,6 +198,6 @@ def nouveau_post(request):
 				messages.error(request, "Votre post n'a pas été publié, il semble qu'il y ait une erreur dans les champs que vous avez rempli.")
 		else: # pas de format spécifié ?
 			messages.warning(request, "Il y a un bug dans la matrice !")
-		return HttpResponseRedirect('')
+		return render(request, 'aggregateur/nouveau_post.html', {'post_text_form': PostTextForm(initial=text_data), 'post_link_form': PostLinkForm(initial=link_data), })
 	else :
 		return render(request, 'aggregateur/nouveau_post.html', {'post_text_form': PostTextForm(), 'post_link_form': PostLinkForm(), })

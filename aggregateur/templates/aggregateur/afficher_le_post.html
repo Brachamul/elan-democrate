@@ -15,7 +15,7 @@
 
 <div class="aggregateur">
 
-	<div class="post clearfix" id="post-{{ post.id }}">
+	<article class="post clearfix" id="post-{{ post.id }}">
 		<div class="healthbox">
 			<div class="vote pos {% if post.color == "POS" %}active{% endif %}" data-postid="{{ post.id }}">↑<sup>+1</sup></div>
 			<div class="health">{{ post.health }}</div>
@@ -29,7 +29,7 @@
 				<h1 class="title">{{ post.title }}</h1></a>
 			{% comment %}<span class="source">(<a href="#">loremipsum.com</a>)</span> {% endcomment %}
 			<div class="meta">
-				<span class="date">Il y a {{ post.date|timesince }},</span>
+				<span class="date">Il y a <time datetime="{{ post.date }}">{{ post.date|timesince }}</time>,</span>
 				<span class="author">par <a href="{% url 'membres' %}{{ post.author.id }}">{{ post.author.profil.nom_courant }}</a></span>
 				{% comment %}<span class="channel"> dans <a href="#">/c/posts</a></span>{% endcomment %}
 			</div>
@@ -47,7 +47,7 @@
 {% comment %}	<span class="report">signaler</span> {% endcomment %}
 			</div>
 		</div>
-	</div>
+	</article>
 
 	<div class="content panel panel-default">
 		<div class="panel-body">
