@@ -1,8 +1,11 @@
+<input id="checkbox-close-comment-{{ comment.pk }}" type="checkbox" />
+
 <div class="comment">
 	<div class="meta">
-		<a href="{% url 'membre' %}{{ comment.author.pk }}">
-			{{ comment.author.profil.nom_courant }}</a>
-		<span>, {{ comment.date|timesince }}</span>
+		<label for="checkbox-close-comment-{{ comment.pk }}">[<span class="minus">–</span><span class="plus">+</span>]</label>
+		<a href="{% url 'membres' %}{{ comment.author.pk }}">
+			{{ comment.author.profil.nom_courant }},</a>
+		<span>{{ comment.date|timesince }}</span>
 	</div>
 	
 	<div class="content">
@@ -10,17 +13,17 @@
 	</div>
 	
 	<div class="actions">
-		<span class="permalink">lien</span>
+{% comment %}	<span class="permalink">lien</span> {% endcomment %}
 		{% if user == comment.author %}
-		<span class="modify">modifier</span>
+{% comment %}	<span class="modify">modifier</span> {% endcomment %}
 		{% endif %}
-		<label for="checkbox-comment-{{comment.pk}}">
+		<label for="checkbox-replyto-comment-{{comment.pk}}">
 		<span class="reply">répondre</span></label>
-		<span class="report">signaler</span>
+{% comment %}	<span class="report">signaler</span> {% endcomment %}
 	</div>
 </div>
 
-<input id="checkbox-comment-{{ comment.pk }}" class="comment_form_checkbox" type="checkbox"/>
+<input id="checkbox-replyto-comment-{{ comment.pk }}" type="checkbox"/>
 <div class="comment_form panel-body">
 	<form method="POST" action="" enctype="multipart/form-data">
 		<div class="form-group">

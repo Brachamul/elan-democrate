@@ -46,15 +46,26 @@
 .aggregateur .comment .meta,
 .aggregateur .comment .actions { color: #666; font-size: .8em; }
 .aggregateur .comment { margin-bottom: 1rem; }
-.aggregateur .comment .content { max-width: 60rem; line-height: 1.8; margin: .5em 0; width: 100%;}
+.aggregateur .comment .content { max-width: 60rem; line-height: 1.8; margin: 0.2em 0 .5em 0; width: 100%;}
 
 .aggregateur .comments > .panel > .panel-body > .panel { background-color: #fafafa; }
 .aggregateur .comments > .panel > .panel-body > .panel .panel-body > .panel > .panel-body > .panel { background-color: #fafafa; }
 .aggregateur .comments > .panel > .panel-body > .panel .panel-body > .panel > .panel-body > .panel > .panel-body > .panel > .panel-body > .panel { background-color: #fafafa; }
 
-/*** ***/
-.comment_form_checkbox { display: none; }
-.comment_form_checkbox:not(:checked) + .comment_form { display: none; }
+/*** display post***/
+input[id^="checkbox-replyto-comment"] { display: none; }
+input[id^="checkbox-replyto-comment"]:not(:checked) + .comment_form { display: none; }
+.comment_form { max-width: 60rem; padding: 0; }
+
+input[id^="checkbox-close-comment"] { display: none; }
+input[id^="checkbox-close-comment"]:checked + .comment .content,
+input[id^="checkbox-close-comment"]:checked + .comment .actions { display: none; }
+input[id^="checkbox-close-comment"]:checked ~ .panel { display: none; }
+input[id^="checkbox-close-comment"]:checked + .comment { margin-bottom: 0; }
+input[id^="checkbox-close-comment"]:checked + .comment .meta label:after { content: " (caché)"; font-style: italic; color: #aaa; }
+input[id^="checkbox-close-comment"]:checked + .comment .meta .minus { display: none; }
+input[id^="checkbox-close-comment"]:not(:checked) + .comment .meta .plus { display: none; }
+
 .aggregateur label:hover { cursor: pointer; }
 
 /*** Nouveau Post ***/

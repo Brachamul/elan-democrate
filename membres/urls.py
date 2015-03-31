@@ -4,7 +4,7 @@ from django.views.generic import RedirectView
 from . import views
 
 urlpatterns = patterns('',
-	url(r'^$', RedirectView.as_view(permanent=False, url='/accueil/'), name='membre'),
+	url(r'^$', RedirectView.as_view(permanent=False, url='/accueil/'), name='membres'),
 	url(r'^enregistrement/$', views.enregistrement, name='enregistrement'),
 	url(r'^enregistrement/(?P<num_adherent>[\d]+)&(?P<email_confirmation_code>[A-Z0-9]+)$', views.url_enregistrement, name='url_enregistrement'),
 	url(r'^connexion/$', views.connexion, name='connexion'),

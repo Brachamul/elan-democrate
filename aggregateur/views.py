@@ -26,6 +26,7 @@ def afficher_le_post(request, slug):
 	except Post.DoesNotExist : raise Http404("Ce post n'existe pas")
 	else :
 		post = get_post_meta(request, post)
+		post.number_of_comments = count_post_comments(post)
 		if request.method == "POST":
 			new_comment = Comment(content=request.POST.get('content'), author=request.user)
 			parent_comment = request.POST.get('parent_comment')
@@ -49,6 +50,7 @@ def aggregateur(request, fil):
 		return { 'posts': posts, 'template': "aggregateur/carte_aggregateur.html", }
 
 def get_post_meta(request, post):
+	post.number_of_comments = count_post_comments(post)
 	if post.format == "LINK" : post.link = post.content
 	else : post.link = post.slug
 	try : vote = Vote.objects.get(post=post, user=request.user)
@@ -106,6 +108,44 @@ def healthify(post):
 	neg = Vote.objects.filter(post=post, color="NEG").count()
 	post.health = pos-neg
 	post.save()
+
+
+### Commentaires
+
+def count_post_comments(post):
+	number_of_comments = 0
+	comments = Comment.objects.filter(parent_post=post)
+	for comment in comments :
+		number_of_comments += 1
+		comments = Comment.objects.filter(parent_comment=comment)
+		for comment in comments :
+			number_of_comments += 1
+			comments = Comment.objects.filter(parent_comment=comment)
+			for comment in comments :
+				number_of_comments += 1
+				comments = Comment.objects.filter(parent_comment=comment)
+				for comment in comments :
+					number_of_comments += 1
+					comments = Comment.objects.filter(parent_comment=comment)
+					for comment in comments :
+						number_of_comments += 1
+						comments = Comment.objects.filter(parent_comment=comment)
+						for comment in comments :
+							number_of_comments += 1
+							comments = Comment.objects.filter(parent_comment=comment)
+							for comment in comments :
+								number_of_comments += 1
+								comments = Comment.objects.filter(parent_comment=comment)
+								for comment in comments :
+									number_of_comments += 1
+									comments = Comment.objects.filter(parent_comment=comment)
+									for comment in comments :
+										number_of_comments += 1
+										comments = Comment.objects.filter(parent_comment=comment)
+										for comment in comments :
+											number_of_comments += 1
+											comments = Comment.objects.filter(parent_comment=comment)
+	return number_of_comments
 
 ### Misc
 
