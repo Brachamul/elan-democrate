@@ -93,6 +93,8 @@ Securité
 * Secure the settings.py file
 * Prevent mass sending of email confirmation messages
 * Add terms and conditions
+* Remove super login
+
 
 
 ***
