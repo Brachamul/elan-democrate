@@ -22,7 +22,9 @@
 			{% load gravatar %}
 			{% if user == user_object %}
 			<div class="gravatar-edit">
-				<p>Votre avatar est géré par <strong>Gravatar</strong>. Il dépend de votre adresse mail. Pour modifier votre avatar, cliquez <a href="{% gravatar_profile_url user.email %}">ici</a>.</p>
+				<p>Votre avatar est géré par <strong>Gravatar</strong>.</p>
+				<p>Il dépend de votre adresse mail.</p>
+				<p>Pour modifier votre avatar, cliquez <a href="{% gravatar_profile_url user.email %}">ici</a>.</p>
 			</div>{% endif %}
 			<img class="gravatar img-responsive center-block" src="{% gravatar_url user_object.email 128 %}" />
 		</div>

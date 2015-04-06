@@ -10,7 +10,7 @@
  /*.panel.profil .editable:after { content: "\270f"; color: rgba(0, 0, 0, 0.8); position: absolute; top: 0; right: 0; font-family: "Glyphicons Halflings"; }*/
 
 .panel.profil.editable .profile-picture.editable .gravatar-edit { position: absolute; width: 100%; text-align: center; }
-.panel.profil.editable .profile-picture.editable .gravatar-edit p { margin: 1em auto 0 auto; width: 30em; }
+.panel.profil.editable .profile-picture.editable .gravatar-edit p { margin: 1em auto 0 auto; max-width: 30em; }
 
 .panel.profil.editable .profile-picture.editable:hover img { opacity: .2; }
 .panel.profil.editable .profile-picture.editable:not(:hover) .gravatar-edit { display: none; }
