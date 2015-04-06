@@ -2,7 +2,7 @@ Membres
 =======
 
 * **Permettre la gestion de mandats JDem**
-* **Expliquer le fonctionnement de Gravatar**
+* ~~Expliquer le fonctionnement de Gravatar~~
 * Afficher le statut d'adhesion
 * URL du profil par nom
 
