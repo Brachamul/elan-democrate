@@ -91,7 +91,7 @@ def SendAuthCode(user):
 	new_credentials = Credentials(user=user, email=user.email)
 	new_credentials.save()
 	code = new_credentials.code
-	lien = "http://elandemocrate.fr/adherent/connexion/" + user.username + "&" + code
+	lien = "http://elandemocrate.fr/m/connexion/" + user.username + "&" + code
 	send_mail(
 		"[Élan Démocrate] Code d'accès : {code}".format(code=code),
 		"Cliquez sur le lien suivant {lien}, ou entrez le code {code} sur le site Élan Démocrate pour vous authentifier.\n\n"
@@ -134,7 +134,7 @@ def SendEmailConfirmationCode(request, adherent):
 	new_email_confirmation_instance = EmailConfirmationInstance(adherent=adherent, email=adherent.email)
 	new_email_confirmation_instance.save()
 	code = new_email_confirmation_instance.code
-	lien = "http://elandemocrate.fr/adherent/enregistrement/" + str(adherent.num_adhérent) + "&" + code
+	lien = "http://elandemocrate.fr/m/enregistrement/" + str(adherent.num_adhérent) + "&" + code
 	send_mail(
 		"[Élan Démocrate] Création de votre compte",
 		"Bonjour,\n\n"
