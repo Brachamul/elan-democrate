@@ -66,6 +66,7 @@ Authentification
 * Ignorer les caractères "espace" dans le code d'authentification
 * Make the "register" button on the "connexion" page remember the content of the email/number field
 * **Enable email registration, currently there's only adherent number registration**
+* **Gérer le cas où l'utilisateur n'est pas enregistré et entre son numéro adhérent dans connexion**
 * Mettre en place l'authentification par SMS
 * Ajouter du JS à l'authentification
 
