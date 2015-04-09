@@ -43,10 +43,11 @@ def afficher_le_post(request, slug):
 def aggregateur(request, fil):
 	''' génère une carte qui affiche les données des 20 derniers posts
 		l'argument "fil" n'est pas opérationnel '''
-	try : posts = Post.objects.all().order_by('-rank', '-health')[:20]
+	try : posts = Post.objects.all().order_by('-rank', '-health')[:100]
 	except Post.DoesNotExist : return False
 	else :
 		for post in posts : post = get_post_meta(request, post)
+		rank_posts(request) # classe les posts s'ils n'ont pas été reclassés depuis au moins 5 minutes
 		return { 'posts': posts, 'template': "aggregateur/carte_aggregateur.html", }
 
 def get_post_meta(request, post):
@@ -87,27 +88,52 @@ def vote(request, post_id, color):
 	# return the endcolor of the vote so that we can light up the up/down arrows
 	return HttpResponse(endcolor)
 
+
 from datetime import datetime, timedelta
 from math import log
-def rank_posts(request):
-	''' straight from the reddit algorithm
-	cette fonction donne un rang à tout les posts '''
-	bayrou_2007 = datetime(2007, 4, 22) # 18% quand même !+
-	for post in Post.objects.filter(date__gt=datetime.now()-timedelta(days=30)) : # on arrête de ranker les posts de + d'un mois
-		healthify(post) # on recalcule le score du post
-		time_since_bayrou = ( post.date - bayrou_2007 ) # quel est l'âge relatif du post ?
-		time_since_bayrou = time_since_bayrou.days * 86400 + time_since_bayrou.seconds # conversion en secondes
-		order = log(max(abs(post.health), 1), 10)
-		sign = 1 if post.health > 0 else -1 if post.health < 0 else 0
-		post.rank = round( sign * order + time_since_bayrou / 45000, 7)
-		post.save()
-	return HttpResponseRedirect('/')
+
+def rank_posts(request, force=False):
+	''' compte le score relatif d'un post
+	straight from the reddit algorithm '''
+	if time_to_rerank(request) == True or force == True :
+		# on classe les posts s'il n'y a pas eu de classement depuis 5 minutes
+		# sauf si un post vient d'être créé, dans quel cas cette fonction est appelée avec l'argument "force"
+		bayrou_2007 = datetime(2007, 4, 22) # 18% quand même !+
+		for post in Post.objects.filter(date__gt=datetime.now()-timedelta(days=30)) : # on arrête de ranker les posts de + d'un mois
+			healthify(post) # on recalcule le score du post
+			time_since_bayrou = ( post.date - bayrou_2007 ) # quel est l'âge relatif du post ?
+			time_since_bayrou = time_since_bayrou.days * 86400 + time_since_bayrou.seconds # conversion en secondes
+			order = log(max(abs(post.health), 1), 10)
+			sign = 1 if post.health > 0 else -1 if post.health < 0 else 0
+			post.rank = round( sign * order + time_since_bayrou / 45000, 7)
+			post.save()
+			result = "Classement réussi !"
+	else :
+		result = "Le dernier classement date déjà d'il y a moins de 5 minutes."
+	print (result)
+	return HttpResponse(result)
 
 def healthify(post):
+	''' compte le score absolu d'un post '''
 	pos = Vote.objects.filter(post=post, color="POS").count()
 	neg = Vote.objects.filter(post=post, color="NEG").count()
 	post.health = pos-neg
 	post.save()
+
+def time_to_rerank(request):
+	try :
+		last_ranking = LastRanking.objects.latest('date')
+	except LastRanking.DoesNotExist :
+		last_ranking = LastRanking.objects.create(date=datetime.now())
+		return True
+	else :
+		if last_ranking.date < (datetime.now()-timedelta(minutes=5)) :
+			last_ranking.date = datetime.now()
+			last_ranking.save()
+			return True
+		else :
+			return False
+
 
 
 ### Commentaires
@@ -170,6 +196,7 @@ def nouveau_post(request):
 					)
 				new_post.save()
 				new_post_adress = "/p/" + new_post.slug
+				rank_posts(request, force=True)
 				print ("\n- Nouveau texte posté par %s : %s" % (request.user.username, request.POST.get('title')))
 				messages.success(request, "Votre post est publié.")
 				return HttpResponseRedirect(new_post_adress)

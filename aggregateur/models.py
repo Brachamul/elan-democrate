@@ -35,6 +35,9 @@ class Vote(models.Model):
 	color = models.CharField(max_length=24, choices=(("POS", "positif"), ("NEG", "négatif"), ("NEU", "neutre")))
 	def __str__(self): return self.color
 
+class LastRanking(models.Model):
+	date = models.DateTimeField()
+
 
 
 class Comment(models.Model):
