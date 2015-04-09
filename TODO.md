@@ -2,7 +2,7 @@ Membres
 =======
 
 * **Permettre la gestion de mandats JDem**
-* ~~Expliquer le fonctionnement de Gravatar~~
+* ~~Expliquer le fonctionnement de Gravatar~~ (1h)
 * Afficher le statut d'adhesion
 * URL du profil par nom
 
@@ -32,7 +32,7 @@ Aggrégateur d'actualité
 Posts
 -----
 * **Mettre en place la pagination des posts**
-* **Recharger le score toutes les x minutes**
+* ~~**Recharger le score toutes les x minutes**~~ (2h)
 * Ajouter un système d'illustration des posts
 * Scraper une illustration pour chaque post
 * Scraper le domaine des URLs
@@ -116,4 +116,4 @@ Sites
 Meta
 ====
 
-* ~~Retirer la DB des commits~~
+* ~~Retirer la DB des commits~~ (1h)
