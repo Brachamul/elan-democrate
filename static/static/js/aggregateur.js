@@ -4,6 +4,7 @@ jQuery(function($) {
 		var postid;
 		postid = $(this).attr("data-postid");
 		postSelector = '#post-' + postid;
+		var url;
 		arrowSelector = postSelector + ' .vote.pos';
 		url = '/p/' + postid + '/vote/' + 'POS';
 		$.get(url, function(color){
@@ -23,6 +24,7 @@ jQuery(function($) {
 		var postid;
 		postid = $(this).attr("data-postid");
 		postSelector = '#post-' + postid;
+		var url;
 		url = '/p/' + postid + '/vote/' + 'NEG';
 		$.get(url, function(color){
 			if (color == "POS") {
@@ -35,6 +37,12 @@ jQuery(function($) {
 				$(postSelector + ' .vote.pos').removeClass("active");
 			}
 		})
+	});
+
+	$('#postranker').click(function(){
+		$.get('/p/rank_posts', function(result){
+			$('#postranker-result').html(result);
+		});
 	});
 
 });
