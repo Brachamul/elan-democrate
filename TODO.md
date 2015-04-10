@@ -1,7 +1,8 @@
 Accueil
 =======
 
-* Modifier la barre de navigation en enlevant les boutons pour les mettre sous la photo de profil
+* ~~Modifier la barre de navigation en enlevant les boutons pour les mettre sous la photo de profil~~ (2h)
+* Faire fonctionner la barre de navigation proprement sur mobile
 
 
 
