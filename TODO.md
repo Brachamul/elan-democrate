@@ -41,10 +41,11 @@ Posts
 Commentaires
 --------
 * **Return to comment after new comment is submitted**
-* ~~**Répondre directement à un post**~~(2h) 
-* Éditer les commentaires
+* ~~**Répondre directement à un post**~~ (2h) 
 * Gérer le cas de descente à X niveaux de commentaires
 * Voter sur les commentaires
+* Rendre l'ajout de commentaires dynamique (js)
+* Éditer les commentaires
 * Supprimer son commentaire
 * Permettre l'édition riche de commentaires, notamment avec des retours à la ligne
 
