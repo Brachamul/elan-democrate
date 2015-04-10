@@ -1,3 +1,8 @@
+Accueil
+=======
+
+* Modifier la barre de navigation en enlevant les boutons pour les mettre sous la photo de profil
+
 Membres
 =======
 
