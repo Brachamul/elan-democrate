@@ -49,11 +49,9 @@
 		</div>
 	</article>
 
-	<div class="content panel panel-default">
-		<div class="panel-body">
-			{{ post.content }}
-		</div>
-	</div>
+	<p class="content">{{ post.content }}</p>
+
+<hr>
 
 <div class="comments">
 
@@ -68,7 +66,7 @@
 				{{ comment_form.content.field.errors }}
 				{{ comment_form.content }}
 			</div>
-			<input type="hidden" name="parent_comment" value="{{ post.pk }}">
+			<input type="hidden" name="parent_post" value="{{ post.pk }}">
 			<button type="submit" class="btn btn-primary">Poster</button>
 			<label class="btn btn-default" for="checkbox-replyto-post-{{ post.pk }}">Cacher</label>
 		</div>

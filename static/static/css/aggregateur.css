@@ -53,8 +53,9 @@
 .aggregateur .comments > .panel > .panel-body > .panel .panel-body > .panel > .panel-body > .panel > .panel-body > .panel > .panel-body > .panel { background-color: #fafafa; }
 
 /*** display post***/
-input[id^="checkbox-replyto-comment"] { display: none; }
-input[id^="checkbox-replyto-comment"]:not(:checked) + .comment_form { display: none; }
+input[id^="checkbox-replyto"] { display: none; }
+input[id^="checkbox-replyto"]:not(:checked) ~ .comment_form { display: none; }
+input[id^="checkbox-replyto"]:checked + p label { display: none; }
 .comment_form { max-width: 60rem; padding: 0; }
 
 input[id^="checkbox-close-comment"] { display: none; }

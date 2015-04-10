@@ -36,14 +36,17 @@ Posts
 * Ajouter un système d'illustration des posts
 * Scraper une illustration pour chaque post
 * Scraper le domaine des URLs
+* Déplacer la scorebox sur mobile
 
 Commentaires
 --------
 * **Return to comment after new comment is submitted**
+* ~~**Répondre directement à un post**~~(2h) 
 * Éditer les commentaires
 * Gérer le cas de descente à X niveaux de commentaires
 * Voter sur les commentaires
 * Supprimer son commentaire
+* Permettre l'édition riche de commentaires, notamment avec des retours à la ligne
 
 Chaînes
 -------

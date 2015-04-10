@@ -30,6 +30,7 @@ def afficher_le_post(request, slug):
 		if request.method == "POST":
 			new_comment = Comment(content=request.POST.get('content'), author=request.user)
 			parent_comment = request.POST.get('parent_comment')
+			print ("Parent comment is : %s" % parent_comment)
 			if parent_comment :
 				parent_comment = Comment.objects.get(id=parent_comment)
 				new_comment.parent_comment = parent_comment
