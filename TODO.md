@@ -51,7 +51,7 @@ Posts
 
 Commentaires
 --------
-* **Return to comment after new comment is submitted**
+* ~~**Return to comment after new comment is submitted**~~
 * ~~**Répondre directement à un post**~~ (2h) 
 * Gérer le cas de descente à X niveaux de commentaires
 * Voter sur les commentaires
@@ -59,6 +59,10 @@ Commentaires
 * Éditer les commentaires
 * Supprimer son commentaire
 * ~~Permettre l'édition riche de commentaires, notamment avec des retours à la ligne~~ (2h, ajout de markdown)
+* Corriger la fonction de comptage des commentaires
+* Déplacer la fonction de création de commentaire de la fonction générale d'affichage de post
+* Bouton pour "cacher" le formulaire de réponse aux commentaires
+* Ajouter un permalien
 
 Chaînes
 -------

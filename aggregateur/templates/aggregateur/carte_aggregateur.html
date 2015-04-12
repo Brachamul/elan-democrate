@@ -41,9 +41,11 @@
 				</div>
 			</div>
 		{% endfor %}
+		{% comment %} There is jQuery AJAX magic here
 		{% if user.is_superuser %}
 			<span id="postranker" class="btn btn-primary">Rank posts !</span>
 			<span id="postranker-result"></span>
 		{% endif %}
+		{% endcomment %}
 	</div>
 </div>

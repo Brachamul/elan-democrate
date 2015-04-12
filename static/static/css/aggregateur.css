@@ -55,11 +55,14 @@
 .aggregateur .content h5,
 .aggregateur .content h6 { font-size: 1.4rem; margin-top: 0; line-height: 1.8; } 
 
+.aggregateur .content p { margin-bottom: 0; }
+
 .aggregateur .comment .meta,
 .aggregateur .comment .actions { color: #666; font-size: .8em; }
-.aggregateur .comment { margin-bottom: 1rem; }
 .aggregateur .comment .content { max-width: 60rem; line-height: 1.8; margin: 0.2em 0 .5em 0; width: 100%;}
+.aggregateur .comments .panel:target { background-color: lightyellow; }
 
+.aggregateur .comments .panel { margin-top: 15px; margin-bottom: 0; }
 .aggregateur .comments > .panel > .panel-body > .panel { background-color: #fafafa; }
 .aggregateur .comments > .panel > .panel-body > .panel .panel-body > .panel > .panel-body > .panel { background-color: #fafafa; }
 .aggregateur .comments > .panel > .panel-body > .panel .panel-body > .panel > .panel-body > .panel > .panel-body > .panel > .panel-body > .panel { background-color: #fafafa; }

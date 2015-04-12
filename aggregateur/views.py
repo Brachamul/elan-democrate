@@ -36,9 +36,8 @@ def afficher_le_post(request, slug):
 				new_comment.parent_comment = parent_comment
 			else : new_comment.parent_post = post
 			new_comment.save()
-			HttpResponseRedirect('#checkbox-comment-%d' % new_comment.pk)
-
-		return render(request, 'aggregateur/afficher_le_post.html', {'post': post, 'comment_form': CommentForm()})
+			return HttpResponseRedirect('#comment%d' % new_comment.pk)
+	return render(request, 'aggregateur/afficher_le_post.html', {'post': post, 'comment_form': CommentForm()})
 
 @login_required
 def aggregateur(request, fil):
