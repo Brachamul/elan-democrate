@@ -3,6 +3,7 @@ Accueil
 
 * ~~Modifier la barre de navigation en enlevant les boutons pour les mettre sous la photo de profil~~ (2h)
 * Faire fonctionner la barre de navigation proprement sur mobile
+* Permettre à l'utilisateur de fermer les messages serveur *
 
 
 
@@ -45,6 +46,8 @@ Posts
 * Scraper une illustration pour chaque post
 * Scraper le domaine des URLs
 * Déplacer la scorebox sur mobile
+* Preview du post en dessous
+* Guide markdown
 
 Commentaires
 --------

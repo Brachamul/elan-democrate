@@ -45,4 +45,10 @@ jQuery(function($) {
 		});
 	});
 
+	// Remplace les tags heading par des paragraphes dans les posts & commentaires en markdown
+	$('.aggregateur .content').find('h1, h2, h3, h4, h5, h6').replaceWith(function() {
+		return '<p>' + $(this).text() + '</p>';
+	});
+
+
 });
