@@ -33,6 +33,10 @@
 				<span class="author">par <a href="{% url 'membres' %}{{ post.author.id }}">{{ post.author.profil.nom_courant }}</a></span>
 				{% comment %}<span class="channel"> dans <a href="#">/c/posts</a></span>{% endcomment %}
 			</div>
+			<div class="content">
+				{% load markdown_deux_tags %}
+				{{ post.content|markdown }}
+			</div>
 			<div class="actions">
 				<span class="comments">
 					{% if post.number_of_comments = 0 %}
@@ -49,9 +53,6 @@
 		</div>
 	</article>
 
-	<p class="content">{{ post.content }}</p>
-
-<hr>
 
 <div class="comments">
 

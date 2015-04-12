@@ -3,6 +3,7 @@ Accueil
 
 * ~~Modifier la barre de navigation en enlevant les boutons pour les mettre sous la photo de profil~~ (2h)
 * Faire fonctionner la barre de navigation proprement sur mobile
+* Permettre à l'utilisateur de fermer les messages serveur *
 
 
 
@@ -45,6 +46,8 @@ Posts
 * Scraper une illustration pour chaque post
 * Scraper le domaine des URLs
 * Déplacer la scorebox sur mobile
+* Preview du post en dessous
+* Guide markdown
 
 Commentaires
 --------
@@ -55,7 +58,7 @@ Commentaires
 * Rendre l'ajout de commentaires dynamique (js)
 * Éditer les commentaires
 * Supprimer son commentaire
-* Permettre l'édition riche de commentaires, notamment avec des retours à la ligne
+* ~~Permettre l'édition riche de commentaires, notamment avec des retours à la ligne~~ (2h, ajout de markdown)
 
 Chaînes
 -------

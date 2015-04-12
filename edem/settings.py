@@ -35,13 +35,18 @@ INSTALLED_APPS = (
 	'django.contrib.messages',
 	'django.contrib.staticfiles',
 	'django_gravatar', # django-gravatar2
-	'auth_with_one_time_code',
+	'markdown_deux', # github.com/trentm/django-markdown-deux
+	'auth_with_one_time_code', 
 	'accueil',
 	'membres',
 	'fichiers_adherents',
 	'tableau_de_bord',
 	'aggregateur',
 )
+
+# DJANGO MARKDOWN DEUX
+
+
 
 MIDDLEWARE_CLASSES = (
 	'django.contrib.sessions.middleware.SessionMiddleware',

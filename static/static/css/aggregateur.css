@@ -41,7 +41,19 @@
 
 .aggregateur .vote:hover { cursor: pointer; }
 
-.aggregateur .post + .content { max-width: 80rem; margin-left: 5rem; }
+.aggregateur .post .content {
+	max-width: 80rem;
+	margin: 1rem 0;
+}
+
+/* On annule le formattage différent des h1/h2/h3/h4/ */
+/* Y'a aussi du jQuery pour faire le ménage */
+.aggregateur .content h1,
+.aggregateur .content h2,
+.aggregateur .content h3,
+.aggregateur .content h4,
+.aggregateur .content h5,
+.aggregateur .content h6 { font-size: 1.4rem; margin-top: 0; line-height: 1.8; } 
 
 .aggregateur .comment .meta,
 .aggregateur .comment .actions { color: #666; font-size: .8em; }
