@@ -58,7 +58,7 @@ Commentaires
 * Rendre l'ajout de commentaires dynamique (js)
 * Éditer les commentaires
 * Supprimer son commentaire
-* Permettre l'édition riche de commentaires, notamment avec des retours à la ligne
+* ~~Permettre l'édition riche de commentaires, notamment avec des retours à la ligne~~ (2h, ajout de markdown)
 
 Chaînes
 -------
