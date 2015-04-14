@@ -9,7 +9,8 @@
 	</div>
 	
 	<div class="content">
-		{{ comment.content }}
+		{% load markdown_deux_tags %}
+		{{ comment.content|markdown }}
 	</div>
 	
 	<div class="actions">
@@ -17,12 +18,13 @@
 		{% if user == comment.author %}
 {% comment %}	<span class="modify">modifier</span> {% endcomment %}
 		{% endif %}
-		<label for="checkbox-replyto-comment-{{comment.pk}}">
+		<label for="checkbox-replyto-comment-{{ comment.pk }}">
 		<span class="reply">répondre</span></label>
 {% comment %}	<span class="report">signaler</span> {% endcomment %}
 	</div>
 </div>
 
+{% comment %} This code also exists in the "afficher_le_post" page {% endcomment %}
 <input id="checkbox-replyto-comment-{{ comment.pk }}" type="checkbox"/>
 <div class="comment_form panel-body">
 	<form method="POST" action="" enctype="multipart/form-data">

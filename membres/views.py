@@ -93,7 +93,7 @@ def url_enregistrement(request, num_adherent, email_confirmation_code):
 			registered = True
 	if registered :
 		messages.success(request, "Votre compte a bien été créé, vous pouvez désormais vous connecter.")
-		return redirect(reverse('mon-profil'))
+		return redirect(reverse('accueil'))
 	else :
 		return render_to_response(
 			'membres/enregistrement.html',

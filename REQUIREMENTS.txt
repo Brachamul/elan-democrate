@@ -1,0 +1,9 @@
+Django==1.7
+Markdown==2.6.1
+django-admin-bootstrapped==2.3.5
+django-autoslug==1.7.2
+django-gravatar2==1.2.1
+django-markdown==0.8.4
+django-markdown-deux==1.0.5
+markdown2==2.3.0
+virtualenv==1.11.6
