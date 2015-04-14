@@ -48,6 +48,7 @@ Posts
 * Déplacer la scorebox sur mobile
 * Preview du post en dessous
 * Guide markdown
+* Bug URL du post lien
 
 Commentaires
 --------
@@ -63,6 +64,8 @@ Commentaires
 * Déplacer la fonction de création de commentaire de la fonction générale d'affichage de post
 * Bouton pour "cacher" le formulaire de réponse aux commentaires
 * Ajouter un permalien
+* Les commentaires gris sont pas jaunes
+
 
 Chaînes
 -------
