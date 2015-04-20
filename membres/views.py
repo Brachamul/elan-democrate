@@ -62,14 +62,20 @@ def enregistrement(request):
 						messages.error(request, "Notre fichier adhérent ne contient pas d'adresse email valide pour ce numéro adhérent. Nous ne pouvons donc pas vous authentifier.")
 			else : messages.info(request, "Cet adhérent est déjà enregistré sur Élan Démocrate.")
 
-#		elif "@" in numero_ou_email :
-#			# Cela ressemble à une adresse mail
-#			email = numero_ou_email
-#			try : user = User.objects.get(email=email)
-#			except User.DoesNotExist :
-#				messages.error(request, "Nous ne connaissons pas cette adresse email.")
-#			else : username = user.username
-#
+		elif "@" in numero_ou_email :
+			# Cela ressemble à une adresse mail
+			email = numero_ou_email
+			try : user = User.objects.get(email=email)
+			except User.DoesNotExist :
+				# Cet email n'existe pas dans la base utilisateur
+				# Regardons si c'est un adhérent existant dans la base
+				try : adherent = Adhérent.objects.get(email=email)
+				except Adhérent.DoesNotExist : print("Cette adresse email n'existe pas dans la base de données des Jeunes Démocrates.")
+				else :
+					print ("Envoi d'email de création de compte à ", adherent.email)
+					backend.SendEmailConfirmationCode(request, adherent)
+			messages.info(request, "Si cette adresse existe dans notre base adhérent, un message de création de compte lui a été envoyé.")
+
 		else :
 			messages.error(request, "Vous semblez avoir entré quelque chose qui n'est ni un numéro adhérent, ni une adresse mail...")
 
@@ -118,7 +124,7 @@ def connexion(request):
 			email = numero_ou_email
 			try : user = User.objects.get(email=email)
 			except User.DoesNotExist :
-				messages.error(request, "Nous ne connaissons pas cette adresse email.")
+				messages.error(request, "Nous ne connaissons pas cette adresse email. Si vous n'avez pas encore de compte, vous pouvez en créer un.")
 			else : username = user.username
 		elif numero_ou_email == "" : pass
 		# on ne met pas de message d'erreur si l'utilisateur a directement cliqué sur le bouton de connexion sans remplir le champs
@@ -142,12 +148,12 @@ def connexion(request):
 					return HttpResponseRedirect('/')
 				elif auth_result == "bad-details" :
 					print("going bad-details")
-					return render_to_response('membres/connexion.html', {'username': username, 'code_sent': True, 'logging_in': True}, context)
+					return render_to_response('membres/connexion.html', {'numero_ou_email': numero_ou_email, 'code_sent': True, 'logging_in': True}, context)
 				else :
 					print("going to shit")
-					return render_to_response('membres/connexion.html', {'username': username, 'code_sent': False, 'logging_in': True}, context)
+					return render_to_response('membres/connexion.html', {'numero_ou_email': numero_ou_email, 'code_sent': False, 'logging_in': True}, context)
 
-		return render_to_response('membres/connexion.html', {'username': username, 'code_sent': code_sent, 'logging_in': True}, context)
+		return render_to_response('membres/connexion.html', {'numero_ou_email': numero_ou_email, 'code_sent': code_sent, 'logging_in': True}, context)
 
 	return render_to_response('membres/connexion.html', {'logging_in': True}, context) # if something fails, reload page with messages
 

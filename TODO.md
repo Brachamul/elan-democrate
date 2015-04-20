@@ -1,10 +1,10 @@
-Accueil
-=======
+Base
+====
 
 * ~~Modifier la barre de navigation en enlevant les boutons pour les mettre sous la photo de profil~~ (2h)
 * Faire fonctionner la barre de navigation proprement sur mobile
 * Permettre à l'utilisateur de fermer les messages serveur *
-
+* Faire apparaitre les sous-menus de la barre de nav au survol de la souris
 
 
 Membres
@@ -86,7 +86,7 @@ Authentification
 * Gérer la durée des sessions
 * Ignorer les caractères "espace" dans le code d'authentification
 * Make the "register" button on the "connexion" page remember the content of the email/number field
-* **Enable email registration, currently there's only adherent number registration**
+* ~~**Enable email registration, currently there's only adherent number registration**~~
 * **Gérer le cas où l'utilisateur n'est pas enregistré et entre son numéro adhérent dans connexion**
 * Si dans connexion on clique sur "créer un compte" lancer directement le processus d'enregistrement plutôt que rediriger
 * Si un mail est envoyé pour l'enregistrement, ne pas remontrer le formulaire
@@ -112,6 +112,7 @@ Tableau de Bord
 ===============
 
 * Compter le nombre d'emails envoyés par utilisateur (# authentification)
+* Notamment lors de l'enregistrement
 
 
 
@@ -123,6 +124,7 @@ Securité
 * Prevent mass sending of email confirmation messages
 * Add terms and conditions
 * Remove super login
+* Create a role that can do everything except look at adherent data
 
 
 

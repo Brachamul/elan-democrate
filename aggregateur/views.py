@@ -99,6 +99,7 @@ def rank_posts(request, force=False):
 		# on classe les posts s'il n'y a pas eu de classement depuis 5 minutes
 		# sauf si un post vient d'être créé, dans quel cas cette fonction est appelée avec l'argument "force"
 		bayrou_2007 = datetime(2007, 4, 22) # 18% quand même !+
+		result = "Il n'y a pas encore de posts à classer" # annuler par la suite s'il y a des posts
 		for post in Post.objects.filter(date__gt=datetime.now()-timedelta(days=30)) : # on arrête de ranker les posts de + d'un mois
 			healthify(post) # on recalcule le score du post
 			time_since_bayrou = ( post.date - bayrou_2007 ) # quel est l'âge relatif du post ?
