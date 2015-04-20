@@ -42,11 +42,8 @@ INSTALLED_APPS = (
 	'fichiers_adherents',
 	'tableau_de_bord',
 	'aggregateur',
+	'mandats',
 )
-
-# DJANGO MARKDOWN DEUX
-
-
 
 MIDDLEWARE_CLASSES = (
 	'django.contrib.sessions.middleware.SessionMiddleware',

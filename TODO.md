@@ -1,3 +1,4 @@
+***
 Base
 ====
 
@@ -6,7 +7,7 @@ Base
 * Permettre à l'utilisateur de fermer les messages serveur *
 * Faire apparaitre les sous-menus de la barre de nav au survol de la souris
 
-
+***
 Membres
 =======
 
@@ -15,6 +16,13 @@ Membres
 * Afficher le statut d'adhesion
 * URL du profil par nom
 
+
+***
+Mandats
+=================
+
+* Permettre la proposition d'un mandat
+* Systèmes de validation et covalidation
 
 
 ***
@@ -113,7 +121,7 @@ Tableau de Bord
 
 * Compter le nombre d'emails envoyés par utilisateur (# authentification)
 * Notamment lors de l'enregistrement
-
+* Noter les changements de mandats
 
 
 ***
