@@ -15,7 +15,7 @@ Membres
 * ~~Expliquer le fonctionnement de Gravatar~~ (1h)
 * Afficher le statut d'adhesion
 * URL du profil par nom
-
+* Crééer un membre pour chaque adhérent du fichier
 
 ***
 Mandats

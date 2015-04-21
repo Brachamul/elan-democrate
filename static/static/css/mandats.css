@@ -1,0 +1,1 @@
+span.mandat:not(:last-child):after { content: ", "; }

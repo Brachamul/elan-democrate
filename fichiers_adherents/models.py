@@ -22,6 +22,7 @@ class FichierAdhérents(models.Model):
 	class Meta:
 		verbose_name_plural = 'fichiers adhérents'
 		permissions = (('peut_televerser', 'peut téléverser'),)
+		# if request.user.has_perm('fichiers_adhérents.peut_televerser')
 
 
 class Adhérent(models.Model):

@@ -10,7 +10,8 @@ from django.views.generic import TemplateView, DetailView
 from .models import *
 from django.contrib.auth.models import User
 from fichiers_adherents.models import Adhérent
-
+from mandats.models import Detenteur
+from mandats.views import pecho_les_mandats
 from auth_with_one_time_code import backend
 
 ### Profile
@@ -22,7 +23,8 @@ class ProfileView(DetailView):
 
 	def get_context_data(self, **kwargs):
 		context = super(ProfileView, self).get_context_data(**kwargs)
-		context['user_object'] = get_object_or_404(User, pk=self.kwargs['pk'])
+		context['membre'] = get_object_or_404(User, pk=self.kwargs['pk'])
+		context['membre'].mandats = pecho_les_mandats(context['membre'])
 		return context
 
 
