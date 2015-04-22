@@ -9,12 +9,13 @@ from django.template import RequestContext
 import sys
 
 from .models import *
+from .forms import *
 
 def mandats_des_membres(request):
 	membres = User.objects.all()
 	for membre in membres :
 		membre.mandats = pecho_les_mandats(membre)
-	return render(request, 'mandats/mandats_des_membres.html', {'membres': membres})
+	return render(request, 'mandats/mandats_des_membres.html', {'membres': membres, 'nouveau_mandat_form': NouveauMandatForm()})
 
 def pecho_les_mandats(membre):
 	membre.mandats = []

@@ -12,6 +12,7 @@ from django.contrib.auth.models import User
 from fichiers_adherents.models import Adhérent
 from mandats.models import Detenteur
 from mandats.views import pecho_les_mandats
+from mandats.forms import NouveauMandatForm
 from auth_with_one_time_code import backend
 
 ### Profile
@@ -25,6 +26,7 @@ class ProfileView(DetailView):
 		context = super(ProfileView, self).get_context_data(**kwargs)
 		context['membre'] = get_object_or_404(User, pk=self.kwargs['pk'])
 		context['membre'].mandats = pecho_les_mandats(context['membre'])
+		context['nouveau_mandat_form'] = NouveauMandatForm()
 		return context
 
 

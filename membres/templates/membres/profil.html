@@ -5,6 +5,7 @@
 
 <title>EDEM - Profil</title>
 <link rel="stylesheet" href="{% get_static_prefix %}css/membres.css" >
+<link rel="stylesheet" href="{% get_static_prefix %}css/mandats.css" >
 
 {% endblock head %}
 
@@ -30,12 +31,13 @@
 		</div>
 	</div>
 	<div class="panel-body">
-		<p><strong>Occupations :</strong></p>
+		<h4>Occupations :</h4>
 		{% if membre.mandats %}
-			<p><strong>Mandats</strong> : {% include "mandats/widget_mandats.html" %}</p>
+			<h4>Mandats :</h4>
+			{% include "mandats/widget_mandats.html" %}
 		{% endif %}
-		<p><strong>Intérêts :</strong></p>
-		<p><strong>Compétences :</strong></p>
+		<h4>Intérêts :</h4>
+		<h4>Compétences :</h4>
 	</div>
 </div>
 </div>

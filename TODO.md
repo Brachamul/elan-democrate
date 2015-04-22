@@ -11,7 +11,7 @@ Base
 Membres
 =======
 
-* **Permettre la gestion de mandats JDem**
+* ~~**Permettre la gestion de mandats JDem**~~(4h)
 * ~~Expliquer le fonctionnement de Gravatar~~ (1h)
 * Afficher le statut d'adhesion
 * URL du profil par nom
@@ -21,6 +21,7 @@ Membres
 Mandats
 =================
 
+* Ajout et retrait de mandat via l'interface dédiée
 * Permettre la proposition d'un mandat
 * Systèmes de validation et covalidation
 
@@ -133,6 +134,7 @@ Securité
 * Add terms and conditions
 * Remove super login
 * Create a role that can do everything except look at adherent data
+* Remove DEBUG
 
 
 
@@ -149,3 +151,5 @@ Meta
 ====
 
 * ~~Retirer la DB des commits~~ (1h)
+** Add .encode("utf-8") to all prints
+* Add logging

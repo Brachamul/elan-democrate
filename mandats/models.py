@@ -16,14 +16,14 @@ class Institution(models.Model):
 
 class Mandat(models.Model):
 	institution = models.ForeignKey(Institution) 
-	date_de_debut = models.DateField()
+	date_de_debut = models.DateField(null=True)
 	date_de_fin = models.DateField(blank=True, null=True)
 	def __str__(self): return "{institution} {annee}".format(institution=self.institution, annee=self.date_de_debut.year)
 	class Meta: permissions = (('gere_les_mandats', 'gère les mandats'),)
 
 class Detenteur(models.Model):
-	user = models.OneToOneField(User, primary_key=True)
-	mandat = models.OneToOneField(Mandat)
+	user = models.ForeignKey(User, primary_key=True)
+	mandat = models.ForeignKey(Mandat)
 	titre = models.CharField(max_length=1023) # Membre du Bureau, Vice-Président, Conseiller Municipal, ...
 	charge = models.CharField(max_length=1023, blank=True, null=True) # en charge de la communication, délégué aux espaces verts, ...
 	date_de_debut = models.DateField(blank=True, null=True) # en cas de début différent du mandat
