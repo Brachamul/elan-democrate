@@ -1,5 +1,3 @@
-span.mandat:not(:last-of-type):after { content: ", "; }
-
 input[id^="checkbox-"] { display: none; }
 input[id^="checkbox-"]:not(:checked) + label + form { display: none; }
 input[id^="checkbox-"] ~ label:after { content: " +"; cursor: pointer; }

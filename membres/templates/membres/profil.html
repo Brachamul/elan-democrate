@@ -13,11 +13,8 @@
 
 {% block content %} {{ block.super }}
 
-<div class="col-md-3"></div>
-
-<div class="col-md-6">
-<div class="profil panel panel-default {% if user == membre %}editable{% endif %}">
-	<div class="panel-heading clearfix text-center">
+<div class="profil {% if user == membre %}editable{% endif %}">
+	<div class="clearfix text-center">
 		<h1>{{ membre.profil.nom_courant }}</h1>
 		<div class="editable profile-picture">
 			{% load gravatar %}
@@ -30,18 +27,43 @@
 			<img class="gravatar img-responsive center-block" src="{% gravatar_url membre.email 128 %}" />
 		</div>
 	</div>
-	<div class="panel-body">
-		<h4>Occupations :</h4>
-		{% if membre.mandats %}
-			<h4>Mandats :</h4>
-			{% include "mandats/widget_mandats.html" %}
+	<div class="profil-body">
+		{% if membre.bio %}
+			<li>
+				{% include "mandats/widget_mandats.html" %}
+			</li>
 		{% endif %}
-		<h4>Intérêts :</h4>
-		<h4>Compétences :</h4>
+		{% if membre.occupations %}
+			<li>
+				<h2>Occupation{{ membre.occupations|pluralize }}</h2>
+				{% include "mandats/widget_mandats.html" %}
+			</li>
+		{% endif %}
+		{% if membre.mandats %}
+			<li>
+				<h2>Mandat{{ membre.mandats|pluralize }}</h2>
+				{% include "mandats/widget_mandats.html" %}
+			</li>
+		{% endif %}
+		{% if membre.interets %}
+			<li>
+				<h2>Intérêt{{ membre.interets|pluralize }}</h2>
+				{% include "mandats/widget_mandats.html" %}
+			</li>
+		{% endif %}
+		{% if membre.competences %}
+			<li>
+				<h2>Compétence{{ membre.competences|pluralize }}</h2>
+				{% include "mandats/widget_mandats.html" %}
+			</li>
+		{% endif %}
 	</div>
 </div>
-</div>
-
-<div class="col-md-3"></div>
 
 {% endblock content %}
+
+				{% if membres.mandats %}
+					<td>
+						{% include "mandats/widget_mandats.html" %}
+					</td>
+				{% endif %}

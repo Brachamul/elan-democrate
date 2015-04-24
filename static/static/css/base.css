@@ -37,3 +37,5 @@ input:invalid:not(:focus) { border-color: red; }
 .anchor { clear: both; }
 
 .dropdown-menu .glyphicon { padding-right: 10px; }
+
+.tags span:not(:last-of-type):after { content: ", "; }
