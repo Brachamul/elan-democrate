@@ -1,5 +1,23 @@
-{% for mandat in membre.mandats %}
-    <span class="mandat">
-        {{ mandat }}
-    </span>
-{% endfor %}
+<div class="tags">
+	{% for mandat in membre.mandats %}
+		<span class="mandat">
+			{{ mandat }}
+		</span>
+	{% endfor %}
+</div>
+
+{% comment %}
+{% if perms.fichiers_adhérents.gere_les_mandats %}
+<input id="checkbox-{{ membre.pk }}" type="checkbox" />
+<label for="checkbox-{{ membre.pk }}"></label>
+<form method="POST" action="" enctype="multipart/form-data">
+	<div class="form-group">
+		{% csrf_token %}
+		{{ nouveau_mandat_form.as_ul }}
+		<input type="hidden" name="membre" value="{{ membre.pk }}">
+		<button type="submit" class="btn btn-primary">Ajouter</button>
+	</div>
+</form>
+{% endif %}
+?
+{% endcomment %}
