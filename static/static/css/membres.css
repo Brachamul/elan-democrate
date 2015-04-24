@@ -18,5 +18,3 @@
 .profil .profil-body { text-align: center; }
 
 .profil .profil-body h2 {  }
-
-.profil .profil-body span:not(:last-of-type):after { content: ", "; }

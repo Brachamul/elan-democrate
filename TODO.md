@@ -11,7 +11,7 @@ Base
 Membres
 =======
 
-* ~~**Permettre la gestion de mandats JDem**~~(4h)
+
 * ~~Expliquer le fonctionnement de Gravatar~~ (1h)
 * Afficher le statut d'adhesion
 * URL du profil par nom
@@ -21,7 +21,7 @@ Membres
 Mandats
 =================
 
-* Ajout et retrait de mandat via l'interface dédiée
+* ~~**Permettre la gestion de mandats JDem**~~(4h)
 * Permettre la proposition d'un mandat
 * Systèmes de validation et covalidation
 
@@ -58,6 +58,7 @@ Posts
 * Preview du post en dessous
 * Guide markdown
 * Bug URL du post lien
+* Rendre les affichages de posts plus responsive
 
 Commentaires
 --------

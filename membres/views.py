@@ -12,7 +12,7 @@ from django.contrib.auth.models import User
 from fichiers_adherents.models import Adhérent
 from mandats.models import Detenteur
 from mandats.views import pecho_les_mandats
-from mandats.forms import NouveauMandatForm
+#from mandats.forms import NouveauMandatForm
 from auth_with_one_time_code import backend
 
 ### Profile

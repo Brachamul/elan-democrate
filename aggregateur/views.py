@@ -192,8 +192,8 @@ def nouveau_post(request):
 					title=title,
 					content=content,
 					author=request.user,
-					channel=Channel.objects.get(pk=1), # change when adding more channels
-				#	illustration=
+#					channel=Channel.objects.get(pk=1), # change when adding more channels
+#					illustration=
 					)
 				new_post.save()
 				new_post_adress = "/p/" + new_post.slug

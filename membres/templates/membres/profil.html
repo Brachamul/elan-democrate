@@ -29,33 +29,23 @@
 	</div>
 	<div class="profil-body">
 		{% if membre.bio %}
-			<li>
 				{% include "mandats/widget_mandats.html" %}
-			</li>
 		{% endif %}
 		{% if membre.occupations %}
-			<li>
 				<h2>Occupation{{ membre.occupations|pluralize }}</h2>
 				{% include "mandats/widget_mandats.html" %}
-			</li>
 		{% endif %}
 		{% if membre.mandats %}
-			<li>
 				<h2>Mandat{{ membre.mandats|pluralize }}</h2>
 				{% include "mandats/widget_mandats.html" %}
-			</li>
 		{% endif %}
 		{% if membre.interets %}
-			<li>
 				<h2>Intérêt{{ membre.interets|pluralize }}</h2>
 				{% include "mandats/widget_mandats.html" %}
-			</li>
 		{% endif %}
 		{% if membre.competences %}
-			<li>
 				<h2>Compétence{{ membre.competences|pluralize }}</h2>
 				{% include "mandats/widget_mandats.html" %}
-			</li>
 		{% endif %}
 	</div>
 </div>
