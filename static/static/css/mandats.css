@@ -1,0 +1,4 @@
+input[id^="checkbox-"] { display: none; }
+input[id^="checkbox-"]:not(:checked) + label + form { display: none; }
+input[id^="checkbox-"] ~ label:after { content: " +"; cursor: pointer; }
+input[id^="checkbox-"]:checked ~ label:after { content: " -"; }

@@ -10,7 +10,8 @@ urlpatterns = patterns('',
 	url(r'^m/', include('membres.urls')),
 	url(r'^p/', include('aggregateur.urls')),
 	url(r'^tableau-de-bord/', include('tableau_de_bord.urls')),
-	url(r'^fichiers-adherents/', include('fichiers_adherents.urls'), name='fichiers_adherents'),
+	url(r'^fichiers-adherents/', include('fichiers_adherents.urls')),
+	url(r'^mandats/', include('mandats.urls')),
 	url(r'^admin/', include(admin.site.urls)),
 )
 

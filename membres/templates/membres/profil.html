@@ -5,6 +5,7 @@
 
 <title>EDEM - Profil</title>
 <link rel="stylesheet" href="{% get_static_prefix %}css/membres.css" >
+<link rel="stylesheet" href="{% get_static_prefix %}css/mandats.css" >
 
 {% endblock head %}
 
@@ -12,33 +13,47 @@
 
 {% block content %} {{ block.super }}
 
-<div class="col-md-3"></div>
-
-<div class="col-md-6">
-<div class="profil panel panel-default {% if user == user_object %}editable{% endif %}">
-	<div class="panel-heading clearfix text-center">
-		<h1>{{ user_object.profil.nom_courant }}</h1>
+<div class="profil {% if user == membre %}editable{% endif %}">
+	<div class="clearfix text-center">
+		<h1>{{ membre.profil.nom_courant }}</h1>
 		<div class="editable profile-picture">
 			{% load gravatar %}
-			{% if user == user_object %}
+			{% if user == membre %}
 			<div class="gravatar-edit">
 				<p>Votre avatar est géré par <strong>Gravatar</strong>.</p>
 				<p>Il dépend de votre adresse mail.</p>
 				<p>Pour modifier votre avatar, cliquez <a href="{% gravatar_profile_url user.email %}">ici</a>.</p>
 			</div>{% endif %}
-			<img class="gravatar img-responsive center-block" src="{% gravatar_url user_object.email 128 %}" />
+			<img class="gravatar img-responsive center-block" src="{% gravatar_url membre.email 128 %}" />
 		</div>
 	</div>
-	<div class="panel-body">
-		<p><strong>Occupations :</strong></p>
-		<p><strong>Mandats :</strong></p>
-		<p><strong>Responsabilités internes :</strong></p>
-		<p><strong>Intérêts :</strong></p>
-		<p><strong>Compétences :</strong></p>
+	<div class="profil-body">
+		{% if membre.bio %}
+				{% include "mandats/widget_mandats.html" %}
+		{% endif %}
+		{% if membre.occupations %}
+				<h2>Occupation{{ membre.occupations|pluralize }}</h2>
+				{% include "mandats/widget_mandats.html" %}
+		{% endif %}
+		{% if membre.mandats %}
+				<h2>Mandat{{ membre.mandats|pluralize }}</h2>
+				{% include "mandats/widget_mandats.html" %}
+		{% endif %}
+		{% if membre.interets %}
+				<h2>Intérêt{{ membre.interets|pluralize }}</h2>
+				{% include "mandats/widget_mandats.html" %}
+		{% endif %}
+		{% if membre.competences %}
+				<h2>Compétence{{ membre.competences|pluralize }}</h2>
+				{% include "mandats/widget_mandats.html" %}
+		{% endif %}
 	</div>
 </div>
-</div>
-
-<div class="col-md-3"></div>
 
 {% endblock content %}
+
+				{% if membres.mandats %}
+					<td>
+						{% include "mandats/widget_mandats.html" %}
+					</td>
+				{% endif %}

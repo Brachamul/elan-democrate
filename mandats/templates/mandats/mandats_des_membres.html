@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}{{ block.super }}
+
+<title>EDEM - Mandats</title>
+
+<link rel="stylesheet" href="{% get_static_prefix %}css/mandats.css" >
+
+{% endblock head %}
+
+{% block content %} {{ block.super }}
+
+<div class="col-sm-12 table-responsive">
+	<table class="table table-condensed table-striped">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Nom Courant</th>
+				<th>Mandats</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for membre in membres %}
+			<tr>
+				<td>
+					<a href="{% url 'membres' %}{{ membre.pk }}">{{ membre.username }}</a>
+				</td>
+				<td>
+					<a href="{% url 'membres' %}{{ membre.pk }}">{{ membre.profil.nom_courant }}</a>
+				</td>
+				<td>
+					{% include "mandats/widget_mandats.html" %}
+				</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+
+{% endblock content %}
+
+{% block scripts %} {{ block.super }}
+
+{% comment %}<script src="{% get_static_prefix %}js/aggregateur.js"></script>{% endcomment %}
+
+{% endblock scripts %}
+

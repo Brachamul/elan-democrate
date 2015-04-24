@@ -80,8 +80,14 @@
 					{% if perms.fichiers_adhérents.peut_televerser %}
 					<li>
 						<a href="{% url 'televersement_du_fichier_adhérent' %}">
-							<span class="glyphicon glyphicon-upload" aria-hidden="true"></span>
+							<span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span>
 							Téléverser un fichier adhérents</a>
+					{% endif %}
+					{% if perms.fichiers_adhérents.gere_les_mandats %}
+					<li>
+						<a href="{% url 'mandats' %}">
+							<span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
+							Voir les mandats</a>
 					{% endif %}
 				</ul>
 			</li>

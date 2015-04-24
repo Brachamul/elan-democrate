@@ -1,3 +1,4 @@
+***
 Base
 ====
 
@@ -6,15 +7,23 @@ Base
 * Permettre à l'utilisateur de fermer les messages serveur *
 * Faire apparaitre les sous-menus de la barre de nav au survol de la souris
 
-
+***
 Membres
 =======
 
-* **Permettre la gestion de mandats JDem**
+
 * ~~Expliquer le fonctionnement de Gravatar~~ (1h)
 * Afficher le statut d'adhesion
 * URL du profil par nom
+* Crééer un membre pour chaque adhérent du fichier
 
+***
+Mandats
+=================
+
+* ~~**Permettre la gestion de mandats JDem**~~(4h)
+* Permettre la proposition d'un mandat
+* Systèmes de validation et covalidation
 
 
 ***
@@ -49,6 +58,7 @@ Posts
 * Preview du post en dessous
 * Guide markdown
 * Bug URL du post lien
+* Rendre les affichages de posts plus responsive
 
 Commentaires
 --------
@@ -113,7 +123,7 @@ Tableau de Bord
 
 * Compter le nombre d'emails envoyés par utilisateur (# authentification)
 * Notamment lors de l'enregistrement
-
+* Noter les changements de mandats
 
 
 ***
@@ -125,6 +135,7 @@ Securité
 * Add terms and conditions
 * Remove super login
 * Create a role that can do everything except look at adherent data
+* Remove DEBUG
 
 
 
@@ -141,3 +152,5 @@ Meta
 ====
 
 * ~~Retirer la DB des commits~~ (1h)
+** Add .encode("utf-8") to all prints
+* Add logging
