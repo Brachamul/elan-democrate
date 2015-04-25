@@ -69,3 +69,5 @@ body.authentification-body .btn.orange { margin-top: 1rem; }
 body .btn.orange { background-color: #222; border-color: #777; color: #777; }
 body .btn.orange:hover { border-color: #EC7C34; color: #EC7C34; }
 body .btn.orange:focus { border-color: #ccc; color: #ccc; }
+
+.glyphicon { padding-right: .3em; }
