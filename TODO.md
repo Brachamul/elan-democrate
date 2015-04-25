@@ -152,5 +152,5 @@ Meta
 ====
 
 * ~~Retirer la DB des commits~~ (1h)
-** Add .encode("utf-8") to all prints
-* Add logging
+* Replace prints by logging or add .encode("utf-8")
+* **Add logging**
