@@ -55,14 +55,14 @@ def enregistrement(request):
 				# Ce numéro n'existe pas dans la base utilisateur
 				# Regardons si c'est un adhérent existant dans la base
 				try : adherent = Adhérent.objects.get(num_adhérent=num_adhérent)
-				except Adhérent.DoesNotExist : print("Ce numéro adherent n'existe pas dans la base de données des Jeunes Démocrates.")
+				except Adhérent.DoesNotExist :
+					messages.error(request, "Ce numéro adhérent n'existe pas dans la base de données des Jeunes Démocrates.")
 				else :
 					if "@" in adherent.email :
-						print ("Envoi d'email de création de compte à ", adherent.email)
+						logging.info("Envoi d'email de création de compte à ", adherent.email)
 						backend.SendEmailConfirmationCode(request, adherent)
 						messages.success(request, "Un email a été envoyé à l'adresse correspondant à ce numéro dans le fichier adhérent. Merci de suivre les instructions contenues dans cet email.")
 					else :
-						print ("Adresse email non valable : [", adherent.email, "]")
 						messages.error(request, "Notre fichier adhérent ne contient pas d'adresse email valide pour ce numéro adhérent. Nous ne pouvons donc pas vous authentifier.")
 			else : messages.info(request, "Cet adhérent est déjà enregistré sur Élan Démocrate.")
 
@@ -74,9 +74,9 @@ def enregistrement(request):
 				# Cet email n'existe pas dans la base utilisateur
 				# Regardons si c'est un adhérent existant dans la base
 				try : adherent = Adhérent.objects.get(email=email)
-				except Adhérent.DoesNotExist : print("Cette adresse email n'existe pas dans la base de données des Jeunes Démocrates.")
+				except Adhérent.DoesNotExist : pass
 				else :
-					print ("Envoi d'email de création de compte à ", adherent.email)
+					logging.info("Envoi d'email de création de compte à ", adherent.email)
 					backend.SendEmailConfirmationCode(request, adherent)
 			messages.info(request, "Si cette adresse existe dans notre base adhérent, un message de création de compte lui a été envoyé.")
 
@@ -95,7 +95,7 @@ def url_enregistrement(request, num_adherent, email_confirmation_code):
 	context = RequestContext(request)
 	registered = False
 	try : adherent = Adhérent.objects.get(num_adhérent=num_adherent) # existe t-il bien un adhérent avec ce numéro ?
-	except Adhérent.DoesNotExist : print("[Log] Impossible d'identifier l'adhérent dont le numéro est %d." % (num_adherent))
+	except Adhérent.DoesNotExist : messages.info(request, "Ce numéro adhérent n'existe pas dans la base de données des Jeunes Démocrates.")
 	else :
 		if backend.EmailConfirmationCheck(request, adherent=adherent, code=email_confirmation_code) :
 			backend.Register(request, adherent=adherent, email=adherent.email)
@@ -146,15 +146,11 @@ def connexion(request):
 			if code == False : messages.error(request, "Merci d'entrer un code, ou d'en demander un nouveau.")
 			else :
 				auth_result = backend.authenticate_and_login(request, username, code)
-				print("Auth result is : ", auth_result)
 				if auth_result == "connected" :
-					print("going connected")
 					return HttpResponseRedirect('/')
 				elif auth_result == "bad-details" :
-					print("going bad-details")
 					return render_to_response('membres/connexion.html', {'numero_ou_email': numero_ou_email, 'code_sent': True, 'logging_in': True}, context)
 				else :
-					print("going to shit")
 					return render_to_response('membres/connexion.html', {'numero_ou_email': numero_ou_email, 'code_sent': False, 'logging_in': True}, context)
 
 		return render_to_response('membres/connexion.html', {'numero_ou_email': numero_ou_email, 'code_sent': code_sent, 'logging_in': True}, context)

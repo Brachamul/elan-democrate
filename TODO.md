@@ -58,7 +58,7 @@ Posts
 * Preview du post en dessous
 * Guide markdown
 * Bug URL du post lien
-* Rendre les affichages de posts plus responsive
+* Rendre les affichages de posts plus responsive avec la healthbox
 
 Commentaires
 --------
@@ -152,5 +152,5 @@ Meta
 ====
 
 * ~~Retirer la DB des commits~~ (1h)
-* Replace prints by logging or add .encode("utf-8")
-* **Add logging**
+* ~~Replace prints by logging or add .encode("utf-8")~~ (1h)
+* ~~**Add logging**~~ (1h)
