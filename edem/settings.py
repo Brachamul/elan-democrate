@@ -9,6 +9,8 @@ Django settings for the edem project.
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+# Adresse du site utilisée pour envoyer les liens de connexion dans les mails, overridé par local settings
+SITE_URL = "http://localhost:8000"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
@@ -163,3 +165,8 @@ LOGGING = {
         },
     }
 }
+
+# import local_settings if exist
+try: from local_settings import *
+except ImportError: pass
+### include SITE_URL

@@ -137,7 +137,7 @@ def connexion(request):
 		if request.POST.get('form_type') == "send_code" and username != None :
 			# l'utilisateur demande l'envoi d'un code d'authentification
 			try : user = User.objects.get(username=username)
-			except User.DoesNotExist : messages.error(request, "Nous avons essayé de vous envoyer un code d'accès par mail, mais cela semble n'avoir pas fonctionné.")
+			except User.DoesNotExist : messages.error(request, "Nous n'avons pas de membres enregistrés à cette adresse ou à ce numéro.")
 			else : code_sent = backend.AskForAuthCode(request, user)
 
 		elif request.POST.get('form_type') == "login" and username != None  :
@@ -159,6 +159,7 @@ def connexion(request):
 
 def url_connexion(request, username, code):
 	context = RequestContext(request)
+	auth_result = backend.authenticate_and_login(request, username, code)
 	if auth_result == "connected" :
 		return HttpResponseRedirect('/')
 	if auth_result == "bad-details" :
