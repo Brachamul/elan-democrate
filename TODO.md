@@ -4,7 +4,7 @@ Base
 
 * ~~Modifier la barre de navigation en enlevant les boutons pour les mettre sous la photo de profil~~ (2h)
 * Faire fonctionner la barre de navigation proprement sur mobile
-* Permettre à l'utilisateur de fermer les messages serveur *
+* Permettre à l'utilisateur de fermer les messages serveur
 * Faire apparaitre les sous-menus de la barre de nav au survol de la souris
 
 ***
@@ -21,7 +21,7 @@ Membres
 Mandats
 =================
 
-* ~~**Permettre la gestion de mandats JDem**~~(4h)
+* ~~**Permettre la gestion de mandats JDem**~~ (4h)
 * Permettre la proposition d'un mandat
 * Systèmes de validation et covalidation
 
