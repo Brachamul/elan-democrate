@@ -26,7 +26,7 @@ class ProfileView(DetailView):
 		context = super(ProfileView, self).get_context_data(**kwargs)
 		context['membre'] = get_object_or_404(User, pk=self.kwargs['pk'])
 		context['membre'].mandats = pecho_les_mandats(context['membre'])
-		context['nouveau_mandat_form'] = NouveauMandatForm()
+#		context['nouveau_mandat_form'] = NouveauMandatForm()
 		return context
 
 
