@@ -15,7 +15,8 @@ Membres
 * ~~Expliquer le fonctionnement de Gravatar~~ (1h)
 * Afficher le statut d'adhesion
 * URL du profil par nom
-* Crééer un membre pour chaque adhérent du fichier
+* Créer un membre pour chaque adhérent du fichier
+* Nom courant default value
 * **Permettre l'édition de son profil**
 
 ***
@@ -96,15 +97,15 @@ Authentification
 
 * Gérer la durée des sessions
 * Ignorer les caractères "espace" dans le code d'authentification
-* Make the "register" button on the "connexion" page remember the content of the email/number field
-* ~~**Enable email registration, currently there's only adherent number registration**~~
-* ~~**Gérer le cas où l'utilisateur n'est pas enregistré et entre son numéro adhérent dans connexion**~~
+* ~~**Enable email registration, currently there's only adherent number registration**~~ (1h)
+* ~~**Gérer le cas où l'utilisateur n'est pas enregistré et entre son numéro adhérent dans connexion**~~ (1h)
 * Si dans connexion on clique sur "créer un compte" lancer directement le processus d'enregistrement plutôt que rediriger
 * Si un mail est envoyé pour l'enregistrement, ne pas remontrer le formulaire
 * Mettre en place l'authentification par SMS
 * Ajouter du JS à l'authentification
 * URLS relatives dans le backend
-* ~~Incohérence des boutons "créer un compte" et "s'enregistrer"~~
+* ~~local_settings pour l'URL envoyé par mail pour le lien direct de connexion~~ (1h)
+* ~~Incohérence des boutons "créer un compte" et "s'enregistrer"~~ (1h)
 * Le champs de connexion est rempli par "None" si il ne retrouve pas d'adhérent, remplacer par rien
 * **Rediriger l'enregistrement sur une feuille de création de profil**
 
