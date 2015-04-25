@@ -58,7 +58,7 @@ Posts
 * Preview du post en dessous
 * Guide markdown
 * Bug URL du post lien
-* Rendre les affichages de posts plus responsive
+* Rendre les affichages de posts plus responsive avec la healthbox
 
 Commentaires
 --------

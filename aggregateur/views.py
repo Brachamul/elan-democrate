@@ -1,3 +1,4 @@
+import logging
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
@@ -30,7 +31,6 @@ def afficher_le_post(request, slug):
 		if request.method == "POST":
 			new_comment = Comment(content=request.POST.get('content'), author=request.user)
 			parent_comment = request.POST.get('parent_comment')
-			print ("Parent comment is : %s" % parent_comment)
 			if parent_comment :
 				parent_comment = Comment.objects.get(id=parent_comment)
 				new_comment.parent_comment = parent_comment
@@ -66,7 +66,8 @@ def get_post_meta(request, post):
 def vote(request, post_id, color):
 	context = RequestContext(request)
 	try : post = Post.objects.get(id=int(post_id))
-	except Post.DoesNotExist : print("\nERROR : Post.DoesNotExist - while trying to vote")
+	except Post.DoesNotExist :
+		logger.error("Post.DoesNotExist - while trying to vote")
 	else:
 		try : vote = Vote.objects.get(user=request.user, post=post)
 		except Vote.DoesNotExist :
@@ -84,7 +85,7 @@ def vote(request, post_id, color):
 			elif vote.color == "NEG" and color == "NEG" : vote.color = "NEU"
 			vote.save()
 			endcolor = vote.color
-		print ("\n---> A %s vote was cast on post n° %s" % (endcolor, post_id))
+		logging.info("A {color} vote was cast on post n°{id}".format(color=endcolor, id=post_id))
 	# return the endcolor of the vote so that we can light up the up/down arrows
 	return HttpResponse(endcolor)
 
@@ -99,7 +100,6 @@ def rank_posts(request, force=False):
 		# on classe les posts s'il n'y a pas eu de classement depuis 5 minutes
 		# sauf si un post vient d'être créé, dans quel cas cette fonction est appelée avec l'argument "force"
 		bayrou_2007 = datetime(2007, 4, 22) # 18% quand même !+
-		result = "Il n'y a pas encore de posts à classer" # annuler par la suite s'il y a des posts
 		for post in Post.objects.filter(date__gt=datetime.now()-timedelta(days=30)) : # on arrête de ranker les posts de + d'un mois
 			healthify(post) # on recalcule le score du post
 			time_since_bayrou = ( post.date - bayrou_2007 ) # quel est l'âge relatif du post ?
@@ -108,11 +108,8 @@ def rank_posts(request, force=False):
 			sign = 1 if post.health > 0 else -1 if post.health < 0 else 0
 			post.rank = round( sign * order + time_since_bayrou / 45000, 7)
 			post.save()
-			result = "Classement réussi !"
-	else :
-		result = "Le dernier classement date déjà d'il y a moins de 5 minutes."
-	print (result)
-	return HttpResponse(result)
+			logging.info("Les posts ont été reclassés !")
+	return HttpResponse()
 
 def healthify(post):
 	''' compte le score absolu d'un post '''
@@ -124,15 +121,19 @@ def healthify(post):
 def time_to_rerank(request):
 	try :
 		last_ranking = LastRanking.objects.latest('date')
+		# si un classement a déjà été fait, on chope sa date
 	except LastRanking.DoesNotExist :
 		last_ranking = LastRanking.objects.create(date=datetime.now())
+		# sinon, on en créé un et on lance le classement
 		return True
 	else :
 		if last_ranking.date < (datetime.now()-timedelta(minutes=5)) :
+			# si la date chopée est plus ancienne que 5 minutes, on reclasse
 			last_ranking.date = datetime.now()
 			last_ranking.save()
 			return True
 		else :
+			# sinon, on reclasse pas
 			return False
 
 
@@ -198,7 +199,11 @@ def nouveau_post(request):
 				new_post.save()
 				new_post_adress = "/p/" + new_post.slug
 				rank_posts(request, force=True)
-				print ("\n- Nouveau texte posté par %s : %s" % (request.user.username, request.POST.get('title')))
+				logging.info(
+					"Nouveau texte posté par {username} : {title}".format(
+					username=request.user.username,
+					title=request.POST.get('title'))
+					)
 				messages.success(request, "Votre post est publié.")
 				return HttpResponseRedirect(new_post_adress)
 			else :
@@ -220,7 +225,11 @@ def nouveau_post(request):
 				new_post.save()
 				new_post_adress = "/p/" + new_post.slug
 				messages.success(request, "Votre post est publié.")
-				print ("\n- Nouveau lien posté par %s : %s" % (request.user.username, request.POST.get('title')))
+				logging.info(
+					"Nouveau lien posté par {username} : {title}".format(
+					username=request.user.username,
+					title=request.POST.get('title'))
+					)
 				return HttpResponseRedirect(new_post_adress)
 			else :
 				messages.error(request, "Votre post n'a pas été publié, il semble qu'il y ait une erreur dans les champs que vous avez rempli.")

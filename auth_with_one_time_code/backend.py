@@ -115,7 +115,6 @@ def DebugAuthCode(request, user):
 
 def AskForAuthCode(request, user):
 	active_codes = count_active_authentication_codes(user)
-	print ("active codes : ", active_codes)
 	if 0 < active_codes < maximum_number_of_active_authentication_codes :
 		messages.warning(request, "Vous semblez avoir déjà reçu au moins un code, vérifiez votre boîte mail...")
 		if SendAuthCode(user) :
@@ -154,7 +153,6 @@ def EmailConfirmationCheck(request, adherent, code):
 		confirmation = EmailConfirmationInstance.objects.get(adherent=adherent, code=code)
 	except EmailConfirmationInstance.DoesNotExist :
 		# ! Check if code is still valid
-		print("[Log] Code de confirmation d'email incorrect pour l'ahérent n°%d." % (num_adherent))
 		messages.error(request, "Le code de confirmation est incorrect")
 	else :
 		return True
