@@ -1,3 +1,4 @@
+import logging
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
@@ -25,7 +26,8 @@ class ProfileView(DetailView):
 	def get_context_data(self, **kwargs):
 		context = super(ProfileView, self).get_context_data(**kwargs)
 		context['membre'] = get_object_or_404(User, pk=self.kwargs['pk'])
-		context['membre'].mandats = pecho_les_mandats(context['membre'])
+		context['profil'] = Profil.objects.get(user=context['membre'])
+		context['profil'].mandats = pecho_les_mandats(context['profil'])
 #		context['nouveau_mandat_form'] = NouveauMandatForm()
 		return context
 

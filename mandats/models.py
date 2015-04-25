@@ -1,6 +1,7 @@
 from django.db import models
 
 from django.contrib.auth.models import User
+from membres.models import Profil
 
 class MetaInstitution(models.Model):
 	nom = models.CharField(max_length=255) # Commune, Fédération, ...
@@ -22,7 +23,7 @@ class Mandat(models.Model):
 	class Meta: permissions = (('gere_les_mandats', 'gère les mandats'),)
 
 class Detenteur(models.Model):
-	user = models.ForeignKey(User)
+	profil = models.ForeignKey(Profil)
 	mandat = models.ForeignKey(Mandat)
 	titre = models.CharField(max_length=1023) # Membre du Bureau, Vice-Président, Conseiller Municipal, ...
 	charge = models.CharField(max_length=1023, blank=True, null=True) # en charge de la communication, délégué aux espaces verts, ...
