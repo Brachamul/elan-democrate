@@ -24,11 +24,35 @@ def all(request):
 def afficher_le_post(request, slug):
 	''' génère la page d'affichage d'un post '''
 	try : post = Post.objects.get(slug=slug)
-	except Post.DoesNotExist : raise Http404("Ce post n'existe pas")
+	except Post.DoesNotExist : raise Http404("Ce post n'existe pas, ou plus.")
 	else :
 		post = get_post_meta(request, post)
 		post.number_of_comments = count_post_comments(post)
-		if request.method == "POST":
+		redirect = process_post_changes(request, post)
+	if redirect : return HttpResponseRedirect(redirect)
+	else : return render(request, 'aggregateur/afficher_le_post.html', {
+		'post': post, 'comment_form': CommentForm()
+		})
+
+def afficher_le_commentaire(request, pk, slug):
+	''' génère la page d'affichage d'un commentaire '''
+	try : comment = Comment.objects.get(pk=pk)
+	except Comment.DoesNotExist : raise Http404("Ce commentaire n'existe pas, ou plus.")
+	else :
+		post = get_root(comment)
+		post = get_post_meta(request, post)
+		post.number_of_comments = count_post_comments(post)
+		redirect = process_post_changes(request, post)
+	if redirect : return HttpResponseRedirect(redirect)
+	else : return render(request, 'aggregateur/afficher_le_commentaire.html', {
+		'post': post, 'comment': comment, 'comment_form': CommentForm()
+		})
+
+def process_post_changes(request, post) :
+	redirect_location = False # de base, on ne redirige pas vers une #id interne
+	if request.method == "POST" :
+
+		if request.POST.get('action') == 'nouveau_commentaire' :
 			new_comment = Comment(content=request.POST.get('content'), author=request.user)
 			parent_comment = request.POST.get('parent_comment')
 			if parent_comment :
@@ -36,8 +60,33 @@ def afficher_le_post(request, slug):
 				new_comment.parent_comment = parent_comment
 			else : new_comment.parent_post = post
 			new_comment.save()
-			return HttpResponseRedirect('#comment%d' % new_comment.pk)
-	return render(request, 'aggregateur/afficher_le_post.html', {'post': post, 'comment_form': CommentForm()})
+			redirect_location = '#comment{pk}'.format(pk=new_comment.pk)
+
+		elif request.POST.get('action') == 'modifier_le_commentaire' :
+			try : comment = Comment.objects.get(pk=request.POST.get('comment-pk'))
+			except Comment.DoesNotExist : messages.error(request, "Erreur : ce commentaire n'existe peut-être plus")
+			else :
+				if comment.author != request.user : messages.error(request, "Vous n'êtes pas l'auteur de ce commentaire, et ne pouvez donc pas le modifier.")
+				else :
+					comment.content = request.POST.get('content')
+					if comment.content == '' : comment.deleted = True
+					else : comment.deleted = False
+					comment.save(update_fields=['content','deleted'])
+					redirect_location = '#comment{pk}'.format(pk=comment.pk)
+
+	if redirect_location : return redirect_location # si une id interne est définie, on la transmet
+	else : return False
+
+def get_root(comment):
+	parent = None
+	while parent == None :
+		parent = comment.parent_post
+		if not parent : comment = comment.parent_comment
+	return parent
+	
+
+	parent_post = models.ForeignKey(Post, null=True, blank=True)
+	parent_comment = models.ForeignKey('self', null=True, blank=True)
 
 @login_required
 def aggregateur(request, fil):

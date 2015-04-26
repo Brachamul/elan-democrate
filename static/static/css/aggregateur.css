@@ -55,17 +55,23 @@
 .aggregateur .content h5,
 .aggregateur .content h6 { font-size: 1.4rem; margin-top: 0; line-height: 1.8; } 
 
-.aggregateur .content p { margin-bottom: 0; }
-
 .aggregateur .comment .meta,
 .aggregateur .comment .actions { color: #666; font-size: .8em; }
 .aggregateur .comment .content { max-width: 60rem; line-height: 1.8; margin: 0.2em 0 .5em 0; width: 100%;}
+.aggregateur .comment .modifier { max-width: 60rem; }
 .aggregateur .comments .panel:target { background-color: lightyellow; }
 
 .aggregateur .comments .panel { margin-top: 15px; margin-bottom: 0; }
 .aggregateur .comments > .panel > .panel-body > .panel { background-color: #fafafa; }
 .aggregateur .comments > .panel > .panel-body > .panel .panel-body > .panel > .panel-body > .panel { background-color: #fafafa; }
 .aggregateur .comments > .panel > .panel-body > .panel .panel-body > .panel > .panel-body > .panel > .panel-body > .panel > .panel-body > .panel { background-color: #fafafa; }
+
+.aggregateur .comments .content .deleted { font-size: .8em; color: #808080; font-style: italic; }
+.aggregateur .comments .actions .supprimer { display: inline; }
+
+.aggregateur .comments .actions .supprimer input[id^="checkbox-delete-comment"],
+.aggregateur .comments .actions .supprimer input[id^="checkbox-delete-comment"]:not(:checked) ~ button { display: none; }
+.aggregateur .comments .actions .supprimer button { padding: 0px 1em; }
 
 /*** display post***/
 input[id^="checkbox-replyto"] { display: none; }
@@ -81,6 +87,12 @@ input[id^="checkbox-close-comment"]:checked + .comment { margin-bottom: 0; }
 input[id^="checkbox-close-comment"]:checked + .comment .meta label:after { content: " (caché)"; font-style: italic; color: #aaa; }
 input[id^="checkbox-close-comment"]:checked + .comment .meta .minus { display: none; }
 input[id^="checkbox-close-comment"]:not(:checked) + .comment .meta .plus { display: none; }
+
+
+input[id^="checkbox-modify-comment"],
+input[id^="checkbox-modify-comment"]:checked ~ .content,
+input[id^="checkbox-modify-comment"]:not(:checked) ~ .modifier { display: none; }
+
 
 .aggregateur label:hover { cursor: pointer; }
 

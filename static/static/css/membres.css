@@ -1,7 +1,7 @@
 /*** Profil ***/
 
 .profil { margin: 1rem auto 0; max-width: 60rem; }
-.profil .gravatar { border-radius: 100%; margin-bottom: 2rem; }
+.profil .gravatar { border-radius: 100%; margin-bottom: 2rem; height: 128px; }
 
 
 .profil.editable .editable:not(:hover):after { display: none; }

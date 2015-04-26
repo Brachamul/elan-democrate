@@ -44,6 +44,8 @@ class Comment(models.Model):
 	content = models.TextField(max_length=10000)
 	author = models.ForeignKey(User)
 	date = models.DateTimeField(auto_now_add=True)
+	last_edit = models.DateTimeField(auto_now=True)
 	parent_post = models.ForeignKey(Post, null=True, blank=True)
 	parent_comment = models.ForeignKey('self', null=True, blank=True)
+	deleted = models.BooleanField(default=False)
 	def __str__(self): return self.content
