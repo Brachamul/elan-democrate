@@ -12,6 +12,7 @@ class Profil(models.Model):
 	user = models.OneToOneField(User, blank=True, null=True)
 	adherent = models.OneToOneField(Adhérent, blank=True, null=True)
 	nom_courant = models.CharField(max_length=255, blank=True, null=True)
+	bio = models.TextField(max_length=255, blank=True, null=True)
 	notes = models.TextField(blank=True, null=True) # Visible uniquement par les responsables
 	def __str__(self): return self.nom_courant
 

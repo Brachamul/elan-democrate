@@ -32,28 +32,34 @@
 			<input id="profil-bio" class="spoiler" type="checkbox"/>
 			<div class="public">
 				{% if profil.bio %}
-					<div class="bio">
-						{% load markdown_deux_tags %}{{ profil.bio|markdown }}
-					</div>
+					<p class="bio-content">{{ profil.bio}}</p>
 				{% endif%}
 			</div>
 			{% if user == membre %}
-			<div class="pas-public">
-				<p>Votre message de présentation :</p>
-				<form method="POST" action="" enctype="multipart/form-data">
-					<div class="form-group">
-						{% csrf_token %}
-						<textarea class="form-control" value="profil.bio"></textarea>
-					</div>
-				</form>
-			</div>
+			<form class="pas-public" method="POST" action="" enctype="multipart/form-data">
+				<div class="form-group">
+					{% csrf_token %}
+					<textarea id="bio-input" name="bio" class="form-control" maxlength="255"
+					placeholder="Mon message de présentation...">{{ profil.bio }}</textarea>
+				</div>
+				<div class="form-group">
+					<button class="btn btn-default btn-sm" disabled="disabled" style="min-width: 7rem;">
+						<span id="bio-counter"></span>/255
+					</button>
+					<button type="submit" class="btn btn-default btn-sm">
+						<span class="glyphicon glyphicon-ok"></span>
+						Enregistrer
+					</button>
+					</input>
+					<label for="profil-bio" class="btn btn-default btn-sm cancel-edit">
+						<span class="glyphicon glyphicon-remove"></span>
+						Annuler
+					</label>
+				</div>
+			</form>
 			<label for="profil-bio" class="btn btn-default make-edit">
 				<span class="glyphicon glyphicon-pencil"></span>
 				Modifier mon message de présentation
-			</label>
-			<label for="profil-bio" class="btn btn-default cancel-edit">
-				<span class="glyphicon glyphicon-remove"></span>
-				Annuler la modification
 			</label>
 			{% endif %}
 		</div>
@@ -66,21 +72,25 @@
 					{% include "mandats/widget_mandats.html" %}
 				</div>
 			{% endif %}
+			{% comment %}
 			{% if user == membre %}
 				<div class="pas-public">
 					<h2>Mandat{{ profil.mandats|pluralize }}</h2>
+					<p>Il n'est pas encore possible de modifier manuellement les mandats.</p>
+					<label for="profil-mandats" class="btn btn-default btn-sm cancel-edit">
+						<span class="glyphicon glyphicon-remove"></span>
+						Annuler
+					</label>
 				</div>
 				<label for="profil-mandats" class="btn btn-default make-edit">
 					<span class="glyphicon glyphicon-pencil"></span>
 					Modifier mes mandats
 				</label>
-				<label for="profil-mandats" class="btn btn-default cancel-edit">
-					<span class="glyphicon glyphicon-remove"></span>
-					Annuler la modification
-				</label>
 			{% endif %}
+			{% endcomment %}
 		</div>
 
+		{% comment %}
 		<div class="occupations">
 			<input id="profil-occupations" class="spoiler" type="checkbox"/>
 			{% if profil.occupations %}
@@ -92,18 +102,20 @@
 			{% if user == membre %}
 				<div class="pas-public">
 					<h2>Occupation{{ profil.occupations|pluralize }}</h2>
+					<label for="profil-occupations" class="btn btn-default btn-sm cancel-edit">
+						<span class="glyphicon glyphicon-remove"></span>
+						Annuler la modification
+					</label>
 				</div>
 				<label for="profil-occupations" class="btn btn-default make-edit">
 					<span class="glyphicon glyphicon-pencil"></span>
 					Modifier mes occupations
 				</label>
-				<label for="profil-occupations" class="btn btn-default cancel-edit">
-					<span class="glyphicon glyphicon-remove"></span>
-					Annuler la modification
-				</label>
 			{% endif %}
 		</div>
+		{% endcomment %}
 
+		{% comment %}
 		<div class="interets">
 			<input id="profil-interets" class="spoiler" type="checkbox"/>
 			{% if profil.interets %}
@@ -115,18 +127,20 @@
 			{% if user == membre %}
 				<div class="pas-public">
 					<h2>Intérêt{{ profil.interets|pluralize }}</h2>
+					<label for="profil-interets" class="btn btn-default btn-sm cancel-edit">
+						<span class="glyphicon glyphicon-remove"></span>
+						Annuler la modification
+					</label>
 				</div>
 				<label for="profil-interets" class="btn btn-default make-edit">
 					<span class="glyphicon glyphicon-pencil"></span>
 					Modifier mes intérêts
 				</label>
-				<label for="profil-interets" class="btn btn-default cancel-edit">
-					<span class="glyphicon glyphicon-remove"></span>
-					Annuler la modification
-				</label>
 			{% endif %}
 		</div>
+		{% endcomment %}
 
+		{% comment %}
 		<div class="competences">
 			<input id="profil-competences" class="spoiler" type="checkbox"/>
 			{% if profil.competences %}
@@ -138,22 +152,28 @@
 			{% if user == membre %}
 				<div class="pas-public">
 					<h2>Compétences{{ profil.competences|pluralize }}</h2>
+					<label for="profil-competences" class="btn btn-default btn-sm cancel-edit">
+						<span class="glyphicon glyphicon-remove"></span>
+						Annuler la modification
+					</label>
 				</div>
 				<label for="profil-competences" class="btn btn-default make-edit">
 					<span class="glyphicon glyphicon-pencil"></span>
 					Modifier mes compétences
 				</label>
-				<label for="profil-competences" class="btn btn-default cancel-edit">
-					<span class="glyphicon glyphicon-remove"></span>
-					Annuler la modification
-				</label>
 			{% endif %}
 		</div>
-
-	</div>
-	
+		{% endcomment %}
 
 	</div>
 </div>
 
 {% endblock content %}
+
+
+
+{% block scripts %} {{ block.super }}
+
+<script src="{% get_static_prefix %}js/profil.js"></script>
+
+{% endblock scripts %}

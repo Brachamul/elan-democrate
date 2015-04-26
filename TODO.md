@@ -15,9 +15,10 @@ Membres
 * ~~Expliquer le fonctionnement de Gravatar~~ (1h)
 * Afficher le statut d'adhesion
 * URL du profil par nom
-* Créer un membre pour chaque adhérent du fichier
-* Nom courant default value
-* **Permettre l'édition de son profil**
+* ~~Créer un membre pour chaque adhérent du fichier~~ (2h)
+* ~~Nom courant default value~~
+* ~~**Permettre l'édition de son profil**~~ (2h)
+* Ajouter d'autres éléments au profil (badges, occupations, intérêts, compétences, ...)
 
 ***
 Mandats

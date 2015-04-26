@@ -22,7 +22,6 @@
 input.spoiler,
 input.spoiler:checked ~ label.make-edit,
 input.spoiler:checked ~ .public,
-input.spoiler:not(:checked) ~ label.cancel-edit,
 input.spoiler:not(:checked) ~ .pas-public { display: none ; }
 
-.btn.make-edit, .btn.cancel-edit { margin-bottom: 2rem; }
+.profil > div { margin-bottom: 2rem; }
