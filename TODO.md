@@ -15,9 +15,10 @@ Membres
 * ~~Expliquer le fonctionnement de Gravatar~~ (1h)
 * Afficher le statut d'adhesion
 * URL du profil par nom
-* Créer un membre pour chaque adhérent du fichier
-* Nom courant default value
-* **Permettre l'édition de son profil**
+* ~~Créer un membre pour chaque adhérent du fichier~~ (2h)
+* ~~Nom courant default value~~
+* ~~**Permettre l'édition de son profil**~~ (2h)
+* Ajouter d'autres éléments au profil (badges, occupations, intérêts, compétences, ...)
 
 ***
 Mandats
@@ -102,6 +103,7 @@ Authentification
 * Si dans connexion on clique sur "créer un compte" lancer directement le processus d'enregistrement plutôt que rediriger
 * Si un mail est envoyé pour l'enregistrement, ne pas remontrer le formulaire
 * Mettre en place l'authentification par SMS
+* Gérer notamment la génération automatique de profil quand on créé un utilisateur via le numéro de tel
 * Ajouter du JS à l'authentification
 * URLS relatives dans le backend
 * ~~local_settings pour l'URL envoyé par mail pour le lien direct de connexion~~ (1h)

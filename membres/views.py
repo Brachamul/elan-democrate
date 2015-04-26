@@ -1,4 +1,6 @@
+import logging
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect, HttpResponse, HttpRequest, Http404
@@ -17,18 +19,29 @@ from auth_with_one_time_code import backend
 
 ### Profile
 
-class ProfileView(DetailView):
+@login_required
+def profil(request, pk):
+	try : user = User.objects.get(pk=pk)
+	except User.DoesNotExist : raise Http404("Cet utilisateur n'existe pas.")
+	else :
+		try : profil = Profil.objects.get(user=user)
+		except Profil.DoesNotExist : raise Http404("Ce profil n'existe pas.")
+		else :
+			if request.method == "POST" and user == request.user : process_profil_changes(request, user, profil)
+			profil.mandats = pecho_les_mandats(profil)
+			return render(request, 'membres/profil.html', {'membre': user, 'profil': profil})
 
-	model = User
-	template_name = 'membres/profil.html'
-
-	def get_context_data(self, **kwargs):
-		context = super(ProfileView, self).get_context_data(**kwargs)
-		context['membre'] = get_object_or_404(User, pk=self.kwargs['pk'])
-		context['membre'].mandats = pecho_les_mandats(context['membre'])
-#		context['nouveau_mandat_form'] = NouveauMandatForm()
-		return context
-
+def process_profil_changes(request, user, profil) :
+	profil.bio = request.POST.get('bio')
+	profil.save()
+#	new_comment = Comment(content=request.POST.get('content'), author=request.user)
+#	parent_comment = request.POST.get('parent_comment')
+#	if parent_comment :
+#		parent_comment = Comment.objects.get(id=parent_comment)
+#		new_comment.parent_comment = parent_comment
+#	else : new_comment.parent_post = post
+#	new_comment.save()
+#	return HttpResponseRedirect('#comment%d' % new_comment.pk)
 
 
 ### Enregistrement

@@ -1,6 +1,6 @@
 /*** Profil ***/
 
-.profil { margin-top: 2rem; }
+.profil { margin: 1rem auto 0; max-width: 60rem; }
 .profil .gravatar { border-radius: 100%; margin-bottom: 2rem; }
 
 
@@ -18,3 +18,10 @@
 .profil .profil-body { text-align: center; }
 
 .profil .profil-body h2 {  }
+
+input.spoiler,
+input.spoiler:checked ~ label.make-edit,
+input.spoiler:checked ~ .public,
+input.spoiler:not(:checked) ~ .pas-public { display: none ; }
+
+.profil > div { margin-bottom: 2rem; }

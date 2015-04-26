@@ -5,5 +5,5 @@ from . import views
 
 urlpatterns = [
 	url(r'^$', RedirectView.as_view(permanent=False, url='par_membre/'), name='mandats'),
-	url(r'^par_membre/$', views.mandats_des_membres, name='mandats_des_membres'),
+	url(r'^par_membre/$', views.afficher_les_mandats, name='afficher_les_mandats'),
 ]

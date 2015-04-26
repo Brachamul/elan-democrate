@@ -21,13 +21,17 @@
 			</tr>
 		</thead>
 		<tbody>
-			{% for membre in membres %}
+			{% for profil in profils %}
 			<tr>
 				<td>
-					<a href="{% url 'membres' %}{{ membre.pk }}">{{ membre.username }}</a>
+					{% if profil.user %}
+					<a href="{% url 'membres' %}{{ profil.user.pk }}">{{ profil.user.username }}</a>
+					{% else %}
+					-
+					{% endif %}
 				</td>
 				<td>
-					<a href="{% url 'membres' %}{{ membre.pk }}">{{ membre.profil.nom_courant }}</a>
+					{{ profil.nom_courant }}
 				</td>
 				<td>
 					{% include "mandats/widget_mandats.html" %}
@@ -36,6 +40,8 @@
 			{% endfor %}
 		</tbody>
 	</table>
+<div style="text-align: right;"><a class="btn btn-primary" href="/admin/mandats"><span class="glyphicon glyphicon-pencil"></span> Modifier les attributions de mandats</a></div>
+
 </div>
 
 {% endblock content %}
