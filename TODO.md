@@ -128,18 +128,20 @@ Tableau de Bord
 * Compter le nombre d'emails envoyés par utilisateur (# authentification)
 * Notamment lors de l'enregistrement
 * Noter les changements de mandats
+* Logger les connexions de chaque user
 
 
 ***
 Securité
 ========
 
-* **Secure the settings.py file**
+* ~~**Secure the settings.py file**~~ (1h)
+* ~~Create local_settings.py~~ (1h)
+* django.middleware.security.SecurityMiddleware [ nécessite un HTTPS partout sur le domaine ]
 * Prevent mass sending of email confirmation messages
 * Add terms and conditions
 * Remove super login
 * Create a role that can do everything except look at adherent data
-* Remove DEBUG
 
 
 

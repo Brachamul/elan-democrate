@@ -28,7 +28,7 @@ footer { margin-top: 4em; }
 input:invalid:not(:focus) { border-color: red; }
 
 .navbar-inverse .profile-picture { padding: 9px; } /* interacts with the image size (32px) to fit the bar */
-.navbar-inverse .profile-picture img { border-radius: 4px; margin-right: .5em; }
+.navbar-inverse .profile-picture img { border-radius: 4px; margin-right: .5em; height: 32px;}
 
 
 .panel > .panel-heading { background-image: url('../images/bg.jpg'); background-color: white; }

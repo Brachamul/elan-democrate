@@ -9,17 +9,8 @@ Django settings for the edem project.
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-# Adresse du site utilisée pour envoyer les liens de connexion dans les mails, overridé par local settings
-SITE_URL = "http://localhost:8000"
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '7u&!5zoikcssm7a2a2xifvwxjg&7akumk0op3*i37u6%)n97n+'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
 TEMPLATE_DEBUG = True
 
@@ -57,6 +48,12 @@ MIDDLEWARE_CLASSES = (
 	'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
+# Deployment checklist stuff
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_HTTPONLY = True
+X_FRAME_OPTIONS = 'DENY'
+
 ROOT_URLCONF = 'edem.urls'
 
 WSGI_APPLICATION = 'edem.wsgi.application'
@@ -68,7 +65,7 @@ WSGI_APPLICATION = 'edem.wsgi.application'
 DATABASES = {
 	'default': {
 		'ENGINE': 'django.db.backends.sqlite3',
-		'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+		'NAME': os.path.join(BASE_DIR, 'edem_database.sqlite3'),
 	}
 }
 
@@ -83,6 +80,8 @@ USE_I18N = True
 
 USE_L10N = True
 
+FIRST_DAY_OF_WEEK = 1 # Lundi, et pas Dimanche comme pour les ricains
+
 # USE_TZ = True
 
 
@@ -91,20 +90,17 @@ USE_L10N = True
 
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
+STATIC_ROOT = os.path.join((BASE_DIR), "static", "static-only")
+MEDIA_ROOT = os.path.join((BASE_DIR), "static", "media")
+STATICFILES_DIRS = (
+    os.path.join((BASE_DIR), "static", "static"),
+)
 
 # Template location
 
 TEMPLATE_DIRS = (
 	os.path.join((BASE_DIR), "static", "templates"),
 )
-
-if DEBUG:
-	
-	STATIC_ROOT = os.path.join((BASE_DIR), "static", "static-only")
-	MEDIA_ROOT = os.path.join((BASE_DIR), "static", "media")
-	STATICFILES_DIRS = (
-		os.path.join((BASE_DIR), "static", "static"),
-	)
 
 from django.contrib import messages
 from django.contrib.messages import constants as message_constants
@@ -117,13 +113,6 @@ LOGOUT_URL = 'deconnexion'
 LOGIN_REDIRECT_URL = 'accueil'
 
 AUTHENTICATION_BACKENDS = ('auth_with_one_time_code.backend.OneTimeCodeBackend',)
-
-EMAIL_SUBJECT_PREFIX = "[Élan Démocrate] "
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_HOST_USER = "noreply.elandemocrate@gmail.com"
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_PASSWORD = 'DJisyourBF'
 
 LOGGING = {
     'version': 1,
@@ -166,7 +155,24 @@ LOGGING = {
     }
 }
 
+##########################
+#  Settings localisables :
+##########################
+
 # import local_settings if exist
 try: from local_settings import *
 except ImportError: pass
-### include SITE_URL
+
+## Custom, adresse du site utilisée pour envoyer les liens de connexion dans les mails, overridé par local settings
+# SITE_URL = "http://localhost:8000"
+
+## Standard, authentification pour l'envoi de mail
+# ALLOWED_HOSTS = [SITE_URL,]
+
+## Standard, authentification pour l'envoi de mail
+# EMAIL_SUBJECT_PREFIX = "[Élan Démocrate] "
+# EMAIL_HOST = "smtp.gmail.com"
+# EMAIL_HOST_USER = "patate@gmail.com"
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_PASSWORD = 'azerty12345'
