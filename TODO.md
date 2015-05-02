@@ -7,18 +7,22 @@ Base
 * Permettre à l'utilisateur de fermer les messages serveur
 * Faire apparaitre les sous-menus de la barre de nav au survol de la souris
 
+
+
 ***
 Membres
 =======
-
 
 * ~~Expliquer le fonctionnement de Gravatar~~ (1h)
 * Afficher le statut d'adhesion
 * URL du profil par nom
 * ~~Créer un membre pour chaque adhérent du fichier~~ (2h)
 * ~~Nom courant default value~~
+* **Rendre modifiable le nom courant**
 * ~~**Permettre l'édition de son profil**~~ (2h)
 * Ajouter d'autres éléments au profil (badges, occupations, intérêts, compétences, ...)
+
+
 
 ***
 Mandats
@@ -27,6 +31,7 @@ Mandats
 * ~~**Permettre la gestion de mandats JDem**~~ (4h)
 * Permettre la proposition d'un mandat
 * Systèmes de validation et covalidation
+
 
 
 ***
@@ -140,7 +145,7 @@ Securité
 * django.middleware.security.SecurityMiddleware [ nécessite un HTTPS partout sur le domaine ]
 * Prevent mass sending of email confirmation messages
 * Add terms and conditions
-* Remove super login
+* Remove force_connect login
 * Create a role that can do everything except look at adherent data
 
 
