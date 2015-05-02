@@ -176,3 +176,9 @@ except ImportError: pass
 # EMAIL_PORT = 587
 # EMAIL_USE_TLS = True
 # EMAIL_HOST_PASSWORD = 'azerty12345'
+
+## Standard SECURITY WARNING: keep the secret key used in production secret!
+# SECRET_KEY = ''
+
+## Standard SECURITY WARNING: don't run with debug turned on in production!
+# DEBUG = False
