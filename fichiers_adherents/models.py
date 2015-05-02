@@ -22,6 +22,7 @@ class FichierAdhérents(models.Model):
 	class Meta:
 		verbose_name_plural = 'fichiers adhérents'
 		permissions = (('peut_televerser', 'peut téléverser'),)
+		# if request.user.has_perm('fichiers_adhérents.peut_televerser')
 
 
 class Adhérent(models.Model):
@@ -51,7 +52,7 @@ class Adhérent(models.Model):
 	importé_par_le_fichier = models.ForeignKey(FichierAdhérents, null=True, blank=True)
 
 	def __str__(self):
-		return '{} {}'.format(self.nom, self.prénom)
+		return '{} {}'.format(self.prénom, self.nom)
 
 
 class AdhérentDuFichier(models.Model):

@@ -54,64 +54,41 @@
 	</article>
 
 	<div class="comments">
-	{% comment %} This code also exists in the "commentaire" page {% endcomment %}
-		<div>
-			<input id="checkbox-replyto-post-{{ post.pk }}" type="checkbox"/>
-			<p><label class="btn btn-primary" for="checkbox-replyto-post-{{ post.pk }}">Commenter</label></p>
-			<div class="comment_form panel-body">
-				<form method="POST" action="" enctype="multipart/form-data">
-					<div class="form-group">
-						{% csrf_token %}
-						<div class="form-group">
-							{{ comment_form.content.field.errors }}
-							{{ comment_form.content }}
-						</div>
-						<input type="hidden" name="action" value="nouveau_commentaire">
-						<input type="hidden" name="parent_post" value="{{ post.pk }}">
-						<button type="submit" class="btn btn-primary">Poster</button>
-						<label class="btn btn-default" for="checkbox-replyto-post-{{ post.pk }}">Cacher</label>
-					</div>
-				</form>
-			</div>
-		</div>
-		
-		{% for comment in post.comment_set.all %}
-		<div class="panel panel-default" id="comment{{ comment.pk }}">
-			<div class="panel-body">
-				{% include "aggregateur/commentaire.html" %}
-				{% for comment in comment.comment_set.all %}
-				<div class="panel panel-default" id="comment{{ comment.pk }}">
-					<div class="panel-body">
-						{% include "aggregateur/commentaire.html" %}
-						{% for comment in comment.comment_set.all %}
-						<div class="panel panel-default" id="comment{{ comment.pk }}">
-							<div class="panel-body">
-								{% include "aggregateur/commentaire.html" %}
-								{% for comment in comment.comment_set.all %}
-								<div class="panel panel-default" id="comment{{ comment.pk }}">
-									<div class="panel-body">
-										{% include "aggregateur/commentaire.html" %}
-										{% for comment in comment.comment_set.all %}
-										<div class="panel panel-default" id="comment{{ comment.pk }}">
-											<div class="panel-body">
-												{% include "aggregateur/commentaire.html" %}
-											</div>
+	{% comment %} This code also exists in the "commentaire" page and "afficher_le_post" {% endcomment %}
+	<div class="alert alert-warning"><span class="glyphicon glyphicon-warning-sign"></span>Vous consultez un fil de commentaires au sein des commentaires de ce post. Pour revenir au post et voir tous les autres commentaires, cliquez <a href="{% url 'post' post.slug %}">ici</a>.</div>
+	<div class="panel panel-default" id="comment{{ comment.pk }}">
+		<div class="panel-body">
+			{% include "aggregateur/commentaire.html" %}
+			{% for comment in comment.comment_set.all %}
+			<div class="panel panel-default" id="comment{{ comment.pk }}">
+				<div class="panel-body">
+					{% include "aggregateur/commentaire.html" %}
+					{% for comment in comment.comment_set.all %}
+					<div class="panel panel-default" id="comment{{ comment.pk }}">
+						<div class="panel-body">
+							{% include "aggregateur/commentaire.html" %}
+							{% for comment in comment.comment_set.all %}
+							<div class="panel panel-default" id="comment{{ comment.pk }}">
+								<div class="panel-body">
+									{% include "aggregateur/commentaire.html" %}
+									{% for comment in comment.comment_set.all %}
+									<div class="panel panel-default" id="comment{{ comment.pk }}">
+										<div class="panel-body">
+											{% include "aggregateur/commentaire.html" %}
 										</div>
-										{% endfor %}
 									</div>
+									{% endfor %}
 								</div>
-								{% endfor %}
 							</div>
+							{% endfor %}
 						</div>
-						{% endfor %}
 					</div>
+					{% endfor %}
 				</div>
-				{% endfor %}
 			</div>
+			{% endfor %}
 		</div>
-		{% endfor %}
 	</div>
-
 </div>
 
 {% endblock content %}

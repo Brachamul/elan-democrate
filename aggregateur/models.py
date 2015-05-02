@@ -20,7 +20,7 @@ class Post(models.Model):
 	slug = AutoSlugField(populate_from=('title'), unique_with='date', max_length=255)
 	content = models.TextField(max_length=10000, null=True, blank=True)
 	author = models.ForeignKey(User)
-	channel = models.ForeignKey(Channel)
+	channel = models.ForeignKey(Channel, null=True)
 	date = models.DateTimeField(auto_now_add=True)
 	health = models.IntegerField(default=0) # votes positifs - votes négatifs
 	rank = models.IntegerField(default=0) # rang selon l'algorithme, prenant en compte le temps passé
@@ -44,6 +44,8 @@ class Comment(models.Model):
 	content = models.TextField(max_length=10000)
 	author = models.ForeignKey(User)
 	date = models.DateTimeField(auto_now_add=True)
+	last_edit = models.DateTimeField(auto_now=True)
 	parent_post = models.ForeignKey(Post, null=True, blank=True)
 	parent_comment = models.ForeignKey('self', null=True, blank=True)
+	deleted = models.BooleanField(default=False)
 	def __str__(self): return self.content

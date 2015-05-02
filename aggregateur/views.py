@@ -1,3 +1,4 @@
+import logging
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
@@ -23,21 +24,69 @@ def all(request):
 def afficher_le_post(request, slug):
 	''' génère la page d'affichage d'un post '''
 	try : post = Post.objects.get(slug=slug)
-	except Post.DoesNotExist : raise Http404("Ce post n'existe pas")
+	except Post.DoesNotExist : raise Http404("Ce post n'existe pas, ou plus.")
 	else :
 		post = get_post_meta(request, post)
 		post.number_of_comments = count_post_comments(post)
-		if request.method == "POST":
+		redirect = process_post_changes(request, post)
+	if redirect : return HttpResponseRedirect(redirect)
+	else : return render(request, 'aggregateur/afficher_le_post.html', {
+		'post': post, 'comment_form': CommentForm()
+		})
+
+def afficher_le_commentaire(request, pk, slug):
+	''' génère la page d'affichage d'un commentaire '''
+	try : comment = Comment.objects.get(pk=pk)
+	except Comment.DoesNotExist : raise Http404("Ce commentaire n'existe pas, ou plus.")
+	else :
+		post = get_root(comment)
+		post = get_post_meta(request, post)
+		post.number_of_comments = count_post_comments(post)
+		redirect = process_post_changes(request, post)
+	if redirect : return HttpResponseRedirect(redirect)
+	else : return render(request, 'aggregateur/afficher_le_commentaire.html', {
+		'post': post, 'comment': comment, 'comment_form': CommentForm()
+		})
+
+def process_post_changes(request, post) :
+	redirect_location = False # de base, on ne redirige pas vers une #id interne
+	if request.method == "POST" :
+
+		if request.POST.get('action') == 'nouveau_commentaire' :
 			new_comment = Comment(content=request.POST.get('content'), author=request.user)
 			parent_comment = request.POST.get('parent_comment')
-			print ("Parent comment is : %s" % parent_comment)
 			if parent_comment :
 				parent_comment = Comment.objects.get(id=parent_comment)
 				new_comment.parent_comment = parent_comment
 			else : new_comment.parent_post = post
 			new_comment.save()
-			return HttpResponseRedirect('#comment%d' % new_comment.pk)
-	return render(request, 'aggregateur/afficher_le_post.html', {'post': post, 'comment_form': CommentForm()})
+			redirect_location = '#comment{pk}'.format(pk=new_comment.pk)
+
+		elif request.POST.get('action') == 'modifier_le_commentaire' :
+			try : comment = Comment.objects.get(pk=request.POST.get('comment-pk'))
+			except Comment.DoesNotExist : messages.error(request, "Erreur : ce commentaire n'existe peut-être plus")
+			else :
+				if comment.author != request.user : messages.error(request, "Vous n'êtes pas l'auteur de ce commentaire, et ne pouvez donc pas le modifier.")
+				else :
+					comment.content = request.POST.get('content')
+					if comment.content == '' : comment.deleted = True
+					else : comment.deleted = False
+					comment.save(update_fields=['content','deleted'])
+					redirect_location = '#comment{pk}'.format(pk=comment.pk)
+
+	if redirect_location : return redirect_location # si une id interne est définie, on la transmet
+	else : return False
+
+def get_root(comment):
+	parent = None
+	while parent == None :
+		parent = comment.parent_post
+		if not parent : comment = comment.parent_comment
+	return parent
+	
+
+	parent_post = models.ForeignKey(Post, null=True, blank=True)
+	parent_comment = models.ForeignKey('self', null=True, blank=True)
 
 @login_required
 def aggregateur(request, fil):
@@ -66,7 +115,8 @@ def get_post_meta(request, post):
 def vote(request, post_id, color):
 	context = RequestContext(request)
 	try : post = Post.objects.get(id=int(post_id))
-	except Post.DoesNotExist : print("\nERROR : Post.DoesNotExist - while trying to vote")
+	except Post.DoesNotExist :
+		logger.error("Post.DoesNotExist - while trying to vote")
 	else:
 		try : vote = Vote.objects.get(user=request.user, post=post)
 		except Vote.DoesNotExist :
@@ -84,7 +134,7 @@ def vote(request, post_id, color):
 			elif vote.color == "NEG" and color == "NEG" : vote.color = "NEU"
 			vote.save()
 			endcolor = vote.color
-		print ("\n---> A %s vote was cast on post n° %s" % (endcolor, post_id))
+		logging.info("A {color} vote was cast on post n°{id}".format(color=endcolor, id=post_id))
 	# return the endcolor of the vote so that we can light up the up/down arrows
 	return HttpResponse(endcolor)
 
@@ -107,11 +157,8 @@ def rank_posts(request, force=False):
 			sign = 1 if post.health > 0 else -1 if post.health < 0 else 0
 			post.rank = round( sign * order + time_since_bayrou / 45000, 7)
 			post.save()
-			result = "Classement réussi !"
-	else :
-		result = "Le dernier classement date déjà d'il y a moins de 5 minutes."
-	print (result)
-	return HttpResponse(result)
+			logging.info("Les posts ont été reclassés !")
+	return HttpResponse()
 
 def healthify(post):
 	''' compte le score absolu d'un post '''
@@ -123,15 +170,19 @@ def healthify(post):
 def time_to_rerank(request):
 	try :
 		last_ranking = LastRanking.objects.latest('date')
+		# si un classement a déjà été fait, on chope sa date
 	except LastRanking.DoesNotExist :
 		last_ranking = LastRanking.objects.create(date=datetime.now())
+		# sinon, on en créé un et on lance le classement
 		return True
 	else :
 		if last_ranking.date < (datetime.now()-timedelta(minutes=5)) :
+			# si la date chopée est plus ancienne que 5 minutes, on reclasse
 			last_ranking.date = datetime.now()
 			last_ranking.save()
 			return True
 		else :
+			# sinon, on reclasse pas
 			return False
 
 
@@ -191,13 +242,17 @@ def nouveau_post(request):
 					title=title,
 					content=content,
 					author=request.user,
-					channel=Channel.objects.get(pk=1), # change when adding more channels
-				#	illustration=
+#					channel=Channel.objects.get(pk=1), # change when adding more channels
+#					illustration=
 					)
 				new_post.save()
 				new_post_adress = "/p/" + new_post.slug
 				rank_posts(request, force=True)
-				print ("\n- Nouveau texte posté par %s : %s" % (request.user.username, request.POST.get('title')))
+				logging.info(
+					"Nouveau texte posté par {username} : {title}".format(
+					username=request.user.username,
+					title=request.POST.get('title'))
+					)
 				messages.success(request, "Votre post est publié.")
 				return HttpResponseRedirect(new_post_adress)
 			else :
@@ -219,7 +274,11 @@ def nouveau_post(request):
 				new_post.save()
 				new_post_adress = "/p/" + new_post.slug
 				messages.success(request, "Votre post est publié.")
-				print ("\n- Nouveau lien posté par %s : %s" % (request.user.username, request.POST.get('title')))
+				logging.info(
+					"Nouveau lien posté par {username} : {title}".format(
+					username=request.user.username,
+					title=request.POST.get('title'))
+					)
 				return HttpResponseRedirect(new_post_adress)
 			else :
 				messages.error(request, "Votre post n'a pas été publié, il semble qu'il y ait une erreur dans les champs que vous avez rempli.")

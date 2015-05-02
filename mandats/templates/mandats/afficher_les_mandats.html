@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}{{ block.super }}
+
+<title>EDEM - Mandats</title>
+
+<link rel="stylesheet" href="{% get_static_prefix %}css/mandats.css" >
+
+{% endblock head %}
+
+{% block content %} {{ block.super }}
+
+<div class="col-sm-12 table-responsive">
+	<table class="table table-condensed table-striped">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Nom Courant</th>
+				<th>Mandats</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for profil in profils %}
+			<tr>
+				<td>
+					{% if profil.user %}
+					<a href="{% url 'membres' %}{{ profil.user.pk }}">{{ profil.user.username }}</a>
+					{% else %}
+					-
+					{% endif %}
+				</td>
+				<td>
+					{{ profil.nom_courant }}
+				</td>
+				<td>
+					{% include "mandats/widget_mandats.html" %}
+				</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+<div style="text-align: right;"><a class="btn btn-primary" href="/admin/mandats"><span class="glyphicon glyphicon-pencil"></span> Modifier les attributions de mandats</a></div>
+
+</div>
+
+{% endblock content %}
+
+{% block scripts %} {{ block.super }}
+
+{% comment %}<script src="{% get_static_prefix %}js/aggregateur.js"></script>{% endcomment %}
+
+{% endblock scripts %}
+

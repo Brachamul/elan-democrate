@@ -1,20 +1,32 @@
-Accueil
-=======
+***
+Base
+====
 
 * ~~Modifier la barre de navigation en enlevant les boutons pour les mettre sous la photo de profil~~ (2h)
 * Faire fonctionner la barre de navigation proprement sur mobile
-* Permettre à l'utilisateur de fermer les messages serveur *
+* Permettre à l'utilisateur de fermer les messages serveur
+* Faire apparaitre les sous-menus de la barre de nav au survol de la souris
 
-
-
+***
 Membres
 =======
 
-* **Permettre la gestion de mandats JDem**
+
 * ~~Expliquer le fonctionnement de Gravatar~~ (1h)
 * Afficher le statut d'adhesion
 * URL du profil par nom
+* ~~Créer un membre pour chaque adhérent du fichier~~ (2h)
+* ~~Nom courant default value~~
+* ~~**Permettre l'édition de son profil**~~ (2h)
+* Ajouter d'autres éléments au profil (badges, occupations, intérêts, compétences, ...)
 
+***
+Mandats
+=================
+
+* ~~**Permettre la gestion de mandats JDem**~~ (4h)
+* Permettre la proposition d'un mandat
+* Systèmes de validation et covalidation
 
 
 ***
@@ -49,6 +61,7 @@ Posts
 * Preview du post en dessous
 * Guide markdown
 * Bug URL du post lien
+* Rendre les affichages de posts plus responsive avec la healthbox
 
 Commentaires
 --------
@@ -85,15 +98,16 @@ Authentification
 
 * Gérer la durée des sessions
 * Ignorer les caractères "espace" dans le code d'authentification
-* Make the "register" button on the "connexion" page remember the content of the email/number field
-* **Enable email registration, currently there's only adherent number registration**
-* **Gérer le cas où l'utilisateur n'est pas enregistré et entre son numéro adhérent dans connexion**
+* ~~**Enable email registration, currently there's only adherent number registration**~~ (1h)
+* ~~**Gérer le cas où l'utilisateur n'est pas enregistré et entre son numéro adhérent dans connexion**~~ (1h)
 * Si dans connexion on clique sur "créer un compte" lancer directement le processus d'enregistrement plutôt que rediriger
 * Si un mail est envoyé pour l'enregistrement, ne pas remontrer le formulaire
 * Mettre en place l'authentification par SMS
+* Gérer notamment la génération automatique de profil quand on créé un utilisateur via le numéro de tel
 * Ajouter du JS à l'authentification
 * URLS relatives dans le backend
-* Incohérence des boutons "créer un compte" et "s'enregistrer"
+* ~~local_settings pour l'URL envoyé par mail pour le lien direct de connexion~~ (1h)
+* ~~Incohérence des boutons "créer un compte" et "s'enregistrer"~~ (1h)
 * Le champs de connexion est rempli par "None" si il ne retrouve pas d'adhérent, remplacer par rien
 * **Rediriger l'enregistrement sur une feuille de création de profil**
 
@@ -112,17 +126,22 @@ Tableau de Bord
 ===============
 
 * Compter le nombre d'emails envoyés par utilisateur (# authentification)
-
+* Notamment lors de l'enregistrement
+* Noter les changements de mandats
+* Logger les connexions de chaque user
 
 
 ***
 Securité
 ========
 
-* **Secure the settings.py file**
+* ~~**Secure the settings.py file**~~ (1h)
+* ~~Create local_settings.py~~ (1h)
+* django.middleware.security.SecurityMiddleware [ nécessite un HTTPS partout sur le domaine ]
 * Prevent mass sending of email confirmation messages
 * Add terms and conditions
 * Remove super login
+* Create a role that can do everything except look at adherent data
 
 
 
@@ -139,3 +158,5 @@ Meta
 ====
 
 * ~~Retirer la DB des commits~~ (1h)
+* ~~Replace prints by logging or add .encode("utf-8")~~ (1h)
+* ~~**Add logging**~~ (1h)
