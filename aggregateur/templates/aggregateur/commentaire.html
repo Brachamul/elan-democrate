@@ -1,6 +1,13 @@
 <input id="checkbox-close-comment-{{ comment.pk }}" type="checkbox" />
 
 <div class="comment">
+
+	<div class="healthbox">
+		<div class="vote pos {% if comment.color == "POS" %}active{% endif %}" data-commentid="{{ comment.id }}">▲<sup>+1</sup></div>
+		<div class="health">{{ comment.health }}</div>
+		<div class="vote neg {% if comment.color == "NEG" %}active{% endif %}" data-commentid="{{ comment.id }}">▼<sup>-1</sup></div>
+	</div>
+
 	<div class="meta">
 		<label for="checkbox-close-comment-{{ comment.pk }}">[<span class="minus">–</span><span class="plus">+</span>]</label>
 		<a href="{% url 'membres' %}{{ comment.author.pk }}">

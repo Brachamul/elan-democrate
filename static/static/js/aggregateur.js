@@ -39,9 +39,54 @@ jQuery(function($) {
 		})
 	});
 
+	$('.comment .vote.pos').click(function(){
+		var commentid;
+		commentid = $(this).attr("data-commentid");
+		commentSelector = '#comment-' + commentid;
+		var url;
+		arrowSelector = commentSelector + ' .vote.pos';
+		url = '/p/' + commentid + '/commentvote/' + 'POS';
+		$.get(url, function(color){
+			if (color == "POS") {
+				$(commentSelector + ' .vote.pos').addClass("active");
+				$(commentSelector + ' .vote.neg').removeClass("active");
+			} else if (color == "NEU") {
+				$(commentSelector + ' .vote').removeClass("active");
+			} else if (color == "NEG") {
+				$(commentSelector + ' .vote.neg').addClass("active");
+				$(commentSelector + ' .vote.pos').removeClass("active");
+			}
+		})
+	});
+
+	$('.comment .vote.neg').click(function(){
+		var commentid;
+		commentid = $(this).attr("data-commentid");
+		commentSelector = '#comment-' + commentid;
+		var url;
+		url = '/p/' + commentid + '/commentvote/' + 'NEG';
+		$.get(url, function(color){
+			if (color == "POS") {
+				$(commentSelector + ' .vote.pos').addClass("active");
+				$(commentSelector + ' .vote.neg').removeClass("active");
+			} else if (color == "NEU") {
+				$(commentSelector + ' .vote').removeClass("active");
+			} else if (color == "NEG") {
+				$(commentSelector + ' .vote.neg').addClass("active");
+				$(commentSelector + ' .vote.pos').removeClass("active");
+			}
+		})
+	});
+
 	$('#postranker').click(function(){
 		$.get('/p/rank_posts', function(result){
 			$('#postranker-result').html(result);
+		});
+	});
+
+	$('#commentmedic').click(function(){
+		$.get('/p/comment_medic', function(result){
+			$('#commentmedic-result').html(result);
 		});
 	});
 

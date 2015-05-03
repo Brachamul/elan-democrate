@@ -96,6 +96,7 @@ Autres
 ------
 * Administration des posts / chaînes
 * Prévenir le double post de commentaire / actu
+* Reclassement récurrent asynchrone
 
 
 
