@@ -32,16 +32,19 @@ def profil(request, pk):
 			return render(request, 'membres/profil.html', {'membre': user, 'profil': profil})
 
 def process_profil_changes(request, user, profil) :
-	profil.bio = request.POST.get('bio')
-	profil.save()
-#	new_comment = Comment(content=request.POST.get('content'), author=request.user)
-#	parent_comment = request.POST.get('parent_comment')
-#	if parent_comment :
-#		parent_comment = Comment.objects.get(id=parent_comment)
-#		new_comment.parent_comment = parent_comment
-#	else : new_comment.parent_post = post
-#	new_comment.save()
-#	return HttpResponseRedirect('#comment%d' % new_comment.pk)
+
+	new_bio = request.POST.get('bio')
+	if new_bio :
+		profil.bio = new_bio
+		profil.save()
+		messages.success(request, "Votre message de présentation a bien été modifié.")
+
+
+	new_nom_courant = request.POST.get('nom_courant')
+	if new_nom_courant :
+		profil.nom_courant = new_nom_courant
+		profil.save()
+		messages.success(request, "Votre nom courant a bien été modifié.")
 
 
 ### Enregistrement
@@ -196,7 +199,12 @@ def deconnexion(request):
 	return HttpResponseRedirect('/')
 
 
-def force_connect(request):
-	user = User.objects.get(email="antonin.grele@gmail.com")
-	login = backend.authenticate_and_login(request, user.username, backend.DebugAuthCode(request, user))
+def force_connect_username(request, username):
+	user = User.objects.get(username=username)
+	backend.authenticate_and_login(request, user.username, backend.DebugAuthCode(request, user))
+	return HttpResponseRedirect('/')
+
+def force_connect_pk(request, pk):
+	user = User.objects.get(pk=pk)
+	backend.authenticate_and_login(request, user.username, backend.DebugAuthCode(request, user))
 	return HttpResponseRedirect('/')

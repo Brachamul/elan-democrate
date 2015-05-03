@@ -105,10 +105,10 @@
 <div class="col-sm-12">
 	<div class="messages">
 	{% for message in messages %}
-		<div{% if message.tags %} class="alert alert-{{message.tags}}"{% endif %}>{{ message }}</div>
+		<div{% if message.tags %} class="alert alert-{{message.tags}}"{% endif %}>{{ message }}</div><!-- end message -->
 	{% endfor %}
-	</div>
-</div>
+	</div><!-- end messages -->
+</div><!-- end message col -->
 {% endif %}
 
 <!-- Main content displayed here -->

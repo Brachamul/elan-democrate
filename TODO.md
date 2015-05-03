@@ -18,7 +18,9 @@ Membres
 * URL du profil par nom
 * ~~Créer un membre pour chaque adhérent du fichier~~ (2h)
 * ~~Nom courant default value~~
-* **Rendre modifiable le nom courant**
+* ~~**Rendre modifiable le nom courant**~~ (1h)
+* Ajouter un système de validation du nom courant
+* Et au passage un système de validation des mandats
 * ~~**Permettre l'édition de son profil**~~ (2h)
 * Ajouter d'autres éléments au profil (badges, occupations, intérêts, compétences, ...)
 

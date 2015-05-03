@@ -113,7 +113,6 @@ def DebugAuthCode(request, user):
 	new_credentials = Credentials(user=user, email=user.email)
 	new_credentials.save()
 	code = new_credentials.code
-	messages.success(request, "Code : %s" % code)
 	return code
 
 
