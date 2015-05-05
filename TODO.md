@@ -118,6 +118,7 @@ Authentification
 * ~~Incohérence des boutons "créer un compte" et "s'enregistrer"~~ (1h)
 * Le champs de connexion est rempli par "None" si il ne retrouve pas d'adhérent, remplacer par rien
 * **Rediriger l'enregistrement sur une feuille de création de profil**
+* **Vérifier pourquoi le même code est envoyé deux fois**
 
 
 
@@ -126,6 +127,7 @@ Fichier Adhérents
 =================
 
 * **Tester le chargement du fichier**
+* ~~résolu un problème avec des caractères spéciaux dans les noms de fichiers template~~ (1h)
 
 
 
