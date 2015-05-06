@@ -5,7 +5,6 @@ jQuery(function($) {
 		postid = $(this).attr("data-postid");
 		postSelector = '#post-' + postid;
 		var url;
-		arrowSelector = postSelector + ' .vote.pos';
 		url = '/p/' + postid + '/vote/' + 'POS';
 		$.get(url, function(color){
 			if (color == "POS") {
@@ -39,9 +38,53 @@ jQuery(function($) {
 		})
 	});
 
+	$('.comment .vote.pos').click(function(){
+		var commentid;
+		commentid = $(this).attr("data-commentid");
+		commentSelector = '#comment-' + commentid;
+		var url;
+		url = '/p/' + commentid + '/commentvote/' + 'POS';
+		$.get(url, function(color){
+			if (color == "POS") {
+				$(commentSelector + ' > .panel-body > .comment .vote.pos').addClass("active");
+				$(commentSelector + ' > .panel-body > .comment .vote.neg').removeClass("active");
+			} else if (color == "NEU") {
+				$(commentSelector + ' > .panel-body > .comment .vote').removeClass("active");
+			} else if (color == "NEG") {
+				$(commentSelector + ' > .panel-body > .comment .vote.neg').addClass("active");
+				$(commentSelector + ' > .panel-body > .comment .vote.pos').removeClass("active");
+			}
+		})
+	});
+
+	$('.comment .vote.neg').click(function(){
+		var commentid;
+		commentid = $(this).attr("data-commentid");
+		commentSelector = '#comment-' + commentid;
+		var url;
+		url = '/p/' + commentid + '/commentvote/' + 'NEG';
+		$.get(url, function(color){
+			if (color == "POS") {
+				$(commentSelector + ' > .panel-body > .comment .vote.pos').addClass("active");
+				$(commentSelector + ' > .panel-body > .comment .vote.neg').removeClass("active");
+			} else if (color == "NEU") {
+				$(commentSelector + ' > .panel-body > .comment .vote').removeClass("active");
+			} else if (color == "NEG") {
+				$(commentSelector + ' > .panel-body > .comment .vote.neg').addClass("active");
+				$(commentSelector + ' > .panel-body > .comment .vote.pos').removeClass("active");
+			}
+		})
+	});
+
 	$('#postranker').click(function(){
 		$.get('/p/rank_posts', function(result){
 			$('#postranker-result').html(result);
+		});
+	});
+
+	$('#commentmedic').click(function(){
+		$.get('/p/comment_medic', function(result){
+			$('#commentmedic-result').html(result);
 		});
 	});
 

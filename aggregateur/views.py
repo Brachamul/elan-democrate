@@ -77,17 +77,6 @@ def process_post_changes(request, post) :
 	if redirect_location : return redirect_location # si une id interne est définie, on la transmet
 	else : return False
 
-def get_root(comment):
-	parent = None
-	while parent == None :
-		parent = comment.parent_post
-		if not parent : comment = comment.parent_comment
-	return parent
-	
-
-	parent_post = models.ForeignKey(Post, null=True, blank=True)
-	parent_comment = models.ForeignKey('self', null=True, blank=True)
-
 @login_required
 def aggregateur(request, fil):
 	''' génère une carte qui affiche les données des 20 derniers posts
@@ -138,6 +127,32 @@ def vote(request, post_id, color):
 	# return the endcolor of the vote so that we can light up the up/down arrows
 	return HttpResponse(endcolor)
 
+def comment_vote(request, comment_id, color):
+	context = RequestContext(request)
+	try : comment = Comment.objects.get(id=int(comment_id))
+	except Comment.DoesNotExist :
+		logger.error("Comment.DoesNotExist - while trying to vote")
+	else:
+		try : vote = CommentVote.objects.get(user=request.user, comment=comment)
+		except CommentVote.DoesNotExist :
+			# no previous votes exist, so let's make a new one
+			new_vote = CommentVote(user=request.user, comment=comment, color=color)
+			new_vote.save()
+			endcolor = color
+		else :
+			# a vote exists, so let's change it
+			if   vote.color == "POS" and color == "POS" : vote.color = "NEU"
+			elif vote.color == "POS" and color == "NEG" : vote.color = "NEG"
+			elif vote.color == "NEU" and color == "POS" : vote.color = "POS"
+			elif vote.color == "NEU" and color == "NEG" : vote.color = "NEG"
+			elif vote.color == "NEG" and color == "POS" : vote.color = "POS"
+			elif vote.color == "NEG" and color == "NEG" : vote.color = "NEU"
+			vote.save()
+			endcolor = vote.color
+		logging.info("A {color} vote was cast on comment n°{id}".format(color=endcolor, id=comment_id))
+	# return the endcolor of the vote so that we can light up the up/down arrows
+	return HttpResponse(endcolor)
+
 
 from datetime import datetime, timedelta
 from math import log
@@ -160,12 +175,24 @@ def rank_posts(request, force=False):
 			logging.info("Les posts ont été reclassés !")
 	return HttpResponse()
 
+def comment_medic(request):
+	for comment in Comment.objects.all() :
+		healthify_comment(comment)
+	return HttpResponse("Comments heathified !")
+
 def healthify(post):
 	''' compte le score absolu d'un post '''
 	pos = Vote.objects.filter(post=post, color="POS").count()
 	neg = Vote.objects.filter(post=post, color="NEG").count()
 	post.health = pos-neg
 	post.save()
+
+def healthify_comment(comment):
+	''' compte le score absolu d'un commentaire '''
+	pos = CommentVote.objects.filter(comment=comment, color="POS").count()
+	neg = CommentVote.objects.filter(comment=comment, color="NEG").count()
+	comment.health = pos-neg
+	comment.save()
 
 def time_to_rerank(request):
 	try :

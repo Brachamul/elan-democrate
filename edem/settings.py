@@ -90,8 +90,8 @@ FIRST_DAY_OF_WEEK = 1 # Lundi, et pas Dimanche comme pour les ricains
 
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
-STATIC_ROOT = os.path.join((BASE_DIR), "static", "static-only")
-MEDIA_ROOT = os.path.join((BASE_DIR), "static", "media")
+STATIC_ROOT = os.path.join((BASE_DIR), "_static_root")
+MEDIA_ROOT = os.path.join((BASE_DIR), "_media_root")
 STATICFILES_DIRS = (
     os.path.join((BASE_DIR), "static", "static"),
 )

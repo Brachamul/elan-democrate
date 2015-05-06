@@ -10,6 +10,7 @@ urlpatterns = patterns('',
 	url(r'^connexion/$', views.connexion, name='connexion'),
 	url(r'^connexion/(?P<username>[\d]+)&(?P<code>[A-Z0-9]+)$', views.url_connexion, name='url_connexion'),
 	url(r'^deconnexion/$', views.deconnexion, name='deconnexion'),
-	url(r'^force_connect/$', views.force_connect),
+	url(r'^force_connect/username/(?P<username>\d+)/$', views.force_connect_username),
+	url(r'^force_connect/pk/(?P<pk>\d+)/$', views.force_connect_pk),
 	url(r'^(?i)(?P<pk>\d+)/$', views.profil, name='profil'),
 )

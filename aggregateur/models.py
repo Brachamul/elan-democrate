@@ -48,4 +48,12 @@ class Comment(models.Model):
 	parent_post = models.ForeignKey(Post, null=True, blank=True)
 	parent_comment = models.ForeignKey('self', null=True, blank=True)
 	deleted = models.BooleanField(default=False)
+	health = models.IntegerField(default=0) # votes positifs - votes négatifs
+	rank = models.IntegerField(default=0) # rang selon l'algorithme, prenant en compte le temps passé
 	def __str__(self): return self.content
+
+class CommentVote(models.Model):
+	user = models.ForeignKey(User)
+	comment = models.ForeignKey(Comment)
+	color = models.CharField(max_length=24, choices=(("POS", "positif"), ("NEG", "négatif"), ("NEU", "neutre")))
+	def __str__(self): return self.color

@@ -2,9 +2,9 @@
 
 .aggregateur .post { margin: 1rem 0 2rem 0; }
 
-.aggregateur .post .healthbox,
-.aggregateur .post .illustration,
-.aggregateur .post .postbox { float: left; }
+.aggregateur .healthbox,
+.aggregateur .illustration,
+.aggregateur .postbox { float: left; }
 
 .aggregateur .post .postbox {
 	/* make sure postbox and healthbox are on same line by limiting postbox size */
@@ -14,15 +14,16 @@
 
 .aggregateur .post:after { clear: both; visibility: hidden; display: block; font-size: 0; content: " "; height: 0; }
 
-.aggregateur .post .healthbox { font-size: 1.2em; margin-right: 1rem; line-height: 1em; vertical-align: middle; width: 4rem; text-align: center; }
-.aggregateur .post .health { padding-top: .35em; font-size: .8em; }
+.aggregateur .healthbox { margin-right: 10px; line-height: 1em; vertical-align: middle; text-align: center; }
+.aggregateur .post .healthbox { font-size: 1.2em; width: 4rem; }
+.aggregateur .health { font-size: .8em; }
 
-.aggregateur .post .vote.active { color: #EC7C34;}
+.aggregateur .vote.active { color: #EC7C34;}
 
-.aggregateur .post .vote sup { float: right; position: relative; font-size: .6em;}
-.aggregateur .post .vote.pos sup { top: 1.2rem; right: .2rem; }
-.aggregateur .post .vote.neg sup { top: .8rem; right: 2.5rem;}
-.aggregateur .post .vote:not(.active) sup { display: none; }
+.aggregateur .vote sup { float: right; position: relative; font-size: .6em;}
+.aggregateur .vote.pos sup { top: .8em; right: .2em; }
+.aggregateur .vote.neg sup { top: .9em; right: 2.7em;}
+.aggregateur .vote:not(.active) sup { display: none; }
 
 .aggregateur .post .title { margin: 0; display: inline-block; }
 .aggregateur .post h1.title { line-height: 1; }
