@@ -76,23 +76,23 @@
 		</div>
 		
 		{% for comment in post.comment_set.all %}
-		<div class="panel panel-default" id="comment{{ comment.pk }}">
+		<div class="panel panel-default" id="comment-{{ comment.pk }}">
 			<div class="panel-body">
 				{% include "aggregateur/commentaire.html" %}
 				{% for comment in comment.comment_set.all %}
-				<div class="panel panel-default" id="comment{{ comment.pk }}">
+				<div class="panel panel-default" id="comment-{{ comment.pk }}">
 					<div class="panel-body">
 						{% include "aggregateur/commentaire.html" %}
 						{% for comment in comment.comment_set.all %}
-						<div class="panel panel-default" id="comment{{ comment.pk }}">
+						<div class="panel panel-default" id="comment-{{ comment.pk }}">
 							<div class="panel-body">
 								{% include "aggregateur/commentaire.html" %}
 								{% for comment in comment.comment_set.all %}
-								<div class="panel panel-default" id="comment{{ comment.pk }}">
+								<div class="panel panel-default" id="comment-{{ comment.pk }}">
 									<div class="panel-body">
 										{% include "aggregateur/commentaire.html" %}
 										{% for comment in comment.comment_set.all %}
-										<div class="panel panel-default" id="comment{{ comment.pk }}">
+										<div class="panel panel-default" id="comment-{{ comment.pk }}">
 											<div class="panel-body">
 												{% include "aggregateur/commentaire.html" %}
 											</div>

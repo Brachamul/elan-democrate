@@ -128,6 +128,9 @@ Fichier Adhérents
 
 * **Tester le chargement du fichier**
 * ~~résolu un problème avec des caractères spéciaux dans les noms de fichiers template~~ (1h)
+* ajouter une étape de validation par l'utilisateur entre la lecture du fichier et son ajout à la bdd
+* remplacer la lecture des mandats pour faire du filtrage dessus
+* ajouter une maintenance pour virer tout les trucs useless générés pendant le processus (genre les adhérents_du_fichier)
 
 
 

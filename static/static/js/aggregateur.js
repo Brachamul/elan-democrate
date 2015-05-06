@@ -5,7 +5,6 @@ jQuery(function($) {
 		postid = $(this).attr("data-postid");
 		postSelector = '#post-' + postid;
 		var url;
-		arrowSelector = postSelector + ' .vote.pos';
 		url = '/p/' + postid + '/vote/' + 'POS';
 		$.get(url, function(color){
 			if (color == "POS") {
@@ -44,17 +43,16 @@ jQuery(function($) {
 		commentid = $(this).attr("data-commentid");
 		commentSelector = '#comment-' + commentid;
 		var url;
-		arrowSelector = commentSelector + ' .vote.pos';
 		url = '/p/' + commentid + '/commentvote/' + 'POS';
 		$.get(url, function(color){
 			if (color == "POS") {
-				$(commentSelector + ' .vote.pos').addClass("active");
-				$(commentSelector + ' .vote.neg').removeClass("active");
+				$(commentSelector + ' > .panel-body > .comment .vote.pos').addClass("active");
+				$(commentSelector + ' > .panel-body > .comment .vote.neg').removeClass("active");
 			} else if (color == "NEU") {
-				$(commentSelector + ' .vote').removeClass("active");
+				$(commentSelector + ' > .panel-body > .comment .vote').removeClass("active");
 			} else if (color == "NEG") {
-				$(commentSelector + ' .vote.neg').addClass("active");
-				$(commentSelector + ' .vote.pos').removeClass("active");
+				$(commentSelector + ' > .panel-body > .comment .vote.neg').addClass("active");
+				$(commentSelector + ' > .panel-body > .comment .vote.pos').removeClass("active");
 			}
 		})
 	});
@@ -67,13 +65,13 @@ jQuery(function($) {
 		url = '/p/' + commentid + '/commentvote/' + 'NEG';
 		$.get(url, function(color){
 			if (color == "POS") {
-				$(commentSelector + ' .vote.pos').addClass("active");
-				$(commentSelector + ' .vote.neg').removeClass("active");
+				$(commentSelector + ' > .panel-body > .comment .vote.pos').addClass("active");
+				$(commentSelector + ' > .panel-body > .comment .vote.neg').removeClass("active");
 			} else if (color == "NEU") {
-				$(commentSelector + ' .vote').removeClass("active");
+				$(commentSelector + ' > .panel-body > .comment .vote').removeClass("active");
 			} else if (color == "NEG") {
-				$(commentSelector + ' .vote.neg').addClass("active");
-				$(commentSelector + ' .vote.pos').removeClass("active");
+				$(commentSelector + ' > .panel-body > .comment .vote.neg').addClass("active");
+				$(commentSelector + ' > .panel-body > .comment .vote.pos').removeClass("active");
 			}
 		})
 	});
