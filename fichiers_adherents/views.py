@@ -51,10 +51,10 @@ def televersement_du_fichier_adherent(request):
 					})
 
 			else:
-				return render(request, 'fichiers_adherents/televerser.html', {'upload_form': upload_form})
+				return render(request, 'fichiers_adherents/upload.html', {'upload_form': upload_form})
 		else:
 			upload_form = TéléversementDuFichierAdhérentForm()
-			return render(request, 'fichiers_adherents/televerser.html', {'upload_form': upload_form})
+			return render(request, 'fichiers_adherents/upload.html', {'upload_form': upload_form})
 	else:
 		messages.error(request, "Vous n'avez pas les droits d'accès au téléversement du fichier adhérents.<br>Êtes-vous bien connecté ?<br><br><a href='/'>Retour</a>")
 		return redirect('accueil')
