@@ -42,10 +42,14 @@
 
 .aggregateur .vote:hover { cursor: pointer; }
 
-.aggregateur .post .content {
-	max-width: 80rem;
-	margin: 1rem 0;
-}
+/* "self" est appliquée uniquement sur les pages des posts eux-mêmes */
+.aggregateur.self .post .meta { margin-top: 1rem; }
+.aggregateur.self .post .content { max-width: 80rem; margin: 1rem 0; }
+.aggregateur.self .post h1.title { max-width: 80rem; margin-bottom: 1rem; font-size: 2.4rem; }
+.aggregateur.self .post {
+	margin: 1rem 0 2rem 0;
+	padding-bottom: 3rem;
+	border-bottom: 1px solid #D3D3D3; }
 
 /* On annule le formattage différent des h1/h2/h3/h4/ */
 /* Y'a aussi du jQuery pour faire le ménage */

@@ -20,7 +20,7 @@ class Post(models.Model):
 	slug = AutoSlugField(populate_from=('title'), unique_with='date', max_length=255)
 	content = models.TextField(max_length=10000, null=True, blank=True)
 	author = models.ForeignKey(User)
-	channel = models.ForeignKey(Channel, null=True)
+	channel = models.ForeignKey(Channel, null=True, blank=True)
 	date = models.DateTimeField(auto_now_add=True)
 	health = models.IntegerField(default=0) # votes positifs - votes négatifs
 	rank = models.IntegerField(default=0) # rang selon l'algorithme, prenant en compte le temps passé
