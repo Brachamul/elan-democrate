@@ -69,6 +69,8 @@ Posts
 * Guide markdown
 * Bug URL du post lien
 * Rendre les affichages de posts plus responsive avec la healthbox
+* **Permettre aux utilisateurs de modifier / supprimer leurs posts**
+* Améliorer un peu le look des posts
 
 Commentaires
 --------
