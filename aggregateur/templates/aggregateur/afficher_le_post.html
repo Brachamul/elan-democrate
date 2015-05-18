@@ -25,8 +25,13 @@
 			<!-- img goes here -->
 		</div>
 		<div class="postbox">
-			<a href="{% url 'aggregateur' %}{{ post.link }}">
-				<h1 class="title">{{ post.title }}</h1></a>
+					{% if post.format == "TEXT" %}
+						<a href="{% url 'aggregateur' %}{{ post.slug }}">
+					{% elif post.format == "LINK" %}
+						<a href="{{ post.link }}" target="_blank">
+					{% endif %}
+							<h1 class="title">{{ post.title }}</h1>
+						</a>
 			{% comment %}<span class="source">(<a href="#">loremipsum.com</a>)</span> {% endcomment %}
 			<div class="meta">
 				<span class="date">Il y a <time datetime="{{ post.date }}">{{ post.date|timesince }}</time>,</span>
@@ -39,11 +44,13 @@
 			</div>
 			<div class="actions">
 				<span class="comments">
+					<a href="{% url 'aggregateur' %}{{ post.slug }}">
 					{% if post.number_of_comments = 0 %}
 						pas de commentaires
 					{% else %}
 						{{ post.number_of_comments }} commentaire{{ post.number_of_comments|pluralize }}
 					{% endif %}
+					</a>
 				</span>
 {% comment %}	<span class="share">partager</span> {% endcomment %}
 {% comment %}	<span class="favorite">ajouter aux favoris</span> {% endcomment %}

@@ -9,16 +9,21 @@
 		{% for post in aggregateur.posts %}
 			<div class="post" id="post-{{ post.id }}">
 				<div class="healthbox">
-					<div class="vote pos {% if post.color == "POS" %}active{% endif %}" data-postid="{{ post.id }}">↑<sup>+1</sup></div>
+					<div class="vote pos {% if post.color == "POS" %}active{% endif %}" data-postid="{{ post.id }}">▲<sup>+1</sup></div>
 					<div class="health">{{ post.health }}</div>
-					<div class="vote neg {% if post.color == "NEG" %}active{% endif %}" data-postid="{{ post.id }}">↓<sup>-1</sup></div>
+					<div class="vote neg {% if post.color == "NEG" %}active{% endif %}" data-postid="{{ post.id }}">▼<sup>-1</sup></div>
 				</div>
 				<div class="illustration">
 					<!-- img goes here -->
 				</div>
 				<div class="postbox">
-						<a href="{% if post.format == "TEXT" %}{% url 'aggregateur' %}{% endif %}{{ post.link }}">
-							<h4 class="title">{{ post.title }}</h4></a>
+					{% if post.format == "TEXT" %}
+						<a href="{% url 'aggregateur' %}{{ post.slug }}">
+					{% elif post.format == "LINK" %}
+						<a href="{{ post.link }}" target="_blank">
+					{% endif %}
+							<h4 class="title">{{ post.title }}</h4>
+						</a>
 {% comment %}			<span class="source">(<a href="#">loremipsum.com</a>)</span> {% endcomment %}
 					<div class="meta">
 						<span class="date">Il y a {{ post.date|timesince }},</span>
@@ -27,11 +32,13 @@
 					</div>
 					<div class="actions">
 					<span class="comments">
+						<a href="{% url 'aggregateur' %}{{ post.slug }}">
 						{% if post.number_of_comments = 0 %}
 							pas de commentaires
 						{% else %}
 							{{ post.number_of_comments }} commentaire{{ post.number_of_comments|pluralize }}
 						{% endif %}
+						</a>
 					</span>
 {% comment %}			<span class="share">partager</span> {% endcomment %}
 {% comment %}			<span class="favorite">ajouter aux favoris</span> {% endcomment %}

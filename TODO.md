@@ -23,7 +23,7 @@ Membres
 * Et au passage un système de validation des mandats
 * ~~**Permettre l'édition de son profil**~~ (2h)
 * Ajouter d'autres éléments au profil (badges, occupations, intérêts, compétences, ...)
-
+* ~~Ne pas pré-écrire "None" dans la description quand il n'y en a pas~~
 
 
 ***
@@ -71,6 +71,8 @@ Posts
 * Rendre les affichages de posts plus responsive avec la healthbox
 * **Permettre aux utilisateurs de modifier / supprimer leurs posts**
 * Améliorer un peu le look des posts
+* ~~Modifier le régex pour régler le soucis des slugs avec caractères spéciaux~~ (1h) #17
+
 
 Commentaires
 --------

@@ -48,6 +48,13 @@ def afficher_le_commentaire(request, pk, slug):
 		'post': post, 'comment': comment, 'comment_form': CommentForm()
 		})
 
+def get_root(comment):
+	parent = None
+	while parent == None :
+		parent = comment.parent_post
+		if not parent : comment = comment.parent_comment
+	return parent
+
 def process_post_changes(request, post) :
 	redirect_location = False # de base, on ne redirige pas vers une #id interne
 	if request.method == "POST" :
@@ -295,8 +302,8 @@ def nouveau_post(request):
 					title=title,
 					content=url,
 					author=request.user,
-					channel=Channel.objects.get(pk=1), # change when adding more channels
-				#	illustration=
+#					channel=Channel.objects.get(pk=1), # change when adding more channels
+#					illustration=
 					)
 				new_post.save()
 				new_post_adress = "/p/" + new_post.slug
