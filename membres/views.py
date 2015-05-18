@@ -75,7 +75,7 @@ def enregistrement(request):
 					messages.error(request, "Ce numéro adhérent n'existe pas dans la base de données des Jeunes Démocrates.")
 				else :
 					if "@" in adherent.email :
-						logging.info("Envoi d'email de création de compte à ", adherent.email)
+						logging.info("Envoi d'email de création de compte à {email}".format(email=adherent.email).encode('utf8'))
 						backend.SendEmailConfirmationCode(request, adherent)
 						messages.success(request, "Un email a été envoyé à l'adresse correspondant à ce numéro dans le fichier adhérent. Merci de suivre les instructions contenues dans cet email.")
 					else :
@@ -92,7 +92,7 @@ def enregistrement(request):
 				try : adherent = Adhérent.objects.get(email=email)
 				except Adhérent.DoesNotExist : pass
 				else :
-					logging.info("Envoi d'email de création de compte à ", adherent.email)
+					logging.info("Envoi d'email de création de compte à {email}".format(email=adherent.email).encode('utf8'))
 					backend.SendEmailConfirmationCode(request, adherent)
 			messages.info(request, "Si cette adresse existe dans notre base adhérent, un message de création de compte lui a été envoyé.")
 

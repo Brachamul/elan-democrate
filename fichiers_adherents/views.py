@@ -18,7 +18,7 @@ def televersement_du_fichier_adherent(request):
 		if request.method == "POST":
 			upload_form = TéléversementDuFichierAdhérentForm(request.POST, request.FILES)
 			if upload_form.is_valid():
-				logging.info('Un nouveau fichier adhérent a été téléversé par {user}.'.format(user=request.user))
+				logging.info("Un nouveau fichier adhérent a été téléversé par {user}.".format(user=request.user).encode('utf8'))
 				fichier = request.FILES['fichier_csv']
 				importateur = request.user
 				slug = request.POST.get('slug')
@@ -27,7 +27,7 @@ def televersement_du_fichier_adherent(request):
 				nouveau_fichier.save()
 				traitement_du_fichier(nouveau_fichier) # Importe les données du fichier dans la base "AdhérentDuFichier"
 				adhérents_importés = AdhérentDuFichier.objects.filter(fichier=nouveau_fichier) # prend tous les adhérents présents dans le nouveau fichier
-				logging.info('Le fichier contient les données de {nombre} adhérents.'.format(nombre=adhérents_importés.count()))
+				logging.info("Le fichier contient les données de {nombre} adhérents.".format(nombre=adhérents_importés.count()).encode('utf8'))
 				nombre_nouveaux_adherents = 0
 				nombre_réadhésions = 0
 				for adherent_du_fichier in adhérents_importés:
@@ -42,8 +42,8 @@ def televersement_du_fichier_adherent(request):
 							nombre_réadhésions += 1
 						mettre_a_jour_un_adherent(adherent_du_fichier)
 
-				logging.info("Nouveaux adhérents : %d" % (nombre_nouveaux_adherents))
-				logging.info("Réadhésions : %d" % (nombre_réadhésions))
+				logging.info("Nouveaux adhérents : %d" % (nombre_nouveaux_adherents).encode('utf8'))
+				logging.info("Réadhésions : %d" % (nombre_réadhésions).encode('utf8'))
 				return render(request, 'fichiers_adherents/traitement.html', {
 					'fichier': nouveau_fichier,
 					'nombre_nouveaux_adherents': nombre_nouveaux_adherents,
@@ -100,7 +100,7 @@ def process_csv_date(csv_date):
 
 def creer_un_nouvel_adherent(adherent_du_fichier):
 	# Ajoute les nouveaux adhérents au fichier Adhérent
-	logging.info("Importation de %s %s, nouvel adhérent numéro %d." % (adherent_du_fichier.prénom, adherent_du_fichier.nom, adherent_du_fichier.num_adhérent))
+	logging.info("Importation de %s %s, nouvel adhérent numéro %d." % (adherent_du_fichier.prénom, adherent_du_fichier.nom, adherent_du_fichier.num_adhérent).encode('utf8'))
 	fichier = adherent_du_fichier.fichier
 	nouvel_adherent = Adhérent(num_adhérent=adherent_du_fichier.num_adhérent)
 	copier_les_donnees_de_l_adherent(nouvel_adherent, adherent_du_fichier, fichier)

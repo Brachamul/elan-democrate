@@ -26,7 +26,7 @@ def generer_le_profil_d_un_adherent(sender, created, **kwargs):
 			nouveau_profil = Profil(adherent=adherent, nom_courant=(adherent.prénom + " " + adherent.nom))
 			nouveau_profil.save()
 		else :
-			logging.warning("Un nouvel adhérent a indiqué une adresse mail déjà présente dans la base de donnée, il faut peut-être fusionner le Membre avec l'Adhérent")
+			logging.warning("Un nouvel adhérent a indiqué une adresse mail déjà présente dans la base de donnée, il faut peut-être fusionner le Membre avec l'Adhérent".encode('utf8'))
 #		if user didn't have an adhérent, then merge them
 
 @receiver(post_save, sender=User) # Quand un adhérent est ajouté via le fichier, on créé un profil 
@@ -37,7 +37,7 @@ def generer_le_profil_d_un_utilisateur(sender, created, **kwargs):
 		except Adhérent.DoesNotExist : # sinon, on lui créé un profil
 			nouveau_profil = Profil(user=user)
 			nouveau_profil.save()
-			logging.warning("Un utilisateur a été créé sans avoir d'email reconnu dans la base adhérents")
+			logging.warning("Un utilisateur a été créé sans avoir d'email reconnu dans la base adhérents".encode('utf8'))
 		else : # mais s'il était déjà dans la base, on peut lier les comptes 
 			ancien_profil = Profil.objects.get(adherent=adherent)
 			ancien_profil.user = user
