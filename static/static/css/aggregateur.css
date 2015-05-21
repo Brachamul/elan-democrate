@@ -101,6 +101,13 @@ input[id^="checkbox-modify-comment"]:not(:checked) ~ .modifier { display: none; 
 
 .aggregateur label:hover { cursor: pointer; }
 
+/*** Pagination ***/
+
+.aggregateur .pagination { width: 100%; text-align: center; }
+.aggregateur .pagination a:hover { text-decoration: none; }
+
+
+
 /*** Nouveau Post ***/
 
 .panel.nouveau-post label { display: block; }

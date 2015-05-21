@@ -1,8 +1,9 @@
 import logging
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse, HttpRequest, Http404
 from django.shortcuts import get_object_or_404, render, render_to_response, redirect
 from django.template import RequestContext
@@ -85,14 +86,16 @@ def process_post_changes(request, post) :
 	else : return False
 
 @login_required
-def aggregateur(request, fil):
-	''' génère une carte qui affiche les données des 20 derniers posts
+def aggregateur(request, page_number=1, fil=None):
+	''' va chercher les posts et les publie via un paginateur
 		l'argument "fil" n'est pas opérationnel '''
-	try : posts = Post.objects.all().order_by('-rank', '-health')[:100]
+	try : posts = Post.objects.all().order_by('-rank', '-health')
 	except Post.DoesNotExist : return False
 	else :
 		for post in posts : post = get_post_meta(request, post)
 		rank_posts(request) # classe les posts s'ils n'ont pas été reclassés depuis au moins 5 minutes
+		posts = Paginator(posts, 2).page(page_number)
+		print("Rendering page %d of %d." % (posts.number, posts.paginator.num_pages))
 		return { 'posts': posts, 'template': "aggregateur/carte_aggregateur.html", }
 
 def get_post_meta(request, post):
@@ -112,7 +115,7 @@ def vote(request, post_id, color):
 	context = RequestContext(request)
 	try : post = Post.objects.get(id=int(post_id))
 	except Post.DoesNotExist :
-		logger.error("Post.DoesNotExist - while trying to vote")
+		logging.error("Post.DoesNotExist - while trying to vote".encode('utf8'))
 	else:
 		try : vote = Vote.objects.get(user=request.user, post=post)
 		except Vote.DoesNotExist :
@@ -138,7 +141,7 @@ def comment_vote(request, comment_id, color):
 	context = RequestContext(request)
 	try : comment = Comment.objects.get(id=int(comment_id))
 	except Comment.DoesNotExist :
-		logger.error("Comment.DoesNotExist - while trying to vote")
+		logging.error("Comment.DoesNotExist - while trying to vote".encode('utf8'))
 	else:
 		try : vote = CommentVote.objects.get(user=request.user, comment=comment)
 		except CommentVote.DoesNotExist :

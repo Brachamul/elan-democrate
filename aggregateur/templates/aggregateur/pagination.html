@@ -1,0 +1,17 @@
+<p class="pagination">
+	{% if aggregateur.posts.has_previous %}
+		<a href="{% url 'accueil' page_number=aggregateur.posts.previous_page_number %}">
+		<span class="glyphicon glyphicon-chevron-left"/>
+		</a>
+		&nbsp;
+	{% endif %}
+
+	Page {{ aggregateur.posts.number }} / {{ aggregateur.posts.paginator.num_pages }}
+
+	{% if aggregateur.posts.has_next %} 
+		&nbsp;
+		<a href="{% url 'accueil' page_number=aggregateur.posts.next_page_number %}">
+		<span class="glyphicon glyphicon-chevron-right"/>
+		</a>
+	{% endif %}
+</p>

@@ -6,6 +6,11 @@
 		</a>
 	</div>
 	<div class="panel-body">
+
+		{% if aggregateur.posts.has_previous %}
+			{% include "aggregateur/pagination.html" %}
+		{% endif %}
+
 		{% for post in aggregateur.posts %}
 			<div class="post" id="post-{{ post.id }}">
 				<div class="healthbox">
@@ -48,13 +53,18 @@
 				</div>
 			</div>
 		{% endfor %}
+
+		{% include "aggregateur/pagination.html" %}
 		
 		{% if user.is_superuser %}
+		<p style="display: none;">
 			<span id="postranker" class="btn btn-primary">Rank posts !</span>
 			<span id="postranker-result"></span>
-			<br>
+		</p>
+		<p style="display: none;">
 			<span id="commentmedic" class="btn btn-primary">Comment medic !</span>
 			<span id="commentmedic-result"></span>
+		</p>
 		{% endif %}
 		
 	</div>
