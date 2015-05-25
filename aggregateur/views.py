@@ -10,6 +10,7 @@ from django.shortcuts import get_object_or_404, render, render_to_response, redi
 from django.template import RequestContext
 from django.views import generic
 from django.views.generic import TemplateView, DetailView
+from notifications import notify
 
 from .models import *
 from .forms import *
@@ -58,6 +59,7 @@ def get_root(comment):
 	return parent
 
 def process_post_changes(request, post) :
+	''' Ajout ou modification de commentaire '''
 	redirect_location = False # de base, on ne redirige pas vers une #id interne
 	if request.method == "POST" :
 
@@ -67,7 +69,10 @@ def process_post_changes(request, post) :
 			if parent_comment :
 				parent_comment = Comment.objects.get(id=parent_comment)
 				new_comment.parent_comment = parent_comment
-			else : new_comment.parent_post = post
+				notify.send(request.user, recipient = request.user, verb='Vous avez commenté un commentaire')
+			else :
+				new_comment.parent_post = post
+				notify.send(request.user, recipient = request.user, verb='Vous avez rédigé un commentaire')
 			new_comment.save()
 			redirect_location = '#comment{pk}'.format(pk=new_comment.pk)
 

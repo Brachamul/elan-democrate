@@ -13,6 +13,7 @@ urlpatterns = patterns('',
 	url(r'^fichiers-adherents/', include('fichiers_adherents.urls')),
 	url(r'^mandats/', include('mandats.urls')),
 	url(r'^admin/', include(admin.site.urls), name='admin'),
+	
 )
 
 from django.conf import settings
@@ -20,3 +21,7 @@ if settings.DEBUG:
 	urlpatterns += patterns('',
 		(r'^media/(?P<path>.*)$', 'django.views.static.serve', {
 		'document_root': settings.MEDIA_ROOT}))
+
+# Notifications
+import notifications
+urlpatterns += patterns('', url(r'^notifications/', include(notifications.urls)))
