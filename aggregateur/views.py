@@ -1,4 +1,5 @@
 import logging
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
@@ -94,7 +95,7 @@ def aggregateur(request, page_number=1, fil=None):
 	else :
 		for post in posts : post = get_post_meta(request, post)
 		rank_posts(request) # classe les posts s'ils n'ont pas été reclassés depuis au moins 5 minutes
-		posts = Paginator(posts, 2).page(page_number)
+		posts = Paginator(posts, settings.POSTS_PER_PAGE).page(page_number)
 		print("Rendering page %d of %d." % (posts.number, posts.paginator.num_pages))
 		return { 'posts': posts, 'template': "aggregateur/carte_aggregateur.html", }
 

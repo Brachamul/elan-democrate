@@ -24,6 +24,7 @@ Membres
 * ~~**Permettre l'édition de son profil**~~ (2h)
 * Ajouter d'autres éléments au profil (badges, occupations, intérêts, compétences, ...)
 * ~~Ne pas pré-écrire "None" dans la description quand il n'y en a pas~~
+* Autres utilisateurs en ligne en ce moment
 
 
 ***

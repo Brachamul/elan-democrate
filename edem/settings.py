@@ -155,6 +155,10 @@ LOGGING = {
     }
 }
 
+### Paramètres personnalisés
+
+POSTS_PER_PAGE = 12 # nombre de posts qui s'affichent en page d'accueil
+
 ##########################
 #  Settings localisables :
 ##########################
