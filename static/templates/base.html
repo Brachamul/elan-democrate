@@ -21,7 +21,7 @@
 
 		<div class="collapse navbar-collapse" id="navbar-collapse">
 		<ul class="nav navbar-nav navbar-right">
-			<li class="dropdown">
+			<li class="dropdown easy_drop">
 				<a href="#" class="dropdown-toggle btn orange profile-picture"
 				data-toggle="dropdown" role="button" aria-expanded="false">
 					{% load gravatar %}
@@ -44,16 +44,15 @@
 			{% load notifications_tags %}
 			{% notifications_unread as non_lues %}
 			<li class="dropdown">
-				<a href="#" class="dropdown-toggle btn orange"
+				<a id="notification_loader" href="#" class="dropdown-toggle btn orange"
 				data-toggle="dropdown" role="button" aria-expanded="false">
 					<span class="glyphicon glyphicon-bell" aria-hidden="true"></span>
 					{% if non_lues %}<span class="icon-counter">{{ non_lues }}</span>{% endif %}
 				</a>
 
-				<ul class="dropdown-menu" role="menu">
-					<li>
-					</li>
+				<ul id="loaded_notifications" class="dropdown-menu" role="menu">
 				</ul>
+
 			</li>
 
 {% comment %}
@@ -71,7 +70,7 @@
 {% endcomment %}
 	
 			{% if user.is_staff %}
-			<li class="dropdown">
+			<li class="dropdown easy_drop">
 				<a href="#" class="dropdown-toggle btn orange"
 				data-toggle="dropdown" role="button" aria-expanded="false">
 					<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
@@ -123,5 +122,11 @@
 {% block footer %}
 
 {% endblock footer %}
+
+{% block scripts %} {{ block.super }}
+
+<script src="{% get_static_prefix %}js/notifications.js"></script>
+
+{% endblock scripts %}
 
 </body>

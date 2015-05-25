@@ -37,6 +37,7 @@ INSTALLED_APPS = (
 	'aggregateur',
 	'mandats',
     'notifications', # django-notifications-hq / https://github.com/django-notifications/django-notifications
+    '_custom', # usually includes views that change thirt-party apps
 )
 
 MIDDLEWARE_CLASSES = (
@@ -155,6 +156,9 @@ LOGGING = {
         },
     }
 }
+
+### Django Notifications
+NOTIFICATIONS_USE_JSONFIELD=True
 
 ### Paramètres personnalisés
 

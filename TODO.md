@@ -25,6 +25,7 @@ Membres
 * Ajouter d'autres éléments au profil (badges, occupations, intérêts, compétences, ...)
 * ~~Ne pas pré-écrire "None" dans la description quand il n'y en a pas~~
 * Autres utilisateurs en ligne en ce moment
+* Créer un processus de validation du nom courant (pour qu'il reste non-anonyme)
 
 
 ***

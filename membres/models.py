@@ -16,7 +16,7 @@ class Profil(models.Model):
 	notes = models.TextField(blank=True, null=True) # Visible uniquement par les responsables
 	def __str__(self): return self.nom_courant
 
-def change_user_str(self): return self.profil.__str__
+def change_user_str(self): return self.profil.nom_courant
 User.__str__ = change_user_str
 
 @receiver(post_save, sender=Adhérent) # Quand un adhérent est ajouté via le fichier, on créé un profil 
