@@ -36,8 +36,7 @@ INSTALLED_APPS = (
 	'tableau_de_bord',
 	'aggregateur',
 	'mandats',
-    'notifications', # django-notifications-hq / https://github.com/django-notifications/django-notifications
-    '_custom', # usually includes views that change thirt-party apps
+	'notifications',
 )
 
 MIDDLEWARE_CLASSES = (

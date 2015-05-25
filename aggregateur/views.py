@@ -10,7 +10,6 @@ from django.shortcuts import get_object_or_404, render, render_to_response, redi
 from django.template import RequestContext
 from django.views import generic
 from django.views.generic import TemplateView, DetailView
-from notifications import notify
 
 from .models import *
 from .forms import *
@@ -69,10 +68,8 @@ def process_post_changes(request, post) :
 			if parent_comment :
 				parent_comment = Comment.objects.get(id=parent_comment)
 				new_comment.parent_comment = parent_comment
-				notify.send(request.user, recipient = request.user, verb='Vous avez commenté un commentaire')
 			else :
 				new_comment.parent_post = post
-				notify.send(request.user, recipient = request.user, verb='Vous avez rédigé un commentaire')
 			new_comment.save()
 			redirect_location = '#comment{pk}'.format(pk=new_comment.pk)
 
@@ -101,7 +98,6 @@ def aggregateur(request, page_number=1, fil=None):
 		for post in posts : post = get_post_meta(request, post)
 		rank_posts(request) # classe les posts s'ils n'ont pas été reclassés depuis au moins 5 minutes
 		posts = Paginator(posts, settings.POSTS_PER_PAGE).page(page_number)
-		print("Rendering page %d of %d." % (posts.number, posts.paginator.num_pages))
 		return { 'posts': posts, 'template': "aggregateur/carte_aggregateur.html", }
 
 def get_post_meta(request, post):
