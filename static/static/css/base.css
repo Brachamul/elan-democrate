@@ -29,10 +29,14 @@ input:invalid:not(:focus) { border-color: red; }
 
 .navbar-inverse .profile-picture { padding: 9px; } /* interacts with the image size (32px) to fit the bar */
 .navbar-inverse .profile-picture img { border-radius: 4px; margin-right: .5em; height: 32px;}
+.navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
+	color: #fff;
+	background-color: #EC7C34;
+}
 
 /* Dans la barre de navigation, affiche les sous-menu des boutons quand on hover ces boutons */
 /* Uniquement appliqué lorsque la classe "easy_drop" est donnée */
-nav .dropdown.easy_drop:hover .dropdown-menu { display: block; }
+/* nav .dropdown.easy_drop:hover .dropdown-menu { display: block; } */
 
 .panel > .panel-heading { background-image: url('../images/bg.jpg'); background-color: white; }
 .main-container [class^="col"] { padding: 0 10px; }
@@ -48,4 +52,5 @@ nav .dropdown.easy_drop:hover .dropdown-menu { display: block; }
 	bottom: 24px;
 	font-size: 10px;
 	left: 29px;
+	left: calc(50% + 0.5em);
 }

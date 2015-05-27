@@ -41,7 +41,7 @@ def afficher_le_commentaire(request, pk, slug):
 	try : comment = Comment.objects.get(pk=pk)
 	except Comment.DoesNotExist : raise Http404("Ce commentaire n'existe pas, ou plus.")
 	else :
-		post = get_root(comment)
+		post = comment.post_racine()
 		post = get_post_meta(request, post)
 		post.number_of_comments = count_post_comments(post)
 		redirect = process_post_changes(request, post)
@@ -50,12 +50,7 @@ def afficher_le_commentaire(request, pk, slug):
 		'post': post, 'comment': comment, 'comment_form': CommentForm()
 		})
 
-def get_root(comment):
-	parent = None
-	while parent == None :
-		parent = comment.parent_post
-		if not parent : comment = comment.parent_comment
-	return parent
+
 
 def process_post_changes(request, post) :
 	''' Ajout ou modification de commentaire '''

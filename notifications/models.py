@@ -13,7 +13,8 @@ class Notification(models.Model):
 
 	# Destinataire
 	destinataire = models.ForeignKey(User, related_name='destinataire_de_la_notif')
-	non_lu = models.BooleanField(default=True)
+	lue = models.BooleanField(default=False) # lue implique que l'utilisateur ait cliqué dessus
+	vue = models.BooleanField(default=False) # vue implique que l'utilisateur l'a simplement affichée
 	prevenu_par_email = models.BooleanField(default=False)
 
 	# Acteur
@@ -66,19 +67,23 @@ admin.site.register(Notification)
 ### Signals
 from aggregateur.models import Comment, Post
 
-#@receiver(post_save, sender=Comment) # Quand un adhérent est ajouté via le fichier, on créé un profil 
-#def notifier_lauteur_du_parent(sender, created, **kwargs):
-#	if created :
-#		commentaire = kwargs.get('instance')
-#		if parent_post : pass
-#		else : parent_comment 
-#
-#		try : adherent = Adhérent.objects.get(email=user.email) # logiquement, l'utilisateur a été créé parce qu'il existait dans la base adhérent, et a été authentifié par email
-#		except Adhérent.DoesNotExist : # sinon, on lui créé un profil
-#			nouveau_profil = Profil(user=user)
-#			nouveau_profil.save()
-#			logging.warning("Un utilisateur a été créé sans avoir d'email reconnu dans la base adhérents".encode('utf8'))
-#		else : # mais s'il était déjà dans la base, on peut lier les comptes 
-#			ancien_profil = Profil.objects.get(adherent=adherent)
-#			ancien_profil.user = user
-#			ancien_profil.save(update_fields=['user'])
+@receiver(post_save, sender=Comment)
+def notifier_lauteur_du_parent(sender, created, **kwargs):
+	if created :
+		commentaire = kwargs.get('instance')
+		if commentaire.parent_post :
+			nouvelle_notif = Notification(
+				destinataire = commentaire.parent_post.author,
+				acteur = commentaire.author,
+				action = "a répondu",
+				cible = commentaire.parent_post,
+				)
+		else :
+			nouvelle_notif = Notification(
+				destinataire = commentaire.parent_comment.author,
+				acteur = commentaire.author,
+				action = "a répondu",
+				cible = commentaire.parent_comment,
+				lieu = commentaire.post_racine(),
+				)
+		nouvelle_notif.save()

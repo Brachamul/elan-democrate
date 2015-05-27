@@ -42,8 +42,13 @@ Mandats
 Notifications
 ========
 
-* **Mettre en place un système de notifications**
-
+* ~~**Mettre en place un système de notifications**~~ (32h)
+* ~~Mettre tout en "vu" au chargement des notifs~~ (1h)
+* ~~Générer une notif lors de la création d'un commentaire~~ (1h)
+* If non_vues > 0, reload, else, don't
+* Passer lues les notifs cliquées
+* Grouper les notifs pour éviter le spam
+* Recharger occasionellement les notifs
 
 
 ***

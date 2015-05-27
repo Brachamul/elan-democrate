@@ -3,6 +3,14 @@
 
 <body>
 
+
+{% block head %}{{ block.super }}
+
+<link rel="stylesheet" href="{% get_static_prefix %}css/notifications.css" >
+
+{% endblock head %}
+
+
 {% block header %}
 
 <nav class="navbar navbar-inverse" style="border-radius:0;" role="navigation">
@@ -41,19 +49,16 @@
 				</ul>
 			</li>
 
-			<li class="dropdown">
-				<a id="notification_loader" href="#" class="dropdown-toggle btn orange"
+			<li id="notifications" class="dropdown">
+				<a id="notification-loader" href="#" class="dropdown-toggle btn orange"
 				data-toggle="dropdown" role="button" aria-expanded="false">
 					<span class="glyphicon glyphicon-bell" aria-hidden="true"></span>
-					<span class="icon-counter">12</span>
+					<span id="non-vues" class="icon-counter"><!-- JS Loaded--></span>
 				</a>
 
-				<ul id="loaded_notifications" class="dropdown-menu" role="menu">
-				<li>
-					<a href="{% url 'notifications_json' filter='all' %}">
-					JSON !
-					</a>
-				</li>
+				<ul id="loaded-notifications" class="dropdown-menu" role="menu">
+					<!-- JS Loaded-->
+					{% include "notifications/notifications.html" %}
 				</ul>
 
 
