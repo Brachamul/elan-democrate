@@ -304,7 +304,7 @@ def nouveau_post(request):
 					content=url,
 					author=request.user,
 #					channel=Channel.objects.get(pk=1), # change when adding more channels
-#					illustration=
+					illustration=illustrate(url),
 					)
 				new_post.save()
 				new_post_adress = "/p/" + new_post.slug
@@ -323,3 +323,18 @@ def nouveau_post(request):
 		return render(request, 'aggregateur/nouveau_post.html', {'post_text_form': PostTextForm(initial=text_data), 'post_link_form': PostLinkForm(initial=link_data), })
 	else :
 		return render(request, 'aggregateur/nouveau_post.html', {'post_text_form': PostTextForm(), 'post_link_form': PostLinkForm(), })
+
+
+###
+
+import requests
+import json
+
+def call_embedly(url) :
+	return requests.get("https://api.embed.ly/1/oembed?key={key}&url={url}".format(key=settings.EMBEDLY_KEY, url=url))
+
+def illustrate(url):
+	link_data = json.loads(call_embedly(url).text)
+	if link_data['thumbnail_url'] :
+		return link_data['thumbnail_url']
+	return None

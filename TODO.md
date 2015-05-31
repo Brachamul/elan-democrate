@@ -81,6 +81,7 @@ Posts
 * ~~Améliorer un peu le look des posts~~ (1h)
 * ~~Modifier le régex pour régler le soucis des slugs avec caractères spéciaux~~ (1h) #17
 * [Gros chantier] générer les posts via JSON pour + de dynamisme
+* Auto-générer un titre
 
 
 Commentaires
