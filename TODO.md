@@ -45,10 +45,11 @@ Notifications
 * ~~**Mettre en place un système de notifications**~~ (32h)
 * ~~Mettre tout en "vu" au chargement des notifs~~ (1h)
 * ~~Générer une notif lors de la création d'un commentaire~~ (1h)
-* If non_vues > 0, reload, else, don't
-* Passer lues les notifs cliquées
-* Grouper les notifs pour éviter le spam
+* ~~If non_vues > 0, reload, else, don't~~ (1h)
+* Passer lues les notifs cliquées et afficher différemment les notifs nonlues
+* **Grouper les notifs pour éviter le spam**
 * Recharger occasionellement les notifs
+* ~~Ne pas s'autonotifier de ses propres actions~~ (0h)
 
 
 ***
@@ -98,7 +99,7 @@ Commentaires
 * Les commentaires gris sont pas jaunes
 * **Déclencher les notations des commentaires de manière récurrente**
 * [Gros chantier] ajout dynamique des commentaires en Ajax
-
+* Quand on clique sur le bouton "répondre", mettre automatiquement le curseur sur la boîte de texte
 
 Chaînes
 -------

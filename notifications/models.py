@@ -86,4 +86,5 @@ def notifier_lauteur_du_parent(sender, created, **kwargs):
 				cible = commentaire.parent_comment,
 				lieu = commentaire.post_racine(),
 				)
-		nouvelle_notif.save()
+		if nouvelle_notif.destinataire != nouvelle_notif.acteur : # On ne notifie pas celui qui a généré la notif !
+			nouvelle_notif.save()
