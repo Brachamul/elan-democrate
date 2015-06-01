@@ -28,7 +28,18 @@
 .aggregateur .post .title { margin: 0; display: inline-block; }
 .aggregateur .post h1.title { line-height: 1; }
 
-.aggregateur .post .illustration { background-color: #ccc; height: 6rem; width: 6rem; margin-right: 1rem; display: none; }
+.aggregateur .post .illustration {
+	text-align: center;
+	height: 5rem;
+	width: 8rem;
+	margin-right: 1rem;
+	margin-top: .25rem;
+}
+
+.aggregateur .post .illustration img {
+	max-width: 8rem;
+	max-height: 6rem;
+}
 
 .aggregateur .post .source,
 .aggregateur .post .meta,
