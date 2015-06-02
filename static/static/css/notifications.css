@@ -1,0 +1,11 @@
+#notifications #loaded-notifications { font-size: .9em; padding: 0; }
+#notifications #loaded-notifications > li a { max-width: 100%; width: 32em; white-space: normal; }
+#notifications .notification img { float: left; margin-right: 8px; border-radius: 4px; }
+/*	#loaded-notifications .notification.non-lue a { font-weight: bold; } */
+#notifications.tout-vu #non-vues.icon-counter { display: none; }
+#notifications:not(.open):not(.tout-vu) .dropdown-toggle { color: #EC7C34; }
+
+#notifications li.notification a { padding: 8px 10px; border-bottom: 1px solid #eee; }
+#notifications li.notification a p { line-height: 1.2; margin-top: -2px; }
+/* #notifications li.notification.non-lue a { border-left: 4px solid #EC7C34; padding-left: 6px; } */
+#notifications li.notification.non-vue a { border-left: 2px solid #EC7C34; padding-left: 8px; } 

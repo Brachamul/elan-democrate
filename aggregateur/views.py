@@ -1,8 +1,10 @@
 import logging
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse, HttpRequest, Http404
 from django.shortcuts import get_object_or_404, render, render_to_response, redirect
 from django.template import RequestContext
@@ -39,7 +41,7 @@ def afficher_le_commentaire(request, pk, slug):
 	try : comment = Comment.objects.get(pk=pk)
 	except Comment.DoesNotExist : raise Http404("Ce commentaire n'existe pas, ou plus.")
 	else :
-		post = get_root(comment)
+		post = comment.post_racine()
 		post = get_post_meta(request, post)
 		post.number_of_comments = count_post_comments(post)
 		redirect = process_post_changes(request, post)
@@ -48,14 +50,10 @@ def afficher_le_commentaire(request, pk, slug):
 		'post': post, 'comment': comment, 'comment_form': CommentForm()
 		})
 
-def get_root(comment):
-	parent = None
-	while parent == None :
-		parent = comment.parent_post
-		if not parent : comment = comment.parent_comment
-	return parent
+
 
 def process_post_changes(request, post) :
+	''' Ajout ou modification de commentaire '''
 	redirect_location = False # de base, on ne redirige pas vers une #id interne
 	if request.method == "POST" :
 
@@ -65,7 +63,8 @@ def process_post_changes(request, post) :
 			if parent_comment :
 				parent_comment = Comment.objects.get(id=parent_comment)
 				new_comment.parent_comment = parent_comment
-			else : new_comment.parent_post = post
+			else :
+				new_comment.parent_post = post
 			new_comment.save()
 			redirect_location = '#comment{pk}'.format(pk=new_comment.pk)
 
@@ -85,14 +84,15 @@ def process_post_changes(request, post) :
 	else : return False
 
 @login_required
-def aggregateur(request, fil):
-	''' génère une carte qui affiche les données des 20 derniers posts
+def aggregateur(request, page_number=1, fil=None):
+	''' va chercher les posts et les publie via un paginateur
 		l'argument "fil" n'est pas opérationnel '''
-	try : posts = Post.objects.all().order_by('-rank', '-health')[:100]
+	try : posts = Post.objects.all().order_by('-rank', '-health')
 	except Post.DoesNotExist : return False
 	else :
 		for post in posts : post = get_post_meta(request, post)
 		rank_posts(request) # classe les posts s'ils n'ont pas été reclassés depuis au moins 5 minutes
+		posts = Paginator(posts, settings.POSTS_PER_PAGE).page(page_number)
 		return { 'posts': posts, 'template': "aggregateur/carte_aggregateur.html", }
 
 def get_post_meta(request, post):
@@ -112,7 +112,7 @@ def vote(request, post_id, color):
 	context = RequestContext(request)
 	try : post = Post.objects.get(id=int(post_id))
 	except Post.DoesNotExist :
-		logger.error("Post.DoesNotExist - while trying to vote")
+		logging.error("Post.DoesNotExist - while trying to vote".encode('utf8'))
 	else:
 		try : vote = Vote.objects.get(user=request.user, post=post)
 		except Vote.DoesNotExist :
@@ -138,7 +138,7 @@ def comment_vote(request, comment_id, color):
 	context = RequestContext(request)
 	try : comment = Comment.objects.get(id=int(comment_id))
 	except Comment.DoesNotExist :
-		logger.error("Comment.DoesNotExist - while trying to vote")
+		logging.error("Comment.DoesNotExist - while trying to vote".encode('utf8'))
 	else:
 		try : vote = CommentVote.objects.get(user=request.user, comment=comment)
 		except CommentVote.DoesNotExist :
@@ -304,7 +304,7 @@ def nouveau_post(request):
 					content=url,
 					author=request.user,
 #					channel=Channel.objects.get(pk=1), # change when adding more channels
-#					illustration=
+					illustration=illustrate(url),
 					)
 				new_post.save()
 				new_post_adress = "/p/" + new_post.slug
@@ -323,3 +323,30 @@ def nouveau_post(request):
 		return render(request, 'aggregateur/nouveau_post.html', {'post_text_form': PostTextForm(initial=text_data), 'post_link_form': PostLinkForm(initial=link_data), })
 	else :
 		return render(request, 'aggregateur/nouveau_post.html', {'post_text_form': PostTextForm(), 'post_link_form': PostLinkForm(), })
+
+
+###
+
+import requests
+import json
+
+def call_embedly(url) :
+	return requests.get("https://api.embed.ly/1/oembed?key={key}&url={url}".format(key=settings.EMBEDLY_KEY, url=url))
+
+def illustrate(url):
+	link_data = json.loads(call_embedly(url).text)
+	if link_data['thumbnail_url'] :
+		return link_data['thumbnail_url']
+	return None
+
+def embed(url):
+	link_data = json.loads(call_embedly(url).text)
+	if link_data['html'] :
+		return link_data['html']
+	return None
+
+def content_type(url):
+	link_data = json.loads(call_embedly(url).text)
+	if link_data['type'] :
+		return link_data['type']
+	return None

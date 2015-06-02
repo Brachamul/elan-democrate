@@ -1,3 +1,5 @@
+{% load static %}
+
 <div class="aggregateur panel panel-default">
 	<div class="panel-heading" style="text-align: right;">
 		<a href="{% url 'nouveau_post' %}">
@@ -6,6 +8,11 @@
 		</a>
 	</div>
 	<div class="panel-body">
+
+		{% if aggregateur.posts.has_previous %}
+			{% include "aggregateur/pagination.html" %}
+		{% endif %}
+
 		{% for post in aggregateur.posts %}
 			<div class="post" id="post-{{ post.id }}">
 				<div class="healthbox">
@@ -14,7 +21,11 @@
 					<div class="vote neg {% if post.color == "NEG" %}active{% endif %}" data-postid="{{ post.id }}">▼<sup>-1</sup></div>
 				</div>
 				<div class="illustration">
-					<!-- img goes here -->
+					<img src="
+						{% if post.illustration %}{{ post.illustration }}
+						{% else %}{% load gravatar %}{% gravatar_url user.author.email 52 %}
+						{% endif %}
+						"/>
 				</div>
 				<div class="postbox">
 					{% if post.format == "TEXT" %}
@@ -48,13 +59,18 @@
 				</div>
 			</div>
 		{% endfor %}
+
+		{% include "aggregateur/pagination.html" %}
 		
 		{% if user.is_superuser %}
+		<p style="display: none;">
 			<span id="postranker" class="btn btn-primary">Rank posts !</span>
 			<span id="postranker-result"></span>
-			<br>
+		</p>
+		<p style="display: none;">
 			<span id="commentmedic" class="btn btn-primary">Comment medic !</span>
 			<span id="commentmedic-result"></span>
+		</p>
 		{% endif %}
 		
 	</div>

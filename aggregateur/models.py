@@ -41,6 +41,7 @@ class LastRanking(models.Model):
 
 
 class Comment(models.Model):
+
 	content = models.TextField(max_length=10000)
 	author = models.ForeignKey(User)
 	date = models.DateTimeField(auto_now_add=True)
@@ -50,7 +51,17 @@ class Comment(models.Model):
 	deleted = models.BooleanField(default=False)
 	health = models.IntegerField(default=0) # votes positifs - votes négatifs
 	rank = models.IntegerField(default=0) # rang selon l'algorithme, prenant en compte le temps passé
+
 	def __str__(self): return self.content
+
+	def post_racine(self):
+		''' récupère le post auquel ce commentaire est rattaché'''
+		parent_post = None
+		comment = self
+		while parent_post == None :
+			parent_post = comment.parent_post
+			if not parent_post : comment = comment.parent_comment
+		return parent_post
 
 class CommentVote(models.Model):
 	user = models.ForeignKey(User)

@@ -36,6 +36,7 @@ INSTALLED_APPS = (
 	'tableau_de_bord',
 	'aggregateur',
 	'mandats',
+	'notifications',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -154,6 +155,16 @@ LOGGING = {
         },
     }
 }
+
+
+
+
+### Paramètres personnalisés
+
+POSTS_PER_PAGE = 12 # nombre de posts qui s'affichent en page d'accueil
+
+# API EMBEDLY
+EMBEDLY_KEY = "111e2b3ee0714950ad122d221fa7d444"
 
 ##########################
 #  Settings localisables :

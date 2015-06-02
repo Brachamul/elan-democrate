@@ -1,0 +1,23 @@
+{% load gravatar %}
+{% for notification in notifications %}
+<li 
+	id="notification-{{ notification.pk }}"
+	class="
+		notification
+		clearfix
+		{% if not notification.lue %} non-lue{% endif %}
+		{% if not notification.vue %} non-vue{% endif %}
+		">
+	<a href="{{ notification.url }}">
+		{% if notification.type_acteur.name == "utilisateur" %}<img src="{% gravatar_url notification.acteur.email 44 %}"/>{% endif %}
+		<p>{{ notification.fulltext }}</p>
+		<div class="anchor"></div>
+	</a></li>
+{% endfor %}
+
+{% comment %}
+<li>
+	<a href="{% url 'notifications' %}">
+	<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span> Anciennes notifications
+	</a></li>
+{% endcomment %}

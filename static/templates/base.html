@@ -3,6 +3,14 @@
 
 <body>
 
+
+{% block head %}{{ block.super }}
+
+<link rel="stylesheet" href="{% get_static_prefix %}css/notifications.css" >
+
+{% endblock head %}
+
+
 {% block header %}
 
 <nav class="navbar navbar-inverse" style="border-radius:0;" role="navigation">
@@ -21,7 +29,7 @@
 
 		<div class="collapse navbar-collapse" id="navbar-collapse">
 		<ul class="nav navbar-nav navbar-right">
-			<li class="dropdown">
+			<li class="dropdown easy_drop">
 				<a href="#" class="dropdown-toggle btn orange profile-picture"
 				data-toggle="dropdown" role="button" aria-expanded="false">
 					{% load gravatar %}
@@ -41,19 +49,21 @@
 				</ul>
 			</li>
 
-{% comment %}
-			<li class="dropdown">
-				<a href="#" class="dropdown-toggle btn orange"
+			<li id="notifications" class="dropdown tout-vu"> <!-- par défaut, on fait comme si pas de notifs -->
+				<a id="notification-loader" href="#" class="dropdown-toggle btn orange"
 				data-toggle="dropdown" role="button" aria-expanded="false">
 					<span class="glyphicon glyphicon-bell" aria-hidden="true"></span>
+					<span id="non-vues" class="icon-counter"><!-- JS Loaded--></span>
 				</a>
-				<ul class="dropdown-menu" role="menu">
-					<li>
-						<a href="#">Notifications</a>
-					</li>
+
+				<ul id="loaded-notifications" class="dropdown-menu" role="menu">
+					<!-- JS to load notifications and reload them on click-->
 				</ul>
+
+
 			</li>
 
+{% comment %}
 			<li class="dropdown">
 				<a href="#" class="dropdown-toggle btn orange"
 				data-toggle="dropdown" role="button" aria-expanded="false">
@@ -68,7 +78,7 @@
 {% endcomment %}
 	
 			{% if user.is_staff %}
-			<li class="dropdown">
+			<li class="dropdown easy_drop">
 				<a href="#" class="dropdown-toggle btn orange"
 				data-toggle="dropdown" role="button" aria-expanded="false">
 					<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
@@ -120,5 +130,11 @@
 {% block footer %}
 
 {% endblock footer %}
+
+{% block scripts %} {{ block.super }}
+
+<script src="{% get_static_prefix %}js/notifications.js"></script>
+
+{% endblock scripts %}
 
 </body>

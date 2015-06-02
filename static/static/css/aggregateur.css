@@ -8,8 +8,7 @@
 
 .aggregateur .post .postbox {
 	/* make sure postbox and healthbox are on same line by limiting postbox size */
-	max-width: 70%; /* fallback */
-	max-width: calc(100% - 4rem - 30px);
+	max-width: 100%;
 }
 
 .aggregateur .post:after { clear: both; visibility: hidden; display: block; font-size: 0; content: " "; height: 0; }
@@ -28,7 +27,30 @@
 .aggregateur .post .title { margin: 0; display: inline-block; }
 .aggregateur .post h1.title { line-height: 1; }
 
-.aggregateur .post .illustration { background-color: #ccc; height: 6rem; width: 6rem; margin-right: 1rem; display: none; }
+.aggregateur .post .illustration {
+	text-align: center;
+	height: 5rem;
+	width: 8rem;
+	margin-right: 1rem;
+	margin-top: .25rem;
+}
+
+.aggregateur .post .illustration img {
+	max-width: 8rem;
+	max-height: 6rem;
+}
+
+.aggregateur.self .post .illustration img {
+	max-width: 100%;
+	max-height: none;
+	border-radius: 1px;
+	box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.aggregateur.self .post .illustration {
+	max-width: 60rem; height: auto; width: auto; float: none;
+	margin: 1rem 0;
+}
 
 .aggregateur .post .source,
 .aggregateur .post .meta,
@@ -100,6 +122,13 @@ input[id^="checkbox-modify-comment"]:not(:checked) ~ .modifier { display: none; 
 
 
 .aggregateur label:hover { cursor: pointer; }
+
+/*** Pagination ***/
+
+.aggregateur .pagination { width: 100%; text-align: center; }
+.aggregateur .pagination a:hover { text-decoration: none; }
+
+
 
 /*** Nouveau Post ***/
 

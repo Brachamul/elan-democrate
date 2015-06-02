@@ -24,6 +24,8 @@ Membres
 * ~~**Permettre l'édition de son profil**~~ (2h)
 * Ajouter d'autres éléments au profil (badges, occupations, intérêts, compétences, ...)
 * ~~Ne pas pré-écrire "None" dans la description quand il n'y en a pas~~
+* Autres utilisateurs en ligne en ce moment
+* Créer un processus de validation du nom courant (pour qu'il reste non-anonyme)
 
 
 ***
@@ -40,8 +42,14 @@ Mandats
 Notifications
 ========
 
-* **Mettre en place un système de notifications**
-
+* ~~**Mettre en place un système de notifications**~~ (32h)
+* ~~Mettre tout en "vu" au chargement des notifs~~ (1h)
+* ~~Générer une notif lors de la création d'un commentaire~~ (1h)
+* ~~If non_vues > 0, reload, else, don't~~ (1h)
+* Passer lues les notifs cliquées et afficher différemment les notifs nonlues
+* **Grouper les notifs pour éviter le spam**
+* Recharger occasionellement les notifs
+* ~~Ne pas s'autonotifier de ses propres actions~~ (0h)
 
 
 ***
@@ -59,20 +67,23 @@ Aggrégateur d'actualité
 
 Posts
 -----
-* **Mettre en place la pagination des posts**
+* ~~**Mettre en place la pagination des posts**~~ (4h)
 * ~~**Recharger le score toutes les x minutes**~~ (2h)
 * Ajouter un système d'illustration des posts
 * Scraper une illustration pour chaque post
 * Scraper le domaine des URLs
 * Déplacer la scorebox sur mobile
-* Preview du post en dessous
+* Preview du post lors de la rédaction
 * Guide markdown
-* Bug URL du post lien
+* ~~Bug URL du post lien~~
 * Rendre les affichages de posts plus responsive avec la healthbox
 * **Permettre aux utilisateurs de modifier / supprimer leurs posts**
-* Améliorer un peu le look des posts
+* ~~Améliorer un peu le look des posts~~ (1h)
 * ~~Modifier le régex pour régler le soucis des slugs avec caractères spéciaux~~ (1h) #17
-
+* [Gros chantier] générer les posts via JSON pour + de dynamisme
+* Auto-générer un titre
+* Finaliser l'intégration des vidéos et autres iframes
+* Ne pas afficher l'url des links (le contenu url des posts de type link)
 
 Commentaires
 --------
@@ -80,7 +91,6 @@ Commentaires
 * ~~**Répondre directement à un post**~~ (2h) 
 * Gérer le cas de descente à X niveaux de commentaires
 * ~~Voter sur les commentaires~~ (2h)
-* Rendre l'ajout de commentaires dynamique (js)
 * ~~Éditer les commentaires~~ (2h)
 * ~~Supprimer son commentaire~~ (1h)
 * ~~Permettre l'édition riche de commentaires, notamment avec des retours à la ligne~~ (2h, ajout de markdown)
@@ -90,7 +100,8 @@ Commentaires
 * ~~Ajouter un permalien~~ (1h)
 * Les commentaires gris sont pas jaunes
 * **Déclencher les notations des commentaires de manière récurrente**
-
+* [Gros chantier] ajout dynamique des commentaires en Ajax
+* Quand on clique sur le bouton "répondre", mettre automatiquement le curseur sur la boîte de texte
 
 Chaînes
 -------
