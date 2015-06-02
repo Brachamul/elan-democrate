@@ -1,3 +1,5 @@
+{% load static %}
+
 <div class="aggregateur panel panel-default">
 	<div class="panel-heading" style="text-align: right;">
 		<a href="{% url 'nouveau_post' %}">
@@ -19,7 +21,11 @@
 					<div class="vote neg {% if post.color == "NEG" %}active{% endif %}" data-postid="{{ post.id }}">▼<sup>-1</sup></div>
 				</div>
 				<div class="illustration">
-					<!-- img goes here -->
+					<img src="
+						{% if post.illustration %}{{ post.illustration }}
+						{% else %}{% load gravatar %}{% gravatar_url user.author.email 52 %}
+						{% endif %}
+						"/>
 				</div>
 				<div class="postbox">
 					{% if post.format == "TEXT" %}
