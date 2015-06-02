@@ -23,7 +23,7 @@
 				<div class="illustration">
 					<img src="
 						{% if post.illustration %}{{ post.illustration }}
-						{% else %}{% get_static_prefix %}images/matrix.gif
+						{% else %}{% load gravatar %}{% gravatar_url user.author.email 52 %}
 						{% endif %}
 						"/>
 				</div>

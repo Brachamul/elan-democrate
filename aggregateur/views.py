@@ -338,3 +338,15 @@ def illustrate(url):
 	if link_data['thumbnail_url'] :
 		return link_data['thumbnail_url']
 	return None
+
+def embed(url):
+	link_data = json.loads(call_embedly(url).text)
+	if link_data['html'] :
+		return link_data['html']
+	return None
+
+def content_type(url):
+	link_data = json.loads(call_embedly(url).text)
+	if link_data['type'] :
+		return link_data['type']
+	return None

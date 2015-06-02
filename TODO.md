@@ -82,7 +82,8 @@ Posts
 * ~~Modifier le régex pour régler le soucis des slugs avec caractères spéciaux~~ (1h) #17
 * [Gros chantier] générer les posts via JSON pour + de dynamisme
 * Auto-générer un titre
-
+* Finaliser l'intégration des vidéos et autres iframes
+* Ne pas afficher l'url des links (le contenu url des posts de type link)
 
 Commentaires
 --------
