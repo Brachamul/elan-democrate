@@ -84,6 +84,7 @@ Posts
 * Auto-générer un titre
 * Finaliser l'intégration des vidéos et autres iframes
 * Ne pas afficher l'url des links (le contenu url des posts de type link)
+* Sauver les thumbnails d'images sur le serveur
 
 Commentaires
 --------
