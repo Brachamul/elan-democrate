@@ -13,7 +13,7 @@
 
 {% block content %} {{ block.super }}
 
-<div class="aggregateur self">
+<div class="aggregateur self col-sm-12">
 
 	<article class="post clearfix" id="post-{{ post.id }}">
 		<div class="postbox">
@@ -35,16 +35,16 @@
 			{% endif %}
 			<div class="anchor"></div>
 
-			<div class="healthbox">
-				<div class="vote pos {% if post.color == "POS" %}active{% endif %}" data-postid="{{ post.id }}">▲<sup>+1</sup></div>
-				<div class="health">{{ post.health }}</div>
-				<div class="vote neg {% if post.color == "NEG" %}active{% endif %}" data-postid="{{ post.id }}">▼<sup>-1</sup></div>
+			<div class="meta">
+				<span class="author">Par <a href="{% url 'membres' %}{{ post.author.id }}">{{ post.author.profil.nom_courant }}</a></span>
+				<span class="date">, il y a <time datetime="{{ post.date }}">{{ post.date|timesince }}</time></span>
+				{% comment %}<span class="channel"> dans <a href="#">/c/posts</a></span>{% endcomment %}
 			</div>
 
-			<div class="meta">
-				<span class="date">Il y a <time datetime="{{ post.date }}">{{ post.date|timesince }}</time>,</span>
-				<span class="author">par <a href="{% url 'membres' %}{{ post.author.id }}">{{ post.author.profil.nom_courant }}</a></span>
-				{% comment %}<span class="channel"> dans <a href="#">/c/posts</a></span>{% endcomment %}
+			<div class="healthbox">
+				<span class="vote pos {% if post.color == "POS" %}active{% endif %}" data-postid="{{ post.id }}">▲<sup>+1</sup></span>
+				<span class="health">{{ post.health }}</span>
+				<span class="vote neg {% if post.color == "NEG" %}active{% endif %}" data-postid="{{ post.id }}">▼<sup>-1</sup></span>
 			</div>
 
 			{% if post.format == "TEXT" %}
@@ -55,7 +55,7 @@
 			{% endif %}
 			
 			<div class="actions">
-				<span class="comments">
+				<span class="nombre-de-commentaires">
 					<a href="{% url 'aggregateur' %}{{ post.slug }}">
 					{% if post.number_of_comments = 0 %}
 						pas de commentaires
@@ -72,64 +72,32 @@
 		</div>
 	</article>
 
-	<div class="comments">
+	<div class="comments"><div class="comments-wrapper">
 	{% comment %} This code also exists in the "commentaire" page {% endcomment %}
-		<div>
-			<input id="checkbox-replyto-post-{{ post.pk }}" type="checkbox"/>
-			<p><label class="btn btn-primary" for="checkbox-replyto-post-{{ post.pk }}">Commenter</label></p>
-			<div class="comment_form panel-body">
-				<form method="POST" action="" enctype="multipart/form-data">
+
+		<input id="checkbox-replyto-post-{{ post.pk }}" type="checkbox"/>
+		<label class="btn btn-primary btn-block root-commentor" for="checkbox-replyto-post-{{ post.pk }}" role="button">Commenter</label>
+		<div class="comment-form panel-body root-commentor">
+			<form method="POST" action="" enctype="multipart/form-data">
+				<div class="form-group">
+					{% csrf_token %}
 					<div class="form-group">
-						{% csrf_token %}
-						<div class="form-group">
-							{{ comment_form.content.field.errors }}
-							{{ comment_form.content }}
-						</div>
-						<input type="hidden" name="action" value="nouveau_commentaire">
-						<input type="hidden" name="parent_post" value="{{ post.pk }}">
-						<button type="submit" class="btn btn-primary">Poster</button>
-						<label class="btn btn-default" for="checkbox-replyto-post-{{ post.pk }}">Cacher</label>
+						{{ comment_form.content.field.errors }}
+						{{ comment_form.content }}
 					</div>
-				</form>
-			</div>
+					<input type="hidden" name="action" value="nouveau_commentaire">
+					<input type="hidden" name="parent_post" value="{{ post.pk }}">
+					<button type="submit" class="btn btn-primary">Poster</button>
+					<label class="btn btn-default" for="checkbox-replyto-post-{{ post.pk }}">Cacher</label>
+				</div>
+			</form>
 		</div>
 		
 		{% for comment in post.comment_set.all %}
-		<div class="panel panel-default" id="comment-{{ comment.pk }}">
-			<div class="panel-body">
-				{% include "aggregateur/commentaire.html" %}
-				{% for comment in comment.comment_set.all %}
-				<div class="panel panel-default" id="comment-{{ comment.pk }}">
-					<div class="panel-body">
-						{% include "aggregateur/commentaire.html" %}
-						{% for comment in comment.comment_set.all %}
-						<div class="panel panel-default" id="comment-{{ comment.pk }}">
-							<div class="panel-body">
-								{% include "aggregateur/commentaire.html" %}
-								{% for comment in comment.comment_set.all %}
-								<div class="panel panel-default" id="comment-{{ comment.pk }}">
-									<div class="panel-body">
-										{% include "aggregateur/commentaire.html" %}
-										{% for comment in comment.comment_set.all %}
-										<div class="panel panel-default" id="comment-{{ comment.pk }}">
-											<div class="panel-body">
-												{% include "aggregateur/commentaire.html" %}
-											</div>
-										</div>
-										{% endfor %}
-									</div>
-								</div>
-								{% endfor %}
-							</div>
-						</div>
-						{% endfor %}
-					</div>
-				</div>
-				{% endfor %}
-			</div>
-		</div>
+			{% include "aggregateur/commentaire.html" %}
 		{% endfor %}
-	</div>
+
+	</div></div>
 
 </div>
 

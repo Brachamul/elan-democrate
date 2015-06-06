@@ -15,80 +15,16 @@
 
 <div class="aggregateur self">
 
-	<article class="post clearfix" id="post-{{ post.id }}">
-		<div class="healthbox">
-			<div class="vote pos {% if post.color == "POS" %}active{% endif %}" data-postid="{{ post.id }}">▲<sup>+1</sup></div>
-			<div class="health">{{ post.health }}</div>
-			<div class="vote neg {% if post.color == "NEG" %}active{% endif %}" data-postid="{{ post.id }}">▼<sup>-1</sup></div>
-		</div>
-		<div class="illustration">
-			<!-- img goes here -->
-		</div>
-		<div class="postbox">
-			<a href="{% url 'aggregateur' %}{{ post.link }}">
-				<h1 class="title">{{ post.title }}</h1></a>
-			{% comment %}<span class="source">(<a href="#">loremipsum.com</a>)</span> {% endcomment %}
-			<div class="meta">
-				<span class="date">Il y a <time datetime="{{ post.date }}">{{ post.date|timesince }}</time>,</span>
-				<span class="author">par <a href="{% url 'membres' %}{{ post.author.id }}">{{ post.author.profil.nom_courant }}</a></span>
-				{% comment %}<span class="channel"> dans <a href="#">/c/posts</a></span>{% endcomment %}
-			</div>
-			<div class="content">
-				{% load markdown_deux_tags %}
-				{{ post.content|markdown }}
-			</div>
-			<div class="actions">
-				<span class="comments">
-					{% if post.number_of_comments = 0 %}
-						pas de commentaires
-					{% else %}
-						{{ post.number_of_comments }} commentaire{{ post.number_of_comments|pluralize }}
-					{% endif %}
-				</span>
-{% comment %}	<span class="share">partager</span> {% endcomment %}
-{% comment %}	<span class="favorite">ajouter aux favoris</span> {% endcomment %}
-{% comment %}	<span class="hide">cacher</span> {% endcomment %}
-{% comment %}	<span class="report">signaler</span> {% endcomment %}
-			</div>
-		</div>
-	</article>
+	<div class="alert alert-warning"><span class="glyphicon glyphicon-warning-sign"></span> Vous consultez un commentaire appartenant aux réponses d'un post. Pour revenir au post et voir les autres commentaires, cliquez <a href="{% url 'post' post.slug %}">ici</a>.</div>
 
-	<div class="comments">
-	{% comment %} This code also exists in the "commentaire" page and "afficher_le_post" {% endcomment %}
-	<div class="alert alert-warning"><span class="glyphicon glyphicon-warning-sign"></span>Vous consultez un fil de commentaires au sein des commentaires de ce post. Pour revenir au post et voir tous les autres commentaires, cliquez <a href="{% url 'post' post.slug %}">ici</a>.</div>
-	<div class="panel panel-default" id="comment{{ comment.pk }}">
-		<div class="panel-body">
+	<div class="comments"><div class="comments-wrapper">
+		
+		{% for comment in post.comment_set.all %}
 			{% include "aggregateur/commentaire.html" %}
-			{% for comment in comment.comment_set.all %}
-			<div class="panel panel-default" id="comment{{ comment.pk }}">
-				<div class="panel-body">
-					{% include "aggregateur/commentaire.html" %}
-					{% for comment in comment.comment_set.all %}
-					<div class="panel panel-default" id="comment{{ comment.pk }}">
-						<div class="panel-body">
-							{% include "aggregateur/commentaire.html" %}
-							{% for comment in comment.comment_set.all %}
-							<div class="panel panel-default" id="comment{{ comment.pk }}">
-								<div class="panel-body">
-									{% include "aggregateur/commentaire.html" %}
-									{% for comment in comment.comment_set.all %}
-									<div class="panel panel-default" id="comment{{ comment.pk }}">
-										<div class="panel-body">
-											{% include "aggregateur/commentaire.html" %}
-										</div>
-									</div>
-									{% endfor %}
-								</div>
-							</div>
-							{% endfor %}
-						</div>
-					</div>
-					{% endfor %}
-				</div>
-			</div>
-			{% endfor %}
-		</div>
-	</div>
+		{% endfor %}
+
+	</div></div>
+
 </div>
 
 {% endblock content %}
