@@ -7,7 +7,6 @@
 .aggregateur .postbox { display: table-cell; vertical-align: top; }
 
 .aggregateur.self .illustration { display: inline-block; }
-.aggregateur.self .postbox { display: table; }
 .aggregateur.self .healthbox,
 .aggregateur.self .meta { display: inline; vertical-align: middle ; }
 .aggregateur.self .post { margin: auto; }
@@ -100,25 +99,29 @@
 	text-align: left;
 }
 
-.aggregateur.self .post .content { text-align: left; font-size: 1.6rem; }
+.aggregateur .comments-wrapper { max-width: calc(100vw - 60px); }
+
+.aggregateur.self .post .content { text-align: left; font-size: 1.6rem; display: inline-block; margin-bottom: 1rem; }
 .aggregateur.self .post .illustration { text-align: center; }
 
 .aggregateur .comment {
 	text-align: left;
 	display: block;
 	margin: auto;
-	border-left: .4em solid #eee;
-	padding-left: 1em;
+	box-shadow: 0px 0px 10px 1px #EEE;
+	padding: .5em 1em 0;
+	border: 1px solid #ccc;
+	border-radius: .25em;
 	margin-bottom: 1em;
+	font-size: 1.3rem;
 }
 
 .aggregateur .comment .meta,
 .aggregateur .comment .actions { color: #666; font-size: .8em; }
-.aggregateur .comment .content { max-width: 72rem; margin: 0.2em 0 .5em 0; width: 100%;}
-.aggregateur .comment .modifier { max-width: 72rem; }
+.aggregateur .comment .actions { margin-bottom: 1em; }
+.aggregateur .comment .content { max-width: 48rem; margin: 0.2em 0 .5em 0; width: 100%;}
+.aggregateur .comment .modifier { max-width: 48rem; }
 .aggregateur .comments .panel:target { background-color: lightyellow; }
-
-.aggergateur .comment .meta {}
 
 .aggregateur .comments .panel { margin-top: 15px; margin-bottom: 0; }
 .aggregateur .comments > .panel > .panel-body > .panel { background-color: #fafafa; }

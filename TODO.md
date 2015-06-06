@@ -5,8 +5,6 @@ Base
 * ~~Modifier la barre de navigation en enlevant les boutons pour les mettre sous la photo de profil~~ (2h)
 * Faire fonctionner la barre de navigation proprement sur mobile
 * Permettre à l'utilisateur de fermer les messages serveur
-* Faire apparaitre les sous-menus de la barre de nav au survol de la souris
-
 
 
 ***
@@ -69,14 +67,15 @@ Posts
 -----
 * ~~**Mettre en place la pagination des posts**~~ (4h)
 * ~~**Recharger le score toutes les x minutes**~~ (2h)
-* Ajouter un système d'illustration des posts
-* Scraper une illustration pour chaque post
+* ~~**Ajouter un système d'illustration des posts**~~ (2h)
+* ~~Scraper une illustration pour chaque post~~ (1h)
 * Scraper le domaine des URLs
-* Déplacer la scorebox sur mobile
+* ~~Déplacer la scorebox sur mobile~~ (1h)
 * Preview du post lors de la rédaction
 * Guide markdown
 * ~~Bug URL du post lien~~
-* Rendre les affichages de posts plus responsive avec la healthbox
+* ~~Rendre les affichages de posts plus responsive avec la healthbox~~ (1h)
+* ~~**Relooking complet des posts & commentaires**~~ (4h)
 * **Permettre aux utilisateurs de modifier / supprimer leurs posts**
 * ~~Améliorer un peu le look des posts~~ (1h)
 * ~~Modifier le régex pour régler le soucis des slugs avec caractères spéciaux~~ (1h) #17
@@ -97,7 +96,7 @@ Commentaires
 * ~~Permettre l'édition riche de commentaires, notamment avec des retours à la ligne~~ (2h, ajout de markdown)
 * Corriger la fonction de comptage des commentaires
 * Déplacer la fonction de création de commentaire de la fonction générale d'affichage de post
-* Bouton pour "cacher" le formulaire de réponse aux commentaires
+* ~~Bouton pour "cacher" le formulaire de réponse aux commentaires~~ (0h)
 * ~~Ajouter un permalien~~ (1h)
 * Les commentaires gris sont pas jaunes
 * **Déclencher les notations des commentaires de manière récurrente**

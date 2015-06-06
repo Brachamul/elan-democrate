@@ -1,4 +1,7 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic,700italic,600,600italic&subset=latin,latin-ext);
+
+html {  min-height: 100%; position: relative; }
+
 body { font-family: 'Open Sans', sans-serif; }
 
 .small { font-size: .6em; }
@@ -56,9 +59,15 @@ input:invalid:not(:focus) { border-color: red; }
 }
 
 footer.endpage {
-	margin-top: 20rem;
+	margin-top: 30rem; /* margin + content of footer-wrapper which is positioned absolutely */
+}
+
+footer.endpage .footer-wrapper {
 	background-color: #222;
 	padding: 4rem 0;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
 	text-align: center;
 	font-size: .8em;
 	font-style: italic;

@@ -72,7 +72,7 @@
 		</div>
 	</article>
 
-	<div class="comments">
+	<div class="comments"><div class="comments-wrapper">
 	{% comment %} This code also exists in the "commentaire" page {% endcomment %}
 
 		<input id="checkbox-replyto-post-{{ post.pk }}" type="checkbox"/>
@@ -97,7 +97,7 @@
 			{% include "aggregateur/commentaire.html" %}
 		{% endfor %}
 
-	</div>
+	</div></div>
 
 </div>
 
