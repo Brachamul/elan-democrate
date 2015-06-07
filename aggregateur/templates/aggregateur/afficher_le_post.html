@@ -26,7 +26,7 @@
 						</a>
 			{% comment %}<span class="source">(<a href="#">loremipsum.com</a>)</span> {% endcomment %}
 
-			{% if post.format == "LINK" and post.illustration %}
+			{% if post.illustration %}
 			<div class="illustration">
 				<a href="{{ post.link }}" target="_blank">
 				<img src="{{ post.illustration }}"/>
