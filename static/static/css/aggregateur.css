@@ -6,6 +6,8 @@
 .aggregateur .illustration,
 .aggregateur .postbox { display: table-cell; vertical-align: top; }
 
+.aggregateur.self .post,
+.aggregateur.self .postbox  { display: block; }
 .aggregateur.self .illustration { display: inline-block; }
 .aggregateur.self .healthbox,
 .aggregateur.self .meta { display: inline; vertical-align: middle ; }
@@ -56,9 +58,12 @@
 }
 
 .aggregateur.self .post .illustration {
-	max-width: 72rem; height: auto; width: auto;
+	max-width: 72rem; max-width: calc(100vw - 60px); height: auto; width: auto;
 	margin: 1rem 0;
+	padding: 0;
 }
+
+.aggregateur.self .post .illustration a { display: block; }
 
 .aggregateur.self .post .meta { text-align: center; display: block; }
 .aggregateur.self .post .healthbox { width: 8rem; display: block; margin: 2rem auto; }
@@ -119,8 +124,8 @@
 .aggregateur .comment .meta,
 .aggregateur .comment .actions { color: #666; font-size: .8em; }
 .aggregateur .comment .actions { margin-bottom: 1em; }
-.aggregateur .comment .content { max-width: 48rem; margin: 0.2em 0 .5em 0; width: 100%;}
-.aggregateur .comment .modifier { max-width: 48rem; }
+.aggregateur .comment .content { max-width: 69rem; margin: 0.2em 0 .5em 0; width: 100%;}
+.aggregateur .comment .modifier { max-width: 69rem; }
 .aggregateur .comments .panel:target { background-color: lightyellow; }
 
 .aggregateur .comments .panel { margin-top: 15px; margin-bottom: 0; }
@@ -133,7 +138,7 @@
 
 .aggregateur .comments .actions .supprimer input[id^="checkbox-delete-comment"],
 .aggregateur .comments .actions .supprimer input[id^="checkbox-delete-comment"]:not(:checked) ~ button { display: none; }
-.aggregateur .comments .actions .supprimer button { padding: 0px 1em; }
+.aggregateur .comments .actions .supprimer button { padding: 0px 1em; margin-right: .5em;}
 
 /*** display post***/
 input[id^="checkbox-replyto"],

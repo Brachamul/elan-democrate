@@ -84,6 +84,9 @@ Posts
 * Finaliser l'intégration des vidéos et autres iframes
 * Ne pas afficher l'url des links (le contenu url des posts de type link)
 * Sauver les thumbnails d'images sur le serveur
+* Autoranking des nouveaux posts non fonctionnel visiblement, peut-être juste sur les links !
+* ~~Problème de photo qui sort du cadre sur l'affichage des posts sur mobile~~ (1h)
+
 
 Commentaires
 --------
@@ -102,6 +105,7 @@ Commentaires
 * **Déclencher les notations des commentaires de manière récurrente**
 * [Gros chantier] ajout dynamique des commentaires en Ajax
 * Quand on clique sur le bouton "répondre", mettre automatiquement le curseur sur la boîte de texte
+* Le lien vers un commentaire prend le commentaire source !
 
 Chaînes
 -------
