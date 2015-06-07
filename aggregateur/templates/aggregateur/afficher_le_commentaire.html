@@ -19,9 +19,7 @@
 
 	<div class="comments"><div class="comments-wrapper">
 		
-		{% for comment in post.comment_set.all %}
-			{% include "aggregateur/commentaire.html" %}
-		{% endfor %}
+		{% include "aggregateur/commentaire.html" %}
 
 	</div></div>
 

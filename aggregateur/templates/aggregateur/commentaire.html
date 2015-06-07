@@ -45,9 +45,7 @@
 	{% endif %}
 
 	<div class="actions">
-		<a href="{% url 'commentaire' post.slug comment.pk %}">
-			<span class="permalink">lien</span>
-		</a>
+		<a href="{% url 'commentaire' post.slug comment.pk %}"><span class="permalink">lien</span></a>
 		{% if user == comment.author %}
 			{% if not comment.deleted %}
 			<form class="supprimer form-inline" method="POST" action="" enctype="multipart/form-data">
