@@ -86,6 +86,7 @@ Posts
 * Sauver les thumbnails d'images sur le serveur
 * Autoranking des nouveaux posts non fonctionnel visiblement, peut-être juste sur les links !
 * ~~Problème de photo qui sort du cadre sur l'affichage des posts sur mobile~~ (1h)
+* Add "choose illustration"
 
 
 Commentaires
