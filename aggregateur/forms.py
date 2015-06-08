@@ -5,6 +5,7 @@ from .models import *
 class PostTextForm(forms.Form):
 	title = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
 	content = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control'}))
+	illustration = forms.CharField(widget=forms.URLInput(attrs={'class': 'form-control'}))
 
 class PostLinkForm(forms.Form):
 	title = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))

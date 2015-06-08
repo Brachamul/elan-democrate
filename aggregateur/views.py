@@ -33,9 +33,12 @@ def afficher_le_post(request, slug):
 		redirect = process_post_changes(request, post)
 	if redirect : return HttpResponseRedirect(redirect)
 	else : return render(request, 'aggregateur/afficher_le_post.html', {
-		'post': post, 'comment_form': CommentForm()
+		'post': post,
+		'profondeur_max': settings.PROFONDEUR_MAXIMALE_DES_COMMENTAIRES,
+		'comment_form': CommentForm()
 		})
 
+@login_required
 def afficher_le_commentaire(request, pk, slug):
 	''' génère la page d'affichage d'un commentaire '''
 	try : comment = Comment.objects.get(pk=pk)
@@ -47,7 +50,9 @@ def afficher_le_commentaire(request, pk, slug):
 		redirect = process_post_changes(request, post)
 	if redirect : return HttpResponseRedirect(redirect)
 	else : return render(request, 'aggregateur/afficher_le_commentaire.html', {
-		'post': post, 'comment': comment, 'comment_form': CommentForm()
+		'post': post, 'comment': comment,
+		'profondeur_max': comment.profondeur() + settings.PROFONDEUR_MAXIMALE_DES_COMMENTAIRES,
+		'comment_form': CommentForm()
 		})
 
 
@@ -66,7 +71,7 @@ def process_post_changes(request, post) :
 			else :
 				new_comment.parent_post = post
 			new_comment.save()
-			redirect_location = '#comment{pk}'.format(pk=new_comment.pk)
+			redirect_location = '#comment-{pk}'.format(pk=new_comment.pk)
 
 		elif request.POST.get('action') == 'modifier_le_commentaire' :
 			try : comment = Comment.objects.get(pk=request.POST.get('comment-pk'))
@@ -78,7 +83,7 @@ def process_post_changes(request, post) :
 					if comment.content == '' : comment.deleted = True
 					else : comment.deleted = False
 					comment.save(update_fields=['content','deleted'])
-					redirect_location = '#comment{pk}'.format(pk=comment.pk)
+					redirect_location = '#comment-{pk}'.format(pk=comment.pk)
 
 	if redirect_location : return redirect_location # si une id interne est définie, on la transmet
 	else : return False
@@ -167,7 +172,7 @@ from math import log
 def rank_posts(request, force=False):
 	''' compte le score relatif d'un post
 	straight from the reddit algorithm '''
-	if time_to_rerank(request) == True or force == True :
+	if force == True or time_to_rerank(request) == True :
 		# on classe les posts s'il n'y a pas eu de classement depuis 5 minutes
 		# sauf si un post vient d'être créé, dans quel cas cette fonction est appelée avec l'argument "force"
 		bayrou_2007 = datetime(2007, 4, 22) # 18% quand même !+
@@ -269,7 +274,8 @@ def nouveau_post(request):
 		if format == "TEXT" :
 			title = request.POST.get('title')
 			content = request.POST.get('content')
-			text_data = {'title': title, 'content': content}
+			illustration = request.POST.get('illustration')
+			text_data = {'title': title, 'content': content, 'illustration': illustration}
 			if PostTextForm(request.POST).is_valid() :
 				new_post = Post(
 					format='TEXT',
@@ -277,7 +283,7 @@ def nouveau_post(request):
 					content=content,
 					author=request.user,
 #					channel=Channel.objects.get(pk=1), # change when adding more channels
-#					illustration=
+					illustration=illustration,
 					)
 				new_post.save()
 				new_post_adress = "/p/" + new_post.slug
@@ -308,13 +314,14 @@ def nouveau_post(request):
 					)
 				new_post.save()
 				new_post_adress = "/p/" + new_post.slug
-				messages.success(request, "Votre post est publié.")
+				rank_posts(request, force=True)
 				logging.info(
 					"Nouveau lien posté par {username} : {title}".format(
 						username=request.user.username,
 						title=request.POST.get('title')
 						).encode('utf8')
 					)
+				messages.success(request, "Votre post est publié.")
 				return HttpResponseRedirect(new_post_adress)
 			else :
 				messages.error(request, "Votre post n'a pas été publié, il semble qu'il y ait une erreur dans les champs que vous avez rempli.")

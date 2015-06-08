@@ -55,13 +55,25 @@ class Comment(models.Model):
 	def __str__(self): return self.content
 
 	def post_racine(self):
-		''' récupère le post auquel ce commentaire est rattaché'''
+		'''récupère le post auquel ce commentaire est rattaché'''
 		parent_post = None
 		comment = self
 		while parent_post == None :
 			parent_post = comment.parent_post
 			if not parent_post : comment = comment.parent_comment
 		return parent_post
+
+	def profondeur(self):
+		'''renvoie le niveau de profondeur de se post par rapport à sa racine'''
+		profondeur = 0
+		parent_post = None
+		comment = self
+		while parent_post == None :
+			profondeur += 1
+			parent_post = comment.parent_post
+			if not parent_post : comment = comment.parent_comment
+		return profondeur
+
 
 class CommentVote(models.Model):
 	user = models.ForeignKey(User)

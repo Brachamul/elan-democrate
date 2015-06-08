@@ -34,6 +34,12 @@
 					<label for="{{ post_text_form.content.id_for_label }}">Texte</label>
 					{{ post_text_form.content }}
 				</div>
+				<div class="form-group">
+					{{ post_text_form.illustration.field.errors }}
+					<label for="{{ post_text_form.title.id_for_label }}">Illustration</label>
+					{{ post_text_form.illustration }}
+					<span class="help-block">Facultatif. Insérez l'URL d'une image. Vous pouvez héberger vos images sur <a href="http://imgur.com" target="_blank">imgur</a>.</span>
+				</div>
 				<input type="hidden" name="format" value="TEXT">
 				<button type="submit" class="btn btn-primary">Poster</button>
 			</div>

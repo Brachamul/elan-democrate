@@ -1,6 +1,8 @@
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic,700italic,600,600italic&subset=latin,latin-ext);
 
 html {  min-height: 100%; position: relative; }
+@media (max-width: 767px) { html { font-size: 9px; } }
+@media (max-width: 450px) { html { font-size: 8px; } }
 
 body { font-family: 'Open Sans', sans-serif; }
 
