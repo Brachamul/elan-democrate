@@ -4,7 +4,7 @@ Base
 
 * ~~Modifier la barre de navigation en enlevant les boutons pour les mettre sous la photo de profil~~ (2h)
 * Faire fonctionner la barre de navigation proprement sur mobile
-* Permettre à l'utilisateur de fermer les messages serveur
+* ~~Permettre à l'utilisateur de fermer les messages serveur~~ (1h)
 
 
 ***
@@ -82,18 +82,17 @@ Posts
 * [Gros chantier] générer les posts via JSON pour + de dynamisme
 * Auto-générer un titre
 * Finaliser l'intégration des vidéos et autres iframes
-* Ne pas afficher l'url des links (le contenu url des posts de type link)
+* ~~Ne pas afficher l'url des links (le contenu url des posts de type link)~~ (0h)
 * Sauver les thumbnails d'images sur le serveur
-* Autoranking des nouveaux posts non fonctionnel visiblement, peut-être juste sur les links !
 * ~~Problème de photo qui sort du cadre sur l'affichage des posts sur mobile~~ (1h)
-* Add "choose illustration"
+* ~~Add "choose illustration"~~ (1h)
 
 
 Commentaires
 --------
-* ~~**Return to comment after new comment is submitted**~~
+* ~~**Return to comment after new comment is submitted**~~ (2h)
 * ~~**Répondre directement à un post**~~ (2h) 
-* Gérer le cas de descente à X niveaux de commentaires
+* ~~Gérer le cas de descente à X niveaux de commentaires~~ (3h)
 * ~~Voter sur les commentaires~~ (2h)
 * ~~Éditer les commentaires~~ (2h)
 * ~~Supprimer son commentaire~~ (1h)
@@ -102,11 +101,12 @@ Commentaires
 * Déplacer la fonction de création de commentaire de la fonction générale d'affichage de post
 * ~~Bouton pour "cacher" le formulaire de réponse aux commentaires~~ (0h)
 * ~~Ajouter un permalien~~ (1h)
-* Les commentaires gris sont pas jaunes
+* ~~Les commentaires gris sont pas jaunes~~ (0h)
 * **Déclencher les notations des commentaires de manière récurrente**
 * [Gros chantier] ajout dynamique des commentaires en Ajax
 * Quand on clique sur le bouton "répondre", mettre automatiquement le curseur sur la boîte de texte
-* Le lien vers un commentaire prend le commentaire source !
+* ~~Le lien vers un commentaire prend le commentaire source !~~ (1h)
+* Afficher les boites de commentaire via jQuery plutôt
 
 Chaînes
 -------
@@ -147,7 +147,7 @@ Authentification
 Fichier Adhérents
 =================
 
-* **Tester le chargement du fichier**
+* ~~**Tester le chargement du fichier**~~ (2h)
 * ~~résolu un problème avec des caractères spéciaux dans les noms de fichiers template~~ (1h)
 * ajouter une étape de validation par l'utilisateur entre la lecture du fichier et son ajout à la bdd
 * remplacer la lecture des mandats pour faire du filtrage dessus

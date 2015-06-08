@@ -6,7 +6,6 @@
 		<label for="checkbox-close-comment-{{ comment.pk }}">[<span class="minus">–</span><span class="plus">+</span>]</label>
 		<span class="author">Par <a href="{% url 'membres' %}{{ comment.author.id }}">{{ comment.author.profil.nom_courant }}</a></span>
 		<span class="date">, il y a <time datetime="{{ comment.date }}">{{ post.date|timesince }}</time></span>
-		<span>. Prof : [{{comment.profondeur}}]
 	</div>
 
 	<div class="healthbox">
