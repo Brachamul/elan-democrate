@@ -6,6 +6,7 @@
 		<label for="checkbox-close-comment-{{ comment.pk }}">[<span class="minus">–</span><span class="plus">+</span>]</label>
 		<span class="author">Par <a href="{% url 'membres' %}{{ comment.author.id }}">{{ comment.author.profil.nom_courant }}</a></span>
 		<span class="date">, il y a <time datetime="{{ comment.date }}">{{ post.date|timesince }}</time></span>
+		<span>. Prof : [{{comment.profondeur}}]
 	</div>
 
 	<div class="healthbox">
@@ -46,6 +47,12 @@
 
 	<div class="actions">
 		<a href="{% url 'commentaire' post.slug comment.pk %}"><span class="permalink">lien</span></a>
+		{% if comment.parent_comment %}
+			<a href="{% url 'commentaire' post.slug comment.parent_comment.pk %}">
+			{% elif comment.parent_post %}
+			<a href="{% url 'post' post.slug %}">
+			{% endif %}
+			<span class="parent">parent</span></a>
 		{% if user == comment.author %}
 			{% if not comment.deleted %}
 			<form class="supprimer form-inline" method="POST" action="" enctype="multipart/form-data">
@@ -83,8 +90,12 @@
 	 </form>
 </div>
 
-{% for comment in comment.comment_set.all %}
-		{% include "aggregateur/commentaire.html" %}
-{% endfor %}
+{% if comment.profondeur > profondeur_max %}
+		<p style="font-size: .9em; font-style: italic;"><a href="{% url 'commentaire' slug=comment.post_racine.slug pk=comment.pk %}"><span class="glyphicon glyphicon-arrow-right"></span> Continuer à lire les réponses à ce commentaire</a></p>
+{% else %}
+		{% for comment in comment.comment_set.all %}
+				{% include "aggregateur/commentaire.html" %}
+		{% endfor %}
+{% endif %}
 
 </div>

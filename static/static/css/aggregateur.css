@@ -8,8 +8,8 @@
 
 .aggregateur.self .post,
 .aggregateur.self .postbox  { display: block; }
-.aggregateur.self .illustration { display: inline-block; }
-.aggregateur.self .healthbox,
+.aggregateur.self .illustration { display: block; }
+.aggregateur.self .healthbox { display: inline-block; vertical-align: middle; }
 .aggregateur.self .meta { display: inline; vertical-align: middle ; }
 .aggregateur.self .post { margin: auto; }
 .aggregateur.self .post .table + .content { margin-top: -1rem; }
@@ -56,7 +56,7 @@
 }
 
 .aggregateur.self .post .illustration {
-	max-width: 72rem; max-width: calc(100vw - 60px); height: auto; width: auto;
+	max-width: 72rem; max-width: calc(100vw - 30px); height: auto; width: auto;
 	margin: 1rem 0;
 	padding: 0;
 }
@@ -102,7 +102,7 @@
 	text-align: left;
 }
 
-.aggregateur .comments-wrapper { max-width: calc(100vw - 60px); }
+.aggregateur .comments-wrapper { max-width: calc(100vw - 30px); }
 
 .aggregateur.self .post .content { text-align: left; font-size: 1.6rem; display: inline-block; margin-bottom: 1rem; }
 .aggregateur.self .post .illustration { text-align: center; }
@@ -124,12 +124,18 @@
 .aggregateur .comment .actions { margin-bottom: 1em; }
 .aggregateur .comment .content { max-width: 69rem; margin: 0.2em 0 .5em 0; width: 100%;}
 .aggregateur .comment .modifier { max-width: 69rem; }
-.aggregateur .comments .panel:target { background-color: lightyellow; }
 
-.aggregateur .comments .panel { margin-top: 15px; margin-bottom: 0; }
-.aggregateur .comments > .panel > .panel-body > .panel { background-color: #fafafa; }
-.aggregateur .comments > .panel > .panel-body > .panel .panel-body > .panel > .panel-body > .panel { background-color: #fafafa; }
-.aggregateur .comments > .panel > .panel-body > .panel .panel-body > .panel > .panel-body > .panel > .panel-body > .panel > .panel-body > .panel { background-color: #fafafa; }
+.aggregateur .comments .comment:target { background-color: lightyellow !important; }
+
+.aggregateur .comments .comments-wrapper > .comment > .comment { background-color: #f6f6f6; }
+.aggregateur .comments .comments-wrapper > .comment > .comment > .comment { background-color: #ffffff; }
+.aggregateur .comments .comments-wrapper > .comment > .comment > .comment > .comment { background-color: #f6f6f6; }
+.aggregateur .comments .comments-wrapper > .comment > .comment > .comment > .comment > .comment { background-color: #ffffff; }
+.aggregateur .comments .comments-wrapper > .comment > .comment > .comment > .comment > .comment > .comment { background-color: #f6f6f6; }
+.aggregateur .comments .comments-wrapper > .comment > .comment > .comment > .comment > .comment > .comment > .comment { background-color: #ffffff; }
+.aggregateur .comments .comments-wrapper > .comment > .comment > .comment > .comment > .comment > .comment > .comment > .comment { background-color: #f6f6f6; }
+.aggregateur .comments .comments-wrapper > .comment > .comment > .comment > .comment > .comment > .comment > .comment > .comment > .comment { background-color: #ffffff; }
+.aggregateur .comments .comments-wrapper > .comment > .comment > .comment > .comment > .comment > .comment > .comment > .comment > .comment > .comment { background-color: #f6f6f6; }
 
 .aggregateur .comments .content .deleted { font-size: .8em; color: #808080; font-style: italic; }
 .aggregateur .comments .actions .supprimer { display: inline; }
