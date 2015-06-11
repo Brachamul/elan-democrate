@@ -1,5 +1,5 @@
 import logging
-from django.shortcuts import get_object_or_404, render, render_to_response
+from django.shortcuts import get_object_or_404, render, render_to_response, redirect
 from django.http import HttpResponseRedirect, HttpResponse, HttpRequest
 from django.template import RequestContext
 from django.core.exceptions import ObjectDoesNotExist
@@ -13,11 +13,14 @@ from .models import *
 from .forms import *
 
 
-def televersement_du_fichier_adherent(request):
+def televersement(request):
 	if request.user.has_perm('fichiers_adhérents.peut_televerser'):
+		print('user has perms')
 		if request.method == "POST":
+			print('method is post')
 			upload_form = TéléversementDuFichierAdhérentForm(request.POST, request.FILES)
 			if upload_form.is_valid():
+				print('upload form is valid')
 				logging.info("Un nouveau fichier adhérent a été téléversé par {user}.".format(user=request.user).encode('utf8'))
 				fichier = request.FILES['fichier_csv']
 				importateur = request.user
@@ -25,45 +28,49 @@ def televersement_du_fichier_adherent(request):
 				fichier.name = ('fichiers_adherents/' + slug + '.csv') # renomme le fichier grâce au slug
 				nouveau_fichier = FichierAdhérents(importateur=importateur, fichier_csv=fichier, slug=slug) # rattache le fichier à la base des fichiers importés
 				nouveau_fichier.save()
-				traitement_du_fichier(nouveau_fichier) # Importe les données du fichier dans la base "AdhérentDuFichier"
-				adhérents_importés = AdhérentDuFichier.objects.filter(fichier=nouveau_fichier) # prend tous les adhérents présents dans le nouveau fichier
-				logging.info("Le fichier contient les données de {nombre} adhérents.".format(nombre=adhérents_importés.count()).encode('utf8'))
-				nombre_nouveaux_adherents = 0
-				nombre_réadhésions = 0
-				for adherent_du_fichier in adhérents_importés:
-					compteur = Adhérent.objects.filter(num_adhérent=adherent_du_fichier.num_adhérent).count() # compte le nombre de fois où ce numéro adhérent existe dans la base
-					if compteur == 0 : # le numéro d'adhérent n'existe pas dans la base
-						creer_un_nouvel_adherent(adherent_du_fichier) # création d'un nouvel adhérent
-						nombre_nouveaux_adherents += 1
-					elif compteur == 1 :
-						# Si l'adhérent était déjà dans la base et qu'on a une nouvelle date de dernière cotisation, on compte une réadhésion
-						adherent_maj = Adhérent.objects.get(num_adhérent=adherent_du_fichier.num_adhérent)
-						if adherent_maj.date_dernière_cotisation != adherent_du_fichier.date_dernière_cotisation :
-							nombre_réadhésions += 1
-						mettre_a_jour_un_adherent(adherent_du_fichier)
-
-				logging.info("Nouveaux adhérents : %d" % (nombre_nouveaux_adherents).encode('utf8'))
-				logging.info("Réadhésions : %d" % (nombre_réadhésions).encode('utf8'))
-				return render(request, 'fichiers_adherents/traitement.html', {
-					'fichier': nouveau_fichier,
-					'nombre_nouveaux_adherents': nombre_nouveaux_adherents,
-					'nombre_réadhésions': nombre_réadhésions,
-					})
-
+				return redirect('previsualisation_du_fichier_adhérent', fichier_id=nouveau_fichier.id )
 			else:
+				print ('upload form not valid')
 				return render(request, 'fichiers_adherents/upload.html', {'upload_form': upload_form})
 		else:
+			print('no post data')
 			upload_form = TéléversementDuFichierAdhérentForm()
 			return render(request, 'fichiers_adherents/upload.html', {'upload_form': upload_form})
 	else:
 		messages.error(request, "Vous n'avez pas les droits d'accès au téléversement du fichier adhérents.<br>Êtes-vous bien connecté ?<br><br><a href='/'>Retour</a>")
 		return redirect('accueil')
 
+def previsualisation(request, fichier_id):
+	return HttpResponse ("Prévisualisation du fichier %s" % fichier_id)
+#	importation(nouveau_fichier) # Importe les données du fichier dans la base "AdhérentDuFichier"
+#	adhérents_importés = AdhérentDuFichier.objects.filter(fichier=nouveau_fichier) # prend tous les adhérents présents dans le nouveau fichier
+#	logging.info("Le fichier contient les données de {nombre} adhérents.".format(nombre=adhérents_importés.count()).encode('utf8'))
+#	nombre_nouveaux_adherents = 0
+#	nombre_réadhésions = 0
+#	for adherent_du_fichier in adhérents_importés:
+#		compteur = Adhérent.objects.filter(num_adhérent=adherent_du_fichier.num_adhérent).count() # compte le nombre de fois où ce numéro adhérent existe dans la base
+#		if compteur == 0 : # le numéro d'adhérent n'existe pas dans la base
+#			creer_un_nouvel_adherent(adherent_du_fichier) # création d'un nouvel adhérent
+#			nombre_nouveaux_adherents += 1
+#		elif compteur == 1 :
+#			# Si l'adhérent était déjà dans la base et qu'on a une nouvelle date de dernière cotisation, on compte une réadhésion
+#			adherent_maj = Adhérent.objects.get(num_adhérent=adherent_du_fichier.num_adhérent)
+#			if adherent_maj.date_dernière_cotisation != adherent_du_fichier.date_dernière_cotisation :
+#				nombre_réadhésions += 1
+#			mettre_a_jour_un_adherent(adherent_du_fichier)
+#
+#	logging.info("Nouveaux adhérents : %d" % (nombre_nouveaux_adherents).encode('utf8'))
+#	logging.info("Réadhésions : %d" % (nombre_réadhésions).encode('utf8'))
+#	return render(request, 'fichiers_adherents/traitement.html', {
+#		'fichier': nouveau_fichier,
+#		'nombre_nouveaux_adherents': nombre_nouveaux_adherents,
+#		'nombre_réadhésions': nombre_réadhésions,
+#		})
 
 import csv
 import datetime
 
-def traitement_du_fichier(fichier):
+def importation(fichier):
 	# Lis le fichier CSV importé et crée une instance AdhérentDuFichier pour chacun d'entre eux
 	with open(settings.MEDIA_ROOT + '/' + fichier.fichier_csv.name, encoding="cp1252", newline='') as fichier_ouvert:
 		lecteur = csv.DictReader(fichier_ouvert, delimiter=";")
