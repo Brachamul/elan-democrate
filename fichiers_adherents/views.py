@@ -1,4 +1,5 @@
 import logging
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render, render_to_response, redirect
 from django.http import HttpResponseRedirect, HttpResponse, HttpRequest
 from django.template import RequestContext
@@ -12,15 +13,12 @@ import sys
 from .models import *
 from .forms import *
 
-
+@login_required
 def televersement(request):
 	if request.user.has_perm('fichiers_adhérents.peut_televerser'):
-		print('user has perms')
 		if request.method == "POST":
-			print('method is post')
 			upload_form = TéléversementDuFichierAdhérentForm(request.POST, request.FILES)
 			if upload_form.is_valid():
-				print('upload form is valid')
 				logging.info("Un nouveau fichier adhérent a été téléversé par {user}.".format(user=request.user).encode('utf8'))
 				fichier = request.FILES['fichier_csv']
 				importateur = request.user
@@ -30,18 +28,18 @@ def televersement(request):
 				nouveau_fichier.save()
 				return redirect('previsualisation_du_fichier_adhérent', fichier_id=nouveau_fichier.id )
 			else:
-				print ('upload form not valid')
 				return render(request, 'fichiers_adherents/upload.html', {'upload_form': upload_form})
 		else:
-			print('no post data')
 			upload_form = TéléversementDuFichierAdhérentForm()
 			return render(request, 'fichiers_adherents/upload.html', {'upload_form': upload_form})
 	else:
-		messages.error(request, "Vous n'avez pas les droits d'accès au téléversement du fichier adhérents.<br>Êtes-vous bien connecté ?<br><br><a href='/'>Retour</a>")
+		messages.error(request, "Vous n'avez pas les droits d'accès au téléversement du fichier des adhérents.")
 		return redirect('accueil')
 
+@login_required
 def previsualisation(request, fichier_id):
-	return HttpResponse ("Prévisualisation du fichier %s" % fichier_id)
+	fichier = FichierAdhérents
+	return render(request, 'fichiers_adherents/previsualisation.html', {'fichierload_form': upload_form})
 #	importation(nouveau_fichier) # Importe les données du fichier dans la base "AdhérentDuFichier"
 #	adhérents_importés = AdhérentDuFichier.objects.filter(fichier=nouveau_fichier) # prend tous les adhérents présents dans le nouveau fichier
 #	logging.info("Le fichier contient les données de {nombre} adhérents.".format(nombre=adhérents_importés.count()).encode('utf8'))

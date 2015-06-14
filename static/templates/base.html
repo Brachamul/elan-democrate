@@ -1,8 +1,7 @@
 {% extends "meta.html" %}
 {% load static %}
 
-<body>
-
+{% if page_title %}{% block title %}{{ page_title }}{% endblock title %}{% endif %}
 
 {% block head %}{{ block.super }}
 
@@ -152,5 +151,3 @@
 <script src="{% get_static_prefix %}js/notifications.js"></script>
 
 {% endblock scripts %}
-
-</body>

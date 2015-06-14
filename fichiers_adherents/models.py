@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 
 class FichierAdhérents(models.Model):
 
-	importé_à_date = models.DateTimeField(auto_now_add=True)
+	date_d_import = models.DateTimeField(auto_now_add=True)
 	importateur = models.ForeignKey(User)
 	slug = models.SlugField(max_length=255)
 	fichier_csv = models.FileField(upload_to='fichiers_adherents/')
