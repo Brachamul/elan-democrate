@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.core.exceptions import ObjectDoesNotExist
 import os
 from django.utils.text import slugify
 
@@ -9,12 +9,37 @@ from django.contrib.auth.models import User
 class FichierAdhérents(models.Model):
 
 	date_d_import = models.DateTimeField(auto_now_add=True)
+#	derniere_activite_enregistree = models.DateTimeField()
 	importateur = models.ForeignKey(User)
 	slug = models.SlugField(max_length=255)
 	fichier_csv = models.FileField(upload_to='fichiers_adherents/')
-
 	nombre_nouveaux_adherents = models.PositiveSmallIntegerField(null=True, blank=True, default=0)
 	nombre_réadhésions = models.PositiveSmallIntegerField(null=True, blank=True, default=0)
+
+	def adherents(self) :
+		''' liste les adherents ayant été importés par ce fichier '''
+		return AdhérentDuFichier.objects.filter(fichier=self)
+
+	def nouveaux_adherents(self) :
+		''' liste le nombre d'adhérents qui seraient introduits par ce fichier '''
+		nouveaux_adherents = []
+		for adherent in self.adherents():
+			try : adherent_actuel_correspondant = Adhérent.objects.get(num_adhérent=adherent.num_adhérent)
+			except Adhérent.DoesNotExist : nouveaux_adherents.append(adherent)
+				# si l'adhérent n'existe pas dans la base
+		return nouveaux_adherents
+
+	def adherents_maj(self) :
+		''' liste le nombre d'adhérents qui ont réadhéré '''
+		adherents_maj = []
+		for adherent in self.adherents():
+			try : adherent_actuel_correspondant = Adhérent.objects.get(num_adhérent=adherent.num_adhérent)
+			except Adhérent.DoesNotExist : pass
+			else : 
+				if adherent.date_dernière_cotisation != adherent_actuel_correspondant.date_dernière_cotisation :
+					# si l'adhérent existe et qu'il a réadhéré
+					adherents_maj.append(adherent)
+		return adherents_maj
 
 	def __str__(self):
 		return self.slug

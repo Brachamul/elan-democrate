@@ -26,7 +26,8 @@ def televersement(request):
 				fichier.name = ('fichiers_adherents/' + slug + '.csv') # renomme le fichier grâce au slug
 				nouveau_fichier = FichierAdhérents(importateur=importateur, fichier_csv=fichier, slug=slug) # rattache le fichier à la base des fichiers importés
 				nouveau_fichier.save()
-				return redirect('previsualisation_du_fichier_adhérent', fichier_id=nouveau_fichier.id )
+				importation(nouveau_fichier) # Importe les données du fichier dans la base "AdhérentDuFichier"
+				return redirect('visualisation_du_fichier_adherent', fichier_id=nouveau_fichier.id )
 			else:
 				return render(request, 'fichiers_adherents/upload.html', {'upload_form': upload_form})
 		else:
@@ -37,14 +38,17 @@ def televersement(request):
 		return redirect('accueil')
 
 @login_required
-def previsualisation(request, fichier_id):
-	fichier = FichierAdhérents
-	return render(request, 'fichiers_adherents/previsualisation.html', {'fichierload_form': upload_form})
-#	importation(nouveau_fichier) # Importe les données du fichier dans la base "AdhérentDuFichier"
-#	adhérents_importés = AdhérentDuFichier.objects.filter(fichier=nouveau_fichier) # prend tous les adhérents présents dans le nouveau fichier
-#	logging.info("Le fichier contient les données de {nombre} adhérents.".format(nombre=adhérents_importés.count()).encode('utf8'))
-#	nombre_nouveaux_adherents = 0
-#	nombre_réadhésions = 0
+def visualisation_du_fichier_adherent(request, fichier_id):
+	fichier = get_object_or_404(FichierAdhérents, id=fichier_id)
+	return render(request, 'fichiers_adherents/visualisation.html', {
+		'page_title': "Visualisation d'un fichier adhérent",
+		'fichier': fichier,
+		'nombre_nouveaux_adherents': len(fichier.nouveaux_adherents()),
+		'nombre_réadhésions': len(fichier.adherents_maj()),
+		})
+
+#	#	logging.info("Le fichier contient les données de {nombre} adhérents.".format(nombre=adhérents_importés.count()).encode('utf8'))
+
 #	for adherent_du_fichier in adhérents_importés:
 #		compteur = Adhérent.objects.filter(num_adhérent=adherent_du_fichier.num_adhérent).count() # compte le nombre de fois où ce numéro adhérent existe dans la base
 #		if compteur == 0 : # le numéro d'adhérent n'existe pas dans la base
