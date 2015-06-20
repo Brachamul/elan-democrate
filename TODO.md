@@ -140,6 +140,7 @@ Authentification
 * Le champs de connexion est rempli par "None" si il ne retrouve pas d'adhérent, remplacer par rien
 * **Rediriger l'enregistrement sur une feuille de création de profil**
 * **Vérifier pourquoi le même code est envoyé deux fois**
+* Focus on "code" after code is sent during connection
 
 
 

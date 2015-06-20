@@ -9,7 +9,6 @@ from django.contrib.auth.models import User
 class FichierAdhérents(models.Model):
 
 	date_d_import = models.DateTimeField(auto_now_add=True)
-#	derniere_activite_enregistree = models.DateTimeField()
 	importateur = models.ForeignKey(User)
 	slug = models.SlugField(max_length=255)
 	fichier_csv = models.FileField(upload_to='fichiers_adherents/')
@@ -25,7 +24,9 @@ class FichierAdhérents(models.Model):
 		nouveaux_adherents = []
 		for adherent in self.adherents():
 			try : adherent_actuel_correspondant = Adhérent.objects.get(num_adhérent=adherent.num_adhérent)
-			except Adhérent.DoesNotExist : nouveaux_adherents.append(adherent)
+			except Adhérent.DoesNotExist :
+				nouveaux_adherents.append(adherent)
+			else : print("adhérent %s trouvé dans la base" % adherent.num_adhérent)
 				# si l'adhérent n'existe pas dans la base
 		return nouveaux_adherents
 
@@ -40,6 +41,16 @@ class FichierAdhérents(models.Model):
 					# si l'adhérent existe et qu'il a réadhéré
 					adherents_maj.append(adherent)
 		return adherents_maj
+
+	def date_ultime(self) :
+		''' cherche la dernière date mentionnée dans le fichier '''
+		latest_entry = self.adherents().latest('date_dernière_cotisation')
+		return latest_entry.date_dernière_cotisation
+
+	def jours_depuis_le_fichier_precedent(self):
+		try : date_actuelle = Adhérent.objects.latest('date_dernière_cotisation')
+		except Adhérent.DoesNotExist : return False
+		else : return date_actuelle - date_ultime(self)
 
 	def __str__(self):
 		return self.slug

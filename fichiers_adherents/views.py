@@ -47,6 +47,10 @@ def visualisation_du_fichier_adherent(request, fichier_id):
 		'nombre_réadhésions': len(fichier.adherents_maj()),
 		})
 
+@login_required
+def activer_le_fichier_adherent(request, fichier_id):
+	return render(request, 'fichiers_adherents/merci.html')		
+
 #	#	logging.info("Le fichier contient les données de {nombre} adhérents.".format(nombre=adhérents_importés.count()).encode('utf8'))
 
 #	for adherent_du_fichier in adhérents_importés:
