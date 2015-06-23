@@ -150,10 +150,14 @@ Fichier Adhérents
 
 * ~~**Tester le chargement du fichier**~~ (2h)
 * ~~résolu un problème avec des caractères spéciaux dans les noms de fichiers template~~ (1h)
-* **ajouter une étape de validation par l'utilisateur entre la lecture du fichier et son ajout à la bdd**
-* ajouter la dernière date d'activité du fichier au modèle
+* ~~**ajouter une étape de validation par l'utilisateur entre la lecture du fichier et son ajout à la bdd**~~ (4h)
+* ~~ajouter la dernière date d'activité du fichier au modèle~~ (1h)
+* ~~**ajouter le calcul de l'ancienneté pour virer les anciens adhérents**~~ (2h)
+* ~~**créer un tableau de bord affichant les évolutions lors du chargement d'un fichier**~~ (2h)
 * remplacer la lecture des mandats pour faire du filtrage dessus
 * ajouter une maintenance pour virer tout les trucs useless générés pendant le processus (genre les adhérents_du_fichier)
+* refondre les permissions et permettre l'attribution de permissions
+* créer un affichage sur la base de permissions
 
 
 

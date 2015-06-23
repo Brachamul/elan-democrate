@@ -1,0 +1,36 @@
+{% extends request.is_ajax|yesno:"base_ajax.html,base.html" %}
+{% load staticfiles %}
+
+
+{% block title %}Fichier Adhérents{% endblock title %}
+
+{% block content %}{{ block.super }}
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>#</th>
+			<th>Nom</th>
+			<th>Prénom</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for adherent in adherents %}
+		<tr>
+			<td>{{ adherent.num_adhérent }}</td>
+			<td>{{ adherent.nom }}</td>
+			<td>{{ adherent.prénom }}</td>
+		</tr>
+		{% endfor %}  
+	</tbody>
+</table>
+
+<style>
+
+body { text-align: center; }
+table { text-align: left; }
+
+</style>
+
+
+{% endblock content %}

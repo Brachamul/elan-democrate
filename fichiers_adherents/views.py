@@ -1,4 +1,5 @@
 import logging
+import csv
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render, render_to_response, redirect
 from django.http import HttpResponseRedirect, HttpResponse, HttpRequest
@@ -49,32 +50,10 @@ def visualisation_du_fichier_adherent(request, fichier_id):
 
 @login_required
 def activer_le_fichier_adherent(request, fichier_id):
+	fichier = get_object_or_404(FichierAdhérents, id=fichier_id)
+	for nouvel_adherent in fichier.nouveaux_adherents(): nouvel_adherent.creer_un_nouvel_adherent()
+	for adherent_maj in fichier.adherents_maj(): adherent_maj.mettre_a_jour_un_adherent()
 	return render(request, 'fichiers_adherents/merci.html')		
-
-#	#	logging.info("Le fichier contient les données de {nombre} adhérents.".format(nombre=adhérents_importés.count()).encode('utf8'))
-
-#	for adherent_du_fichier in adhérents_importés:
-#		compteur = Adhérent.objects.filter(num_adhérent=adherent_du_fichier.num_adhérent).count() # compte le nombre de fois où ce numéro adhérent existe dans la base
-#		if compteur == 0 : # le numéro d'adhérent n'existe pas dans la base
-#			creer_un_nouvel_adherent(adherent_du_fichier) # création d'un nouvel adhérent
-#			nombre_nouveaux_adherents += 1
-#		elif compteur == 1 :
-#			# Si l'adhérent était déjà dans la base et qu'on a une nouvelle date de dernière cotisation, on compte une réadhésion
-#			adherent_maj = Adhérent.objects.get(num_adhérent=adherent_du_fichier.num_adhérent)
-#			if adherent_maj.date_dernière_cotisation != adherent_du_fichier.date_dernière_cotisation :
-#				nombre_réadhésions += 1
-#			mettre_a_jour_un_adherent(adherent_du_fichier)
-#
-#	logging.info("Nouveaux adhérents : %d" % (nombre_nouveaux_adherents).encode('utf8'))
-#	logging.info("Réadhésions : %d" % (nombre_réadhésions).encode('utf8'))
-#	return render(request, 'fichiers_adherents/traitement.html', {
-#		'fichier': nouveau_fichier,
-#		'nombre_nouveaux_adherents': nombre_nouveaux_adherents,
-#		'nombre_réadhésions': nombre_réadhésions,
-#		})
-
-import csv
-import datetime
 
 def importation(fichier):
 	# Lis le fichier CSV importé et crée une instance AdhérentDuFichier pour chacun d'entre eux
@@ -108,42 +87,3 @@ def process_csv_date(csv_date):
 		processed_date = datetime.datetime.strptime(csv_date, '%m/%d/%Y').date()
 		return processed_date
 	else : return None
-
-
-
-def creer_un_nouvel_adherent(adherent_du_fichier):
-	# Ajoute les nouveaux adhérents au fichier Adhérent
-	logging.info("Importation de %s %s, nouvel adhérent numéro %d." % (adherent_du_fichier.prénom, adherent_du_fichier.nom, adherent_du_fichier.num_adhérent).encode('utf8'))
-	fichier = adherent_du_fichier.fichier
-	nouvel_adherent = Adhérent(num_adhérent=adherent_du_fichier.num_adhérent)
-	copier_les_donnees_de_l_adherent(nouvel_adherent, adherent_du_fichier, fichier)
-	nouvel_adherent.save()
-	fichier.nombre_nouveaux_adherents += 1
-	fichier.save()
-
-def mettre_a_jour_un_adherent(adherent_du_fichier):
-	# Met à jour les adhérents existants avec les nouvelles données
-	adherent_maj = Adhérent.objects.get(num_adhérent=adherent_du_fichier.num_adhérent)
-	copier_les_donnees_de_l_adherent(adherent_maj, adherent_du_fichier, adherent_du_fichier.fichier)
-	adherent_maj.save()
-
-
-def copier_les_donnees_de_l_adherent(nouvel_adherent, adherent_du_fichier, fichier):
-	nouvel_adherent.fédération = adherent_du_fichier.fédération
-	nouvel_adherent.date_première_adhésion = adherent_du_fichier.date_première_adhésion
-	nouvel_adherent.date_dernière_cotisation = adherent_du_fichier.date_dernière_cotisation
-	nouvel_adherent.nom = adherent_du_fichier.nom
-	nouvel_adherent.prénom = adherent_du_fichier.prénom
-	nouvel_adherent.code_postal = adherent_du_fichier.code_postal
-	nouvel_adherent.ville = adherent_du_fichier.ville
-	nouvel_adherent.pays = adherent_du_fichier.pays
-	nouvel_adherent.date_de_naissance = adherent_du_fichier.date_de_naissance
-	nouvel_adherent.profession = adherent_du_fichier.profession
-	nouvel_adherent.tel_portable = adherent_du_fichier.tel_portable
-	nouvel_adherent.tel_bureau = adherent_du_fichier.tel_bureau
-	nouvel_adherent.tel_domicile = adherent_du_fichier.tel_domicile
-	nouvel_adherent.email = adherent_du_fichier.email
-	nouvel_adherent.mandats = adherent_du_fichier.mandats
-	nouvel_adherent.commune = adherent_du_fichier.commune
-	nouvel_adherent.importé_par_le_fichier = adherent_du_fichier.fichier
-	nouvel_adherent.save()

@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.forms.models import model_to_dict
-from django.http import HttpResponseRedirect, HttpResponse, HttpRequest, Http404, JsonResponse
+from django.http import HttpResponseRedirect, HttpResponse, HttpRequest, Http404
 from django.shortcuts import get_object_or_404, render, render_to_response, redirect
 
 from .models import *
