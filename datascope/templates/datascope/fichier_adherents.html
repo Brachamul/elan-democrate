@@ -5,32 +5,63 @@
 {% block title %}Fichier Adhérents{% endblock title %}
 
 {% block content %}{{ block.super }}
-
-<table class="table">
+<div id="representation-du-fichier-adherent">
+<input class="search" placeholder="Rechercher">
+<table class="table fichier">
 	<thead>
 		<tr>
-			<th>#</th>
-			<th>Nom</th>
-			<th>Prénom</th>
+			<th class="sort" data-sort="num-adherent">#</th>
+			<th class="sort" data-sort="federation">Fédération</th>
+			<th class="sort" data-sort="nom">Nom</th>
+			<th class="sort" data-sort="prenom">Prénom</th>
+			<th class="sort days" data-sort="der-cot">Dernière cotisation</th>
+			<th class="sort" data-sort="notes">Notes</th>
 		</tr>
 	</thead>
-	<tbody>
+	<tbody class="list">
 		{% for adherent in adherents %}
 		<tr>
-			<td>{{ adherent.num_adhérent }}</td>
-			<td>{{ adherent.nom }}</td>
-			<td>{{ adherent.prénom }}</td>
+			<td class="num-adherent">{{ adherent.num_adhérent }}</td>
+			<td class="federation">{{ adherent.fédération }}</td>
+			<td class="nom">{{ adherent.nom }}</td>
+			<td class="prenom">{{ adherent.prénom }}</td>
+			<td class="days der-cot">{{ adherent.jours_depuis_la_derniere_cotisation }} j</td>
+			<td class="notes"></td>
 		</tr>
 		{% endfor %}  
 	</tbody>
 </table>
+</div>
 
 <style>
 
 body { text-align: center; }
 table { text-align: left; }
+table.fichier .days { text-align: right; width: 2em; }
+table.fichier .days { text-align: right; }
+input.search {
+	font-size: 2em; 
+	width: 100%;
+	border: none;
+	border-bottom: 1px solid #ddd;
+	text-align: center;
+	font-style: italic;
+	}
+th.sort:after { content: " "; width: 1em; }
+th.sort.asc, th.sort.desc { color: #EC7C34; }
+th.sort.asc:after { content: "▲"; }
+th.sort.desc:after { content: "▼"; }
 
 </style>
 
-
 {% endblock content %}
+
+{% block scripts %}{{ block.super }}
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.1.1/list.min.js"></script>
+<script>
+var options = { valueNames: [ 'num-adherent', 'federation', 'nom', 'prenom', 'der-cot', 'notes' ] };
+var adherents = new List('representation-du-fichier-adherent', options);
+</script>
+
+{% endblock scripts %}
