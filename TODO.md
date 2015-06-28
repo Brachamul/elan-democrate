@@ -33,7 +33,8 @@ Mandats
 * ~~**Permettre la gestion de mandats JDem**~~ (4h)
 * Permettre la proposition d'un mandat
 * Systèmes de validation et covalidation
-
+* ~~**Afficher les mandats uniquement actifs**~~ (2h)
+* **refondre les permissions et permettre l'attribution de permissions sur la base des mandats**
 
 
 ***
@@ -154,11 +155,15 @@ Fichier Adhérents
 * ~~ajouter la dernière date d'activité du fichier au modèle~~ (1h)
 * ~~**ajouter le calcul de l'ancienneté pour virer les anciens adhérents**~~ (2h)
 * ~~**créer un tableau de bord affichant les évolutions lors du chargement d'un fichier**~~ (2h)
-* remplacer la lecture des mandats pour faire du filtrage dessus
 * ajouter une maintenance pour virer tout les trucs useless générés pendant le processus (genre les adhérents_du_fichier)
-* refondre les permissions et permettre l'attribution de permissions
-* créer un affichage sur la base de permissions
+* lancer une notification lors de la mise à jour du fichier
 
+
+***
+Datascope
+=========
+* ~~Recherche et filtrage dynamique du fichier adherent~~ (2h)
+* créer un affichage du fichier sur la base de permissions
 
 
 ***

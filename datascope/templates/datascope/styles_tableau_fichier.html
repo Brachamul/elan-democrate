@@ -1,0 +1,25 @@
+<style>
+
+body { text-align: center; }
+.table-responsive { border : none; }
+table { text-align: left; }
+table.fichier .days { text-align: right; width: 7em; }
+table.fichier .num-adherent { text-align: right; width: 7em; }
+input.search {
+	font-size: 2em; 
+	width: 100%;
+	border: none;
+	border-bottom: 1px solid #ddd;
+	text-align: center;
+	font-style: italic;
+	}
+th.sort { cursor: pointer; }
+th.sort:after { content: " ▲"; width: 1em; color: #ccc; font-size: .7em; vertical-align: top;}
+th.sort.asc, th.sort.desc,
+th.sort.asc:after, th.sort.desc:after { color: #EC7C34; }
+th.sort.desc:after { content: " ▼"; }
+td.der-cot .wrap:after { content: " j"; }
+td .wrap { word-wrap: break-word; }
+table.fichier tbody tr td { padding: .5em 1em; }
+
+</style>

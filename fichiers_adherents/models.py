@@ -61,7 +61,6 @@ class FichierAdhérents(models.Model):
 
 
 
-
 class Adhérent(models.Model):
 	# Ce profil reprend une partie des données du fichier adhérent officiel du MoDem. Il ne peut pas être modifié par l'utilisateur
 	num_adhérent = models.IntegerField(primary_key=True)

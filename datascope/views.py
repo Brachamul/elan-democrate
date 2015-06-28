@@ -17,4 +17,5 @@ from fichiers_adherents.models import Adhérent
 def fichier_adherents(request):
 	return render(request, 'datascope/fichier_adherents.html', {
 		'adherents': Adhérent.objects.all(),
+		'page_title': "Fichier adhérents",
 		})
