@@ -1,0 +1,88 @@
+{% extends request.is_ajax|yesno:"base_ajax.html,base.html" %}
+{% load staticfiles %}
+
+
+{% block title %}Traitement du fichier adhérents{% endblock title %}
+
+{% block content %}{{ block.super }}
+
+<h1>Traitement du fichier importé</h1>
+
+<br/>
+
+<div class="fichier-dashboard">
+
+<div class="row row-centered">
+	<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 col-centered">
+		<div class="bignumber">{{ fichier.adherents|length }}</div>
+		<h4>Adhérents</h4>
+	</div>
+
+	<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 col-centered">
+		<div class="bignumber">{{ fichier.nouveaux_adherents|length }}</div>
+		<h4>Nouveaux</h4>
+	</div>
+	
+	<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 col-centered">
+		<div class="bignumber">{{ fichier.nombre_réadhésions|length }}</div>
+		<h4>Réadhésions</h4>
+	</div>
+
+	<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 col-centered">
+		<div class="bignumber">0</div>
+		<h4>Non-renouvellements</h4>
+	</div>
+
+	{% if fichier.jours_depuis_le_fichier_precedent %}
+	{% endif %}
+</div>
+
+<br/>
+
+<p><a class="btn btn-lg btn-primary" href="{% url 'activer_le_fichier_adherent' fichier_id=fichier.id %}" >Charger ce fichier dans la base</a></p>
+<p>Daté du <strong>{{ fichier.date_ultime }}</strong>,
+{% if fichier.jours_depuis_le_fichier_precedent >= 0 %}
+ce fichier est <strong>plus récent</strong> que le précédent de <strong>{{ fichier.jours_depuis_le_fichier_precedent }} jours</strong>.
+{% else %}
+ce fichier est <strong>plus ancien</strong> que le fichier actuel de <strong>{{ fichier.jours_depuis_le_fichier_precedent }} jours</strong>.
+{% endif %}
+</p>
+
+<br/><br/>
+
+<table class="table">
+	<tr>
+		<th>#</th>
+		<th>Nom</th>
+		<th>Prénom</th>
+	</tr>
+	{% for adherent in fichier.adhérentdufichier_set.all %}
+	<tr>
+		<td>{{ adherent.num_adhérent }}</td>
+		<td>{{ adherent.nom }}</td>
+		<td>{{ adherent.prénom }}</td>
+	</tr>
+	{% endfor %}  
+</table>
+
+</div>
+
+<style>
+
+body { text-align: center; }
+table { text-align: left; }
+.fichier-dashboard *[class*='col-'] { margin-top: 1em; margin-bottom: 2em; }
+.fichier-dashboard h4 { font-weight: lighter; text-transform: lowercase; }
+.fichier-dashboard .bignumber { font-size: 4em; color: #EC7C34; }
+/* centered columns styles */
+.row-centered { text-align:center; }
+.col-centered {
+	display: inline-block;
+	float: none;
+	/* inline-block space fix */
+	margin-right: -4px;
+}
+
+</style>
+
+{% endblock content %}

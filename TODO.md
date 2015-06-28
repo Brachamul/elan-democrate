@@ -33,7 +33,8 @@ Mandats
 * ~~**Permettre la gestion de mandats JDem**~~ (4h)
 * Permettre la proposition d'un mandat
 * Systèmes de validation et covalidation
-
+* ~~**Afficher les mandats uniquement actifs**~~ (2h)
+* **refondre les permissions et permettre l'attribution de permissions sur la base des mandats**
 
 
 ***
@@ -140,6 +141,7 @@ Authentification
 * Le champs de connexion est rempli par "None" si il ne retrouve pas d'adhérent, remplacer par rien
 * **Rediriger l'enregistrement sur une feuille de création de profil**
 * **Vérifier pourquoi le même code est envoyé deux fois**
+* Focus on "code" after code is sent during connection
 
 
 
@@ -149,10 +151,19 @@ Fichier Adhérents
 
 * ~~**Tester le chargement du fichier**~~ (2h)
 * ~~résolu un problème avec des caractères spéciaux dans les noms de fichiers template~~ (1h)
-* ajouter une étape de validation par l'utilisateur entre la lecture du fichier et son ajout à la bdd
-* remplacer la lecture des mandats pour faire du filtrage dessus
+* ~~**ajouter une étape de validation par l'utilisateur entre la lecture du fichier et son ajout à la bdd**~~ (4h)
+* ~~ajouter la dernière date d'activité du fichier au modèle~~ (1h)
+* ~~**ajouter le calcul de l'ancienneté pour virer les anciens adhérents**~~ (2h)
+* ~~**créer un tableau de bord affichant les évolutions lors du chargement d'un fichier**~~ (2h)
 * ajouter une maintenance pour virer tout les trucs useless générés pendant le processus (genre les adhérents_du_fichier)
+* lancer une notification lors de la mise à jour du fichier
 
+
+***
+Datascope
+=========
+* ~~Recherche et filtrage dynamique du fichier adherent~~ (2h)
+* créer un affichage du fichier sur la base de permissions
 
 
 ***

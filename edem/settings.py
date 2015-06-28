@@ -37,6 +37,7 @@ INSTALLED_APPS = (
 	'aggregateur',
 	'mandats',
 	'notifications',
+    'datascope', # différents affichages de données pour les utilisateurs
 )
 
 MIDDLEWARE_CLASSES = (
@@ -163,6 +164,7 @@ LOGGING = {
 
 POSTS_PER_PAGE = 12 # nombre de posts qui s'affichent en page d'accueil
 PROFONDEUR_MAXIMALE_DES_COMMENTAIRES = 6 # niveau max de décente dans l'affichage des commentaires pour une même page
+DUREE_D_ACTIVITE = 2 # Nombre d'années d'activité des adhérents après leur dernière cotisation (année actuelle - année de cotisation > x)
 
 # API EMBEDLY
 EMBEDLY_KEY = "111e2b3ee0714950ad122d221fa7d444"

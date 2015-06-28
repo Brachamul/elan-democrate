@@ -1,0 +1,50 @@
+{% extends request.is_ajax|yesno:"base_ajax.html,base.html" %}
+{% load staticfiles %}
+
+{% block content %}{{ block.super }}
+
+<div id="representation-du-fichier-adherent">
+<input class="search" placeholder="Rechercher" autofocus>
+<div class="table-responsive">
+<table class="table fichier table-striped">
+	<thead>
+		<tr>
+			<th class="sort num-adherent" data-sort="num-adherent">#</th>
+			<th class="sort" data-sort="federation">Fédé</th>
+			<th class="sort" data-sort="nom">Nom</th>
+			<th class="sort" data-sort="prenom">Prénom</th>
+			<th class="sort" data-sort="mandats">Mandat</th>
+			<th class="sort" data-sort="notes">Notes</th>
+			<th class="sort days" data-sort="der-cot">Der. cot.</th>
+		</tr>
+	</thead>
+	<tbody class="list">
+		{% for adherent in adherents %}
+		<tr>
+			<td class="num-adherent"><div class="wrap">{{ adherent.num_adhérent }}</div></td>
+			<td class="federation"><div class="wrap">{{ adherent.fédération }}</div></td>
+			<td class="nom"><div class="wrap">{{ adherent.nom }}</div></td>
+			<td class="prenom"><div class="wrap">{{ adherent.prénom }}</div></td>
+			<td class="mandats"><div class="wrap">{{ adherent.mandats }}</div></td>
+			<td class="notes"><div class="wrap"></div></td>
+			<td class="days der-cot"><div class="wrap">{{ adherent.jours_depuis_la_derniere_cotisation }}</div></td>
+		</tr>
+		{% endfor %}  
+	</tbody>
+</table>
+</div>
+</div>
+
+{% include "datascope/styles_tableau_fichier.html" %}
+
+{% endblock content %}
+
+{% block scripts %}{{ block.super }}
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.1.1/list.min.js"></script>
+<script>
+var options = { valueNames: [ 'num-adherent', 'federation', 'nom', 'prenom', 'der-cot', 'notes', 'mandats' ] };
+var adherents = new List('representation-du-fichier-adherent', options);
+</script>
+
+{% endblock scripts %}

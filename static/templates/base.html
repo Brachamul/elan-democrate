@@ -1,12 +1,12 @@
 {% extends "meta.html" %}
 {% load static %}
 
-<body>
-
+{% if page_title %}{% block title %}{{ page_title }}{% endblock title %}{% endif %}
 
 {% block head %}{{ block.super }}
 
 <link rel="stylesheet" href="{% get_static_prefix %}css/notifications.css" >
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 
 {% endblock head %}
 
@@ -152,5 +152,3 @@
 <script src="{% get_static_prefix %}js/notifications.js"></script>
 
 {% endblock scripts %}
-
-</body>
