@@ -1,15 +1,17 @@
-import logging
 import csv
+import logging
+import sys
+
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, render, render_to_response, redirect
-from django.http import HttpResponseRedirect, HttpResponse, HttpRequest
-from django.template import RequestContext
-from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
 from django.contrib import messages
-from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponseRedirect, HttpResponse, HttpRequest
+from django.shortcuts import get_object_or_404, render, render_to_response, redirect
+from django.template import RequestContext
 
-import sys
+from datascope.models import mettre_a_jour_les_federations
 
 from .models import *
 from .forms import *
@@ -53,6 +55,7 @@ def activer_le_fichier_adherent(request, fichier_id):
 	fichier = get_object_or_404(FichierAdhérents, id=fichier_id)
 	for nouvel_adherent in fichier.nouveaux_adherents(): nouvel_adherent.creer_un_nouvel_adherent()
 	for adherent_maj in fichier.adherents_maj(): adherent_maj.mettre_a_jour_un_adherent()
+	mettre_a_jour_les_federations() # recharge les permissions de vue sur les fédérations en cas de nouvelles fédérations
 	return render(request, 'fichiers_adherents/merci.html')		
 
 def importation(fichier):

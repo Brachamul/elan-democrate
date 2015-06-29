@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from django.db import models
 from django.contrib.auth.models import User
 from membres.models import Profil
+from datascope.models import VueFederation
 
 class MetaInstitution(models.Model):
 	nom = models.CharField(max_length=255) # Commune, Fédération, ...
@@ -37,6 +38,7 @@ class Detenteur(models.Model):
 	charge = models.CharField(max_length=1023, blank=True, null=True) # en charge de la communication, délégué aux espaces verts, ...
 	date_de_debut = models.DateField(blank=True, null=True) # en cas de début différent du mandat
 	date_de_fin = models.DateField(blank=True, null=True) # en cas de fin différente du mandat
+	peut_voir_la_federation = models.ManyToManyField(VueFederation, blank=True)
 	def __str__(self): return "{titre} {prefixe} {institution}".format(titre=self.titre, prefixe=self.mandat.institution.prefixe, institution=self.mandat.institution.nom)
 	def actif(self):
 		if self.date_de_fin : return datetime.now().date() < self.date_de_fin # Vrai si la date de fin n'est pas encore passée

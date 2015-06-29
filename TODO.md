@@ -205,3 +205,5 @@ Meta
 * ~~Retirer la DB des commits~~ (1h)
 * ~~Replace prints by logging or add .encode("utf-8")~~ (1h)
 * ~~**Add logging**~~ (1h)
+* revamp all page titles
+* make more inpage loads
