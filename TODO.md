@@ -24,6 +24,8 @@ Membres
 * ~~Ne pas pré-écrire "None" dans la description quand il n'y en a pas~~
 * Autres utilisateurs en ligne en ce moment
 * Créer un processus de validation du nom courant (pour qu'il reste non-anonyme)
+* Adhésioniversaire
+
 
 
 ***
@@ -157,6 +159,7 @@ Fichier Adhérents
 * ~~**créer un tableau de bord affichant les évolutions lors du chargement d'un fichier**~~ (2h)
 * ajouter une maintenance pour virer tout les trucs useless générés pendant le processus (genre les adhérents_du_fichier)
 * lancer une notification lors de la mise à jour du fichier
+* remplacer FichierAdhérent et Adhérent par FichierAdherent et Adherent
 
 
 ***

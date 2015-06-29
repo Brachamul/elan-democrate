@@ -41,10 +41,12 @@
 
 <p><a class="btn btn-lg btn-primary" href="{% url 'activer_le_fichier_adherent' fichier_id=fichier.id %}" >Charger ce fichier dans la base</a></p>
 <p>Daté du <strong>{{ fichier.date_ultime }}</strong>,
-{% if fichier.jours_depuis_le_fichier_precedent >= 0 %}
+{% if fichier.jours_depuis_le_fichier_precedent > 0 %}
 ce fichier est <strong>plus récent</strong> que le précédent de <strong>{{ fichier.jours_depuis_le_fichier_precedent }} jours</strong>.
-{% else %}
+{% elif fichier.jours_depuis_le_fichier_precedent < 0 %}
 ce fichier est <strong>plus ancien</strong> que le fichier actuel de <strong>{{ fichier.jours_depuis_le_fichier_precedent }} jours</strong>.
+{% else %}
+ce fichier est daté du <strong>même jour</strong> que le fichier actuel.
 {% endif %}
 </p>
 
@@ -55,12 +57,16 @@ ce fichier est <strong>plus ancien</strong> que le fichier actuel de <strong>{{ 
 		<th>#</th>
 		<th>Nom</th>
 		<th>Prénom</th>
+		<th>Première Adhésion</th>
+		<th>Dernière Cotisation</th>
 	</tr>
 	{% for adherent in fichier.adhérentdufichier_set.all %}
 	<tr>
 		<td>{{ adherent.num_adhérent }}</td>
 		<td>{{ adherent.nom }}</td>
 		<td>{{ adherent.prénom }}</td>
+		<td>{{ adherent.date_première_adhésion }}</td>
+		<td>{{ adherent.date_dernière_cotisation }}</td>
 	</tr>
 	{% endfor %}  
 </table>

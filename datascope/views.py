@@ -27,11 +27,8 @@ def fichier_adherents(request):
 		for detenteur in detenteurs :
 			if detenteur.actif() :
 				federations_visibles = VueFederation.objects.filter(detenteur=detenteur)
-				for federation in federations_visibles :
-					adherents.append(federation.adherents())
+				for federation in federations_visibles : adherents += federation.adherents()
 	if adherents :
-		print ("ADHERENTS:")
-		print (adherents)
 		return render(request, 'datascope/fichier_adherents.html', {
 			'adherents': adherents,
 			'page_title': "Fichier adhérents",
@@ -39,3 +36,5 @@ def fichier_adherents(request):
 	else :
 		messages.error(request, "Vous n'avez pas accès au contenu du fichier adhérent.")
 		return redirect('accueil')
+
+def maj_federations(request): return HttpResponse(mettre_a_jour_les_federations())

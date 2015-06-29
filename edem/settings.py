@@ -35,9 +35,9 @@ INSTALLED_APPS = (
 	'fichiers_adherents',
 	'tableau_de_bord',
 	'aggregateur',
+    'datascope', # différents affichages de données pour les utilisateurs
 	'mandats',
 	'notifications',
-    'datascope', # différents affichages de données pour les utilisateurs
 )
 
 MIDDLEWARE_CLASSES = (

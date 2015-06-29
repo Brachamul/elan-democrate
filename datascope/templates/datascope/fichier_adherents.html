@@ -2,9 +2,6 @@
 {% load staticfiles %}
 
 {% block content %}{{ block.super }}
-{% for adherent in adherents %}
-{{ adherent }}
-{% endfor %}
 <div id="representation-du-fichier-adherent">
 <input class="search" placeholder="Rechercher" autofocus>
 <div class="table-responsive">

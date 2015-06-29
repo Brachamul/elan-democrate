@@ -80,7 +80,7 @@ class Adhérent(models.Model):
 	email = models.CharField(max_length=255, null=True, blank=True)
 	mandats = models.CharField(max_length=255, null=True, blank=True)
 	commune = models.CharField(max_length=255, null=True, blank=True) # Dans le cas où la personne est élu dans une autre commune que sa ville de résidence.
-	importé_par_le_fichier = models.ForeignKey(FichierAdhérents, null=True, blank=True)
+	importé_par_le_fichier = models.ForeignKey(FichierAdhérents, null=True, blank=True, on_delete=models.SET_NULL)
 
 	def anciennete(self): return datetime.now() - self.date_première_adhésion
 	def actif(self): return (datetime.now().year - self.date_dernière_cotisation.year) > settings.DUREE_D_ACTIVITE
