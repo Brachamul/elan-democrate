@@ -20,7 +20,6 @@ def mettre_a_jour_les_federations():
 	federations_du_fichier = Adhérent.objects.all().values('fédération').annotate(n=models.Count('pk'))
 	for federation in federations_du_fichier : federations.append(str(federation['fédération']))
 	for federation in federations :
-		print (federation)
 		try : vue = VueFederation.objects.get(federation=federation)
 		except VueFederation.DoesNotExist :
 			nouvelle_vue = VueFederation(federation=federation)

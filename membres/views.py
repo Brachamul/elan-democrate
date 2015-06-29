@@ -29,7 +29,7 @@ def profil(request, pk):
 		else :
 			if request.method == "POST" and user == request.user : process_profil_changes(request, user, profil)
 			profil.mandats = pecho_les_mandats(profil)
-			return render(request, 'membres/profil.html', {'membre': user, 'profil': profil})
+			return render(request, 'membres/profil.html', {'membre': user, 'profil': profil, 'page_title': profil.nom_courant})
 
 def process_profil_changes(request, user, profil) :
 
