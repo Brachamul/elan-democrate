@@ -26,8 +26,10 @@ def fichier_adherents(request):
 		adherents = []
 		for detenteur in detenteurs :
 			if detenteur.actif() :
-				federations_visibles = VueFederation.objects.filter(detenteur=detenteur)
-				for federation in federations_visibles : adherents += federation.adherents()
+				if detenteur.peut_voir_le_fichier_national() : adherents = Adhérent.objects.all()
+				else :
+					federations_visibles = VueFederation.objects.filter(detenteur=detenteur)
+					for federation in federations_visibles : adherents += federation.adherents()
 	if adherents :
 		return render(request, 'datascope/fichier_adherents.html', {
 			'adherents': adherents,

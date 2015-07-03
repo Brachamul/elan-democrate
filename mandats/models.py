@@ -13,7 +13,6 @@ class Institution(models.Model):
 	nom = models.CharField(max_length=1023) # Jeunes Démocrates, Mouvement Démocrate des Yvelines, Paris
 	prefixe = models.CharField(max_length=10) # "des" Jeunes Démocrates, "de" Paris
 	classe = models.ForeignKey(MetaInstitution, blank=True, null=True) # Commune, Fédération, ...
-	code = models.CharField(max_length=255, blank=True, null=True, help_text="Dans le cas d'une fédéation JDem, c'est le numéro de fédé, par exemple '78'.")
 	def __str__(self): return self.nom
 	class Meta: permissions = (('gere_les_mandats', 'gère les mandats'),)
 
@@ -40,8 +39,10 @@ class Detenteur(models.Model):
 	date_de_debut = models.DateField(blank=True, null=True, help_text="En cas d'arrivée après le début du mandat") # en cas de début différent du mandat
 	date_de_fin = models.DateField(blank=True, null=True, help_text="En cas de départ avant la fin du mandat") # en cas de fin différente du mandat
 	peut_voir_la_federation = models.ManyToManyField(VueFederation, blank=True)
+	def peut_voir_le_fichier_national(self): return self.mandat.institution.nom == "Jeunes Démocrates" and self.titre.nom == "Président(e)" or self.titre.nom == "Secrétaire"
 	def __str__(self): return "{titre} {prefixe} {institution}".format(titre=self.titre, prefixe=self.mandat.institution.prefixe, institution=self.mandat.institution.nom)
 	def actif(self):
 		if self.date_de_fin : return datetime.now().date() < self.date_de_fin # Vrai si la date de fin n'est pas encore passée
 		else : return True # Vrai également s'il n'y a pas de date de fin
 	class Meta: permissions = (('gere_les_mandats', 'gère les mandats'),)
+

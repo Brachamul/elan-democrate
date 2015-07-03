@@ -31,8 +31,8 @@ from mandats.models import Detenteur
 @receiver(post_save, sender=Detenteur)
 def accorder_une_vue_a_un_detenteur(sender, created, **kwargs):
 	if created :
-		detenteur = kwargs.get('detenteur')
-		if detenteur.mandat.institution.code and detenteur.titre == "Président" or detenteur.titre == "Secrétaire" :
+		detenteur = kwargs.get('instance')
+		if detenteur.mandat.institution.code and detenteur.titre.nom == "Président(e)" or detenteur.titre.nom == "Secrétaire" :
 			if detenteur.mandat.institution.classe == "Fédération JDem" :
 				try : vue = VueFederation(federation=detenteur.mandat.institution.code)
 				except VueFederation.DoesNotExist : pass
