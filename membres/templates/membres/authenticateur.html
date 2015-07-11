@@ -7,7 +7,7 @@
 	<br>
 	<div class="messages">
 	{% for message in messages %}
-		<div{% if message.tags %} class="alert alert-{{message.tags}}"{% endif %}>{{ message }}</div>
+		<div{% if message.tags %} class="alert alert-{{message.tags}} alert-dismissible"{% endif %}>{{ message }}</div>
 	{% endfor %}
 	</div>
 {% endif %}
@@ -114,6 +114,7 @@
 {% else %}
 
 	<form
+		class="ajax-form"
 		method="POST"
 		action="{% url 'connexion' %}"
 		role="form"
@@ -144,6 +145,35 @@
 
 
 {% endif %}
+
+<form
+	id="daform"
+	method="POST"
+	action="{% url 'form_test' %}"
+	role="form"
+	enctype="multipart/form-data"
+	>{% csrf_token %}
+<h1>DA FORM</h1>
+<input name="potato">
+<submit>
+</form>
+<div id="daform-response" style="background-color: blue; color: white;"></div>
+
+<script>
+	
+$('.ajax-form').submit(function(){
+	$.ajax({
+		data: $(this).serialize(), // Form data
+		type: $(this).attr('method'), // GET or POST
+		url: $(this).attr('action'), // URL action
+		success: function(response) {
+			$('#daform-response').html(response)
+		}
+	})
+	return false; // cancel original submit event
+})
+
+</script>
 
 </div>
 </body>

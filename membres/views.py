@@ -46,6 +46,9 @@ def process_profil_changes(request, user, profil) :
 		profil.save()
 		messages.success(request, "Votre nom courant a bien été modifié.")
 
+def form_test(request):
+	if request.method == 'POST': return HttpResponse('Truly, this was a %s.' % request.POST.get('potato'))
+	else : return HttpResponse('This was not a true potato.')
 
 ### Enregistrement
 

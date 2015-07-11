@@ -210,3 +210,4 @@ Meta
 * ~~**Add logging**~~ (1h)
 * revamp all page titles
 * make more inpage loads
+* timeout and fallback if google fonts / jquery not accessible
