@@ -24,6 +24,8 @@ Membres
 * ~~Ne pas pré-écrire "None" dans la description quand il n'y en a pas~~
 * Autres utilisateurs en ligne en ce moment
 * Créer un processus de validation du nom courant (pour qu'il reste non-anonyme)
+* Adhésioniversaire
+* Membres non adhérents ?
 
 
 ***
@@ -157,6 +159,7 @@ Fichier Adhérents
 * ~~**créer un tableau de bord affichant les évolutions lors du chargement d'un fichier**~~ (2h)
 * ajouter une maintenance pour virer tout les trucs useless générés pendant le processus (genre les adhérents_du_fichier)
 * lancer une notification lors de la mise à jour du fichier
+* remplacer FichierAdhérent et Adhérent par FichierAdherent et Adherent
 
 
 ***
@@ -204,4 +207,8 @@ Meta
 
 * ~~Retirer la DB des commits~~ (1h)
 * ~~Replace prints by logging or add .encode("utf-8")~~ (1h)
+* remove special chars in logging anyway
 * ~~**Add logging**~~ (1h)
+* revamp all page titles
+* make more inpage loads
+* Fix logging on prod

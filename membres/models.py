@@ -10,11 +10,18 @@ from fichiers_adherents.models import Adhérent
 class Profil(models.Model):
 	# Ce profil est rempli par l'utilisateur ou un administrateur lorsque le modèle officiel n'est pas à jour
 	user = models.OneToOneField(User, blank=True, null=True)
-	adherent = models.OneToOneField(Adhérent, blank=True, null=True)
+	adherent = models.OneToOneField(Adhérent, blank=True, null=True, on_delete=models.SET_NULL)
 	nom_courant = models.CharField(max_length=255, blank=True, null=True)
 	bio = models.TextField(max_length=255, blank=True, null=True)
 	notes = models.TextField(blank=True, null=True) # Visible uniquement par les responsables
-	def __str__(self): return self.nom_courant
+	def email(self):
+		email = None
+		try : email = self.adherent.email
+		except AttributeError : pass
+		try : email = self.user.email
+		except AttributeError : pass
+		return email
+	def __str__(self): return ("%s (%s)" % (self.nom_courant, self.email()))
 
 @receiver(post_save, sender=Adhérent) # Quand un adhérent est ajouté via le fichier, on créé un profil 
 def generer_le_profil_d_un_adherent(sender, created, **kwargs):

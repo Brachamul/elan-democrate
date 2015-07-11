@@ -1,15 +1,17 @@
-import logging
 import csv
+import logging
+import sys
+
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, render, render_to_response, redirect
-from django.http import HttpResponseRedirect, HttpResponse, HttpRequest
-from django.template import RequestContext
-from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
 from django.contrib import messages
-from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponseRedirect, HttpResponse, HttpRequest
+from django.shortcuts import get_object_or_404, render, render_to_response, redirect
+from django.template import RequestContext
 
-import sys
+from datascope.models import mettre_a_jour_les_federations
 
 from .models import *
 from .forms import *
@@ -30,10 +32,10 @@ def televersement(request):
 				importation(nouveau_fichier) # Importe les données du fichier dans la base "AdhérentDuFichier"
 				return redirect('visualisation_du_fichier_adherent', fichier_id=nouveau_fichier.id )
 			else:
-				return render(request, 'fichiers_adherents/upload.html', {'upload_form': upload_form})
+				return render(request, 'fichiers_adherents/upload.html', {'upload_form': upload_form, 'page_title': "Téléverser un fichier adhérents"})
 		else:
 			upload_form = TéléversementDuFichierAdhérentForm()
-			return render(request, 'fichiers_adherents/upload.html', {'upload_form': upload_form})
+			return render(request, 'fichiers_adherents/upload.html', {'upload_form': upload_form, 'page_title': "Téléverser un fichier adhérents"})
 	else:
 		messages.error(request, "Vous n'avez pas les droits d'accès au téléversement du fichier des adhérents.")
 		return redirect('accueil')
@@ -53,7 +55,8 @@ def activer_le_fichier_adherent(request, fichier_id):
 	fichier = get_object_or_404(FichierAdhérents, id=fichier_id)
 	for nouvel_adherent in fichier.nouveaux_adherents(): nouvel_adherent.creer_un_nouvel_adherent()
 	for adherent_maj in fichier.adherents_maj(): adherent_maj.mettre_a_jour_un_adherent()
-	return render(request, 'fichiers_adherents/merci.html')		
+	mettre_a_jour_les_federations() # recharge les permissions de vue sur les fédérations en cas de nouvelles fédérations
+	return render(request, 'fichiers_adherents/merci.html', {'page_title': "Merci !"})		
 
 def importation(fichier):
 	# Lis le fichier CSV importé et crée une instance AdhérentDuFichier pour chacun d'entre eux
@@ -80,10 +83,6 @@ def importation(fichier):
 			nouvel_adherent.commune = row['Commune']
 			nouvel_adherent.save()
 
-
-
 def process_csv_date(csv_date):
-	if csv_date : 
-		processed_date = datetime.datetime.strptime(csv_date, '%m/%d/%Y').date()
-		return processed_date
+	if csv_date : return datetime.strptime(csv_date, '%m/%d/%Y').date()
 	else : return None
