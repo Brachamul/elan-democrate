@@ -1,9 +1,28 @@
 {% extends "base.html" %}
 
 {% block content %}{{ block.super }}
-<p style="text-align: center">
-	<a href="{% url 'initialisation_edem'%}" class="btn btn-primary">Initialize JDem mandat data</a>
-	<a href="{% url 'delete_all_mandates'%}" class="btn btn-primary">Delete all mandat data</a>
-</p>
+
+<div class="col-md-4" style="text-align: center;">
+
+	<div class="panel panel-default">
+	<div class="panel-heading"><h2>Contrôle des mandats</h2></div>
+	<div class="panel-body">
+		<p><a href="{% url 'initialisation_edem'%}" class="btn btn-primary">Initialize JDem mandat data</a></p>
+		<p><a href="{% url 'delete_all_mandates'%}" class="btn btn-primary">Delete all mandat data</a></p>
+	</div>
+	</div>
+
+</div>
+
+<div class="col-md-4" style="text-align: center;">
+
+	<div class="panel panel-default">
+	<div class="panel-heading"><h2>Contrôle du fichier</h2></div>
+	<div class="panel-body">
+		<p><a href="{% url 'delete_all_adherents'%}" class="btn btn-primary">Delete all adherent data</a></p>
+	</div>
+	</div>
+
+</div>
 
 {% endblock content %}

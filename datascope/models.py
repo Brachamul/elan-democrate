@@ -14,7 +14,7 @@ class VueFederation(models.Model):
 	numero_de_federation = models.CharField(max_length=255, help_text="C'est le numéro de la fédé, par exemple '78'.")
 	federation = models.ForeignKey(Institution)
 	titres = models.ManyToManyField(Titre, help_text="Ce sont les titres qui permettent d'accéder aux données, par exemple 'secrétaire' et 'président'.")
-	def __str__(self): return self.federation
+	def __str__(self): return self.numero_de_federation
 	def adherents(self): return Adhérent.objects.filter(fédération=self.numero_de_federation)
 	def generer_les_titres_par_defaut(self):
 		for titre in self.federation.institution.meta_institution.titres_par_defaut :
@@ -29,7 +29,9 @@ def mettre_a_jour_les_federations():
 	for numero_de_federation in numeros_de_federations :
 		try : vue = VueFederation.objects.get(numero_de_federation=numero_de_federation)
 		except VueFederation.DoesNotExist :
-			nouvelle_vue = VueFederation(federation=federation)
+			nouvelle_vue = VueFederation(numero_de_federation=numero_de_federation)
+			nouvelle_institution = Institution.objects.get_or_create(nom=numero_de_federation, prefixe="du", meta_institution=MetaInstitution.objects.get(nom="Fédération JDem"))[0]
+			nouvelle_vue.federation = nouvelle_institution
 			nouvelle_vue.save()
 	return VueFederation.objects.all()
 

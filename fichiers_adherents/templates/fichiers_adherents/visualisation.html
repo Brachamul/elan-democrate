@@ -33,8 +33,6 @@
 		<h4>Non-renouvellements</h4>
 	</div>
 
-	{% if fichier.jours_depuis_le_fichier_precedent %}
-	{% endif %}
 </div>
 
 <br/>
@@ -46,7 +44,7 @@ ce fichier est <strong>plus récent</strong> que le précédent de <strong>{{ fi
 {% elif fichier.jours_depuis_le_fichier_precedent < 0 %}
 ce fichier est <strong>plus ancien</strong> que le fichier actuel de <strong>{{ fichier.jours_depuis_le_fichier_precedent }} jours</strong>.
 {% else %}
-ce fichier est daté du <strong>même jour</strong> que le fichier actuel.
+ce fichier est daté du <strong>même jour</strong> que le fichier actuel (ou il n'y a pas encore de fichier dans la base).
 {% endif %}
 </p>
 

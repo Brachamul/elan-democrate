@@ -10,6 +10,10 @@ def tableau_de_bord(request):
     return render(request, 'tableau_de_bord/tableau_de_bord.html', {'page_title': "Tableau de bord"})
 
 from mandats.models import *
+from fichiers_adherents.models import *
+from datascope.models import *
+from membres.models import *
+
 @login_required
 def initialisation_edem(request):
 	if not MetaInstitution.objects.all() : # Il n'y a pas de méta-institutions, ce qui implique une base de données vierge
@@ -80,4 +84,17 @@ def delete_all_mandates(request):
 	Mandat.objects.all().delete()
 	Detenteur.objects.all().delete()
 	messages.success(request, "Les mandats ont tous été supprimés")
+	return redirect('tableau_de_bord')
+
+
+
+@login_required
+def delete_all_adherents(request):
+	Adhérent.objects.all().delete()
+	FichierAdhérents.objects.all().delete()
+	AdhérentDuFichier.objects.all().delete()
+	Profil.objects.exclude(pk=1).delete()
+	Institution.objects.filter(meta_institution=MetaInstitution.objects.get(nom="Fédération JDem")).delete()
+	VueFederation.objects.all().delete()
+	messages.success(request, "Les adherents et fichiers ont tous été supprimés")
 	return redirect('tableau_de_bord')
