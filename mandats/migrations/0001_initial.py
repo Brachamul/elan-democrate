@@ -2,72 +2,93 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-from django.conf import settings
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('auth', '0001_initial'),
+        ('membres', '0007_auto_20150629_2155'),
     ]
 
     operations = [
         migrations.CreateModel(
             name='Detenteur',
             fields=[
-                ('user', models.OneToOneField(to=settings.AUTH_USER_MODEL, serialize=False, primary_key=True)),
-                ('titre', models.CharField(max_length=1023)),
-                ('charge', models.CharField(max_length=1023, blank=True, null=True)),
-                ('date_de_debut', models.DateField(blank=True, null=True)),
-                ('date_de_fin', models.DateField(blank=True, null=True)),
+                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
+                ('charge', models.CharField(max_length=1023, null=True, blank=True)),
+                ('date_de_debut', models.DateField(help_text="En cas d'arrivée après le début du mandat", blank=True, null=True)),
+                ('date_de_fin', models.DateField(help_text='En cas de départ avant la fin du mandat', blank=True, null=True)),
             ],
             options={
+                'permissions': (('gere_les_mandats', 'gère les mandats'),),
             },
-            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='Institution',
             fields=[
-                ('id', models.AutoField(auto_created=True, verbose_name='ID', primary_key=True, serialize=False)),
+                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
                 ('nom', models.CharField(max_length=1023)),
                 ('prefixe', models.CharField(max_length=10)),
             ],
             options={
+                'permissions': (('gere_les_mandats', 'gère les mandats'),),
             },
-            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='Mandat',
             fields=[
-                ('id', models.AutoField(auto_created=True, verbose_name='ID', primary_key=True, serialize=False)),
-                ('date_de_debut', models.DateField(blank=True, null=True)),
-                ('date_de_fin', models.DateField(blank=True, null=True)),
+                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
+                ('date_de_debut', models.DateField(null=True)),
+                ('date_de_fin', models.DateField(null=True, blank=True)),
                 ('institution', models.ForeignKey(to='mandats.Institution')),
             ],
             options={
+                'permissions': (('gere_les_mandats', 'gère les mandats'),),
             },
-            bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='MetaInstitution',
             fields=[
-                ('id', models.AutoField(auto_created=True, verbose_name='ID', primary_key=True, serialize=False)),
+                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
                 ('nom', models.CharField(max_length=255)),
             ],
             options={
+                'permissions': (('gere_les_mandats', 'gère les mandats'),),
             },
-            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Titre',
+            fields=[
+                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
+                ('nom', models.CharField(max_length=1023)),
+            ],
+            options={
+                'permissions': (('gere_les_mandats', 'gère les mandats'),),
+            },
+        ),
+        migrations.AddField(
+            model_name='metainstitution',
+            name='titres_par_defaut',
+            field=models.ManyToManyField(blank=True, to='mandats.Titre'),
         ),
         migrations.AddField(
             model_name='institution',
-            name='classe',
+            name='meta_institution',
             field=models.ForeignKey(blank=True, to='mandats.MetaInstitution', null=True),
-            preserve_default=True,
         ),
         migrations.AddField(
             model_name='detenteur',
             name='mandat',
-            field=models.OneToOneField(to='mandats.Mandat'),
-            preserve_default=True,
+            field=models.ForeignKey(to='mandats.Mandat'),
+        ),
+        migrations.AddField(
+            model_name='detenteur',
+            name='profil',
+            field=models.ForeignKey(to='membres.Profil'),
+        ),
+        migrations.AddField(
+            model_name='detenteur',
+            name='titre',
+            field=models.ForeignKey(to='mandats.Titre'),
         ),
     ]

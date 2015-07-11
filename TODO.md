@@ -25,7 +25,7 @@ Membres
 * Autres utilisateurs en ligne en ce moment
 * Créer un processus de validation du nom courant (pour qu'il reste non-anonyme)
 * Adhésioniversaire
-
+* Membres non adhérents ?
 
 
 ***
@@ -207,6 +207,8 @@ Meta
 
 * ~~Retirer la DB des commits~~ (1h)
 * ~~Replace prints by logging or add .encode("utf-8")~~ (1h)
+* remove special chars in logging anyway
 * ~~**Add logging**~~ (1h)
 * revamp all page titles
 * make more inpage loads
+* Fix logging on prod

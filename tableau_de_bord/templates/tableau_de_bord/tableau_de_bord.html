@@ -1,23 +1,9 @@
 {% extends "base.html" %}
 
-{% block head %}{{ block.super }}
-
-<title>EDEM - Tableau de bord</title>
-
-{% endblock head %}
-
-
-
-{% block header %}{{ block.super }}
-<div class="jumbotron">
-	<div class="container">
-		<h1 style="display: inline-block;">Tableau de bord</h1>
-	</div>
-</div>
-{% endblock header %}
-
-
-
 {% block content %}{{ block.super }}
+<p style="text-align: center">
+	<a href="{% url 'initialisation_edem'%}" class="btn btn-primary">Initialize JDem mandat data</a>
+	<a href="{% url 'delete_all_mandates'%}" class="btn btn-primary">Delete all mandat data</a>
+</p>
 
 {% endblock content %}

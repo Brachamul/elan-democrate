@@ -7,14 +7,13 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('datascope', '__first__'),
-        ('mandats', '0005_auto_20150628_1204'),
+        ('mandats', '0002_auto_20150705_2107'),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='detenteur',
-            name='peut_voir_la_federation',
-            field=models.ManyToManyField(to='datascope.VueFederation'),
+            model_name='institution',
+            name='titres',
+            field=models.ManyToManyField(blank=True, to='mandats.Titre'),
         ),
     ]
