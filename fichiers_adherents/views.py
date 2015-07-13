@@ -22,7 +22,7 @@ def televersement(request):
 		if request.method == "POST":
 			upload_form = TéléversementDuFichierAdhérentForm(request.POST, request.FILES)
 			if upload_form.is_valid():
-				logging.info("Un nouveau fichier adhérent a été téléversé par {user}.".format(user=request.user).encode('utf8'))
+				logging.info("A new adherent file was uploaded by {user}.".format(user=request.user).encode('utf8'))
 				fichier = request.FILES['fichier_csv']
 				importateur = request.user
 				slug = request.POST.get('slug')

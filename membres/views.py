@@ -1,4 +1,3 @@
-import logging
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
@@ -79,7 +78,6 @@ def enregistrement(request):
 				except Adhérent.DoesNotExist : messages.error(request, "Ce numéro adhérent n'existe pas dans la base de données des Jeunes Démocrates.")
 				else :
 					if "@" in adherent.email :
-						logging.info("Envoi d'email de création de compte à {email}".format(email=adherent.email).encode('utf8'))
 						backend.SendEmailConfirmationCode(request, adherent)
 						messages.success(request, "Un email a été envoyé à l'adresse correspondant à ce numéro dans le fichier adhérent. Merci de suivre les instructions contenues dans cet email.")
 					else : messages.error(request, "Notre fichier adhérent ne contient pas d'adresse email valide pour ce numéro adhérent. Nous ne pouvons donc pas vous authentifier.")
@@ -93,11 +91,8 @@ def enregistrement(request):
 				# Cet email n'existe pas dans la base utilisateur
 				# Regardons si c'est un adhérent existant dans la base
 				try : adherent = Adhérent.objects.get(email=email)
-				except Adhérent.DoesNotExist :
-					backend.SendEmailInvalidNotification(request, email)
-				else :
-					logging.info("Envoi d'email de création de compte à {}".format(email).encode('utf8'))
-					backend.SendEmailConfirmationCode(request, adherent)
+				except Adhérent.DoesNotExist : backend.SendEmailInvalidNotification(request, email)
+				else : backend.SendEmailConfirmationCode(request, adherent)
 			else :
 				# l'email est déjà inscrit dans la base, on envoie un code d'authentification
 				backend.AskForAuthCode(request, user)
@@ -120,8 +115,9 @@ def url_enregistrement(request, num_adherent, email_confirmation_code):
 	if backend.EmailConfirmationCheck(request, adherent=adherent, code=email_confirmation_code) :
 		backend.Register(request, adherent=adherent, email=adherent.email)
 		user = User.objects.get(username=adherent.num_adhérent)
-		messages.success(request, "Votre compte a bien été créé, vous pouvez désormais vous connecter.")
-		status = "logging_in"
+		messages.success(request, "Votre compte a bien été créé. Un email vous a été envoyé pour votre première connexion.")
+		backend.AskForAuthCode(request, user)
+		status = "complete"
 	
 	else : messages.error(request, "L'authentification a échoué.")
 
