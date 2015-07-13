@@ -52,37 +52,37 @@ def form_test(request):
 
 ### Enregistrement
 
-from .forms import UserForm
+def auth_template(request, status):
+	# Si on est en train de répondre 
+	if request.is_ajax() : 
+		if status == "registering" : return 'membres/auth_enregistrement.html'
+		elif status == "complete" : return 'membres/auth_complete.html'
+		else : return 'membres/auth_connexion.html'
+	else : return 'membres/empty_box.html'
 
 def enregistrement(request):
 	context = RequestContext(request)
-
-	# A boolean value for telling the template whether the registration was successful.
-	# Set to False initially. Code changes value to True when registration succeeds.
-	registered = False
-
-	# If it's a HTTP POST, we're interested in processing form data.
-	if request.method == 'POST':
-		numero_ou_email = request.POST.get('numero_ou_email')
-
-		# regardons si c'est un numéro adhérent (donc isdigit) ou une adresse mail (avec un @)
+	numero_ou_email = request.POST.get('numero_ou_email')
+	status = "registering"
+	if numero_ou_email :
+	# on a une demande d'enregistrement avec un numéro d'adhérent ou un email
+		
+	# regardons si c'est un numéro adhérent (donc isdigit) ou une adresse mail (avec un @)
 		if numero_ou_email.isdigit() :
-			num_adhérent = numero_ou_email
 			# Cela ressemble à un numéro adhérent !
+			num_adhérent = numero_ou_email
 			try : user = User.objects.get(username=num_adhérent)
 			except User.DoesNotExist :
 				# Ce numéro n'existe pas dans la base utilisateur
 				# Regardons si c'est un adhérent existant dans la base
 				try : adherent = Adhérent.objects.get(num_adhérent=num_adhérent)
-				except Adhérent.DoesNotExist :
-					messages.error(request, "Ce numéro adhérent n'existe pas dans la base de données des Jeunes Démocrates.")
+				except Adhérent.DoesNotExist : messages.error(request, "Ce numéro adhérent n'existe pas dans la base de données des Jeunes Démocrates.")
 				else :
 					if "@" in adherent.email :
 						logging.info("Envoi d'email de création de compte à {email}".format(email=adherent.email).encode('utf8'))
 						backend.SendEmailConfirmationCode(request, adherent)
 						messages.success(request, "Un email a été envoyé à l'adresse correspondant à ce numéro dans le fichier adhérent. Merci de suivre les instructions contenues dans cet email.")
-					else :
-						messages.error(request, "Notre fichier adhérent ne contient pas d'adresse email valide pour ce numéro adhérent. Nous ne pouvons donc pas vous authentifier.")
+					else : messages.error(request, "Notre fichier adhérent ne contient pas d'adresse email valide pour ce numéro adhérent. Nous ne pouvons donc pas vous authentifier.")
 			else : messages.info(request, "Cet adhérent est déjà enregistré sur Élan Démocrate.")
 
 		elif "@" in numero_ou_email :
@@ -93,98 +93,77 @@ def enregistrement(request):
 				# Cet email n'existe pas dans la base utilisateur
 				# Regardons si c'est un adhérent existant dans la base
 				try : adherent = Adhérent.objects.get(email=email)
-				except Adhérent.DoesNotExist : pass
+				except Adhérent.DoesNotExist :
+					backend.SendEmailInvalidNotification(request, email)
 				else :
-					logging.info("Envoi d'email de création de compte à {email}".format(email=adherent.email).encode('utf8'))
+					logging.info("Envoi d'email de création de compte à {}".format(email).encode('utf8'))
 					backend.SendEmailConfirmationCode(request, adherent)
-			messages.info(request, "Si cette adresse existe dans notre base adhérent, un message de création de compte lui a été envoyé.")
+			else :
+				# l'email est déjà inscrit dans la base, on envoie un code d'authentification
+				backend.AskForAuthCode(request, user)
 
-		else :
-			messages.error(request, "Vous semblez avoir entré quelque chose qui n'est ni un numéro adhérent, ni une adresse mail...")
+			messages.success(request, "Un email a été envoyé à {} !".format(email))
+			status = "complete"
 
-	return render_to_response(
-			'membres/enregistrement.html',
-			{'registering': True},
-			context)
+		else : messages.error(request, "Vous semblez avoir entré quelque chose qui n'est ni un numéro adhérent, ni une adresse mail...")
+
+	return render(request, auth_template(request, status), {'numero_ou_email': numero_ou_email, 'status': status })
 
 
 
 def url_enregistrement(request, num_adherent, email_confirmation_code):
 	# intervient lorsqu'un utilisateur clique sur le lien de validation de son adresse mail dans sa boîte de messagerie
 	context = RequestContext(request)
-	registered = False
-	try : adherent = Adhérent.objects.get(num_adhérent=num_adherent) # existe t-il bien un adhérent avec ce numéro ?
-	except Adhérent.DoesNotExist : messages.info(request, "Ce numéro adhérent n'existe pas dans la base de données des Jeunes Démocrates.")
-	else :
-		if backend.EmailConfirmationCheck(request, adherent=adherent, code=email_confirmation_code) :
-			backend.Register(request, adherent=adherent, email=adherent.email)
-			user = User.objects.get(username=adherent.num_adhérent)
-			registered = True
-	if registered :
+	status = "registering"
+	adherent = get_object_or_404(Adhérent, num_adhérent=num_adherent) # existe t-il bien un adhérent avec ce numéro ?
+	
+	if backend.EmailConfirmationCheck(request, adherent=adherent, code=email_confirmation_code) :
+		backend.Register(request, adherent=adherent, email=adherent.email)
+		user = User.objects.get(username=adherent.num_adhérent)
 		messages.success(request, "Votre compte a bien été créé, vous pouvez désormais vous connecter.")
-		return redirect(reverse('accueil'))
-	else :
-		return render_to_response(
-			'membres/enregistrement.html',
-			{'registering': True},
-			context)
+		status = "logging_in"
+	
+	else : messages.error(request, "L'authentification a échoué.")
+
+	return render(request, auth_template(request, status), {'numero_ou_email': numero_ou_email, 'status': status })
 
 
-### Connexion
+### Conenxion
+
 
 def connexion(request):
 	context = RequestContext(request)
-
-	if request.method == 'POST' :
-
-		username = None # default to no username
-		code_sent = False
-		numero_ou_email = request.POST.get('numero_ou_email')
+	user = False # si on ne trouve pas d'user, c'est que numero / email sont faux
+	code_sent = False # default to no code sent
+	status = False
+	numero_ou_email = request.POST.get('numero_ou_email')
+	if numero_ou_email :
+		# on a une demande de connexion avec un numéro d'adhérent ou un email
 		# regardons si c'est un numéro adhérent (donc isdigit) ou une adresse mail (avec un @)
 		if numero_ou_email.isdigit() :
-			username = numero_ou_email
+			try : user = User.objects.get(username=numero_ou_email)
+			except User.DoesNotExist : messages.error(request, "Ce numéro ne correspond pas à un adhérent de notre fichier.")
 		elif "@" in numero_ou_email :
-			email = numero_ou_email
-			try : user = User.objects.get(email=email)
-			except User.DoesNotExist :
-				messages.error(request, "Nous ne connaissons pas cette adresse email. Si vous n'avez pas encore de compte, vous pouvez en créer un.")
-			else : username = user.username
+			try : user = User.objects.get(email=numero_ou_email)
+			except User.DoesNotExist : code_sent = backend.SendUserDoesNotExistEmail(request, numero_ou_email) 
 		elif numero_ou_email == "" : pass
 		# on ne met pas de message d'erreur si l'utilisateur a directement cliqué sur le bouton de connexion sans remplir le champs
 		else : messages.error(request, "Vous semblez avoir entré quelque chose qui n'est ni un numéro adhérent, ni une adresse mail...")
 
-		if request.POST.get('form_type') == "send_code" and username != None :
-			# l'utilisateur demande l'envoi d'un code d'authentification
-			try : user = User.objects.get(username=username)
-			except User.DoesNotExist : messages.error(request, "Nous n'avons pas de membres enregistrés à cette adresse ou à ce numéro.")
-			else : code_sent = backend.AskForAuthCode(request, user)
+		if user : code_sent = backend.AskForAuthCode(request, user)
 
-		elif request.POST.get('form_type') == "login" and username != None  :
-			# l'utilisateur demande à être authentifié
-			code = request.POST.get('code', False)
-			if code == False : messages.error(request, "Merci d'entrer un code, ou d'en demander un nouveau.")
-			else :
-				auth_result = backend.authenticate_and_login(request, username, code)
-				if auth_result == "connected" :
-					return HttpResponseRedirect('/')
-				elif auth_result == "bad-details" :
-					return render_to_response('membres/connexion.html', {'numero_ou_email': numero_ou_email, 'code_sent': True, 'logging_in': True}, context)
-				else :
-					return render_to_response('membres/connexion.html', {'numero_ou_email': numero_ou_email, 'code_sent': False, 'logging_in': True}, context)
+		if code_sent :
+			status = "complete"
+			messages.success(request, "Un email a été envoyé à votre adresse.")
 
-		return render_to_response('membres/connexion.html', {'numero_ou_email': numero_ou_email, 'code_sent': code_sent, 'logging_in': True}, context)
+	return render(request, auth_template(request, status), {'numero_ou_email': numero_ou_email, 'status': status })
 
-	return render_to_response('membres/connexion.html', {'logging_in': True}, context) # if something fails, reload page with messages
 
 def url_connexion(request, username, code):
 	context = RequestContext(request)
 	auth_result = backend.authenticate_and_login(request, username, code)
-	if auth_result == "connected" :
-		return HttpResponseRedirect('/')
-	if auth_result == "bad-details" :
-		return render_to_response('membres/connexion.html', {'username': username, 'code_sent': True, 'logging_in': True}, context)
-	return render_to_response('membres/connexion.html', {'username': username, 'code_sent': False, 'logging_in': True}, context)
-
+	if auth_result == "connected" : status = "complete"
+	return redirect('accueil')
 
 
 ### Deconnexion

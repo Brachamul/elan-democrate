@@ -5,8 +5,13 @@ from django.http import HttpResponseRedirect, HttpResponse, HttpRequest
 from django.shortcuts import get_object_or_404, render, render_to_response, redirect
 
 def accueil(request, page_number=1, fil=None):
-	return render( request, 'accueil/accueil.html', {
+	if request.user.is_authenticated() :
+		return render( request, 'accueil/accueil.html', {
 		'message_accueil' : 'accueil/message_accueil.html',
 		'aggregateur': aggregateur(request, page_number=page_number, fil=fil),
 		'page_title': "Accueil",
 		})
+	else :
+		return render( request, 'empty_box.html', {
+		'page_title': "Authentification",
+			})

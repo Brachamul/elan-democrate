@@ -1,0 +1,68 @@
+<style>
+
+body {
+	background-color: #111;
+	color: gray;
+	font-family: "Open Sans", Arial, Helvetica, sans-serif;
+}
+
+.container {
+	width: 44rem;
+	max-width: 100%;
+	margin: 0 auto;
+	margin-top: 25%;
+	margin-top: 15vh;
+}
+
+h1.elan-democrate {
+	color: #EC7C34;
+	font-size: 3rem;
+	text-align: center;
+	margin-bottom: 3rem;
+}
+
+h2 {
+	font-size: 2rem;
+	margin-bottom: 2rem;
+}
+
+input#numero_adherent_ou_email { margin: 2rem 0; }
+
+input.form-control { background-color: #444; border-color: #444; color: #EC7C34; }
+
+input.form-control:focus {
+		border-color: #ccc;
+        -moz-box-shadow:    none;
+        -webkit-box-shadow: none;
+        box-shadow:         none;
+}
+
+a,
+a:link { color: inherit; } /* override bootstrap blue links */
+p a:link { font-weight: bold; } /* fat links when inside paragraphs */
+a:hover { text-decoration: none; border-bottom: .1em solid #EC7C34; color: #EC7C34; } /* override bootstrap blue links */
+
+label { font-weight: normal; } /* override bootstrap bold labels */
+p { margin-bottom: 15px;}
+
+
+.btn.orange { background-color: #222; border-color: #777; color: #777; margin-top: 1rem; font-weight: normal; }
+.btn.orange:hover { border-color: #EC7C34; color: #EC7C34; }
+.btn.orange:focus { border-color: #ccc; color: #ccc; }
+
+.glyphicon { padding-right: .3em; }
+
+hr { margin-top: 3rem; border: 1px solid #808080; border-radius: 1em; }
+
+.spoiler > a ~ * { display: none; }
+.spoiler > a:target ~ * { display: block; } /* noscript fallback */
+.spoiler > a { font-weight: normal; margin-top: 2rem; display: block; outline: 0; }
+.spoiler > a::before { content: "+ ";}
+.spoiler > a.active::before { content: "- ";}
+.spoiler > a:hover,
+.spoiler > a:focus	{ color: #EC7C34; border: none; text-decoration: none; }
+.spoiler p 	{ font-size: .9em; border-left: .15em solid #333; padding-left: 1rem; }
+
+input:invalid:not(:focus) { border: none; }
+
+</style>
