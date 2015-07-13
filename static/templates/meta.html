@@ -14,19 +14,32 @@
 	  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 	<![endif]-->
 
-	<link rel="stylesheet" href="{% get_static_prefix %}bootstrap/css/bootstrap.min.css" >
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 	<link rel="stylesheet" href="{% get_static_prefix %}css/base.css" >
-	<link rel="stylesheet" href="{% get_static_prefix %}css/auth.css" >
 	<link rel="shortcut icon" href="{% get_static_prefix %}images/favicon.ico" type="image/x-icon" />
+
 	<title>{% block title %}ÉDEM{% endblock title %} - Élan Démocrate</title>
 	{% block head %}{% endblock head %}
+
+	{% comment %} http://writing.colin-gourlay.com/safely-using-ready-before-including-jquery/ {% endcomment %}
+	<script>(function(w,d,u){w.readyQ=[];w.bindReadyQ=[];function p(x,y){if(x=="ready"){w.bindReadyQ.push(y);}else{w.readyQ.push(x);}};var a={ready:p,bind:p};w.$=w.jQuery=function(f){if(f===d||f===u){return a}else{p(f)}}})(window,document)</script>
 
 </head>
 
 <body>
 
-{% if user.is_authenticated %}
+<noscript>
+<input id="noscript-dismiss" type="checkbox" style="display: none;"/>
+<div class="alert alert-danger alert-dismissible" style="text-align: center; border-radius: 0;">
+	<label class="close" for="noscript-dismiss">×</label>
+	<span><strong>Attention : JavaScript n'est pas activé.</strong></span><br>
+	<span style="font-size: .8em;"><a href="http://enable-javascript.com/fr" class="alert-link">Activez JavaScript</a> pour bénéficier de toutes les fonctionalités d'Élan Démocrate.</span>
+</div>
+<style>#noscript-dismiss:checked + .alert { display: none }</style>
+</noscript>
 
+{% if user.is_authenticated %}
+	
 	<header>
 		{% block header %}{% endblock header %}
 	</header>
@@ -46,17 +59,18 @@
 {% endif %}
 
 {% block scripts %}
-<!-- SCRIPTS BLOCK -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="{% get_static_prefix %}js/jquery-2.1.3.min.js"><\/script>') }
-</script>
-<script src="{% get_static_prefix %}bootstrap/js/bootstrap.min.js"></script>
 
-<script>
-	jQuery(function($) {
-		//$ is jQuery
-	});
+<!-- SCRIPTS BLOCK -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="{% get_static_prefix %}js/jquery-2.1.3.min.js"><\/script>')
 </script>
+
+{% comment %} http://writing.colin-gourlay.com/safely-using-ready-before-including-jquery/ {% endcomment %}
+<script>(function($,d){$.each(readyQ,function(i,f){$(f)});$.each(bindReadyQ,function(i,f){$(d).bind("ready",f)})})(jQuery,document)</script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+{% comment %}<script src="{% get_static_prefix %}bootstrap/js/bootstrap.min.js"></script>{% endcomment %}
 
 {% comment %} More scripts are loaded here by lower level templates {% endcomment %}
 

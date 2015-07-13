@@ -34,6 +34,7 @@ def count_active_registration_codes(adherent):
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
 
 site_url = settings.SITE_URL
+emailer = settings.EMAIL_HOST_USER
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
 
@@ -97,12 +98,13 @@ def SendAuthCode(user):
 	code = new_credentials.code
 	lien = site_url + "/m/connexion/" + user.username + "&" + code
 	send_mail(
-		"[Élan Démocrate] Code d'accès : {code}".format(code=code),
-		"Cliquez sur le lien suivant {lien}, ou entrez le code {code} sur le site Élan Démocrate pour vous authentifier.\n\n"
+		"[Élan Démocrate] Lien de connexion",
+		"Cliquez sur le lien suivan pour vous authentifier: \n\n"
+		"{lien}"
 		"Ce code d'accès ne sera valable qu'une fois.\n\n"
 		"Les mots de passe sont fréquemment utilisés à plusieurs endroits sur internet. Il suffit qu'un seul des sites auxquels vous êtes inscrit soit piraté pour que votre mot de passe soit compromis. La méthode d'authentification utilisée ici, avec un code d'accès à utilisation unique, vous protège du vol de mot de passe.\n\n"
-		"N'oubliez pas de changer souvent le mot de passe de votre boîte email !".format(code=code, lien=lien),
-		'noreply.elandemocrate@gmail.com',
+		"N'oubliez pas de changer souvent le mot de passe de votre boîte email !".format(lien=lien),
+		emailer,
 		[user.email],
 		fail_silently=False
 		)
@@ -121,12 +123,9 @@ def AskForAuthCode(request, user):
 	if 0 < active_codes < maximum_number_of_active_authentication_codes :
 		messages.warning(request, "Vous semblez avoir déjà reçu au moins un code, vérifiez votre boîte mail...")
 		if SendAuthCode(user) :
-			messages.success(request, "Un nouveau code d'accès vous a été envoyé par mail.")
-	elif active_codes >= maximum_number_of_active_authentication_codes :
-		messages.error(request, "Vous avez déjà reçu {x} codes d'accès au cours de la dernière heure ! Vérifiez votre boîte mail...".format(x=active_codes))
-	else :
-		if SendAuthCode(user) :
-			messages.success(request, "Un code d'accès vous a été envoyé par mail.")
+			pass # messages.success(request, "Un nouveau code d'accès vous a été envoyé par mail.")
+	elif active_codes >= maximum_number_of_active_authentication_codes : messages.error(request, "Vous avez déjà reçu {x} codes d'accès au cours de la dernière heure ! Vérifiez votre boîte mail...".format(x=active_codes))
+	elif SendAuthCode(user) : messages.success(request, "Un code d'accès vous a été envoyé par mail.")
 	return True # confirm that there is now an active code
 
 
@@ -144,7 +143,7 @@ def SendEmailConfirmationCode(request, adherent):
 		"Si vous êtes vous-même auteur de cette demande, cliquez sur le lien suivant pour finaliser la création de votre compte :\n\n{lien}\n\n"
 		"Attention : votre adresse email est la clé de votre compte sur Élan Démocrate. Il est de votre responsabilité de vous prémunir contre la prise de contrôle de votre adresse email, en changeant notamment votre mot de passe de manière fréquente.\n\n"
 		"À bientôt sur le réseau Élan Démocrate !\n\n".format(lien=lien),
-		'noreply.elandemocrate@gmail.com',
+		emailer,
 		[new_email_confirmation_instance.email],
 		fail_silently=False
 		)
@@ -152,13 +151,60 @@ def SendEmailConfirmationCode(request, adherent):
 
 def EmailConfirmationCheck(request, adherent, code):
 	# Vérifie que le code de confirmation d'une adresse mail est bon
-	try :
-		confirmation = EmailConfirmationInstance.objects.get(adherent=adherent, code=code)
-	except EmailConfirmationInstance.DoesNotExist :
-		# ! Check if code is still valid
-		messages.error(request, "Le code de confirmation est incorrect")
-	else :
-		return True
+	try : confirmation = EmailConfirmationInstance.objects.get(adherent=adherent, code=code)
+	except EmailConfirmationInstance.DoesNotExist : messages.error(request, "Le code de confirmation est incorrect")
+	else : return True
+
+def SendEmailInvalidNotification(request, email):
+	# Si l'adresse ne correspond pas à un adhérent, on ne peut pas créer le compte
+	send_mail(
+		"[Élan Démocrate] Votre adresse n'existe pas dans notre base adhérent",
+		"Bonjour,\n\n"
+		"Sur le site Élan Démocrate, une demande de création de compte basée sur votre adresse mail a été réalisée.\n\n"
+		"Malheureusement, votre adresse n'existe pas dans notre base adhérent. Il est possible qu'elle n'ait pas été mise à jour dans le fichier des adhérents, ou qu'une autre erreur se soit produite.\n\n"
+#		"Si vous êtes bien adhérent du Mouvement Démocrate de moins de 33 ans, cliquez sur le lien suivant pour obtenir de l'aide.\n\n{aide}\n\n"
+#		"Sinon, vous pouvez adhérer au Mouvement Démocrate en cliquant ici : \n\n{adherer}\n\n"
+		"Peut-être à bientôt, sur le réseau Élan Démocrate !\n\n", #.format(aide=?, adherer=?)
+		emailer,
+		[email],
+		fail_silently=False
+		)
+	return True
+
+def SendEmailAlreadyRegistered(request, email):
+	# Si l'adresse correspond déjà à un adhérent
+	lien = site_url + "/m/connexion/"
+	send_mail(
+		"[Élan Démocrate] Votre adresse mail est déjà associée à un compte",
+		"Bonjour,\n\n"
+		"Sur le site Élan Démocrate, une demande de création de compte basée sur votre adresse mail a été réalisée.\n\n"
+		"Malheureusement, votre adresse est déjà associée à un compte sur Elan Démocrate.\n\n"
+		"Vous pouvez vous connecter à ce compte en vous rendant ici :\n\n"
+		"{lien}\n\n"
+		"Peut-être à bientôt, sur le réseau Élan Démocrate !\n\n".format(lien=lien),
+		emailer,
+		[email],
+		fail_silently=False
+		)
+	return True
+
+def SendUserDoesNotExistEmail(request, email):
+	# Si l'adresse ne correspond pas à un adhérent, on ne peut pas logger l'utilisateur
+	lien = site_url + "/m/enregistrement/"
+	send_mail(
+		"[Élan Démocrate] Vous n'avez pas encore créé de compte",
+		"Bonjour,\n\n"
+		"Sur le site Élan Démocrate, une demande de connexion basée sur votre adresse mail a été réalisée.\n\n"
+		"Malheureusement, votre adresse n'est pas encore associée à un compte.\n\n"
+		"Si vous êtes adhérent jeune du Mouvement Démocrate, inscrivez-vous en vous rendant ici :\n\n"
+		"{lien}\n\n"
+#		"Sinon, vous pouvez adhérer au Mouvement Démocrate en cliquant ici : \n\n{adherer}\n\n"
+		"Peut-être à bientôt, sur le réseau Élan Démocrate !\n\n".format(lien=lien),
+		emailer,
+		[email],
+		fail_silently=False
+		)
+	return True
 
 def Register(request, adherent, email) :
 	new_user = User(username=adherent.num_adhérent, email=email)
