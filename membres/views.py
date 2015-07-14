@@ -11,7 +11,7 @@ from django.views.generic import TemplateView, DetailView
 
 from .models import *
 from django.contrib.auth.models import User
-from fichiers_adherents.models import Adhérent
+from fichiers_adherents.models import Adherent
 from mandats.models import Detenteur
 from mandats.views import pecho_les_mandats
 #from mandats.forms import NouveauMandatForm
@@ -75,8 +75,8 @@ def enregistrement(request):
 			except User.DoesNotExist :
 				# Ce numéro n'existe pas dans la base utilisateur
 				# Regardons si c'est un adhérent existant dans la base
-				try : adherent = Adhérent.objects.get(num_adhérent=num_adhérent)
-				except Adhérent.DoesNotExist : messages.error(request, "Ce numéro adhérent n'existe pas dans la base de données des Jeunes Démocrates.")
+				try : adherent = Adherent.objects.get(num_adhérent=num_adhérent)
+				except Adherent.DoesNotExist : messages.error(request, "Ce numéro adhérent n'existe pas dans la base de données des Jeunes Démocrates.")
 				else :
 					if "@" in adherent.email :
 						backend.SendEmailConfirmationCode(request, adherent)
@@ -91,8 +91,8 @@ def enregistrement(request):
 			except User.DoesNotExist :
 				# Cet email n'existe pas dans la base utilisateur
 				# Regardons si c'est un adhérent existant dans la base
-				try : adherent = Adhérent.objects.get(email=email)
-				except Adhérent.DoesNotExist : backend.SendEmailInvalidNotification(request, email)
+				try : adherent = Adherent.objects.get(email=email)
+				except Adherent.DoesNotExist : backend.SendEmailInvalidNotification(request, email)
 				else : backend.SendEmailConfirmationCode(request, adherent)
 			else :
 				# l'email est déjà inscrit dans la base, on envoie un code d'authentification
@@ -111,7 +111,7 @@ def url_enregistrement(request, num_adherent, email_confirmation_code):
 	# intervient lorsqu'un utilisateur clique sur le lien de validation de son adresse mail dans sa boîte de messagerie
 	context = RequestContext(request)
 	status = "registering"
-	adherent = get_object_or_404(Adhérent, num_adhérent=num_adherent) # existe t-il bien un adhérent avec ce numéro ?
+	adherent = get_object_or_404(Adherent, num_adhérent=num_adherent) # existe t-il bien un adhérent avec ce numéro ?
 	
 	try : user = User.objects.get(username=num_adherent)
 	except User.DoesNotExist : 

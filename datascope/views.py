@@ -11,22 +11,21 @@ from django.template import RequestContext
 from django.views import generic
 from django.views.generic import TemplateView, DetailView
 
-from fichiers_adherents.models import Adhérent
+from fichiers_adherents.models import Adherent
 from membres.models import Profil
 from mandats.models import Detenteur
 from .models import *
 
 
-
 @login_required
 def fichier_adherents(request):
 	detenteurs = Detenteur.objects.filter(profil = request.user.profil)
-	if request.user.has_perm('gere_les_mandats') or request.user.is_superuser() : adherents = Adhérent.objects.all()
+	if request.user.has_perm('gere_les_mandats') or request.user.is_superuser() : adherents = Adherent.objects.all()
 	elif detenteurs :
 		adherents = []
 		for detenteur in detenteurs :
 			if detenteur.actif() :
-				if detenteur.peut_voir_le_fichier_national() : adherents = Adhérent.objects.all()
+				if detenteur.peut_voir_le_fichier_national() : adherents = Adherent.objects.all()
 				else :
 					federations_visibles = VueFederation.objects.filter(detenteur=detenteur)
 					for federation in federations_visibles : adherents += federation.adherents()

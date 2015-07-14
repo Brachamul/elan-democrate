@@ -94,13 +94,23 @@
 						<a href="{% url 'televersement_du_fichier_adhérent' %}">
 							<span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span>
 							Téléverser un fichier adhérents</a>
+					</li>
 					{% endif %}
 					{% if perms.fichiers_adhérents.gere_les_mandats %}
 					<li>
 						<a href="{% url 'mandats' %}">
 							<span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
 							Voir les mandats</a>
+					</li>
 					{% endif %}
+					{% if user.is_superuser %}
+					<li>
+						<a href="{% url 'tableau_de_bord' %}">
+							<span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span>
+							Tableau de bord</a>
+					</li>
+					{% endif %}
+
 				</ul>
 			</li>
 			{% endif %}

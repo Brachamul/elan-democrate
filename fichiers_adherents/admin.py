@@ -6,28 +6,28 @@ from .models import *
 
 class AdherentDuFichierInline(admin.TabularInline):
 	# For each feature, display development projects that can improve it
-	model = AdhérentDuFichier
+	model = AdherentDuFichier
 	fk_name = 'fichier'
 	extra = 0
 
-class FichierAdhérentsAdmin(admin.ModelAdmin):
-	model = FichierAdhérents
+class FichierAdherentsAdmin(admin.ModelAdmin):
+	model = FichierAdherents
 	inlines = [AdherentDuFichierInline, ]
 
-admin.site.register(FichierAdhérents, FichierAdhérentsAdmin)
+admin.site.register(FichierAdherents, FichierAdherentsAdmin)
 
 
 
-class AdhérentDuFichierAdmin(admin.ModelAdmin):
-	model = AdhérentDuFichier
+class AdherentDuFichierAdmin(admin.ModelAdmin):
+	model = AdherentDuFichier
 	list_display = ("__str__", "num_adhérent", "adhérent", "fichier")
 
-admin.site.register(AdhérentDuFichier, AdhérentDuFichierAdmin)
+admin.site.register(AdherentDuFichier, AdherentDuFichierAdmin)
 
 
 
-class AdhérentAdmin(admin.ModelAdmin):
-    model = Adhérent
+class AdherentAdmin(admin.ModelAdmin):
+    model = Adherent
     list_display = ("num_adhérent", "nom", "prénom", "fédération", "email", "importé_par_le_fichier")
 
-admin.site.register(Adhérent, AdhérentAdmin)
+admin.site.register(Adherent, AdherentAdmin)

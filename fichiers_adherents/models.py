@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from datetime import datetime, timedelta
 
 
-class FichierAdhérents(models.Model):
+class FichierAdherents(models.Model):
 
 	date_d_import = models.DateTimeField(auto_now_add=True)
 	importateur = models.ForeignKey(User)
@@ -18,7 +18,7 @@ class FichierAdhérents(models.Model):
 
 	def adherents(self) :
 		''' liste les adherents ayant été importés par ce fichier '''
-		return AdhérentDuFichier.objects.filter(fichier=self)
+		return AdherentDuFichier.objects.filter(fichier=self)
 
 	def nouveaux_adherents(self) :
 		''' liste le nombre d'adhérents qui seraient introduits par ce fichier '''
@@ -31,8 +31,8 @@ class FichierAdhérents(models.Model):
 		''' liste le nombre d'adhérents qui ont réadhéré '''
 		adherents_maj = []
 		for adherent in self.adherents():
-			try : adherent_actuel_correspondant = Adhérent.objects.get(num_adhérent=adherent.num_adhérent)
-			except Adhérent.DoesNotExist : pass
+			try : adherent_actuel_correspondant = Adherent.objects.get(num_adhérent=adherent.num_adhérent)
+			except Adherent.DoesNotExist : pass
 			else : 
 				if adherent.date_dernière_cotisation != adherent_actuel_correspondant.date_dernière_cotisation :
 					# si l'adhérent existe et qu'il a réadhéré
@@ -45,8 +45,8 @@ class FichierAdhérents(models.Model):
 		return latest_entry.date_dernière_cotisation
 
 	def jours_depuis_le_fichier_precedent(self) :
-		try : date_actuelle = Adhérent.objects.latest('date_dernière_cotisation').date_dernière_cotisation
-		except Adhérent.DoesNotExist : return False
+		try : date_actuelle = Adherent.objects.latest('date_dernière_cotisation').date_dernière_cotisation
+		except Adherent.DoesNotExist : return False
 		else :
 			jours = (date_actuelle - self.date_ultime()).days
 			return jours
@@ -61,7 +61,7 @@ class FichierAdhérents(models.Model):
 
 
 
-class Adhérent(models.Model):
+class Adherent(models.Model):
 	# Ce profil reprend une partie des données du fichier adhérent officiel du MoDem. Il ne peut pas être modifié par l'utilisateur
 	num_adhérent = models.IntegerField(primary_key=True)
 	fédération = models.IntegerField(null=True, blank=True)
@@ -80,7 +80,7 @@ class Adhérent(models.Model):
 	email = models.CharField(max_length=255, null=True, blank=True)
 	mandats = models.CharField(max_length=255, null=True, blank=True)
 	commune = models.CharField(max_length=255, null=True, blank=True) # Dans le cas où la personne est élu dans une autre commune que sa ville de résidence.
-	importé_par_le_fichier = models.ForeignKey(FichierAdhérents, null=True, blank=True, on_delete=models.SET_NULL)
+	importé_par_le_fichier = models.ForeignKey(FichierAdherents, null=True, blank=True, on_delete=models.SET_NULL)
 
 	def anciennete(self): return datetime.now() - self.date_première_adhésion
 	def actif(self): return (datetime.now().year - self.date_dernière_cotisation.year) > settings.DUREE_D_ACTIVITE
@@ -89,13 +89,13 @@ class Adhérent(models.Model):
 	def __str__(self): return '{} {}'.format(self.prénom, self.nom)
 
 
-class AdhérentDuFichier(models.Model):
+class AdherentDuFichier(models.Model):
 
 	class Meta:
 		verbose_name_plural = "adhérents du fichier"
 
-	fichier = models.ForeignKey(FichierAdhérents)
-	adhérent = models.ForeignKey(Adhérent, null=True)
+	fichier = models.ForeignKey(FichierAdherents)
+	adhérent = models.ForeignKey(Adherent, null=True)
 	fédération = models.IntegerField(null=True)
 	date_première_adhésion = models.DateField(null=True)
 	date_dernière_cotisation = models.DateField(null=True)
@@ -115,8 +115,8 @@ class AdhérentDuFichier(models.Model):
 	commune = models.CharField(max_length=255, null=True)
 
 	def est_nouveau(self):
-		try : adherent_actuel_correspondant = Adhérent.objects.get(num_adhérent=self.num_adhérent)
-		except Adhérent.DoesNotExist : return True
+		try : adherent_actuel_correspondant = Adherent.objects.get(num_adhérent=self.num_adhérent)
+		except Adherent.DoesNotExist : return True
 		else : return False
 
 	def transferer_les_donnees_dun_adherent_du_fichier(self, adherent_de_la_base):
@@ -142,13 +142,13 @@ class AdhérentDuFichier(models.Model):
 
 	def creer_un_nouvel_adherent(self):
 		''' Ajoute un adhérent du fichier importé à la base '''
-		nouvel_adherent = Adhérent(num_adhérent=self.num_adhérent)
+		nouvel_adherent = Adherent(num_adhérent=self.num_adhérent)
 		self.transferer_les_donnees_dun_adherent_du_fichier(nouvel_adherent)
 		nouvel_adherent.save()
 	
 	def mettre_a_jour_un_adherent(self):
 		''' Met à jour les adhérents existants avec les données du fichier importé '''
-		adherent_maj = Adhérent.objects.get(num_adhérent=self.num_adhérent)
+		adherent_maj = Adherent.objects.get(num_adhérent=self.num_adhérent)
 		self.transferer_les_donnees_dun_adherent_du_fichier(adherent_maj)
 
 	def __str__(self): return ('%s %s') % (self.prénom, self.nom)

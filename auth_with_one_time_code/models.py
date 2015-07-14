@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
-from fichiers_adherents.models import Adhérent
+from fichiers_adherents.models import Adherent
 
 import string, random
 def randomly_generated_code(i): return ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(i))
@@ -24,7 +24,7 @@ class Credentials(models.Model):
 		verbose_name_plural = "Credentials"
 
 class EmailConfirmationInstance(models.Model):
-	adherent = models.ForeignKey(Adhérent) # credentials are linked to one specific user
+	adherent = models.ForeignKey(Adherent) # credentials are linked to one specific user
 	email = models.EmailField() # we'll send them an email !
 	code = models.CharField(max_length=32, default=randomly_generated_code(32))
 	date = models.DateTimeField(auto_now=True)

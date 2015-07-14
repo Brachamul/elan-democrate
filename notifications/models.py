@@ -7,7 +7,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.timesince import timesince
 from django.contrib.auth.models import User
-from fichiers_adherents.models import Adhérent
+from fichiers_adherents.models import Adherent
 
 class Notification(models.Model):
 

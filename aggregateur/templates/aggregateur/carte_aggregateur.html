@@ -38,7 +38,7 @@
 {% comment %}			<span class="source">(<a href="#">loremipsum.com</a>)</span> {% endcomment %}
 					<div class="meta">
 						<span class="date">Il y a {{ post.date|timesince }},</span>
-						<span class="author">par <a href="{% url 'membres' %}{{ post.author.id }}">{{ post.author.profil.nom_courant }}</a></span>
+						<span class="author">par <a href="{% url 'membres' %}{{ post.author.id }}">{{ post.author.profil.nom_courant }}</a></span>{% if post.channel %}, <span class="channel">dans {{ post.channel }}</span>{% endif %}
 {% comment %}			<span class="channel"> dans <a href="#">/c/posts</a></span> {% endcomment %}
 					</div>
 					<div class="actions">
