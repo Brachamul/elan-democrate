@@ -21,7 +21,7 @@ from .models import *
 @login_required
 def fichier_adherents(request):
 	detenteurs = Detenteur.objects.filter(profil = request.user.profil)
-	if request.user.has_perm('gere_les_mandats') : adherents = Adhérent.objects.all()
+	if request.user.has_perm('gere_les_mandats') or request.user.is_superuser() : adherents = Adhérent.objects.all()
 	elif detenteurs :
 		adherents = []
 		for detenteur in detenteurs :

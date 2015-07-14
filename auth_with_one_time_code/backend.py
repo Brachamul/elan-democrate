@@ -1,3 +1,4 @@
+import logging
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
@@ -5,31 +6,6 @@ from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, render_to_response, redirect
 
 from .models import Credentials, EmailConfirmationInstance
-
-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
-
-# Rules of the Auth :
-hours_code_valid_for_authentication = 1
-maximum_number_of_active_authentication_codes = 3
-maximum_number_of_attempts = 3
-hours_code_valid_for_registration = 24
-
-# Processing the rules
-from datetime import timedelta
-from django.utils import timezone
-
-authentication_code_validity_threshold = timezone.now() - timedelta(hours=hours_code_valid_for_authentication)
-registration_code_validity_threshold = timezone.now() - timedelta(hours=hours_code_valid_for_registration)
-
-def count_active_authentication_codes(user):
-	return Credentials.objects.filter(
-		user=user,
-		date__gt=(timezone.now() - timedelta(hours=hours_code_valid_for_authentication))).count()
-
-def count_active_registration_codes(adherent):
-	return EmailConfirmationInstance.objects.filter(
-		adherent=adherent,
-		date__gt=(timezone.now() - timedelta(hours=hours_code_valid_for_registration))).count()
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
 
@@ -41,33 +17,26 @@ emailer = settings.EMAIL_HOST_USER
 class OneTimeCodeBackend :
 	
 	def authenticate(self, request, username=None, code=None):
-		user = User.objects.get(username=username)
-		email = user.email
-		credentials = Credentials.objects.filter(email=email, code=code)
-
-		for i in credentials :
-			# pour éviter le forcing, on empêche plus de 3 essais par utilisateur et par heure
-			i.attempts += 1
-			i.save()
-
-		if credentials.filter(date__gt=(authentication_code_validity_threshold)).count() > 0 :
-			# look for credentials fitting email and code, but not older than x number of hours ago
-			if credentials.filter(date__gt=(authentication_code_validity_threshold), attempts__lte=maximum_number_of_attempts).count() > 0 :
-				return user
-			else :
-				messages.error(request, "Trop de tentatives d'accès ont été réalisées dernièrement, merci d'attendre avant de renouveller l'opération.")
-				return None
+		user = get_object_or_404(User, username=username)
+		auth_successful = False # unless specified otherwise, we assume the authentication has failed
+		try : credentials = Credentials.objects.get(user=user, code=code)
+		except Credentials.DoesNotExist : messages.error(request, "Ce lien de connexion a expiré, car lien plus récent vous a déjà été envoyé.")
 		else :
-			# s'il ya des codes valides mais trop vieux
-			if credentials.count() > 0 :
-				messages.error(request, "Vos codes d'accès ne sont plus valables.")
+			if credentials.too_many_attempts() : messages.error(request, "Vous avez essayé de vous connecter plus de {} fois. Par mesure de sécurité, votre compte sera verouillé pendant {}h.".format(settings.AUTH_CODE_MAXIMUM_ATTEMPS, settings.AUTH_CODE_LIFESPAN))
+			elif credentials.is_expired() : messages.error(request, "Votre lien de connexion a expiré, car il vous a été envoyé il y a plus d'{}h. Merci de vous reconnecter.".format(settings.AUTH_CODE_LIFESPAN))
+			else : auth_successful = True
+		if auth_successful : return user
+		else :
+			try : credentials # if there are credentials, increment the attempts
+			except NameError: pass
+			else :
+				credentials.attempts += 1 # on compte une tentative supplémentaire
+				credentials.save()
 			return None
 
 	def get_user(self, user_id):
-		try:
-			return User.objects.get(pk=user_id)
-		except User.DoesNotExist:
-			return None
+		try: return User.objects.get(pk=user_id)
+		except User.DoesNotExist: return None
 
 def authenticate_and_login(request, username, code) :
 	user = authenticate(request=request, username=username, code=code)
@@ -92,15 +61,13 @@ def authenticate_and_login(request, username, code) :
 
 from django.core.mail import send_mail
 
-def SendAuthCode(user):
-	new_credentials = Credentials(user=user, email=user.email)
-	new_credentials.save()
-	code = new_credentials.code
+def SendAuthCode(user, code):
 	lien = site_url + "/m/connexion/" + user.username + "&" + code
+	print('Utilisateur n°{}, code {}, email : {}'.format(user, code, user.email))
 	send_mail(
 		"[Élan Démocrate] Lien de connexion",
 		"Cliquez sur le lien suivan pour vous authentifier: \n\n"
-		"{lien}"
+		"{lien}\n\n"
 		"Ce code d'accès ne sera valable qu'une fois.\n\n"
 		"Les mots de passe sont fréquemment utilisés à plusieurs endroits sur internet. Il suffit qu'un seul des sites auxquels vous êtes inscrit soit piraté pour que votre mot de passe soit compromis. La méthode d'authentification utilisée ici, avec un code d'accès à utilisation unique, vous protège du vol de mot de passe.\n\n"
 		"N'oubliez pas de changer souvent le mot de passe de votre boîte email !".format(lien=lien),
@@ -110,23 +77,18 @@ def SendAuthCode(user):
 		)
 	return True
 
-def DebugAuthCode(request, user):
-	# only used for debugging purposes
-	new_credentials = Credentials(user=user, email=user.email)
-	new_credentials.save()
-	code = new_credentials.code
-	return code
-
-
 def AskForAuthCode(request, user):
-	active_codes = count_active_authentication_codes(user)
-	if 0 < active_codes < maximum_number_of_active_authentication_codes :
-		messages.warning(request, "Vous semblez avoir déjà reçu au moins un code, vérifiez votre boîte mail...")
-		if SendAuthCode(user) :
-			pass # messages.success(request, "Un nouveau code d'accès vous a été envoyé par mail.")
-	elif active_codes >= maximum_number_of_active_authentication_codes : messages.error(request, "Vous avez déjà reçu {x} codes d'accès au cours de la dernière heure ! Vérifiez votre boîte mail...".format(x=active_codes))
-	elif SendAuthCode(user) : messages.success(request, "Un code d'accès vous a été envoyé par mail.")
-	return True # confirm that there is now an active code
+	try : credentials = Credentials.objects.get(user=user)
+	except Credentials.DoesNotExist : credentials = Credentials.objects.create(user=user)
+	else :
+		if credentials.is_expired() : credentials.regenerate()
+		elif credentials.too_many_attempts() : # Cet utilisateur a essayé de se connecter sans y parvenir plusieurs fois de suite.
+			messages.error(request, "Vous avez essayé de vous connecter plus de {} fois. Par mesure de sécurité, votre compte est temporairement verrouillé. pendant {}h.".format(settings.AUTH_CODE_MAXIMUM_ATTEMPS, settings.AUTH_CODE_LIFESPAN))
+			return False # Si le code avait expiré, un nouveau code aurait été envoyé.
+		elif not user.email : # Il n'y a pas de mail associé à cet utilisateur ?
+			messages.error(request, "Il n'y a pas d'adresse email associée à ce compte ! Bizarre ...")
+			return False
+	return SendAuthCode(user, credentials.code) # Confirmation qu'un code a été envoyé
 
 
 def SendEmailConfirmationCode(request, adherent):

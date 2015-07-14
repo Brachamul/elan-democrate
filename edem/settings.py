@@ -114,7 +114,6 @@ LOGIN_URL = 'connexion'
 LOGOUT_URL = 'deconnexion'
 LOGIN_REDIRECT_URL = 'accueil'
 
-AUTHENTICATION_BACKENDS = ('auth_with_one_time_code.backend.OneTimeCodeBackend',)
 
 LOGGING = {
     'version': 1,
@@ -165,6 +164,13 @@ LOGGING = {
 POSTS_PER_PAGE = 12 # nombre de posts qui s'affichent en page d'accueil
 PROFONDEUR_MAXIMALE_DES_COMMENTAIRES = 6 # niveau max de décente dans l'affichage des commentaires pour une même page
 DUREE_D_ACTIVITE = 2 # Nombre d'années d'activité des adhérents après leur dernière cotisation (année actuelle - année de cotisation > x)
+
+AUTHENTICATION_BACKENDS = ('auth_with_one_time_code.backend.OneTimeCodeBackend',) # Pas personnalisé, juste là pour info
+AUTH_CODE_LENGTH = 6 # longueur du code d'authentification, par exemple '6' donne 'J2DH92'
+AUTH_CODE_LIFESPAN = 1 # les codes d'authentification sont valides X heures
+AUTH_CODE_MAXIMUM_ATTEMPS = 3 # au bout de 3 essais, le code expire
+
+HELP_EMAIL_ADRESS = "[ Demandez à Antoine de créer une adresse d'aide, on en a pas encore ! ]"
 
 # API EMBEDLY
 EMBEDLY_KEY = "111e2b3ee0714950ad122d221fa7d444"

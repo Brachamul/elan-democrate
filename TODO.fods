@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rpt="http://openoffice.org/2005/report" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
- <office:meta><meta:creation-date>2015-07-11T13:03:06.487000000</meta:creation-date><dc:date>2015-07-13T23:03:19.590000000</dc:date><meta:editing-duration>PT21H12M24S</meta:editing-duration><meta:editing-cycles>8</meta:editing-cycles><meta:generator>LibreOffice/4.4.3.2$Windows_x86 LibreOffice_project/88805f81e9fe61362df02b9941de8e38a9b5fd16</meta:generator><meta:document-statistic meta:table-count="1" meta:cell-count="650" meta:object-count="0"/></office:meta>
+ <office:meta><meta:creation-date>2015-07-11T13:03:06.487000000</meta:creation-date><dc:date>2015-07-14T05:06:06.444000000</dc:date><meta:editing-duration>P1DT1H30M</meta:editing-duration><meta:editing-cycles>16</meta:editing-cycles><meta:generator>LibreOffice/4.4.3.2$Windows_x86 LibreOffice_project/88805f81e9fe61362df02b9941de8e38a9b5fd16</meta:generator><meta:document-statistic meta:table-count="1" meta:cell-count="686" meta:object-count="0"/></office:meta>
  <office:settings>
   <config:config-item-set config:name="ooo:view-settings">
    <config:config-item config:name="VisibleAreaTop" config:type="int">0</config:config-item>
    <config:config-item config:name="VisibleAreaLeft" config:type="int">0</config:config-item>
    <config:config-item config:name="VisibleAreaWidth" config:type="int">34392</config:config-item>
-   <config:config-item config:name="VisibleAreaHeight" config:type="int">48429</config:config-item>
+   <config:config-item config:name="VisibleAreaHeight" config:type="int">40978</config:config-item>
    <config:config-item-map-indexed config:name="Views">
     <config:config-item-map-entry>
      <config:config-item config:name="ViewId" config:type="string">view1</config:config-item>
      <config:config-item-map-named config:name="Tables">
       <config:config-item-map-entry config:name="Sheet1">
-       <config:config-item config:name="CursorPositionX" config:type="int">6</config:config-item>
-       <config:config-item config:name="CursorPositionY" config:type="int">31</config:config-item>
+       <config:config-item config:name="CursorPositionX" config:type="int">2</config:config-item>
+       <config:config-item config:name="CursorPositionY" config:type="int">76</config:config-item>
        <config:config-item config:name="HorizontalSplitMode" config:type="short">0</config:config-item>
        <config:config-item config:name="VerticalSplitMode" config:type="short">0</config:config-item>
        <config:config-item config:name="HorizontalSplitPosition" config:type="int">0</config:config-item>
@@ -23,7 +23,7 @@
        <config:config-item config:name="PositionLeft" config:type="int">0</config:config-item>
        <config:config-item config:name="PositionRight" config:type="int">0</config:config-item>
        <config:config-item config:name="PositionTop" config:type="int">0</config:config-item>
-       <config:config-item config:name="PositionBottom" config:type="int">0</config:config-item>
+       <config:config-item config:name="PositionBottom" config:type="int">35</config:config-item>
        <config:config-item config:name="ZoomType" config:type="short">0</config:config-item>
        <config:config-item config:name="ZoomValue" config:type="int">110</config:config-item>
        <config:config-item config:name="PageViewZoomValue" config:type="int">60</config:config-item>
@@ -229,7 +229,7 @@
      <text:p><text:sheet-name>???</text:sheet-name> (<text:title>???</text:title>)</text:p>
     </style:region-left>
     <style:region-right>
-     <text:p><text:date style:data-style-name="N2" text:date-value="2015-07-13">00/00/0000</text:date>, <text:time style:data-style-name="N2" text:time-value="22:51:34.219000000">00:00:00</text:time></text:p>
+     <text:p><text:date style:data-style-name="N2" text:date-value="2015-07-14">00/00/0000</text:date>, <text:time style:data-style-name="N2" text:time-value="05:05:36.871000000">00:00:00</text:time></text:p>
     </style:region-right>
    </style:header>
    <style:header-left style:display="false"/>
@@ -739,17 +739,17 @@
       <text:p>Authentification</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Rediriger l&apos;enregistrement sur une feuille de création de profil</text:p>
+      <text:p>Notification de changer le profil après première connexion</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>À faire</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Haute</text:p>
+     <table:table-cell table:number-columns-repeated="2" office:value-type="string" calcext:value-type="string">
+      <text:p>Moyen</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="1019"/>
+     <table:table-cell table:number-columns-repeated="1018"/>
     </table:table-row>
-    <table:table-row table:style-name="ro1">
+    <table:table-row table:style-name="ro1" table:visibility="filter">
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Meta</text:p>
      </table:table-cell>
@@ -757,15 +757,18 @@
       <text:p>Authentification</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Vérifier pourquoi le même code est envoyé deux fois</text:p>
+      <text:p>Refonte du backend d&apos;authentification</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>À faire</text:p>
+      <text:p>Fait</text:p>
      </table:table-cell>
-     <table:table-cell office:value-type="string" calcext:value-type="string">
+     <table:table-cell table:number-columns-repeated="2" office:value-type="string" calcext:value-type="string">
       <text:p>Haute</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="1019"/>
+     <table:table-cell office:value-type="float" office:value="6" calcext:value-type="float">
+      <text:p>6</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="1017"/>
     </table:table-row>
     <table:table-row table:style-name="ro1" table:visibility="filter">
      <table:table-cell office:value-type="string" calcext:value-type="string">
@@ -805,7 +808,7 @@
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="1017"/>
     </table:table-row>
-    <table:table-row table:style-name="ro1">
+    <table:table-row table:style-name="ro1" table:visibility="filter">
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Meta</text:p>
      </table:table-cell>
@@ -826,7 +829,7 @@
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="1017"/>
     </table:table-row>
-    <table:table-row table:style-name="ro1">
+    <table:table-row table:style-name="ro1" table:visibility="filter">
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Meta</text:p>
      </table:table-cell>
@@ -837,9 +840,15 @@
       <text:p>Focus on &quot;code&quot; after code is sent during connection</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>À faire</text:p>
+      <text:p>Fait</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="1020"/>
+     <table:table-cell table:number-columns-repeated="2" office:value-type="string" calcext:value-type="string">
+      <text:p>Faible</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="1017"/>
     </table:table-row>
     <table:table-row table:style-name="ro1">
      <table:table-cell office:value-type="string" calcext:value-type="string">
@@ -854,7 +863,13 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>À faire</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="1020"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Faible</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Moyen</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="1018"/>
     </table:table-row>
     <table:table-row table:style-name="ro1">
      <table:table-cell office:value-type="string" calcext:value-type="string">
@@ -869,24 +884,15 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>À faire</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="1020"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Faible</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Moyen</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="1018"/>
     </table:table-row>
-    <table:table-row table:style-name="ro1">
-     <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Meta</text:p>
-     </table:table-cell>
-     <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Authentification</text:p>
-     </table:table-cell>
-     <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Ignorer les caractères &quot;espace&quot; dans le code d&apos;authentification</text:p>
-     </table:table-cell>
-     <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>À faire</text:p>
-     </table:table-cell>
-     <table:table-cell table:number-columns-repeated="1020"/>
-    </table:table-row>
-    <table:table-row table:style-name="ro1">
+    <table:table-row table:style-name="ro1" table:visibility="filter">
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Meta</text:p>
      </table:table-cell>
@@ -897,9 +903,15 @@
       <text:p>Le champs de connexion est rempli par &quot;None&quot; si il ne retrouve pas d&apos;adhérent, remplacer par rien</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>À faire</text:p>
+      <text:p>Fait</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="1020"/>
+     <table:table-cell table:number-columns-repeated="2" office:value-type="string" calcext:value-type="string">
+      <text:p>Faible</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="1017"/>
     </table:table-row>
     <table:table-row table:style-name="ro1">
      <table:table-cell office:value-type="string" calcext:value-type="string">
@@ -914,9 +926,15 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>À faire</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="1020"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Moyen</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Haute</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="1018"/>
     </table:table-row>
-    <table:table-row table:style-name="ro1">
+    <table:table-row table:style-name="ro1" table:visibility="filter">
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Meta</text:p>
      </table:table-cell>
@@ -937,7 +955,7 @@
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="1018"/>
     </table:table-row>
-    <table:table-row table:style-name="ro1">
+    <table:table-row table:style-name="ro1" table:visibility="filter">
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Meta</text:p>
      </table:table-cell>
@@ -948,9 +966,15 @@
       <text:p>Si un mail est envoyé pour l&apos;enregistrement, ne pas remontrer le formulaire</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>À faire</text:p>
+      <text:p>Fait</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="1020"/>
+     <table:table-cell table:number-columns-repeated="2" office:value-type="string" calcext:value-type="string">
+      <text:p>Faible</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="1017"/>
     </table:table-row>
     <table:table-row table:style-name="ro1">
      <table:table-cell office:value-type="string" calcext:value-type="string">
@@ -965,7 +989,13 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>À faire</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="1020"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Faible</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>?</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="1018"/>
     </table:table-row>
     <table:table-row table:style-name="ro1" table:visibility="filter">
      <table:table-cell office:value-type="string" calcext:value-type="string">
@@ -1395,7 +1425,7 @@
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="1017"/>
     </table:table-row>
-    <table:table-row table:style-name="ro1">
+    <table:table-row table:style-name="ro1" table:visibility="filter">
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Fichier</text:p>
      </table:table-cell>
@@ -1583,9 +1613,18 @@
       <text:p>remplacer FichierAdhérent et Adhérent par FichierAdherent et Adherent</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>À faire</text:p>
+      <text:p>Fait</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="1020"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Moyen</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Faible</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="1017"/>
     </table:table-row>
     <table:table-row table:style-name="ro1" table:visibility="filter">
      <table:table-cell office:value-type="string" calcext:value-type="string">
@@ -1964,7 +2003,7 @@
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="1017"/>
     </table:table-row>
-    <table:table-row table:style-name="ro1">
+    <table:table-row table:style-name="ro1" table:visibility="filter">
      <table:table-cell table:number-columns-repeated="2" office:value-type="string" calcext:value-type="string">
       <text:p>Meta</text:p>
      </table:table-cell>
@@ -2145,6 +2184,27 @@
       <text:p>Notifications</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Mettre un message quand pas de notifs (ou alors toujours avoir au moins la notif de changer le profil)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>À faire</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Faible</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Moyen</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="1018"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Meta</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Notifications</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Passer lues les notifs cliquées et afficher différemment les notifs nonlues</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
@@ -2165,7 +2225,13 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>À faire</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="1020"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Faible</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Haute</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="1018"/>
     </table:table-row>
     <table:table-row table:style-name="ro1" table:visibility="filter">
      <table:table-cell office:value-type="string" calcext:value-type="string">
@@ -2418,7 +2484,7 @@
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="1018"/>
     </table:table-row>
-    <table:table-row table:style-name="ro1">
+    <table:table-row table:style-name="ro1" table:visibility="filter">
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Meta</text:p>
      </table:table-cell>
@@ -2496,7 +2562,7 @@
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="1018"/>
     </table:table-row>
-    <table:table-row table:style-name="ro1">
+    <table:table-row table:style-name="ro1" table:visibility="filter">
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Meta</text:p>
      </table:table-cell>
@@ -2520,7 +2586,7 @@
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="1017"/>
     </table:table-row>
-    <table:table-row table:style-name="ro1">
+    <table:table-row table:style-name="ro1" table:visibility="filter">
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Meta</text:p>
      </table:table-cell>
@@ -2531,7 +2597,7 @@
       <text:p>Envoyer des emails différents si trop de codes ont déjà été envoyés</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>À faire</text:p>
+      <text:p>Fait</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Faible</text:p>
@@ -2539,9 +2605,12 @@
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Moyen</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="1018"/>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="1017"/>
     </table:table-row>
-    <table:table-row table:style-name="ro1">
+    <table:table-row table:style-name="ro1" table:visibility="filter">
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Meta</text:p>
      </table:table-cell>
@@ -2552,17 +2621,41 @@
       <text:p>Si quelqu&apos;un tente de s&apos;enregistrer avec une adresse existante, on lui envoie un mail de connexion</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>À faire</text:p>
-     </table:table-cell>
-     <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Moyen</text:p>
+      <text:p>Fait</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Faible</text:p>
      </table:table-cell>
-     <table:table-cell table:number-columns-repeated="1018"/>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Moyen</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="1017"/>
     </table:table-row>
-    <table:table-row table:style-name="ro1" table:number-rows-repeated="1048442">
+    <table:table-row table:style-name="ro1" table:visibility="filter">
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Meta</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Authentification</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Mail d&apos;assistance défini dans les settings (et autres changements de settings)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>Fait</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="2" office:value-type="string" calcext:value-type="string">
+      <text:p>Faible</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="1017"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro1" table:number-rows-repeated="1048441">
      <table:table-cell table:number-columns-repeated="1024"/>
     </table:table-row>
     <table:table-row table:style-name="ro1">
@@ -2571,7 +2664,7 @@
    </table:table>
    <table:named-expressions/>
    <table:database-ranges>
-    <table:database-range table:name="__Anonymous_Sheet_DB__0" table:target-range-address="Sheet1.A1:Sheet1.G123" table:display-filter-buttons="true">
+    <table:database-range table:name="__Anonymous_Sheet_DB__0" table:target-range-address="Sheet1.A1:Sheet1.G134" table:display-filter-buttons="true">
      <table:filter>
       <table:filter-and>
        <table:filter-condition table:field-number="3" table:value="À faire" table:operator="="/>

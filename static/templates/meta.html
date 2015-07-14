@@ -44,7 +44,7 @@
 		{% block header %}{% endblock header %}
 	</header>
 	
-	<div class="container-fluid main-container" >
+	<div id="main-container" class="container-fluid main-container" >
 		{% block content %}{% endblock content %}
 	</div>
 	
@@ -59,6 +59,8 @@
 {% endif %}
 
 {% block scripts %}
+
+{% include "spinner.html" %}
 
 <!-- SCRIPTS BLOCK -->
 

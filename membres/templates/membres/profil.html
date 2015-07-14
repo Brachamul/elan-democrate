@@ -24,7 +24,7 @@
 					<h1>{{ profil.nom_courant }}</h1>
 				{% endif%}
 			</div>
-			{% if user == membre %}
+{% comment %}			{% if user == membre %}
 			<form class="pas-public" method="POST" action="" enctype="multipart/form-data">
 				<div class="form-group">
 					{% csrf_token %}
@@ -48,6 +48,7 @@
 				Modifier mon nom courant
 			</label>
 			{% endif %}
+{% endcomment %}
 		</div>
 
 		<div class="editable profile-picture">

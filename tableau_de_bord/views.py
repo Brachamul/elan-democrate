@@ -90,9 +90,9 @@ def delete_all_mandates(request):
 
 @login_required
 def delete_all_adherents(request):
-	Adhérent.objects.all().delete()
-	FichierAdhérents.objects.all().delete()
-	AdhérentDuFichier.objects.all().delete()
+	Adherent.objects.all().delete()
+	FichierAdherents.objects.all().delete()
+	AdherentDuFichier.objects.all().delete()
 	Profil.objects.exclude(pk=1).delete()
 	Institution.objects.filter(meta_institution=MetaInstitution.objects.get(nom="Fédération JDem")).delete()
 	VueFederation.objects.all().delete()

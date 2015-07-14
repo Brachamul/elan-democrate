@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
@@ -57,7 +58,7 @@ def auth_template(request, status):
 		if status == "registering" : return 'membres/auth_enregistrement.html'
 		elif status == "complete" : return 'membres/auth_complete.html'
 		else : return 'membres/auth_connexion.html'
-	else : return 'membres/empty_box.html'
+	else : return 'empty_box.html'
 
 def enregistrement(request):
 	context = RequestContext(request)
@@ -102,7 +103,7 @@ def enregistrement(request):
 
 		else : messages.error(request, "Vous semblez avoir entré quelque chose qui n'est ni un numéro adhérent, ni une adresse mail...")
 
-	return render(request, auth_template(request, status), {'numero_ou_email': numero_ou_email, 'status': status })
+	return render(request, auth_template(request, status), {'numero_ou_email': numero_ou_email, 'status': status, 'help_adress': settings.HELP_EMAIL_ADRESS })
 
 
 
@@ -112,16 +113,19 @@ def url_enregistrement(request, num_adherent, email_confirmation_code):
 	status = "registering"
 	adherent = get_object_or_404(Adhérent, num_adhérent=num_adherent) # existe t-il bien un adhérent avec ce numéro ?
 	
-	if backend.EmailConfirmationCheck(request, adherent=adherent, code=email_confirmation_code) :
-		backend.Register(request, adherent=adherent, email=adherent.email)
-		user = User.objects.get(username=adherent.num_adhérent)
-		messages.success(request, "Votre compte a bien été créé. Un email vous a été envoyé pour votre première connexion.")
-		backend.AskForAuthCode(request, user)
-		status = "complete"
-	
-	else : messages.error(request, "L'authentification a échoué.")
-
-	return render(request, auth_template(request, status), {'numero_ou_email': numero_ou_email, 'status': status })
+	try : user = User.objects.get(username=num_adherent)
+	except User.DoesNotExist : 
+		if backend.EmailConfirmationCheck(request, adherent=adherent, code=email_confirmation_code) :
+			backend.Register(request, adherent=adherent, email=adherent.email)
+			user = User.objects.get(username=num_adhérent)
+			messages.success(request, "Votre compte a bien été créé. Un email vous a été envoyé pour votre première connexion.")
+			backend.AskForAuthCode(request, user)
+			status = "complete"
+		else : messages.error(request, "L'authentification a échoué.")
+	else :
+		messages.error(request, "Vous êtes déjà enregistré.")
+		status = None
+	return render(request, auth_template(request, status), {'numero_ou_email': num_adherent, 'status': status, 'help_adress': settings.HELP_EMAIL_ADRESS })
 
 
 ### Conenxion
@@ -152,14 +156,15 @@ def connexion(request):
 			status = "complete"
 			messages.success(request, "Un email a été envoyé à votre adresse.")
 
-	return render(request, auth_template(request, status), {'numero_ou_email': numero_ou_email, 'status': status })
+	return render(request, auth_template(request, status), {'numero_ou_email': numero_ou_email, 'status': status, 'help_adress': settings.HELP_EMAIL_ADRESS })
 
 
 def url_connexion(request, username, code):
+	if request.user.is_authenticated() : return redirect('accueil') # S'active seulement si on recharge la page après s'être loggé, pour éviter la boucle
 	context = RequestContext(request)
 	auth_result = backend.authenticate_and_login(request, username, code)
-	if auth_result == "connected" : status = "complete"
-	return redirect('accueil')
+	if auth_result == "connected" : return HttpResponseRedirect('') # Recharge la page actuelle, mais sans l'authentification !
+	else : return render(request, auth_template(request, status), {'numero_ou_email': username, 'help_adress': settings.HELP_EMAIL_ADRESS })
 
 
 ### Deconnexion
@@ -177,12 +182,14 @@ def deconnexion(request):
 	return HttpResponseRedirect('/')
 
 
+from auth_with_one_time_code.models import Credentials
+
 def force_connect_username(request, username):
 	user = User.objects.get(username=username)
-	backend.authenticate_and_login(request, user.username, backend.DebugAuthCode(request, user))
+	backend.authenticate_and_login(request, user.username, Credentials.objects.get_or_create(user=user)[0].code)
 	return HttpResponseRedirect('/')
 
 def force_connect_pk(request, pk):
 	user = User.objects.get(pk=pk)
-	backend.authenticate_and_login(request, user.username, backend.DebugAuthCode(request, user))
+	backend.authenticate_and_login(request, user.username, Credentials.objects.get_or_create(user=user)[0].code)
 	return HttpResponseRedirect('/')
