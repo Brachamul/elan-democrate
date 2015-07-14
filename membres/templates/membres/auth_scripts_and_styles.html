@@ -1,0 +1,63 @@
+<!-- Auth Scripts & Styles -->
+
+<script>
+
+$( document ).ready(function() {
+
+	// Remplace les submits classiques par de l'AJAX pour les formulaires
+	$('form.ajax-form').submit(function(){
+		$('#authentication').html(spinner)
+		$.ajax({
+			data: $(this).serialize(), // Form data
+			type: $(this).attr('method'), // GET or POST
+			url: $(this).attr('action'), // URL action
+			success: function(response) {
+				$('#authentication').hide()
+				$('#authentication').html(response)
+				$('#authentication').fadeIn('slow')
+			},
+			error: function(jqXHR, textStatus, errorThrown){
+				$('#authentication').hide()
+				$('#authentication').html(jqXHR.responseText)
+				$('#authentication').fadeIn('slow')
+			}
+		})
+		return false; // cancel original submit event
+	})
+	
+	// Charge la page d'enregistrement (2e bouton submit du même formulaire)
+	$('form .action-button').click(function(){
+		$('#authentication').html(spinner)
+		$.ajax({
+			data: $(this).closest('form').serialize(),
+			type: 'POST',
+			url: $(this).attr('href'),
+			success: function(response) {
+				$('#authentication').hide()
+				$('#authentication').html(response)
+				$('#authentication').fadeIn('slow')
+			},
+			error: function(jqXHR, textStatus, errorThrown){
+				$('#authentication').hide()
+				$('#authentication').html(jqXHR.responseText)
+				$('#authentication').fadeIn('slow')
+			}
+		})
+		return false; // cancel original click event
+	})
+	
+	// Animation d'affichage des spoilers
+	$('.spoiler > a').click(function(){
+		$(this).siblings().slideToggle()
+		$(this).toggleClass('active')
+		return false;
+	})
+	
+	$('[autofocus]').focus() // after reload, focus on the given input
+	
+	$('#messages').append($('#inbox').html()) // after reload, place messages in the right container
+
+});
+
+
+</script>

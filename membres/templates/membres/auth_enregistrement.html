@@ -1,0 +1,39 @@
+{% include "messages.html" %}
+
+<h2>Créer un compte</h2>
+<form class="ajax-form" action="{% url 'enregistrement' %}"
+	method="POST" role="form" enctype="multipart/form-data">{% csrf_token %}
+	<div class="form-group">
+		<label class="control-label">Veuillez indiquer votre numéro d'adhérent, ou l'adresse mail que vous avez fourni au MoDem lors de votre adhésion :</label>
+		<input name="numero_ou_email" placeholder="Email ou n° adhérent"
+		value="{% if numero_ou_email %}{{ numero_ou_email }}{% endif %}" class="form-control" type="text" autofocus>
+	</div>
+	<p>
+		<button type="submit" class="btn orange"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Je créé mon compte</button>
+		<a class="btn orange action-button" href="{% url 'connexion' %}">
+			<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span> J'ai déjà un compte !</a>
+	</p>
+</form>
+
+<div class="spoiler">
+<a id="je-ne-suis-pas-adherent" href="#je-ne-suis-pas-adherent">Je ne suis pas / plus adhérent</a>
+<p>Seuls les adhérents jeunes du Mouvement Démocrate ont accès à cet espace. Cependant, si vous avez été adhérent par le passé, il y a moins de deux ans, il est possible que vos données soient encore accessibles, et vous pouvez vous enregistrer normalement. Pour adhérer ou réadhérer au Mouvement Démocrate, rendez-vous <a href="http://guepar.mouvementdemocrate.fr/" target="_blank">ici</a>.</p>
+</div>
+
+<div class="spoiler">
+<a id="je-ne-suis-pas-jeune" href="#je-ne-suis-pas-jeune">Je ne suis pas / plus jeune</a>
+<p>L'initiative Élan Démocrate étant portée par les Jeunes Démocrates, nous n'avons pas accès aux données des adhérents dits "aînés". Si vous avez plus de 32 ans, vous ne pourrez pas vous enregistrer.</p>
+</div>
+
+<div class="spoiler">
+<a id="je-n-y-arrive-pas" href="#je-n-y-arrive-pas">Je n'arrive pas à m'enregistrer</a>
+<p>En cas de difficultés, contactez :<br/>
+		<a href="mailto:{{ help_adress }}?Subject=J'ai un problème !">{{ help_adress }}</a></p>
+</div>
+
+<div class="spoiler">
+<a id="je-veux-me-connecter" href="#je-veux-me-connecter">Je veux revenir à la page de connexion</a>
+<p>Seuls les adhérents jeunes du Mouvement Démocrate ont accès à cet espace. Cependant, si vous avez été adhérent par le passé, il y a moins de deux ans, il est possible que vos données soient encore accessibles, et vous pouvez vous enregistrer normalement. Pour adhérer ou réadhérer au Mouvement Démocrate, rendez-vous <a href="http://guepar.mouvementdemocrate.fr/" target="_blank">ici</a>.</p>
+</div>
+
+{% include "membres/auth_scripts_and_styles.html" %}

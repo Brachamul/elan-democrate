@@ -1,10 +1,9 @@
-<p class="tags">
-	{% for mandat in profil.mandats %}
-		<span class="mandat">
-			{{ mandat }}
-		</span>
-	{% endfor %}
-</p>
+{% for mandat in profil.mandats %}
+	<span class="mandat">
+		{{ mandat }}
+	</span>
+{% endfor %}
+
 
 {% comment %}
 {% if perms.fichiers_adhérents.gere_les_mandats %}

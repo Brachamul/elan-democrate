@@ -1,3 +1,4 @@
+import logging
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
@@ -8,65 +9,34 @@ from .models import Credentials, EmailConfirmationInstance
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
 
-# Rules of the Auth :
-hours_code_valid_for_authentication = 1
-maximum_number_of_active_authentication_codes = 3
-maximum_number_of_attempts = 3
-hours_code_valid_for_registration = 24
-
-# Processing the rules
-from datetime import timedelta
-from django.utils import timezone
-
-authentication_code_validity_threshold = timezone.now() - timedelta(hours=hours_code_valid_for_authentication)
-registration_code_validity_threshold = timezone.now() - timedelta(hours=hours_code_valid_for_registration)
-
-def count_active_authentication_codes(user):
-	return Credentials.objects.filter(
-		user=user,
-		date__gt=(timezone.now() - timedelta(hours=hours_code_valid_for_authentication))).count()
-
-def count_active_registration_codes(adherent):
-	return EmailConfirmationInstance.objects.filter(
-		adherent=adherent,
-		date__gt=(timezone.now() - timedelta(hours=hours_code_valid_for_registration))).count()
-
-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
-
 site_url = settings.SITE_URL
+emailer = settings.EMAIL_HOST_USER
 
 #-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
 
 class OneTimeCodeBackend :
 	
 	def authenticate(self, request, username=None, code=None):
-		user = User.objects.get(username=username)
-		email = user.email
-		credentials = Credentials.objects.filter(email=email, code=code)
-
-		for i in credentials :
-			# pour éviter le forcing, on empêche plus de 3 essais par utilisateur et par heure
-			i.attempts += 1
-			i.save()
-
-		if credentials.filter(date__gt=(authentication_code_validity_threshold)).count() > 0 :
-			# look for credentials fitting email and code, but not older than x number of hours ago
-			if credentials.filter(date__gt=(authentication_code_validity_threshold), attempts__lte=maximum_number_of_attempts).count() > 0 :
-				return user
-			else :
-				messages.error(request, "Trop de tentatives d'accès ont été réalisées dernièrement, merci d'attendre avant de renouveller l'opération.")
-				return None
+		user = get_object_or_404(User, username=username)
+		auth_successful = False # unless specified otherwise, we assume the authentication has failed
+		try : credentials = Credentials.objects.get(user=user, code=code)
+		except Credentials.DoesNotExist : messages.error(request, "Ce lien de connexion a expiré, car lien plus récent vous a déjà été envoyé.")
 		else :
-			# s'il ya des codes valides mais trop vieux
-			if credentials.count() > 0 :
-				messages.error(request, "Vos codes d'accès ne sont plus valables.")
+			if credentials.too_many_attempts() : messages.error(request, "Vous avez essayé de vous connecter plus de {} fois. Par mesure de sécurité, votre compte sera verouillé pendant {}h.".format(settings.AUTH_CODE_MAXIMUM_ATTEMPS, settings.AUTH_CODE_LIFESPAN))
+			elif credentials.is_expired() : messages.error(request, "Votre lien de connexion a expiré, car il vous a été envoyé il y a plus d'{}h. Merci de vous reconnecter.".format(settings.AUTH_CODE_LIFESPAN))
+			else : auth_successful = True
+		if auth_successful : return user
+		else :
+			try : credentials # if there are credentials, increment the attempts
+			except NameError: pass
+			else :
+				credentials.attempts += 1 # on compte une tentative supplémentaire
+				credentials.save()
 			return None
 
 	def get_user(self, user_id):
-		try:
-			return User.objects.get(pk=user_id)
-		except User.DoesNotExist:
-			return None
+		try: return User.objects.get(pk=user_id)
+		except User.DoesNotExist: return None
 
 def authenticate_and_login(request, username, code) :
 	user = authenticate(request=request, username=username, code=code)
@@ -91,43 +61,34 @@ def authenticate_and_login(request, username, code) :
 
 from django.core.mail import send_mail
 
-def SendAuthCode(user):
-	new_credentials = Credentials(user=user, email=user.email)
-	new_credentials.save()
-	code = new_credentials.code
+def SendAuthCode(user, code):
 	lien = site_url + "/m/connexion/" + user.username + "&" + code
+	print('Utilisateur n°{}, code {}, email : {}'.format(user, code, user.email))
 	send_mail(
-		"[Élan Démocrate] Code d'accès : {code}".format(code=code),
-		"Cliquez sur le lien suivant {lien}, ou entrez le code {code} sur le site Élan Démocrate pour vous authentifier.\n\n"
+		"[Élan Démocrate] Lien de connexion",
+		"Cliquez sur le lien suivan pour vous authentifier: \n\n"
+		"{lien}\n\n"
 		"Ce code d'accès ne sera valable qu'une fois.\n\n"
 		"Les mots de passe sont fréquemment utilisés à plusieurs endroits sur internet. Il suffit qu'un seul des sites auxquels vous êtes inscrit soit piraté pour que votre mot de passe soit compromis. La méthode d'authentification utilisée ici, avec un code d'accès à utilisation unique, vous protège du vol de mot de passe.\n\n"
-		"N'oubliez pas de changer souvent le mot de passe de votre boîte email !".format(code=code, lien=lien),
-		'noreply.elandemocrate@gmail.com',
+		"N'oubliez pas de changer souvent le mot de passe de votre boîte email !".format(lien=lien),
+		emailer,
 		[user.email],
 		fail_silently=False
 		)
 	return True
 
-def DebugAuthCode(request, user):
-	# only used for debugging purposes
-	new_credentials = Credentials(user=user, email=user.email)
-	new_credentials.save()
-	code = new_credentials.code
-	return code
-
-
 def AskForAuthCode(request, user):
-	active_codes = count_active_authentication_codes(user)
-	if 0 < active_codes < maximum_number_of_active_authentication_codes :
-		messages.warning(request, "Vous semblez avoir déjà reçu au moins un code, vérifiez votre boîte mail...")
-		if SendAuthCode(user) :
-			messages.success(request, "Un nouveau code d'accès vous a été envoyé par mail.")
-	elif active_codes >= maximum_number_of_active_authentication_codes :
-		messages.error(request, "Vous avez déjà reçu {x} codes d'accès au cours de la dernière heure ! Vérifiez votre boîte mail...".format(x=active_codes))
+	try : credentials = Credentials.objects.get(user=user)
+	except Credentials.DoesNotExist : credentials = Credentials.objects.create(user=user)
 	else :
-		if SendAuthCode(user) :
-			messages.success(request, "Un code d'accès vous a été envoyé par mail.")
-	return True # confirm that there is now an active code
+		if credentials.is_expired() : credentials.regenerate()
+		elif credentials.too_many_attempts() : # Cet utilisateur a essayé de se connecter sans y parvenir plusieurs fois de suite.
+			messages.error(request, "Vous avez essayé de vous connecter plus de {} fois. Par mesure de sécurité, votre compte est temporairement verrouillé. pendant {}h.".format(settings.AUTH_CODE_MAXIMUM_ATTEMPS, settings.AUTH_CODE_LIFESPAN))
+			return False # Si le code avait expiré, un nouveau code aurait été envoyé.
+		elif not user.email : # Il n'y a pas de mail associé à cet utilisateur ?
+			messages.error(request, "Il n'y a pas d'adresse email associée à ce compte ! Bizarre ...")
+			return False
+	return SendAuthCode(user, credentials.code) # Confirmation qu'un code a été envoyé
 
 
 def SendEmailConfirmationCode(request, adherent):
@@ -144,7 +105,7 @@ def SendEmailConfirmationCode(request, adherent):
 		"Si vous êtes vous-même auteur de cette demande, cliquez sur le lien suivant pour finaliser la création de votre compte :\n\n{lien}\n\n"
 		"Attention : votre adresse email est la clé de votre compte sur Élan Démocrate. Il est de votre responsabilité de vous prémunir contre la prise de contrôle de votre adresse email, en changeant notamment votre mot de passe de manière fréquente.\n\n"
 		"À bientôt sur le réseau Élan Démocrate !\n\n".format(lien=lien),
-		'noreply.elandemocrate@gmail.com',
+		emailer,
 		[new_email_confirmation_instance.email],
 		fail_silently=False
 		)
@@ -152,13 +113,60 @@ def SendEmailConfirmationCode(request, adherent):
 
 def EmailConfirmationCheck(request, adherent, code):
 	# Vérifie que le code de confirmation d'une adresse mail est bon
-	try :
-		confirmation = EmailConfirmationInstance.objects.get(adherent=adherent, code=code)
-	except EmailConfirmationInstance.DoesNotExist :
-		# ! Check if code is still valid
-		messages.error(request, "Le code de confirmation est incorrect")
-	else :
-		return True
+	try : confirmation = EmailConfirmationInstance.objects.get(adherent=adherent, code=code)
+	except EmailConfirmationInstance.DoesNotExist : messages.error(request, "Le code de confirmation est incorrect")
+	else : return True
+
+def SendEmailInvalidNotification(request, email):
+	# Si l'adresse ne correspond pas à un adhérent, on ne peut pas créer le compte
+	send_mail(
+		"[Élan Démocrate] Votre adresse n'existe pas dans notre base adhérent",
+		"Bonjour,\n\n"
+		"Sur le site Élan Démocrate, une demande de création de compte basée sur votre adresse mail a été réalisée.\n\n"
+		"Malheureusement, votre adresse n'existe pas dans notre base adhérent. Il est possible qu'elle n'ait pas été mise à jour dans le fichier des adhérents, ou qu'une autre erreur se soit produite.\n\n"
+#		"Si vous êtes bien adhérent du Mouvement Démocrate de moins de 33 ans, cliquez sur le lien suivant pour obtenir de l'aide.\n\n{aide}\n\n"
+#		"Sinon, vous pouvez adhérer au Mouvement Démocrate en cliquant ici : \n\n{adherer}\n\n"
+		"Peut-être à bientôt, sur le réseau Élan Démocrate !\n\n", #.format(aide=?, adherer=?)
+		emailer,
+		[email],
+		fail_silently=False
+		)
+	return True
+
+def SendEmailAlreadyRegistered(request, email):
+	# Si l'adresse correspond déjà à un adhérent
+	lien = site_url + "/m/connexion/"
+	send_mail(
+		"[Élan Démocrate] Votre adresse mail est déjà associée à un compte",
+		"Bonjour,\n\n"
+		"Sur le site Élan Démocrate, une demande de création de compte basée sur votre adresse mail a été réalisée.\n\n"
+		"Malheureusement, votre adresse est déjà associée à un compte sur Elan Démocrate.\n\n"
+		"Vous pouvez vous connecter à ce compte en vous rendant ici :\n\n"
+		"{lien}\n\n"
+		"Peut-être à bientôt, sur le réseau Élan Démocrate !\n\n".format(lien=lien),
+		emailer,
+		[email],
+		fail_silently=False
+		)
+	return True
+
+def SendUserDoesNotExistEmail(request, email):
+	# Si l'adresse ne correspond pas à un adhérent, on ne peut pas logger l'utilisateur
+	lien = site_url + "/m/enregistrement/"
+	send_mail(
+		"[Élan Démocrate] Vous n'avez pas encore créé de compte",
+		"Bonjour,\n\n"
+		"Sur le site Élan Démocrate, une demande de connexion basée sur votre adresse mail a été réalisée.\n\n"
+		"Malheureusement, votre adresse n'est pas encore associée à un compte.\n\n"
+		"Si vous êtes adhérent jeune du Mouvement Démocrate, inscrivez-vous en vous rendant ici :\n\n"
+		"{lien}\n\n"
+#		"Sinon, vous pouvez adhérer au Mouvement Démocrate en cliquant ici : \n\n{adherer}\n\n"
+		"Peut-être à bientôt, sur le réseau Élan Démocrate !\n\n".format(lien=lien),
+		emailer,
+		[email],
+		fail_silently=False
+		)
+	return True
 
 def Register(request, adherent, email) :
 	new_user = User(username=adherent.num_adhérent, email=email)

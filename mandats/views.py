@@ -17,17 +17,23 @@ from .forms import *
 def afficher_les_mandats(request):
 	profils = Profil.objects.all()
 	for profil in profils :
-		profil.mandats = pecho_les_mandats(profil)
+		profil.mandats = pecho_les_mandats(profil, uniquement_les_mandats_actifs=True)
 	return render(request, 'mandats/afficher_les_mandats.html', {
 		'profils': profils,
-#		'nouveau_mandat_form': NouveauMandatForm()
+		'page_title': "Mandats",
 		})
 
-def pecho_les_mandats(profil):
+def pecho_les_mandats(profil, uniquement_les_mandats_actifs=False):
 	profil.mandats = []
-	try : mandats = Detenteur.objects.filter(profil=profil)
+	try : detenteurs = Detenteur.objects.filter(profil=profil)
 	except Detenteur.DoesNotExist :
 		profil.mandats = None
 	else :
-		for mandat in mandats : profil.mandats.append(mandat)
+		for detenteur in detenteurs :
+			if uniquement_les_mandats_actifs :
+				if detenteur.actif() and detenteur.mandat.actif() :
+					profil.mandats.append(detenteur)
+					print ("ce mandat est ACTIF")
+				else : print ("ce mandat est INACTIF")
+			else : profil.mandats.append(detenteur)
 	return profil.mandats

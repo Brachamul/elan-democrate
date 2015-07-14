@@ -1,0 +1,117 @@
+{% extends request.is_ajax|yesno:"base_ajax.html,base.html" %}
+{% load staticfiles %}
+
+
+{% block title %}Traitement du fichier adhérents{% endblock title %}
+
+{% block content %}{{ block.super }}
+
+<h1>Traitement du fichier importé</h1>
+
+<br/>
+
+<div class="fichier-dashboard">
+
+<div class="row row-centered">
+	<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 col-centered">
+		<div class="bignumber">{{ fichier.adherents|length }}</div>
+		<h4>Adhérents</h4>
+	</div>
+
+	<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 col-centered">
+		<div class="bignumber">{{ fichier.nouveaux_adherents|length }}</div>
+		<h4>Nouveaux</h4>
+	</div>
+	
+	<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 col-centered">
+		<div class="bignumber">{{ fichier.nombre_réadhésions|length }}</div>
+		<h4>Réadhésions</h4>
+	</div>
+
+	<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 col-centered">
+		<div class="bignumber">0</div>
+		<h4>Non-renouvellements</h4>
+	</div>
+
+</div>
+
+<br/>
+
+<p><a id="load-dat-file" class="btn btn-lg btn-primary" href="{% url 'activer_le_fichier_adherent' fichier_id=fichier.id %}" >Charger ce fichier dans la base</a></p>
+<p>Daté du <strong>{{ fichier.date_ultime }}</strong>,
+{% if fichier.jours_depuis_le_fichier_precedent > 0 %}
+ce fichier est <strong>plus récent</strong> que le précédent de <strong>{{ fichier.jours_depuis_le_fichier_precedent }} jours</strong>.
+{% elif fichier.jours_depuis_le_fichier_precedent < 0 %}
+ce fichier est <strong>plus ancien</strong> que le fichier actuel de <strong>{{ fichier.jours_depuis_le_fichier_precedent }} jours</strong>.
+{% else %}
+ce fichier est daté du <strong>même jour</strong> que le fichier actuel (ou il n'y a pas encore de fichier dans la base).
+{% endif %}
+</p>
+
+<br/><br/>
+
+<table class="table" style="display: inline-block; overflow: auto; width: auto;">
+	<thead>
+	<tr>
+		<th>#</th>
+		<th>Nom</th>
+		<th>Prénom</th>
+		<th>Email</th>
+		<th>Première Adhésion</th>
+		<th>Dernière Cotisation</th>
+	</tr>
+	</thead>
+	<tbody>
+	{% for adherent in fichier.adhérentdufichier_set.all %}
+	<tr>
+		<td>{{ adherent.num_adhérent }}</td>
+		<td>{{ adherent.nom }}</td>
+		<td>{{ adherent.prénom }}</td>
+		<td>{{ adherent.email }}</td>
+		<td>{{ adherent.date_première_adhésion }}</td>
+		<td>{{ adherent.date_dernière_cotisation }}</td>
+	</tr>
+	{% endfor %}  
+	</tbody>
+</table>
+
+</div>
+
+<style>
+
+body { text-align: center; }
+table { text-align: left; }
+.fichier-dashboard *[class*='col-'] { margin-top: 1em; margin-bottom: 2em; }
+.fichier-dashboard h4 { font-weight: lighter; text-transform: lowercase; }
+.fichier-dashboard .bignumber { font-size: 4em; color: #EC7C34; }
+/* centered columns styles */
+.row-centered { text-align:center; }
+.col-centered {
+	display: inline-block;
+	float: none;
+	/* inline-block space fix */
+	margin-right: -4px;
+}
+
+</style>
+
+{% endblock content %}
+
+{% block scripts %}{{ block.super }}
+
+<script>
+
+$( document ).ready(function() {
+
+	// Remplace les submits classiques par de l'AJAX pour les formulaires
+	$('#load-dat-file').click(function(){
+		$('#main-container').fadeOut('slow', function() {
+			$(this).html(spinner).fadeIn()
+		})
+	})
+
+})
+
+</script>
+
+{% endblock scripts %}

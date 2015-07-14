@@ -1,12 +1,12 @@
 {% extends "meta.html" %}
 {% load static %}
 
-<body>
-
+{% if page_title %}{% block title %}{{ page_title }}{% endblock title %}{% endif %}
 
 {% block head %}{{ block.super }}
 
 <link rel="stylesheet" href="{% get_static_prefix %}css/notifications.css" >
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 
 {% endblock head %}
 
@@ -23,7 +23,7 @@
 				<span class="icon-bar"></span>
 			</button>
 			<a class="navbar-brand" href="/">
-				<img src="{% get_static_prefix %}images/white-dashes.png" style="height: .9em; margin-bottom: .4em; margin-right: 1px;"/><strong>Élan Démocrate</strong>
+				<img src="{% get_static_prefix %}images/white-dashes.png" style="height: .9em; margin-bottom: .4em; margin-right: 1px; display: inline;"/><strong>Élan Démocrate</strong>
 			</a>
 		</div>
 
@@ -113,19 +113,8 @@
 
 {% block content %}
 
-{% if messages %}
-<div class="col-sm-12">
-	<div class="messages">
-	{% for message in messages %}
-		<div{% if message.tags %} class="alert alert-{{message.tags}} alert-dismissible"{% endif %}>{{ message }}
-			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-			</button>
-		</div><!-- end message -->
-	{% endfor %}
-	</div><!-- end messages -->
-</div><!-- end message col -->
-{% endif %}
+{% if messages %}<div class="col-sm-12">{% include "messages.html" %}</div>{% endif %}
+
 
 <!-- Main content displayed here -->
 
@@ -152,5 +141,3 @@
 <script src="{% get_static_prefix %}js/notifications.js"></script>
 
 {% endblock scripts %}
-
-</body>

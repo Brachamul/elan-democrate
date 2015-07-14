@@ -184,7 +184,7 @@ def rank_posts(request, force=False):
 			sign = 1 if post.health > 0 else -1 if post.health < 0 else 0
 			post.rank = round( sign * order + time_since_bayrou / 45000, 7)
 			post.save()
-			logging.info("Les posts ont été reclassés !".encode('utf8'))
+			logging.info("Posts have been reranked".encode('utf8'))
 	return HttpResponse()
 
 def comment_medic(request):
@@ -289,7 +289,7 @@ def nouveau_post(request):
 				new_post_adress = "/p/" + new_post.slug
 				rank_posts(request, force=True)
 				logging.info(
-					"Nouveau texte posté par {username} : {title}".format(
+					"New text link posted by {username} : {title}".format(
 						username=request.user.username,
 						title=request.POST.get('title')
 						).encode('utf8')
@@ -316,7 +316,7 @@ def nouveau_post(request):
 				new_post_adress = "/p/" + new_post.slug
 				rank_posts(request, force=True)
 				logging.info(
-					"Nouveau lien posté par {username} : {title}".format(
+					"New link post by {username} : {title}".format(
 						username=request.user.username,
 						title=request.POST.get('title')
 						).encode('utf8')

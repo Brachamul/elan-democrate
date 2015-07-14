@@ -1,0 +1,21 @@
+{% extends request.is_ajax|yesno:"base_ajax.html,base.html" %}
+{% load staticfiles %}
+
+
+{% block title %}Traitement du fichier adhérents{% endblock title %}
+
+{% block content %}{{ block.super }}
+
+<h1>Merci !</h1>
+
+<p>Le nouveau fichier adhérent a bien été importé !</p>
+
+<p>*</p>
+
+<p><a class="btn btn-primary" href="{% url 'accueil' %}">Retour à l'accueil</a></p>
+
+<audio autoplay class="tada" style="display: none" src="http://soundbible.com/grab.php?id=1003&type=mp3">
+
+<style> body { text-align: center; } </style>
+
+{% endblock content %}

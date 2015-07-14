@@ -1,0 +1,24 @@
+{% include "messages.html" %}
+
+<form class="ajax-form" action="{% url 'connexion' %}"
+	method="POST" role="form" enctype="multipart/form-data">{% csrf_token %}
+	<input name="numero_ou_email" placeholder="Email ou n° adhérent"
+			value="{% if numero_ou_email %}{{ numero_ou_email }}{% endif %}" class="form-control" type="text" autofocus required>
+	<input type="hidden" name="form_type" value="send_code">
+	<p style="text-align: center;">
+		<button type="submit" class="btn orange">
+			<span class="glyphicon glyphicon-off" aria-hidden="true"></span> Connexion</button>
+		<a class="btn orange action-button" href="{% url 'enregistrement' %}">
+			<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span> Je créé mon compte</a>
+	</p>
+</form>
+
+<br>
+
+<div class="spoiler">
+<a id="ou-suis-je" href="#ou-suis-je">Où suis-je ?</a>
+<p>Vous êtes sur <strong>Élan Démocrate</strong>, le réseau interne des Jeunes Démocrates. Si vous êtes adhérent du Mouvement Démocrate, et que votre adhésion a déjà été enregistrée par le mouvement, vous pouvez créer un compte. En cas de difficultés, contactez :<br/>
+	<a href="mailto:{{ help_adress }}?Subject=J'ai un problème !">{{ help_adress }}</a></p>
+</div>
+
+{% include "membres/auth_scripts_and_styles.html" %}

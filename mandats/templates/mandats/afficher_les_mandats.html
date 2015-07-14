@@ -1,54 +1,52 @@
-{% extends "base.html" %}
-{% load static %}
+{% extends request.is_ajax|yesno:"base_ajax.html,base.html" %}
+{% load staticfiles %}
 
-{% block head %}{{ block.super }}
+{% block content %}{{ block.super }}
 
-<title>EDEM - Mandats</title>
-
-<link rel="stylesheet" href="{% get_static_prefix %}css/mandats.css" >
-
-{% endblock head %}
-
-{% block content %} {{ block.super }}
-
-<div class="col-sm-12 table-responsive">
-	<table class="table table-condensed table-striped">
-		<thead>
-			<tr>
-				<th>#</th>
-				<th>Nom Courant</th>
-				<th>Mandats</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for profil in profils %}
-			<tr>
-				<td>
-					{% if profil.user %}
-					<a href="{% url 'membres' %}{{ profil.user.pk }}">{{ profil.user.username }}</a>
-					{% else %}
-					-
-					{% endif %}
-				</td>
-				<td>
-					{{ profil.nom_courant }}
-				</td>
-				<td>
-					{% include "mandats/widget_mandats.html" %}
-				</td>
-			</tr>
-			{% endfor %}
-		</tbody>
-	</table>
-<div style="text-align: right;"><a class="btn btn-primary" href="/admin/mandats"><span class="glyphicon glyphicon-pencil"></span> Modifier les attributions de mandats</a></div>
-
+<div id="representation-des-mandats">
+<input class="search" placeholder="Rechercher" autofocus>
+<div class="table-responsive">
+<table class="table fichier table-striped">
+	<thead>
+		<tr>
+			<th class="sort num-adherent" data-sort="num-adherent">#</th>
+			<th class="sort" data-sort="federation">Fédé</th>
+			<th class="sort" data-sort="nom">Nom</th>
+			<th class="sort" data-sort="prenom">Prénom</th>
+			<th class="sort" data-sort="nom-courant">Nom Courant</th>
+			<th class="sort" data-sort="mandats">Mandat</th>
+			<th class="sort days" data-sort="der-cot">Der. cot.</th>	
+		</tr>
+	</thead>
+	<tbody class="list">
+		{% for profil in profils %}
+		<tr>
+			<td class="num-adherent"><div class="wrap"><a href="{% url 'membres' %}{{ profil.user.pk }}">{{ profil.adherent.num_adhérent }}</a></div></td>
+			<td class="federation"><div class="wrap">{{ profil.adherent.fédération }}</div></td>
+			<td class="nom"><div class="wrap">{{ profil.adherent.nom }}</div></td>
+			<td class="prenom"><div class="wrap">{{ profil.adherent.prénom }}</div></td>
+			<td class="nom-courant"><div class="wrap">{{ profil.nom_courant }}</div></td>
+			<td class="mandats"><div class="wrap">{% include "mandats/widget_mandats.html" %}</div></td>
+			<td class="days der-cot"><div class="wrap">{{ profil.adherent.jours_depuis_la_derniere_cotisation }}</div></td>
+		</tr>
+		{% endfor %}  
+	</tbody>
+</table>
 </div>
+</div>
+
+<div style="text-align: right;"><a class="btn btn-primary btn-block" href="/admin/mandats"><span class="glyphicon glyphicon-pencil"></span> Modifier les attributions de mandats</a></div>
+
+{% include "datascope/styles_tableau_fichier.html" %}
 
 {% endblock content %}
 
-{% block scripts %} {{ block.super }}
+{% block scripts %}{{ block.super }}
 
-{% comment %}<script src="{% get_static_prefix %}js/aggregateur.js"></script>{% endcomment %}
+<script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.1.1/list.min.js"></script>
+<script>
+var options = { valueNames: [ 'num-adherent', 'federation', 'nom', 'prenom', 'der-cot', 'nom-courant', 'mandats' ] };
+var adherents = new List('representation-des-mandats', options);
+</script>
 
 {% endblock scripts %}
-
