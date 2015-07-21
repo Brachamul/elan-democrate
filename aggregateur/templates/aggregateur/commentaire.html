@@ -1,4 +1,4 @@
-<input id="checkbox-close-comment-{{ comment.pk }}" type="checkbox" />
+<div class="card">
 
 <div class="comment" id="comment-{{ comment.pk }}">
 
@@ -66,29 +66,14 @@
 			{% endif %}
 		<label for="checkbox-modify-comment-{{ comment.pk }}"><span class="modify">modifier</span></label>
 		{% endif %}
-		<label for="checkbox-replyto-comment-{{ comment.pk }}">
-		<span class="reply">répondre</span></label>
+		<span class="reply link" data-comment="{{ comment.pk }}">répondre</span></label>
 {% comment %}	<span class="report">signaler</span> {% endcomment %}
 	</div>
 
 {% comment %} This code also exists in the "afficher_le_post" page {% endcomment %}
-<input id="checkbox-replyto-comment-{{ comment.pk }}" type="checkbox"/>
-<div class="comment-form panel-body">
-	<form method="POST" action="" enctype="multipart/form-data">
-		<div class="form-group">
-			{% csrf_token %}
-			<div class="form-group">
-				{{ comment_form.content.field.errors }}
-				{{ comment_form.content }}
-			</div>
-			<input type="hidden" name="action" value="nouveau_commentaire">
-			<input type="hidden" name="parent_comment" value="{{ comment.pk }}">
-			<button type="submit" class="btn btn-primary">Poster</button>
-			<label class="btn btn-default" for="checkbox-replyto-comment-{{ comment.pk }}">Cacher</label>
-		</div>
-	 </form>
-</div>
-
+	<div class="comment-form panel-body" data-comment="{{ comment.pk }}">
+		{% include "aggregateur/nouveau_commentaire.html" %}
+	</div>
 {% if comment.profondeur > profondeur_max %}
 		<p style="font-size: .9em; font-style: italic;"><a href="{% url 'commentaire' slug=comment.post_racine.slug pk=comment.pk %}"><span class="glyphicon glyphicon-arrow-right"></span> Continuer à lire les réponses à ce commentaire</a></p>
 {% else %}
@@ -96,5 +81,7 @@
 				{% include "aggregateur/commentaire.html" %}
 		{% endfor %}
 {% endif %}
+
+</div>
 
 </div>

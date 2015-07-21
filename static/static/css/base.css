@@ -43,7 +43,6 @@ input:invalid:not(:focus) { border-color: red; }
 /* Uniquement appliqué lorsque la classe "easy_drop" est donnée */
 /* nav .dropdown.easy_drop:hover .dropdown-menu { display: block; } */
 
-.panel > .panel-heading { background-image: url('../images/bg.jpg'); background-color: white; }
 .main-container [class^="col"] { padding: 0 10px; }
 
 .anchor { clear: both; }
@@ -78,3 +77,36 @@ footer.endpage .footer-wrapper {
 }
 
 footer.endpage a:link, footer.endpage a:visited { color: #999;}
+
+.btn-primary { background-color: #EC7C34; border-color: #E4742C; }
+.btn-primary:hover,
+.btn-primary:focus{ background-color: #E4742C; border-color: #DC6C24; }
+.btn-primary:active,
+.btn-primary:active:focus { background-color: #DC6C24; border-color: #D5651D; }
+
+.btn, .btn:hover, .btn:focus, .btn:active, .btn:active:focus { outline: 0; transition: background-color 0.25s; }
+
+a,
+a:visited { color: #E4742C; outline: 0; }
+a:hover,
+a:focus { color: #DC6C24; text-decoration: none; outline: 0; }
+a:active { color: #D5651D; outline: 0; }
+
+a h1 { color: #EC7C34 !important; }
+
+.panel > .panel-heading { background-color: #222; }
+
+.panel-heading a,
+.panel-heading a:visited { color: #777; }
+.panel-heading a:hover,
+.panel-heading a:focus { color: #DC6C24; }
+.panel-heading a:active { color: #D5651D; }
+
+.form-control:focus {
+	border-color: #FFA961;
+	box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px rgba(236, 124, 52, 0.25);
+}
+
+
+span.link:hover { cursor: pointer; color: #EC7C34; border-bottom: 1px solid #EC7C34; }
+span.link.active { color: #EC7C34; }

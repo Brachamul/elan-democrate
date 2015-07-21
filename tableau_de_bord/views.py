@@ -114,7 +114,7 @@ def initialize_base_posts(request):
 	illustration = "/static/images/flat_upload.png"
 
 	v0_2 = Post.objects.get_or_create(
-		title = "Mise à jour version v0.2 : notifications, illustrations et relooking des posts",
+		title = "Mise à jour v0.2 : notifications, illustrations et relooking des posts",
 		format = "TEXT",
 		channel= channel,
 		content = markdownify(
@@ -150,14 +150,14 @@ def initialize_base_posts(request):
 		)[0]
 
 	v0_3 = Post.objects.get_or_create(
-		title = "Mise à jour version v0.3 : refonte de l'authentification, amélioration du traitement du fichier adhérent, mise en place des mandats, et les responsables fédéraux ont désormais accès à leur partie du fichier",
+		title = "Mise à jour v0.3 : refonte de l'authentification, amélioration du traitement du fichier adhérent, mise en place des mandats, et les responsables fédéraux ont désormais accès à leur partie du fichier",
 		format = "TEXT",
 		channel= channel,
 		content = markdownify(
 			"""Hello, pour la mise à jour v0.3, voici les modifications principales :
 
 			* **Authentification :**
-			Retravaillé en profondeur processus a été simplifié et allégé. Il est désormais plus fluide et plus sécurisé. Par exemple, il devient impossible de "tester" une adresse mail pour voir si elle est reconnue par le fichier adhérent (donc pas de message du genre "nous avons bien envoyé un email à l'adresse patate@patate.com").
+			Retravaillé en profondeur, le processus d'authentification a été simplifié et allégé. Il est désormais plus fluide et plus sécurisé. Par exemple, il devient impossible de "tester" une adresse mail pour voir si elle est reconnue par le fichier adhérent (donc pas de message du genre "nous avons bien envoyé un email à l'adresse patate@patate.com").
 			
 			* **Traitement automatisé du fichier adhérents :**
 			Ajout d'une étape de validation : une fois qu'on a téléversé le fichier, on peut regarder le résultat de l'import avant de le charger dans la base. De plus, on peut désormais revenir en arrière en activant un ancien fichier en cas de problème.

@@ -34,6 +34,7 @@ def afficher_le_post(request, slug):
 	if redirect : return HttpResponseRedirect(redirect)
 	else : return render(request, 'aggregateur/afficher_le_post.html', {
 		'post': post,
+		'page_title': post.title,
 		'profondeur_max': settings.PROFONDEUR_MAXIMALE_DES_COMMENTAIRES,
 		'comment_form': CommentForm()
 		})

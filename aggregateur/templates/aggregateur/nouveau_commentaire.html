@@ -1,0 +1,12 @@
+<form class="nouveau_commentaire" method="POST" action="" enctype="multipart/form-data">
+	<div class="form-group">
+		{% csrf_token %}
+		<div class="form-group">
+			{{ comment_form.content.field.errors }}
+			{{ comment_form.content }}
+		</div>
+		<input type="hidden" name="action" value="nouveau_commentaire">
+		<input type="hidden" name="parent_comment" value="{{ comment.pk }}">
+		<button type="submit" class="btn btn-primary btn-block">Poster</button>
+	</div>
+</form>

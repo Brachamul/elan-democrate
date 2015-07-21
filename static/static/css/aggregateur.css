@@ -1,48 +1,45 @@
 /*** Fil Info ***/
 
-.aggregateur .post { display: table; margin-bottom: 2rem; }
+.aggregateur .post { display: table; }
 
 .aggregateur .healthbox,
 .aggregateur .illustration,
 .aggregateur .postbox { display: table-cell; vertical-align: top; }
+
+.aggregateur .posts .post { padding: 15px 32px 14px 0px; border-bottom: 1px solid #F2F2F2; }
+.aggregateur .posts .healthbox,
+.aggregateur .posts .illustration { padding-right: 15px; white-space: nowrap; }
+.aggregateur .posts .postbox { width: 99%; }
 
 .aggregateur.self .post,
 .aggregateur.self .postbox  { display: block; }
 .aggregateur.self .illustration { display: block; }
 .aggregateur.self .healthbox { display: inline-block; vertical-align: middle; }
 .aggregateur.self .meta { display: inline; vertical-align: middle ; }
-.aggregateur.self .post { margin: auto; }
+.aggregateur.self .postbox { margin: auto; }
 .aggregateur.self .post .table + .content { margin-top: -1rem; }
 .aggregateur.self .content p { line-height: 1.8; }
 
 .aggregateur .post::after { clear: both; visibility: hidden; display: block; font-size: 0; content: " "; height: 0; }
 
-.aggregateur .healthbox { margin-right: 10px; line-height: 1em; text-align: center;  }
-.aggregateur .post .healthbox { font-size: 1.2em; width: 4rem; }
+.aggregateur .post .healthbox { font-size: 1.2em; width: 8rem; padding-left: 15px; }
 .aggregateur .health { font-size: .8em; }
 
-.aggregateur .vote.active { color: #EC7C34;}
-
-.aggregateur .vote sup { float: right; font-size: .6em;}
-.aggregateur .vote.pos sup { top: .8em; right: .2em; }
-.aggregateur .vote.neg sup { top: .9em; right: 2.7em;}
+.aggregateur .healthbox { line-height: 1em; text-align: center; color: #ccc; }
+.aggregateur .vote { transition: color 0.25s; }
+.aggregateur .vote.pos { color: #999; }
+.aggregateur .post[data-color="POS"] .vote.pos,
+.aggregateur .post[data-color="NEG"] .vote.neg { color: #EC7C34; }
+.aggregateur .vote .glyphicon { padding: .1em .1em 0 0; }
 
 .aggregateur.self .healthbox .vote { position: relative; }
-.aggregateur.self .vote.pos sup { position: absolute; top: 0.1em; right: 0.2em; }
-.aggregateur.self .vote.neg sup { position: absolute; top: 2.4em; right: 0.5em; }
-
-.aggregateur .vote sup { display: none; }
-.aggregateur .vote.active sup { display: inline;}
 
 .aggregateur .post .title { margin: 0; display: inline-block; }
 .aggregateur .post h1.title { line-height: 1.4; }
 
 .aggregateur .post .illustration {
-	text-align: right;
-	height: 5rem;
-	width: 12rem;
-	padding-top: .25rem;
-	padding-right: 2.5rem; 
+	text-align: center;
+	min-width: 9.5rem;
 }
 
 .aggregateur .post .illustration img {
@@ -69,7 +66,7 @@
 
 .aggregateur .post .source,
 .aggregateur .post .meta,
-.aggregateur .post .actions { color: #666; font-size: .9em; }
+.aggregateur .post .actions { color: #999; font-size: .9em; }
 
 .aggregateur .post .source a,
 .aggregateur .post .meta a,
@@ -81,10 +78,9 @@
 .aggregateur .vote:hover { cursor: pointer; }
 
 /* "self" est appliquée uniquement sur les pages des posts eux-mêmes */
-.aggregateur.self .post .meta { margin-top: 1rem; }
-.aggregateur.self .post { width: 72rem; max-width: 100%; margin: 1rem auto; }
-.aggregateur.self .comments .root-comment-box { max-width: 72rem; margin: 2rem auto; }
-.aggregateur.self .post h1.title { max-width: 72rem; margin-bottom: 1rem; font-size: 2.8rem; text-align: center; }
+.aggregateur.self .postbox .meta { margin-top: 1rem; }
+.aggregateur.self .postbox { width: 72rem; max-width: 100%; padding: 2rem 1rem; }
+.aggregateur.self .postbox h1.title { max-width: 72rem; margin-bottom: 1rem; font-size: 2.8rem; text-align: center; }
 
 /* On annule le formattage différent des h1/h2/h3/h4/ */
 /* Y'a aussi du jQuery pour faire le ménage */
@@ -97,10 +93,7 @@
 
 .aggregateur.self { text-align: center; }
 
-.aggregateur .comments {
-	display: inline-block;
-	text-align: left;
-}
+.aggregateur .comments { text-align: left; }
 
 .aggregateur .comments-wrapper { max-width: calc(100vw - 30px); }
 
@@ -111,10 +104,7 @@
 	text-align: left;
 	display: block;
 	margin: auto;
-	box-shadow: 0px 0px 10px 1px #EEE;
 	padding: .5em 1em 0;
-	border: 1px solid #ccc;
-	border-radius: .25em;
 	margin-bottom: 1em;
 	font-size: 1.3rem;
 }
@@ -124,6 +114,8 @@
 .aggregateur .comment .actions { margin-bottom: 1em; }
 .aggregateur .comment .content { max-width: 69rem; margin: 0.2em 0 .5em 0; width: 100%;}
 .aggregateur .comment .modifier { max-width: 69rem; }
+
+.aggregateur .comment-form { display: none; }
 
 .aggregateur .comments .comment:target { background-color: lightyellow !important; }
 
@@ -144,14 +136,11 @@
 .aggregateur .comments .actions .supprimer input[id^="checkbox-delete-comment"]:not(:checked) ~ button { display: none; }
 .aggregateur .comments .actions .supprimer button { padding: 0px 1em; margin-right: .5em;}
 
-/*** display post***/
-input[id^="checkbox-replyto"],
-input[id^="checkbox-replyto"] ~ .comment-form { display: none; }
-input[id^="checkbox-replyto"]:checked ~ .comment-form { display: block; }
-input[id^="checkbox-replyto"]:checked + label { display: none; }
-
-.root-commentor { width: 72rem; max-width: 100%; margin: 2rem auto; }
-.root-commentor.panel-body { padding: 0; }
+.aggregateur.self .root-commentor { display: block; margin: 2rem auto; }
+.aggregateur.self .root-commentor .nouveau_commentaire { display: none; }
+.aggregateur.self .root-commentor .toggle.btn-primary::after { content: 'Commenter'; }
+.aggregateur.self .root-commentor .toggle.btn-default::after { content: 'Annuler'; }
+.aggregateur.self .root-commentor .toggle { margin: 1.5rem 0; }
 
 input[id^="checkbox-close-comment"] { display: none; }
 input[id^="checkbox-close-comment"]:checked + .comment .content,
@@ -172,7 +161,7 @@ input[id^="checkbox-modify-comment"]:not(:checked) ~ .modifier { display: none; 
 
 /*** Pagination ***/
 
-.aggregateur .pagination { width: 100%; text-align: center; }
+.aggregateur .pagination { width: 100%; text-align: center; color: #999; }
 .aggregateur .pagination a:hover { text-decoration: none; }
 
 
@@ -181,3 +170,36 @@ input[id^="checkbox-modify-comment"]:not(:checked) ~ .modifier { display: none; 
 
 .panel.nouveau-post label { display: block; }
 .panel.nouveau-post label::after { content: " :"; }
+
+
+.aggregateur a:visited .title { color: #d2824e; }
+
+/* naut */
+.aggregateur .posts { padding: 0; }
+.aggregateur .card {
+	box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.16);
+	border-radius: 2px;
+	border: 1px solid #eee;
+	animation-name: fadein;
+	animation-duration: 0.75s;
+	animation-iteration-count: 1;
+	-webkit-animation-name: fadein;
+	-webkit-animation-duration: .75s;
+	-webkit-animation-iteration-count: 1;
+	margin: 1rem 0;
+}
+
+.aggregateur.self {
+	animation-name: fadein;
+	animation-duration: 0.75s;
+	animation-iteration-count: 1;
+	-webkit-animation-name: fadein;
+	-webkit-animation-duration: .75s;
+	-webkit-animation-iteration-count: 1;
+}
+
+@-webkit-keyframes fadein { 0% { opacity:0; transform:translateY(48px); -webkit-transform:translateY(48px); } 100% { opacity:1; transform:translateY(0px); -webkit-transform:translateY(0px); } }
+@-moz-keyframes fadein { 0% { opacity:0; transform:translateY(48px); -webkit-transform:translateY(48px); } 100% { opacity:1; transform:translateY(0px); -webkit-transform:translateY(0px); } }
+@-o-keyframes fadein { 0% { opacity:0; transform:translateY(48px); -webkit-transform:translateY(48px); } 100% { opacity:1; transform:translateY(0px); -webkit-transform:translateY(0px); } }
+@keyframes fadein { 0% { opacity:0; transform:translateY(48px); -webkit-transform:translateY(48px); } 100% { opacity:1; transform:translateY(0px); -webkit-transform:translateY(0px); } }
+

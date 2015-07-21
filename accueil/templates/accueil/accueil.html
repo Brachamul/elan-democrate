@@ -11,17 +11,15 @@
 
 {% block content %} {{ block.super }}
 
-{% if aggregateur %}
-<div class="col-sm-8">
-    {% include aggregateur.template %}
-</div>
-{% endif %}
+{% include aggregateur.template %}
 
+{% comment %}
 {% if message_accueil %}
 <div class="col-sm-4">
 	{% include message_accueil %}
 </div>
 {% endif %}
+{% endcomment %}
 
 {% endblock content %}
 
