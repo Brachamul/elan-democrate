@@ -42,7 +42,11 @@
 .post::after { clear: both; visibility: hidden; display: block; font-size: 0; content: " "; height: 0; }
 .post .title { line-height: 1.4; }
 
+.post .illustration { text-align: center; min-width: 9.5rem; }
+.post .illustration img { max-width: 8rem; max-height: 6rem; }
+
 .actions .link, .actions a { margin-right: .5em; margin-top: .5em; font-weight: bold; }
+
 
 
 /* PAGE D'AFFICHAGE D'UN POST UNIQUE */
@@ -75,7 +79,12 @@ article .actions { margin: 2rem 0; }
 .posts .vote .glyphicon { padding: .1em .1em 0 0; }
 .posts .title { display: inline-block; margin-top: 0; margin-bottom: 0; color: #EC7C34; line-height: 1.25;}
 .posts .meta { font-size: .8em; }
-
+@media screen and (max-width: 450px) {
+	.posts .healthbox { display: none; }
+	.posts .illustration { padding-left: 5px; }
+	.posts .illustration { text-align: center; min-width: 4.75rem; padding-top: 3px; }
+	.posts .illustration img { max-width: 4rem; max-height: 3rem; }
+}
 
 
 /* VOTES */
@@ -115,8 +124,7 @@ article .actions { margin: 2rem 0; }
 
 
 
-.post .illustration { text-align: center; min-width: 9.5rem; }
-.post .illustration img { max-width: 8rem; max-height: 6rem; }
+
 
 
 
@@ -162,15 +170,6 @@ article .actions { margin: 2rem 0; }
 .root-commentor .nouveau_commentaire { display: none; }
 .root-commentor .toggle.btn-primary::after { content: 'Commenter'; }
 .root-commentor .toggle.btn-default::after { content: 'Annuler'; }
-
-input[id^="checkbox-close-comment"] { display: none; }
-input[id^="checkbox-close-comment"]:checked + .comment .content,
-input[id^="checkbox-close-comment"]:checked + .comment .actions { display: none; }
-input[id^="checkbox-close-comment"]:checked ~ .panel { display: none; }
-input[id^="checkbox-close-comment"]:checked + .comment { margin-bottom: 0; }
-input[id^="checkbox-close-comment"]:checked + .comment .meta label::after { content: " (caché)"; font-style: italic; color: #aaa; }
-input[id^="checkbox-close-comment"]:checked + .comment .meta .minus { display: none; }
-input[id^="checkbox-close-comment"]:not(:checked) + .comment .meta .plus { display: none; }
 
 
 input[id^="checkbox-modify-comment"],
