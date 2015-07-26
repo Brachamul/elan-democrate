@@ -13,7 +13,7 @@
 
 {% block header %}
 
-<nav class="navbar navbar-inverse" style="border-radius:0;" role="navigation">
+<nav class="navbar" style="border-radius:0;" role="navigation">
 	<div class="container-fluid">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
@@ -23,17 +23,16 @@
 				<span class="icon-bar"></span>
 			</button>
 			<a class="navbar-brand" href="/">
-				<img src="{% get_static_prefix %}images/white-dashes.png" style="height: .9em; margin-bottom: .4em; margin-right: 1px; display: inline;"/><strong>Élan Démocrate</strong>
+				<span class="glyphicon glyphicon-chevron-right"></span>
+				<strong>Élan Démocrate</strong>
 			</a>
 		</div>
 
 		<div class="collapse navbar-collapse" id="navbar-collapse">
 		<ul class="nav navbar-nav navbar-right">
-			<li class="dropdown easy_drop">
-				<a href="#" class="dropdown-toggle btn orange profile-picture"
+			<li class="dropdown">
+				<a href="#" class="dropdown-toggle"
 				data-toggle="dropdown" role="button" aria-expanded="false">
-					{% load gravatar %}
-					<img src="{% gravatar_url user.email 32 %}"/>
 					{{ user.profil.nom_courant }}
 				</a>
 				<ul class="dropdown-menu" role="menu">
@@ -50,7 +49,7 @@
 			</li>
 
 			<li id="notifications" class="dropdown tout-vu"> <!-- par défaut, on fait comme si pas de notifs -->
-				<a id="notification-loader" href="#" class="dropdown-toggle btn orange"
+				<a id="notification-loader" href="#" class="dropdown-toggle"
 				data-toggle="dropdown" role="button" aria-expanded="false">
 					<span class="glyphicon glyphicon-bell" aria-hidden="true"></span>
 					<span id="non-vues" class="icon-counter"><!-- JS Loaded--></span>
@@ -78,8 +77,8 @@
 {% endcomment %}
 	
 			{% if user.is_staff %}
-			<li class="dropdown easy_drop">
-				<a href="#" class="dropdown-toggle btn orange"
+			<li class="dropdown">
+				<a href="#" class="dropdown-toggle"
 				data-toggle="dropdown" role="button" aria-expanded="false">
 					<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
 				</a>
@@ -110,7 +109,6 @@
 							Tableau de bord</a>
 					</li>
 					{% endif %}
-
 				</ul>
 			</li>
 			{% endif %}
@@ -123,10 +121,7 @@
 
 {% block content %}
 
-{% if messages %}<div class="col-sm-12">{% include "messages.html" %}</div>{% endif %}
-
-
-<!-- Main content displayed here -->
+	<!-- Main content displayed here -->
 
 {% endblock content %}
 
@@ -134,11 +129,7 @@
 
 <div class="footer-wrapper">
 
-<p>Si vous rencontrez un bug, signalez le bugs sur <a href="https://github.com/Brachamul/elan-democrate/issues/new">GitHub</a>.</p>
-
-<p>Le réseau Élan Démocrate est développé par Antonin Grêlé, des Jeunes Démocrates.</p>
-
-<p>Remerciements à Antoine Carette, Stéphane Manet et Stephen Daloz.</p>
+<p>Si vous rencontrez un bug, signalez le bugs sur <a href="https://github.com/Brachamul/elan-democrate/issues/new">GitHub</a>.  Le réseau Élan Démocrate est développé par Antonin Grêlé, des Jeunes Démocrates. Remerciements à Antoine Carette, Stéphane Manet et Stephen Daloz.</p>
 
 <p>Pour participer à l'amélioration de cet outil, n'hésitez pas à <a href="mailto:antonin.grele@gmail.com">me contacter</a> !</p>
 

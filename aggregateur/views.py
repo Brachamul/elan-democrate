@@ -14,10 +14,20 @@ from django.views.generic import TemplateView, DetailView
 from .models import *
 from .forms import *
 
-def all(request):
-	# temporary catch all url for posts
-	return HttpResponseRedirect('/')
+def all(request): return aggregateur(request)
 
+
+### Channels
+
+@login_required
+def aggregateur(request, page=1, chaine=None):
+	''' va chercher les posts de la chaine et les publie via un paginateur
+		l'argument 'chaine' n'est pas encore opérationnel '''
+	posts = Post.objects.all().order_by('-rank', '-health')
+	for post in posts : post = get_post_meta(request, post)
+	rank_posts(request) # classe les posts s'ils n'ont pas été reclassés depuis au moins 5 minutes
+	posts = Paginator(posts, settings.POSTS_PER_PAGE).page(page)
+	return render(request, 'aggregateur/posts.html', { 'posts': posts, 'page_title': "Chaine" } )
 
 
 ### Affichage des Posts
@@ -32,7 +42,7 @@ def afficher_le_post(request, slug):
 		post.number_of_comments = count_post_comments(post)
 		redirect = process_post_changes(request, post)
 	if redirect : return HttpResponseRedirect(redirect)
-	else : return render(request, 'aggregateur/afficher_le_post.html', {
+	else : return render(request, 'aggregateur/post.html', {
 		'post': post,
 		'page_title': post.title,
 		'profondeur_max': settings.PROFONDEUR_MAXIMALE_DES_COMMENTAIRES,
@@ -88,18 +98,6 @@ def process_post_changes(request, post) :
 
 	if redirect_location : return redirect_location # si une id interne est définie, on la transmet
 	else : return False
-
-@login_required
-def aggregateur(request, page_number=1, fil=None):
-	''' va chercher les posts et les publie via un paginateur
-		l'argument "fil" n'est pas opérationnel '''
-	try : posts = Post.objects.all().order_by('-rank', '-health')
-	except Post.DoesNotExist : return False
-	else :
-		for post in posts : post = get_post_meta(request, post)
-		rank_posts(request) # classe les posts s'ils n'ont pas été reclassés depuis au moins 5 minutes
-		posts = Paginator(posts, settings.POSTS_PER_PAGE).page(page_number)
-		return { 'posts': posts, 'template': "aggregateur/carte_aggregateur.html", }
 
 def get_post_meta(request, post):
 	post.number_of_comments = count_post_comments(post)

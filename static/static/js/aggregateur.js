@@ -1,18 +1,28 @@
 jQuery(function($) {
 
-	$('.post[data-color="POS"]').each(function(){
+
+
+	// On garde en mémoire le score des commentaires et des posts
+
+	$('[data-color="POS"]').each(function(){
 		var health = parseInt($(this).data('health'), 10) - 1
 		$(this).attr('data-health', health)
 	})
 
-	$('.post[data-color="NEG"]').each(function(){
+	$('[data-color="NEG"]').each(function(){
 		var health = parseInt($(this).data('health'), 10) + 1
 		$(this).attr('data-health', health)
 	})
 
-	$('.post .vote.pos').click(function(){
-		var url = '/p/' + $(this).data('postid') + '/vote/' + 'POS'
+
+
+	// On envoie un vote et on récupère la couleur du résultat (POS-NEU-NEG)
+
+	$('.post .vote').click(function(){
 		var post = $(this).closest('.post')
+		var postId = post.data('postid')
+		var voteColor = $(this).data('color')
+		var url = '/p/' + postId + '/vote/' + voteColor
 		var health = parseInt(post.attr('data-health'), 10)
 		$.get(url, function(color){
 			post.attr('data-color', color)
@@ -21,66 +31,21 @@ jQuery(function($) {
 		})
 	})
 
-	$('.post .vote.neg').click(function(){
-		var url = '/p/' + $(this).data('postid') + '/vote/' + 'NEG'
-		var post = $(this).closest('.post')
-		var health = parseInt(post.attr('data-health'), 10)
+	$('.comment .vote').click(function(){
+		var comment = $(this).closest('.comment')
+		var commentId = comment.data('commentid')
+		var voteColor = $(this).data('color')
+		var url = '/p/' + commentId + '/commentvote/' + voteColor
+		var health = parseInt(comment.attr('data-health'), 10)
 		$.get(url, function(color){
-			post.attr('data-color', color)
+			comment.attr('data-color', color)
 			if (color == "POS") { health = health + 1 } else if (color == "NEG") { health = health - 1 }
-			post.find('.health').hide().html(health).fadeIn()
+			comment.find('.health').hide().html(health).fadeIn()
 		})
 	})
 
 
-	$('.post .vote.neg').click(function(){
-		var url = '/p/' + $(this).data('postid') + '/vote/' + 'NEG'
-		var post = $(this).closest('.post') 
-		$.get(url, function(color){
-			post.attr('data-color', color)
-		})
-		var health = parseInt(post.attr('data-health'), 10)
-		if (post.attr('data-color') == "POS") {
-			health = health + 1	
-		} else if (post.attr('data-color') == "NEG") {
-			health = health - 1
-		}
-		post.find('.health').html(health)
-	})
 
-	$('.comment .vote.pos').click(function(){
-		var commentid = $(this).attr("data-commentid")
-		var commentSelector = '#comment-' + commentid
-		var url = '/p/' + commentid + '/commentvote/' + 'POS'
-		$.get(url, function(color){
-			if (color == "POS") {
-				$(commentSelector + ' > .healthbox .vote.pos').addClass("active")
-				$(commentSelector + ' > .healthbox .vote.neg').removeClass("active")
-			} else if (color == "NEU") {
-				$(commentSelector + ' > .healthbox .vote').removeClass("active")
-			} else if (color == "NEG") {
-				$(commentSelector + ' > .healthbox .vote.neg').addClass("active")
-				$(commentSelector + ' > .healthbox .vote.pos').removeClass("active")
-			}
-		})
-	})
-
-	$('.comment .vote.neg').click(function(){
-		var commentid = $(this).attr("data-commentid")
-		var commentSelector = '#comment-' + commentid
-		var url = '/p/' + commentid + '/commentvote/' + 'NEG'
-		$.get(url, function(color){
-			if (color == "POS") {
-				$(commentSelector + ' > .healthbox .vote.pos').addClass("active")
-				$(commentSelector + ' > .healthbox .vote.neg').removeClass("active")
-			} else if (color == "NEU") {
-				$(commentSelector + ' > .healthbox .vote').removeClass("active")
-			} else if (color == "NEG") {
-				$(commentSelector + ' > .healthbox .vote.neg').addClass("active")
-				$(commentSelector + ' > .healthbox .vote.pos').removeClass("active")
-			}
-		})
-	})
 
 	$('#postranker').click(function(){
 		$.get('/p/rank_posts', function(result){
@@ -105,10 +70,26 @@ jQuery(function($) {
 		$(this).toggleClass('active')
 	})
 
+	$('.comment .link.modify').click(function(){
+		$(this).closest('.comment').children('form.modifier').slideToggle()
+		$(this).closest('.comment').children('.content').slideToggle()
+	})
+
 	$('.root-commentor button.toggle').click(function(){
 		$(this).toggleClass('btn-primary').toggleClass('btn-default')
 		$(this).prev('form.nouveau_commentaire').slideToggle().find('textarea').focus()
 	})
+
+
+
+	// RÉACTIVITÉ
+
+	$('#sidebar-toggle').click(function(){
+		$('#aggregateur').toggleClass('sidebar-show')
+	})
+
+
+	
 
 
 })
