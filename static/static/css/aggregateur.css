@@ -8,6 +8,8 @@
 
 /* RÉACTIVITÉ */
 
+/* Pages d'affichage des posts */
+
 #aggregateur { width: 100%;	}
 #aggregateur { transition: all .5s ease-in-out; }
 
@@ -25,6 +27,13 @@
 #sidebar-back { position: absolute; right: 1rem; top: .7rem; color: white; transition: all 1s ease-in-out; }
 .sidebar-show #sidebar-back { color: #EC7C34; }
 
+/* Page de nouveau post*/
+
+@media screen and (max-width: 767px) {
+	.nouveau-post .panel-body { display: none; }
+	.nouveau-post .panel-heading { position: relative; cursor: pointer;}
+	.nouveau-post .panel-heading::after { content: '+'; position: absolute; top: 25%; right: 1.4em; font-size: 1.4em; }
+}
 
 
 
@@ -33,7 +42,11 @@
 .post::after { clear: both; visibility: hidden; display: block; font-size: 0; content: " "; height: 0; }
 .post .title { line-height: 1.4; }
 
+.post .illustration { text-align: center; min-width: 9.5rem; }
+.post .illustration img { max-width: 8rem; max-height: 6rem; }
+
 .actions .link, .actions a { margin-right: .5em; margin-top: .5em; font-weight: bold; }
+
 
 
 /* PAGE D'AFFICHAGE D'UN POST UNIQUE */
@@ -66,7 +79,12 @@ article .actions { margin: 2rem 0; }
 .posts .vote .glyphicon { padding: .1em .1em 0 0; }
 .posts .title { display: inline-block; margin-top: 0; margin-bottom: 0; color: #EC7C34; line-height: 1.25;}
 .posts .meta { font-size: .8em; }
-
+@media screen and (max-width: 450px) {
+	.posts .healthbox { display: none; }
+	.posts .illustration { padding-left: 5px; }
+	.posts .illustration { text-align: center; min-width: 4.75rem; padding-top: 3px; }
+	.posts .illustration img { max-width: 4rem; max-height: 3rem; }
+}
 
 
 /* VOTES */
@@ -76,7 +94,8 @@ article .actions { margin: 2rem 0; }
 .vote:hover { color: #EC7C34; cursor: pointer; }
 .post[data-color="POS"] .vote.pos,
 .post[data-color="NEG"] .vote.neg { color: #EC7C34; }
-
+.comment[data-color="POS"] > .healthbox .vote.pos,
+.comment[data-color="NEG"] > .healthbox .vote.neg { color: #EC7C34; }
 
 
 /* COMMENTS */
@@ -100,8 +119,12 @@ article .actions { margin: 2rem 0; }
 .comments .supprimer input[id^="checkbox-delete-comment"]:not(:checked) ~ button { display: none; }
 .comments .supprimer button { padding: 0px 1em; margin-right: .5em;}
 
-.post .illustration { text-align: center; min-width: 9.5rem; }
-.post .illustration img { max-width: 8rem; max-height: 6rem; }
+.comment-shower { color: #999; display: none; }
+
+
+
+
+
 
 
 
@@ -148,15 +171,6 @@ article .actions { margin: 2rem 0; }
 .root-commentor .toggle.btn-primary::after { content: 'Commenter'; }
 .root-commentor .toggle.btn-default::after { content: 'Annuler'; }
 
-input[id^="checkbox-close-comment"] { display: none; }
-input[id^="checkbox-close-comment"]:checked + .comment .content,
-input[id^="checkbox-close-comment"]:checked + .comment .actions { display: none; }
-input[id^="checkbox-close-comment"]:checked ~ .panel { display: none; }
-input[id^="checkbox-close-comment"]:checked + .comment { margin-bottom: 0; }
-input[id^="checkbox-close-comment"]:checked + .comment .meta label::after { content: " (caché)"; font-style: italic; color: #aaa; }
-input[id^="checkbox-close-comment"]:checked + .comment .meta .minus { display: none; }
-input[id^="checkbox-close-comment"]:not(:checked) + .comment .meta .plus { display: none; }
-
 
 input[id^="checkbox-modify-comment"],
 input[id^="checkbox-modify-comment"]:checked ~ .content,
@@ -186,7 +200,6 @@ a:visited .title { color: #d2824e; }
 	position: relative;
 	box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.16);
 	border-radius: 2px;
-	border: 1px solid #eee;
 	animation-name: fadein;
 	animation-duration: 0.75s;
 	animation-iteration-count: 1;
@@ -194,9 +207,9 @@ a:visited .title { color: #d2824e; }
 	-webkit-animation-duration: .75s;
 	-webkit-animation-iteration-count: 1;
 	margin-bottom: 1rem;
-	padding: .5rem 1rem;
-	background-color: white;
 }
+
+.card:not(.alert) { background-color: white; padding: .5rem 1rem; border: 1px solid #eee; }
 
 .card.btn-primary { }
 .card.btn:hover { }

@@ -25,7 +25,8 @@ def aggregateur(request, page=1, chaine=None):
 		l'argument 'chaine' n'est pas encore opérationnel '''
 	posts = Post.objects.all().order_by('-rank', '-health')
 	for post in posts : post = get_post_meta(request, post)
-	rank_posts(request) # classe les posts s'ils n'ont pas été reclassés depuis au moins 5 minutes
+#	if time_to_rerank(request) == True : rank_posts() # classe les posts s'ils n'ont pas été reclassés depuis au moins 5 minutes
+#	a activer uniquement si on a pas de cron job pour le reclassement
 	posts = Paginator(posts, settings.POSTS_PER_PAGE).page(page)
 	return render(request, 'aggregateur/posts.html', { 'posts': posts, 'page_title': "Chaine" } )
 
@@ -108,6 +109,11 @@ def get_post_meta(request, post):
 	else : post.color = vote.color
 	return post
 
+def comment_color(request, comment_id):
+	try : vote = CommentVote.objects.get(comment=comment_id, user=request.user)
+	except CommentVote.DoesNotExist : return HttpResponse("NEU")
+	else : return HttpResponse(vote.color)
+
 
 
 ### Traitement des votes
@@ -166,25 +172,28 @@ def comment_vote(request, comment_id, color):
 
 
 from datetime import datetime, timedelta
-from math import log
+from math import log, sqrt
 
-def rank_posts(request, force=False):
-	''' compte le score relatif d'un post
-	straight from the reddit algorithm '''
-	if force == True or time_to_rerank(request) == True :
-		# on classe les posts s'il n'y a pas eu de classement depuis 5 minutes
-		# sauf si un post vient d'être créé, dans quel cas cette fonction est appelée avec l'argument "force"
-		bayrou_2007 = datetime(2007, 4, 22) # 18% quand même !+
-		for post in Post.objects.filter(date__gt=datetime.now()-timedelta(days=30)) : # on arrête de ranker les posts de + d'un mois
-			healthify(post) # on recalcule le score du post
-			time_since_bayrou = ( post.date - bayrou_2007 ) # quel est l'âge relatif du post ?
-			time_since_bayrou = time_since_bayrou.days * 86400 + time_since_bayrou.seconds # conversion en secondes
-			order = log(max(abs(post.health), 1), 10)
-			sign = 1 if post.health > 0 else -1 if post.health < 0 else 0
-			post.rank = round( sign * order + time_since_bayrou / 45000, 7)
-			post.save()
-			logging.info("Posts have been reranked".encode('utf8'))
+def rank_posts():
+	''' classe les posts selon leur score et leur ancienneté ''' # straight from the reddit algorithm http://amix.dk/blog/post/19588
+	bayrou_2007 = datetime(2007, 4, 22) # 18% quand même !
+	for post in Post.objects.filter(date__gt=datetime.now()-timedelta(days=30)) : # on arrête de ranker les posts de + d'un mois
+		healthify(post) # on recalcule le score du post
+		time_since_bayrou = ( post.date - bayrou_2007 ) # quel est l'âge relatif du post ?
+		time_since_bayrou = time_since_bayrou.days * 86400 + time_since_bayrou.seconds # conversion en secondes
+		order = log(max(abs(post.health), 1), 10)
+		sign = 1 if post.health > 0 else -1 if post.health < 0 else 0
+		post.rank = round( sign * order + time_since_bayrou / 45000, 7)
+		post.save()
+		logging.info("Posts have been reranked".encode('utf8'))
 	return HttpResponse()
+
+def rank_comments():
+	''' classe les commentaires selon leur score ''' # straight from the reddit algorithm http://amix.dk/blog/post/19588
+	for commentaire in Comment.objects.filter(date__gt=datetime.now()-timedelta(days=30)) : # on arrête de ranker les commentaires de + d'un mois
+		commentaire.evaluer_le_score()
+	return HttpResponse()
+
 
 def comment_medic(request):
 	for comment in Comment.objects.all() :
@@ -271,9 +280,9 @@ def nouveau_post(request):
 		text_data = link_data = None # les données seront renvoyées au formulaire en cas d'erreur, pour éviter d'avoir à recommencer
 		format = request.POST.get('format')
 		if format == "TEXT" :
-			title = request.POST.get('title')
-			content = request.POST.get('content')
-			illustration = request.POST.get('illustration')
+			title = request.POST.get('Titre')
+			content = request.POST.get('Texte')
+			illustration = request.POST.get('Illustration')
 			text_data = {'title': title, 'content': content, 'illustration': illustration}
 			if PostTextForm(request.POST).is_valid() :
 				new_post = Post(
@@ -286,7 +295,7 @@ def nouveau_post(request):
 					)
 				new_post.save()
 				new_post_adress = "/p/" + new_post.slug
-				rank_posts(request, force=True)
+				rank_posts()
 				logging.info(
 					"New text link posted by {username} : {title}".format(
 						username=request.user.username,
@@ -296,11 +305,11 @@ def nouveau_post(request):
 				messages.success(request, "Votre post est publié.")
 				return HttpResponseRedirect(new_post_adress)
 			else :
-				messages.error(request, "Votre post n'a pas été publié, il semble qu'il y ait une erreur dans les champs que vous avez rempli.")
+				messages.error(request, "Votre post n'a pas été publié : {}".format(PostTextForm(request.POST).errors), extra_tags='safe')
 
 		elif format == "LINK" :
-			title = request.POST.get('title')
-			url = request.POST.get('url')
+			title = request.POST.get('Titre')
+			url = request.POST.get('Lien_URL')
 			link_data = {'title': title, 'url': url}
 			if PostLinkForm(request.POST).is_valid() :
 				new_post = Post(
@@ -313,7 +322,7 @@ def nouveau_post(request):
 					)
 				new_post.save()
 				new_post_adress = "/p/" + new_post.slug
-				rank_posts(request, force=True)
+				rank_posts()
 				logging.info(
 					"New link post by {username} : {title}".format(
 						username=request.user.username,
@@ -323,7 +332,7 @@ def nouveau_post(request):
 				messages.success(request, "Votre post est publié.")
 				return HttpResponseRedirect(new_post_adress)
 			else :
-				messages.error(request, "Votre post n'a pas été publié, il semble qu'il y ait une erreur dans les champs que vous avez rempli.")
+				messages.error(request, "Votre post n'a pas été publié : {}".format(PostLinkForm(request.POST).errors), extra_tags='safe')
 		else: # pas de format spécifié ?
 			messages.warning(request, "Il y a un bug dans la matrice !")
 		return render(request, 'aggregateur/nouveau_post.html', {'post_text_form': PostTextForm(initial=text_data), 'post_link_form': PostLinkForm(initial=link_data), })

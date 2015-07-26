@@ -1,6 +1,8 @@
-<div class="comment card" data-commentid="{{ comment.id }}" data-health="{{ comment.health }}" data-color="{{ comment.color }}">
+<div class="hiding-container">
 
-	<span class="hider"></span>
+	<div class="card comment-shower link"><span class="glyphicon glyphicon-plus"></span></div>
+
+<div class="comment card" data-commentid="{{ comment.id }}" data-health="{{ comment.health }}" data-color="{{ comment.color }}">
 
 	<span class="healthbox">
 		<div class="vote pos" data-color="POS"><span class="glyphicon glyphicon-circle-arrow-up"></span></div>
@@ -73,11 +75,13 @@
 		{% include "aggregateur/nouveau_commentaire.html" %}
 	</div>
 {% if comment.profondeur > profondeur_max %}
-		<p style="font-size: .9em; font-style: italic;"><a href="{% url 'commentaire' slug=comment.post_racine.slug pk=comment.pk %}"><span class="glyphicon glyphicon-arrow-right"></span> Continuer à lire les réponses à ce commentaire</a></p>
+	<p style="font-size: .9em; font-style: italic;"><a href="{% url 'commentaire' slug=comment.post_racine.slug pk=comment.pk %}"><span class="glyphicon glyphicon-arrow-right"></span> Continuer à lire les réponses à ce commentaire</a></p>
 {% else %}
-		{% for comment in comment.comment_set.all %}
-				{% include "aggregateur/commentaire.html" %}
-		{% endfor %}
+	{% for comment in comment.comment_set.all %}
+			{% include "aggregateur/commentaire.html" %}
+	{% endfor %}
 {% endif %}
 
 </div>
+
+</div> <!-- hiding-container -->

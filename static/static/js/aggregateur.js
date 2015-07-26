@@ -35,7 +35,7 @@ jQuery(function($) {
 		var comment = $(this).closest('.comment')
 		var commentId = comment.data('commentid')
 		var voteColor = $(this).data('color')
-		var url = '/p/' + commentId + '/commentvote/' + voteColor
+		var url = '/p/comment/' + commentId + '/vote/' + voteColor
 		var health = parseInt(comment.attr('data-health'), 10)
 		$.get(url, function(color){
 			comment.attr('data-color', color)
@@ -45,6 +45,17 @@ jQuery(function($) {
 	})
 
 
+	// Au chargement, on évalue la couleur attribuée par l'utilisateur aux commentaires
+	$('.comment').each(function(){
+		var comment = $(this)
+		var url = '/p/comment/' + comment.data('commentid') + '/getcolor'
+		var health = parseInt(comment.attr('data-health'), 10)
+		$.get(url, function(color){
+			comment.attr('data-color', color)
+			if (color == "POS") { health = health + 1 } else if (color == "NEG") { health = health - 1 }
+			comment.find('.health').hide().html(health).fadeIn()
+		})
+	})
 
 
 	$('#postranker').click(function(){
@@ -62,6 +73,11 @@ jQuery(function($) {
 	// Remplace les tags heading par des paragraphes dans les posts & commentaires en markdown
 	$('.aggregateur .content').find('h1, h2, h3, h4, h5, h6').replaceWith(function() {
 		return '<p>' + $(this).text() + '</p>'
+	})
+
+	$('.comment .hider, .comment-shower').click(function(){
+		$(this).closest('.hiding-container').children('.comment').slideToggle()
+		$(this).closest('.hiding-container').children('.comment-shower').slideToggle()
 	})
 
 	$('.comment .reply').click(function(){
@@ -86,6 +102,10 @@ jQuery(function($) {
 
 	$('#sidebar-toggle').click(function(){
 		$('#aggregateur').toggleClass('sidebar-show')
+	})
+
+	$('.nouveau-post .panel-heading').click(function(){
+		$(this).next('.panel-body').slideToggle()
 	})
 
 

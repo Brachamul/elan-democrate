@@ -1,3 +1,5 @@
+from math import sqrt
+
 from django.db import models
 from django.utils import timezone
 
@@ -74,6 +76,20 @@ class Comment(models.Model):
 			parent_post = comment.parent_post
 			if not parent_post : comment = comment.parent_comment
 		return profondeur
+
+	def evaluer_le_score(self):
+		POS = CommentVote.objects.filter(comment=self, color="POS").count()
+		NEG = CommentVote.objects.filter(comment=self, color="NEG").count()
+		n = POS + NEG # >>> Nombre de votes
+		if n == 0 :
+			score = 0
+		else :
+			z = 1.0  #1.0 = 85%, 1.6 = 95% >>> Niveau de confiance requis
+			phat = float(POS) / n 
+			score = sqrt(phat+z*z/(2*n)-z*((phat*(1-phat)+z*z/(4*n))/n))/(1+z*z/n) # Dafuq
+		self.rank = score
+		return score
+
 
 
 class CommentVote(models.Model):

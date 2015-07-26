@@ -3,7 +3,6 @@
 
 {% block head %}{{ block.super }}
 
-<title>EDEM - Nouveau Post</title>
 <link rel="stylesheet" href="{% get_static_prefix %}css/aggregateur.css" >
 
 {% endblock head %}
@@ -16,67 +15,75 @@
 
 <div class="col-sm-6">
 
-<div class="nouveau-post panel panel-default">
-	<div class="panel-heading">
-		<h4>Poster un nouveau texte</h4>
+	<div class="nouveau-post panel panel-default">
+		<div class="panel-heading">
+			<h4>Poster un nouveau texte</h4>
+		</div>
+		<div class="panel-body">
+			<form id="post_text_form" method="POST" action="" enctype="multipart/form-data">
+				<div class="form-group">
+					{% csrf_token %}
+					<div class="form-group">
+						{{ post_text_form.Titre.field.errors }}
+						<label for="{{ post_text_form.Titre.id_for_label }}">Titre</label>
+						{{ post_text_form.Titre }}
+					</div>
+					<div class="form-group">
+						{{ post_text_form.Texte.field.errors }}
+						<label for="{{ post_text_form.Texte.id_for_label }}">Texte</label>
+						{{ post_text_form.Texte }}
+					</div>
+					<div class="form-group">
+						{{ post_text_form.Illustration.field.errors }}
+						<label for="{{ post_text_form.Illustration.id_for_label }}">Illustration</label>
+						{{ post_text_form.Illustration }}
+						<span class="help-block">Facultatif. Insérez l'URL d'une image. Vous pouvez héberger vos images sur <a href="http://imgur.com" target="_blank">imgur</a>.</span>
+					</div>
+					<input type="hidden" name="format" value="TEXT">
+					<button type="submit" class="btn btn-primary">Poster</button>
+				</div>
+			 </form>
+		</div>
 	</div>
-	<div class="panel-body">
-		<form id="post_text_form" method="POST" action="" enctype="multipart/form-data">
-			<div class="form-group">
-				{% csrf_token %}
-				<div class="form-group">
-					{{ post_text_form.title.field.errors }}
-					<label for="{{ post_text_form.title.id_for_label }}">Titre</label>
-					{{ post_text_form.title }}
-				</div>
-				<div class="form-group">
-					{{ post_text_form.content.field.errors }}
-					<label for="{{ post_text_form.content.id_for_label }}">Texte</label>
-					{{ post_text_form.content }}
-				</div>
-				<div class="form-group">
-					{{ post_text_form.illustration.field.errors }}
-					<label for="{{ post_text_form.title.id_for_label }}">Illustration</label>
-					{{ post_text_form.illustration }}
-					<span class="help-block">Facultatif. Insérez l'URL d'une image. Vous pouvez héberger vos images sur <a href="http://imgur.com" target="_blank">imgur</a>.</span>
-				</div>
-				<input type="hidden" name="format" value="TEXT">
-				<button type="submit" class="btn btn-primary">Poster</button>
-			</div>
-		 </form>
-	</div>
-</div>
 
 </div>
 
 <div class="col-sm-6">
 
-<div class="nouveau-post panel panel-default">
-	<div class="panel-heading">
-		<h4>Partager un nouveau lien</h4>
-	</div>
-	<div class="panel-body">
-		<form id="post_form" method="POST" action="" enctype="multipart/form-data">
-			<div class="form-group">
-				{% csrf_token %}
+	<div class="nouveau-post panel panel-default">
+		<div class="panel-heading">
+			<h4>Partager un nouveau lien</h4>
+		</div>
+		<div class="panel-body">
+			<form id="post_form" method="POST" action="" enctype="multipart/form-data">
 				<div class="form-group">
-					{{ post_link_form.title.field.errors }}
-					<label for="{{ post_link_form.title.id_for_label }}">Titre</label>
-					{{ post_link_form.title }}
+					{% csrf_token %}
+					<div class="form-group">
+						{{ post_link_form.Titre.field.errors }}
+						<label for="{{ post_link_form.Titre.id_for_label }}">Titre</label>
+						{{ post_link_form.Titre }}
+					</div>
+					<div class="form-group">
+						{{ post_link_form.Lien_URL.field.errors }}
+						<label for="{{ post_link_form.Lien_URL.id_for_label }}">Lien URL</label>
+						{{ post_link_form.Lien_URL }}
+					</div>
+					<input type="hidden" name="format" value="LINK">
+					<button type="submit" class="btn btn-primary">Poster</button>
 				</div>
-				<div class="form-group">
-					{{ post_link_form.url.field.errors }}
-					<label for="{{ post_link_form.url.id_for_label }}">Lien URL</label>
-					{{ post_link_form.url }}
-				</div>
-				<input type="hidden" name="format" value="LINK">
-				<button type="submit" class="btn btn-primary">Poster</button>
-			</div>
-		 </form>
+			 </form>
+		</div>
 	</div>
-</div>
 
 </div>
 
 
 {% endblock content %}
+
+
+
+{% block scripts %} {{ block.super }}
+
+<script src="{% get_static_prefix %}js/aggregateur.js"></script>
+
+{% endblock scripts %}
