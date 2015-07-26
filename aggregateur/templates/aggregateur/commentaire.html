@@ -1,27 +1,24 @@
-<input id="checkbox-close-comment-{{ comment.pk }}" type="checkbox" />
+<div class="comment card" data-commentid="{{ comment.id }}" data-health="{{ comment.health }}" data-color="{{ comment.color }}">
 
-<div class="comment" id="comment-{{ comment.pk }}">
+	<span class="hider"></span>
 
-	<div class="meta">
-		<label for="checkbox-close-comment-{{ comment.pk }}">[<span class="minus">–</span><span class="plus">+</span>]</label>
+	<span class="healthbox">
+		<div class="vote pos" data-color="POS"><span class="glyphicon glyphicon-circle-arrow-up"></span></div>
+		<div class="health">{{ comment.health }}</div>
+		<div class="vote neg" data-color="NEG"><span class="glyphicon glyphicon-circle-arrow-down"></span></div>
+	</span>
+
+	<span class="meta">
 		<span class="author">Par <a href="{% url 'membres' %}{{ comment.author.id }}">{{ comment.author.profil.nom_courant }}</a></span>
 		<span class="date">, il y a <time datetime="{{ comment.date }}">{{ post.date|timesince }}</time></span>
-	</div>
-
-	<div class="healthbox">
-		<span class="vote pos {% if comment.color == "POS" %}active{% endif %}" data-commentid="{{ comment.id }}">▲</span>
-		<span class="health">{{ comment.health }}</span>
-		<span class="vote neg {% if comment.color == "NEG" %}active{% endif %}" data-commentid="{{ comment.id }}">▼</span>
-	</div>
-	
-	<input id="checkbox-modify-comment-{{ comment.pk }}" type="checkbox"/>
+	</span>
 
 	<div class="content">
 		{% load markdown_deux_tags %}
 		{{ comment.content|markdown }}
 		{% if comment.deleted %}<span class="deleted">- supprimé</span>{% endif %}
 	</div>
-	
+
 	{% if comment.author == user %}
 	<form class="modifier" method="POST" action="" enctype="multipart/form-data">
 		<div class="form-group">
@@ -36,15 +33,16 @@
 				Enregistrer
 			</button>
 			</input>
-			<label for="checkbox-modify-comment-{{ comment.pk }}" class="btn btn-default btn-sm cancel-edit">
+			<span class="btn btn-default btn-sm cancel-edit">
 				<span class="glyphicon glyphicon-remove"></span>
 				Annuler
-			</label>
+			</span>
 		</div>
 	</form>
 	{% endif %}
 
 	<div class="actions">
+		<span class="hider link">cacher</span>
 		<a href="{% url 'commentaire' post.slug comment.pk %}"><span class="permalink">lien</span></a>
 		{% if comment.parent_comment %}
 			<a href="{% url 'commentaire' post.slug comment.parent_comment.pk %}">
@@ -55,7 +53,7 @@
 		{% if user == comment.author %}
 			{% if not comment.deleted %}
 			<form class="supprimer form-inline" method="POST" action="" enctype="multipart/form-data">
-				<label for="checkbox-delete-comment-{{ comment.pk }}"><span class="report">supprimer</span></label>
+				<label for="checkbox-delete-comment-{{ comment.pk }}"><span class="delete link">supprimer</span></label>
 				<input id="checkbox-delete-comment-{{ comment.pk }}" type="checkbox"/>
 				{% csrf_token %}
 				<input type="hidden" name="content" value="">
@@ -64,31 +62,16 @@
 				<button type="submit" class="btn btn-warning btn-xs">confirmer la suppresion ?</button>
 			</form>
 			{% endif %}
-		<label for="checkbox-modify-comment-{{ comment.pk }}"><span class="modify">modifier</span></label>
+		<span class="modify link">modifier</span>
 		{% endif %}
-		<label for="checkbox-replyto-comment-{{ comment.pk }}">
-		<span class="reply">répondre</span></label>
+		<span class="reply link" data-comment="{{ comment.pk }}">répondre</span></label>
 {% comment %}	<span class="report">signaler</span> {% endcomment %}
 	</div>
 
 {% comment %} This code also exists in the "afficher_le_post" page {% endcomment %}
-<input id="checkbox-replyto-comment-{{ comment.pk }}" type="checkbox"/>
-<div class="comment-form panel-body">
-	<form method="POST" action="" enctype="multipart/form-data">
-		<div class="form-group">
-			{% csrf_token %}
-			<div class="form-group">
-				{{ comment_form.content.field.errors }}
-				{{ comment_form.content }}
-			</div>
-			<input type="hidden" name="action" value="nouveau_commentaire">
-			<input type="hidden" name="parent_comment" value="{{ comment.pk }}">
-			<button type="submit" class="btn btn-primary">Poster</button>
-			<label class="btn btn-default" for="checkbox-replyto-comment-{{ comment.pk }}">Cacher</label>
-		</div>
-	 </form>
-</div>
-
+	<div class="comment-form panel-body" data-comment="{{ comment.pk }}">
+		{% include "aggregateur/nouveau_commentaire.html" %}
+	</div>
 {% if comment.profondeur > profondeur_max %}
 		<p style="font-size: .9em; font-style: italic;"><a href="{% url 'commentaire' slug=comment.post_racine.slug pk=comment.pk %}"><span class="glyphicon glyphicon-arrow-right"></span> Continuer à lire les réponses à ce commentaire</a></p>
 {% else %}
