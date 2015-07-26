@@ -1,34 +1,24 @@
-{% extends "base.html" %}
+{% extends "aggregateur/channel.html" %}
 {% load static %}
 
-{% block head %}{{ block.super }}
-
-<title>{{ post.title }}</title>
-
-<link rel="stylesheet" href="{% get_static_prefix %}css/aggregateur.css" >
-
-{% endblock head %}
-
-{% block content %} {{ block.super }}
+{% block primary_content %}
 
 <div class="aggregateur self">
 
-	<div class="alert alert-warning"><span class="glyphicon glyphicon-warning-sign"></span> Vous consultez un commentaire appartenant aux réponses d'un post. Pour revenir au post et voir les autres commentaires, cliquez <a href="{% url 'post' post.slug %}">ici</a>.</div>
+	<div class="alert alert-warning card">
+		<span class="glyphicon glyphicon-warning-sign"></span> Vous consultez un commentaire appartenant aux réponses d'un post. Pour revenir au post et voir les autres commentaires, cliquez <a href="{% url 'post' post.slug %}"><strong>ici</strong></a>.
+	</div>
 
-	<div class="comments"><div class="comments-wrapper">
+	<div class="comments">
+
+		<div class="comments-wrapper">
 		
-		{% include "aggregateur/commentaire.html" %}
+			{% include "aggregateur/commentaire.html" %}
+	
+		</div>
 
-	</div></div>
+	</div>
 
 </div>
 
-{% endblock content %}
-
-
-
-{% block scripts %} {{ block.super }}
-
-<script src="{% get_static_prefix %}js/aggregateur.js"></script>
-
-{% endblock scripts %}
+{% endblock primary_content %}

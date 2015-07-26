@@ -1,10 +1,22 @@
 {% if messages %}
 	<div id="messages" class="messages">
 		{% for message in messages %}
-			<div{% if message.tags %} class="alert alert-{{message.tags}} alert-dismissible"{% endif %}>{{ message }}
+
+			<div class="alert alert-dismissible 
+				{% if message.level_tag %}alert-{{message.level_tag}}{% endif %}
+				{% if messages.extra_tags %}{{message.extra_tags}}{% endif %}
+				">
+
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
+						<span class="glyphicon glyphicon-remove"></span>
 				</button>
+
+				{% if 'safe' in message.tags %}
+					{{ message|safe }}
+				{% else %}
+					{{ message }}
+				{% endif %}
+
 			</div>
 		{% endfor %}
 	</div>
