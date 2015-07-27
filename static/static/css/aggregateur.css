@@ -122,7 +122,14 @@ article .actions { margin: 2rem 0; }
 .comment-shower { color: #999; display: none; }
 
 
+/* CHANNEL SIDEBAR */
 
+#secondary-wrapper { color: #999; }
+#secondary-wrapper .box { color: #999; padding: 0 1rem 1rem; }
+#secondary-wrapper h3 { padding: 0 1rem 2rem; border-bottom: 1px solid #F2F2F2; }
+
+
+/****************/
 
 
 
@@ -209,7 +216,11 @@ a:visited .title { color: #d2824e; }
 	margin-bottom: 1rem;
 }
 
-.card:not(.alert) { background-color: white; padding: .5rem 1rem; border: 1px solid #eee; }
+.card:not(.alert) {
+	padding: .5rem 1rem;
+	background-color: white;
+	border: 1px solid #eee;
+}
 
 .card.btn-primary { }
 .card.btn:hover { }
@@ -218,4 +229,6 @@ a:visited .title { color: #d2824e; }
 @-moz-keyframes fadein { 0% { opacity:0; transform:translateY(48px); -webkit-transform:translateY(48px); } 100% { opacity:1; transform:translateY(0px); -webkit-transform:translateY(0px); } }
 @-o-keyframes fadein { 0% { opacity:0; transform:translateY(48px); -webkit-transform:translateY(48px); } 100% { opacity:1; transform:translateY(0px); -webkit-transform:translateY(0px); } }
 @keyframes fadein { 0% { opacity:0; transform:translateY(48px); -webkit-transform:translateY(48px); } 100% { opacity:1; transform:translateY(0px); -webkit-transform:translateY(0px); } }
+
+
 

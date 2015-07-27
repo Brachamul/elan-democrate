@@ -22,11 +22,11 @@
 				<span class="vote neg" data-color="NEG"><span class="glyphicon glyphicon-circle-arrow-down"></span></span>
 			</span>
 
-			<span class="meta">
+			<div class="meta">
 				<span class="author">Par <a href="{% url 'membres' %}{{ post.author.id }}">{{ post.author.profil.nom_courant }}</a>
 				</span><span class="date">, il y a <time datetime="{{ post.date }}">{{ post.date|timesince }}</time>
 				</span>{% if post.channel %}, <span class="channel">dans {{ post.channel }}</span>{% endif %}
-			</span>
+			</div>
 
 			{% if post.illustration %}
 			<div class="illustration">
