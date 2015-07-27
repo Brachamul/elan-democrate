@@ -216,7 +216,7 @@ a:visited .title { color: #d2824e; }
 	margin-bottom: 1rem;
 }
 
-.card:not(.alert) {
+.card:not(.alert):not(.btn) {
 	padding: .5rem 1rem;
 	background-color: white;
 	border: 1px solid #eee;
@@ -225,10 +225,10 @@ a:visited .title { color: #d2824e; }
 .card.btn-primary { }
 .card.btn:hover { }
 
-@-webkit-keyframes fadein { 0% { opacity:0; transform:translateY(48px); -webkit-transform:translateY(48px); } 100% { opacity:1; transform:translateY(0px); -webkit-transform:translateY(0px); } }
-@-moz-keyframes fadein { 0% { opacity:0; transform:translateY(48px); -webkit-transform:translateY(48px); } 100% { opacity:1; transform:translateY(0px); -webkit-transform:translateY(0px); } }
-@-o-keyframes fadein { 0% { opacity:0; transform:translateY(48px); -webkit-transform:translateY(48px); } 100% { opacity:1; transform:translateY(0px); -webkit-transform:translateY(0px); } }
-@keyframes fadein { 0% { opacity:0; transform:translateY(48px); -webkit-transform:translateY(48px); } 100% { opacity:1; transform:translateY(0px); -webkit-transform:translateY(0px); } }
+@-webkit-keyframes fadein { 0% { opacity: 0; transform: translateY(48px); -webkit-transform: translateY(48px); } 100% { opacity: 1; transform: translateY(0px); -webkit-transform: translateY(0px); } }
+@-moz-keyframes fadein { 0% { opacity: 0; transform: translateY(48px); -webkit-transform: translateY(48px); } 100% { opacity: 1; transform: translateY(0px); -webkit-transform: translateY(0px); } }
+@-o-keyframes fadein { 0% { opacity: 0; transform: translateY(48px); -webkit-transform: translateY(48px); } 100% { opacity: 1; transform: translateY(0px); -webkit-transform: translateY(0px); } }
+@keyframes fadein { 0% { opacity: 0; transform: translateY(48px); -webkit-transform: translateY(48px); } 100% { opacity: 1; transform: translateY(0px); -webkit-transform: translateY(0px); } }
 
 
 
