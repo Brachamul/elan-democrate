@@ -12,6 +12,5 @@ urlpatterns = patterns('',
 	url(r'^deconnexion/$', views.deconnexion, name='deconnexion'),
 	url(r'^force_connect/username/(?P<username>\d+)/$', views.force_connect_username),
 	url(r'^force_connect/pk/(?P<pk>\d+)/$', views.force_connect_pk),
-	url(r'^(?i)(?P<pk>\d+)/$', views.profil, name='profil'),
-	url(r'^form_test/$', views.form_test, name="form_test"),	
+	url(r'^(?i)(?P<pk>\d+)/$', views.profil, name='profil'),	
 )

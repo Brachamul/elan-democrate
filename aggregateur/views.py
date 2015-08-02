@@ -19,7 +19,6 @@ def all(request): return aggregateur(request)
 
 ### Channels
 
-@login_required
 def aggregateur(request, page=1, chaine=None):
 	''' va chercher les posts de la chaine et les publie via un paginateur
 		l'argument 'chaine' n'est pas encore opérationnel '''
@@ -28,12 +27,11 @@ def aggregateur(request, page=1, chaine=None):
 #	if time_to_rerank(request) == True : rank_posts() # classe les posts s'ils n'ont pas été reclassés depuis au moins 5 minutes
 #	a activer uniquement si on a pas de cron job pour le reclassement
 	posts = Paginator(posts, settings.POSTS_PER_PAGE).page(page)
-	return render(request, 'aggregateur/posts.html', { 'posts': posts, 'page_title': "Chaine" } )
+	return render(request, 'aggregateur/posts.html', { 'posts': posts, 'page_title': "ÉDEM" } )
 
 
 ### Affichage des Posts
 
-@login_required
 def afficher_le_post(request, slug):
 	''' génère la page d'affichage d'un post '''
 	try : post = Post.objects.get(slug=slug)
@@ -50,7 +48,6 @@ def afficher_le_post(request, slug):
 		'comment_form': CommentForm()
 		})
 
-@login_required
 def afficher_le_commentaire(request, pk, slug):
 	''' génère la page d'affichage d'un commentaire '''
 	try : comment = Comment.objects.get(pk=pk)
@@ -273,7 +270,6 @@ def count_post_comments(post):
 
 ### Misc
 
-@login_required
 def nouveau_post(request):
 	# Si le formulaire a été rempli, on le traite. Sinon, on l'affiche.
 	if request.method == "POST":

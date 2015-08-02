@@ -177,6 +177,8 @@ def initialize_base_posts(request):
 
 	return redirect('tableau_de_bord')
 
+	# https://i.imgur.com/VGNzCfi.png
+
 @login_required
 def delete_all_posts(request):
 	Post.objects.all().delete()

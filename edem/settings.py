@@ -34,7 +34,7 @@ INSTALLED_APPS = (
 	'fichiers_adherents',
 	'tableau_de_bord',
 	'aggregateur',
-    'datascope', # différents affichages de données pour les utilisateurs
+	'datascope', # différents affichages de données pour les utilisateurs
 	'mandats',
 	'notifications',
 )
@@ -94,7 +94,7 @@ MEDIA_URL = '/media/'
 STATIC_ROOT = os.path.join((BASE_DIR), "_static_root")
 MEDIA_ROOT = os.path.join((BASE_DIR), "_media_root")
 STATICFILES_DIRS = (
-    os.path.join((BASE_DIR), "static", "static"),
+	os.path.join((BASE_DIR), "static", "static"),
 )
 
 # Template location
@@ -115,44 +115,44 @@ LOGIN_REDIRECT_URL = 'accueil'
 
 
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': True,
-    'formatters': {
-        'standard': {
-            'format': '%(asctime)s %(levelname)s %(name)s %(message)s'
-        },
-    },
-    'handlers': {
-        'default': {
-            'level':'DEBUG',
-            'class':'logging.handlers.RotatingFileHandler',
-            'filename': 'log_loggidy.log',
-            'maxBytes': 1024*1024*5, # 5 MB
-            'backupCount': 5,
-            'formatter':'standard',
-        },  
-        'request_handler': {
-                'level':'DEBUG',
-                'class':'logging.handlers.RotatingFileHandler',
-                'filename': 'log_django_request.log',
-                'maxBytes': 1024*1024*5, # 5 MB
-                'backupCount': 5,
-                'formatter':'standard',
-        },
-    },
-    'loggers': {
+	'version': 1,
+	'disable_existing_loggers': True,
+	'formatters': {
+		'standard': {
+			'format': '%(asctime)s %(levelname)s %(name)s %(message)s'
+		},
+	},
+	'handlers': {
+		'default': {
+			'level':'DEBUG',
+			'class':'logging.handlers.RotatingFileHandler',
+			'filename': 'log_loggidy.log',
+			'maxBytes': 1024*1024*5, # 5 MB
+			'backupCount': 5,
+			'formatter':'standard',
+		},  
+		'request_handler': {
+				'level':'DEBUG',
+				'class':'logging.handlers.RotatingFileHandler',
+				'filename': 'log_django_request.log',
+				'maxBytes': 1024*1024*5, # 5 MB
+				'backupCount': 5,
+				'formatter':'standard',
+		},
+	},
+	'loggers': {
 
-        '': {
-            'handlers': ['default'],
-            'level': 'DEBUG',
-            'propagate': True
-        },
-        'django.request': { # Stop SQL debug from logging to main logger
-            'handlers': ['request_handler'],
-            'level': 'DEBUG',
-            'propagate': False
-        },
-    }
+		'': {
+			'handlers': ['default'],
+			'level': 'DEBUG',
+			'propagate': True
+		},
+		'django.request': { # Stop SQL debug from logging to main logger
+			'handlers': ['request_handler'],
+			'level': 'DEBUG',
+			'propagate': False
+		},
+	}
 }
 
 
@@ -173,6 +173,14 @@ HELP_EMAIL_ADRESS = "[ Demandez à Antoine de créer une adresse d'aide, on en a
 
 # API EMBEDLY
 EMBEDLY_KEY = "111e2b3ee0714950ad122d221fa7d444"
+
+
+# FRONT-END IMPORTS, using context_processors.py
+IMPORT_JQUERY = '<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>'
+IMPORT_BOOTSTRAP_JS = '<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>'
+IMPORT_BOOTSTRAP_CSS = '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">'
+
+
 
 ##########################
 #  Settings localisables :

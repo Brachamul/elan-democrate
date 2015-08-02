@@ -3,6 +3,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404, render, render_to_response, redirect
 
 from .models import Credentials, EmailConfirmationInstance
@@ -61,21 +62,26 @@ def authenticate_and_login(request, username, code) :
 
 from django.core.mail import send_mail
 
-def SendAuthCode(user, code):
+def SendAuthCode(request, user, code):
 	lien = site_url + "/m/connexion/" + user.username + "&" + code
-	print('Utilisateur n°{}, code {}, email : {}'.format(user, code, user.email))
-	send_mail(
-		"[Élan Démocrate] Lien de connexion",
-		"Cliquez sur le lien suivan pour vous authentifier: \n\n"
-		"{lien}\n\n"
-		"Ce code d'accès ne sera valable qu'une fois.\n\n"
-		"Les mots de passe sont fréquemment utilisés à plusieurs endroits sur internet. Il suffit qu'un seul des sites auxquels vous êtes inscrit soit piraté pour que votre mot de passe soit compromis. La méthode d'authentification utilisée ici, avec un code d'accès à utilisation unique, vous protège du vol de mot de passe.\n\n"
-		"N'oubliez pas de changer souvent le mot de passe de votre boîte email !".format(lien=lien),
-		emailer,
-		[user.email],
-		fail_silently=False
-		)
-	return True
+	try :
+		send_mail(
+			"[Élan Démocrate] Lien de connexion",
+			"Cliquez sur le lien suivan pour vous authentifier: \n\n"
+			"{lien}\n\n\n"
+			"Ce code d'accès ne sera valable qu'une fois.\n\n"
+			"Les mots de passe sont fréquemment utilisés à plusieurs endroits sur internet. Il suffit qu'un seul des sites auxquels vous êtes inscrit soit piraté pour que votre mot de passe soit compromis. La méthode d'authentification utilisée ici, avec un code d'accès à utilisation unique, vous protège du vol de mot de passe.\n\n"
+			"N'oubliez pas de changer souvent le mot de passe de votre boîte email !".format(lien=lien),
+			emailer,
+			[user.email],
+			fail_silently=False
+			)
+	except :
+		logging.error("Couldn't send a logging-in email.".encode('utf8'))
+		messages.error(request, "Une erreur est survenue. Le serveur email est peut-être indisponible.")
+		return False
+	else :
+		return True
 
 def AskForAuthCode(request, user):
 	try : credentials = Credentials.objects.get(user=user)
@@ -88,7 +94,7 @@ def AskForAuthCode(request, user):
 		elif not user.email : # Il n'y a pas de mail associé à cet utilisateur ?
 			messages.error(request, "Il n'y a pas d'adresse email associée à ce compte ! Bizarre ...")
 			return False
-	return SendAuthCode(user, credentials.code) # Confirmation qu'un code a été envoyé
+	return SendAuthCode(request, user, credentials.code) # Confirmation qu'un code a été envoyé
 
 
 def SendEmailConfirmationCode(request, adherent):
