@@ -13,7 +13,7 @@ class Credentials(models.Model):
 	code = models.CharField(max_length=settings.AUTH_CODE_LENGTH, default=randomly_generated_code(settings.AUTH_CODE_LENGTH))
 	date = models.DateTimeField(auto_now=True)
 	attempts = models.PositiveSmallIntegerField(default=0) # increments each time a user attempts to log in with a code
-	def is_expired(self): return not (self.date > (datetime.now() - timedelta(hours=settings.AUTH_CODE_LIFESPAN))) # Code is active for 4 hours
+	def is_expired(self): return not ((self.date + timedelta(hours=settings.AUTH_CODE_LIFESPAN)) > (datetime.now())) # Code is active for 4 hours
 	def too_many_attempts(self): return (self.attempts >= settings.AUTH_CODE_MAXIMUM_ATTEMPS)
 	def regenerate(self):
 		self.code = self.code.default

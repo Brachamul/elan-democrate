@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime, timedelta
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -20,7 +21,7 @@ def all(request): return aggregateur(request)
 ### Channels
 
 @login_required
-def aggregateur(request, page=1, chaine=None):
+def aggregateur(request, page=1, channel="accueil"):
 	''' va chercher les posts de la chaine et les publie via un paginateur
 		l'argument 'chaine' n'est pas encore opérationnel '''
 	posts = Post.objects.all().order_by('-rank', '-health')
@@ -28,7 +29,7 @@ def aggregateur(request, page=1, chaine=None):
 #	if time_to_rerank(request) == True : rank_posts() # classe les posts s'ils n'ont pas été reclassés depuis au moins 5 minutes
 #	a activer uniquement si on a pas de cron job pour le reclassement
 	posts = Paginator(posts, settings.POSTS_PER_PAGE).page(page)
-	return render(request, 'aggregateur/posts.html', { 'posts': posts, 'page_title': "Chaine" } )
+	return render(request, 'aggregateur/posts.html', { 'posts': posts, 'channel': channel, } ) # 'page_title': channel.name 
 
 
 ### Affichage des Posts
@@ -47,7 +48,8 @@ def afficher_le_post(request, slug):
 		'post': post,
 		'page_title': post.title,
 		'profondeur_max': settings.PROFONDEUR_MAXIMALE_DES_COMMENTAIRES,
-		'comment_form': CommentForm()
+		'comment_form': CommentForm(),
+		'channel': post.channel
 		})
 
 @login_required
@@ -64,7 +66,8 @@ def afficher_le_commentaire(request, pk, slug):
 	else : return render(request, 'aggregateur/afficher_le_commentaire.html', {
 		'post': post, 'comment': comment,
 		'profondeur_max': comment.profondeur() + settings.PROFONDEUR_MAXIMALE_DES_COMMENTAIRES,
-		'comment_form': CommentForm()
+		'comment_form': CommentForm(),
+		'channel': post.channel
 		})
 
 
@@ -87,15 +90,29 @@ def process_post_changes(request, post) :
 
 		elif request.POST.get('action') == 'modifier_le_commentaire' :
 			try : comment = Comment.objects.get(pk=request.POST.get('comment-pk'))
-			except Comment.DoesNotExist : messages.error(request, "Erreur : ce commentaire n'existe peut-être plus")
+			except Comment.DoesNotExist : messages.error(request, "Erreur : ce commentaire n'existe peut-être plus.")
 			else :
 				if comment.author != request.user : messages.error(request, "Vous n'êtes pas l'auteur de ce commentaire, et ne pouvez donc pas le modifier.")
 				else :
 					comment.content = request.POST.get('content')
 					if comment.content == '' : comment.deleted = True
 					else : comment.deleted = False
-					comment.save(update_fields=['content','deleted'])
+					if (comment.date + timedelta(minutes=10)) > datetime.now() : comment.last_edit = datetime.now()
+					comment.save()
 					redirect_location = '#comment-{pk}'.format(pk=comment.pk)
+
+		elif request.POST.get('action') == 'modifier_le_post' :
+			print("modifying post")
+			try : post = Post.objects.get(pk=request.POST.get('post-pk'))
+			except Post.DoesNotExist : messages.error(request, "Erreur : ce post n'existe peut-être plus.")
+			else :
+				if post.author != request.user : messages.error(request, "Vous n'êtes pas l'auteur de ce post, et ne pouvez donc pas le modifier.")
+				else :
+					post.content = request.POST.get('content')
+					post.deleted = (post.content == '') # if post is empty, consider deleted
+					if (post.date + timedelta(minutes=10)) > datetime.now() : post.last_edit = datetime.now()
+					post.save()
+					redirect_location = '#' # reload page
 
 	if redirect_location : return redirect_location # si une id interne est définie, on la transmet
 	else : return False
@@ -171,7 +188,6 @@ def comment_vote(request, comment_id, color):
 	return HttpResponse(endcolor)
 
 
-from datetime import datetime, timedelta
 from math import log, sqrt
 
 def rank_posts():
@@ -274,7 +290,7 @@ def count_post_comments(post):
 ### Misc
 
 @login_required
-def nouveau_post(request):
+def nouveau_post(request, channel=None):
 	# Si le formulaire a été rempli, on le traite. Sinon, on l'affiche.
 	if request.method == "POST":
 		text_data = link_data = None # les données seront renvoyées au formulaire en cas d'erreur, pour éviter d'avoir à recommencer

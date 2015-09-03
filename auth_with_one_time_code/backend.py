@@ -81,6 +81,7 @@ def AskForAuthCode(request, user):
 	try : credentials = Credentials.objects.get(user=user)
 	except Credentials.DoesNotExist : credentials = Credentials.objects.create(user=user)
 	else :
+		print (credentials.attempts)
 		if credentials.is_expired() : credentials.regenerate()
 		elif credentials.too_many_attempts() : # Cet utilisateur a essayé de se connecter sans y parvenir plusieurs fois de suite.
 			messages.error(request, "Vous avez essayé de vous connecter plus de {} fois. Par mesure de sécurité, votre compte est temporairement verrouillé. pendant {}h.".format(settings.AUTH_CODE_MAXIMUM_ATTEMPS, settings.AUTH_CODE_LIFESPAN))

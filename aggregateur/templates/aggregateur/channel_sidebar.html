@@ -1,8 +1,18 @@
+{% load bootstrap3 %}
+
 {% comment %} <div class="alert alert-success card">Chouette!</div>	{% endcomment %} 
 
 <div class="card card-big">
 	<h3>Accueil</h3>
 	<div class="box">
 		<p>Bienvenue sur Élan Démocrate.</p>
+		<a class="btn btn-xs btn-default"
+			{% if channel %}
+				href="{% url 'nouveau_post_avec_chaine' channel %}"
+			{% else %}
+				href="{% url 'nouveau_post' %}"
+			{% endif %}>
+			{% bootstrap_icon "plus" %} nouveau post
+			</a>
 	</div>
 </div>

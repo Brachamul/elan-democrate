@@ -86,9 +86,9 @@ jQuery(function($) {
 		$(this).toggleClass('active')
 	})
 
-	$('.comment .link.modify').click(function(){
-		$(this).closest('.comment').children('form.modifier').slideToggle()
-		$(this).closest('.comment').children('.content').slideToggle()
+	$('.card .link.modify, .card .cancel-edit').click(function(){ // Shows form to modify comments or posts
+		$(this).closest('.card').find('form.modifier').slideToggle()
+		$(this).closest('.card').find('.content').slideToggle()
 	})
 
 	$('.root-commentor button.toggle').click(function(){

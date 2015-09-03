@@ -37,6 +37,7 @@ INSTALLED_APPS = (
     'datascope', # différents affichages de données pour les utilisateurs
 	'mandats',
 	'notifications',
+    'bootstrap3', # django-bootstrap3
 )
 
 MIDDLEWARE_CLASSES = (

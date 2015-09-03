@@ -42,8 +42,30 @@
 			</div>
 			{% endif %}
 
+			{% if post.author == user %}
+			<form class="modifier" method="POST" action="" enctype="multipart/form-data">
+				<div class="form-group">
+					{% csrf_token %}
+					<textarea id="post-input" name="content" rows="5" class="form-control" maxlength="10000">{{ post.content }}</textarea>
+					<input type="hidden" name="action" value="modifier_le_post">
+					<input type="hidden" name="post-pk" value="{{ post.pk }}">
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-default btn-sm">
+						<span class="glyphicon glyphicon-ok"></span>
+						Enregistrer
+					</button>
+					</input>
+					<span class="btn btn-default btn-sm cancel-edit">
+						<span class="glyphicon glyphicon-remove"></span>
+						Annuler
+					</span>
+				</div>
+			</form>
+			{% endif %}
+
 			<div class="actions">
-				<span class="nombre-de-commentaires">
+				<span class="nombre-de-commentaires link">
 					<a href="{% url 'aggregateur' %}{{ post.slug }}">
 					{% if post.number_of_comments = 0 %}
 						pas de commentaires
@@ -52,6 +74,7 @@
 					{% endif %}
 					</a>
 				</span>
+				<span class="modify link">modifier</span>
 {% comment %}	<span class="share">partager</span> {% endcomment %}
 {% comment %}	<span class="favorite">ajouter aux favoris</span> {% endcomment %}
 {% comment %}	<span class="hide">cacher</span> {% endcomment %}

@@ -35,6 +35,9 @@
 	.nouveau-post .panel-heading::after { content: '+'; position: absolute; top: 25%; right: 1.4em; font-size: 1.4em; }
 }
 
+/* Modifier un post */
+
+.post .modifier { max-width: 69rem; display: none; }
 
 
 /* META DONNES DES POSTS */
@@ -101,6 +104,7 @@ article .actions { margin: 2rem 0; }
 /* COMMENTS */
 
 .comment .healthbox, .comment .meta { display: inline-block; vertical-align: middle; margin-right: .5rem; }
+.comment .meta { font-size: 0.8m; }
 .comment .healthbox div { display: inline-block; color: #999; }
 .comment .health { vertical-align: .2rem; margin: 0 .5rem;}
 .comment .vote { font-size: 1.2em; }
