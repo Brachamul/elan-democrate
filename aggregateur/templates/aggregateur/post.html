@@ -7,13 +7,15 @@
 
 		<div class="postbox">
 
-			{% if post.format == "TEXT" %}
-			<a href="{% url 'aggregateur' %}{{ post.slug }}">
-			{% elif post.format == "LINK" %}
-			<a href="{{ post.link }}" target="_blank">
-			{% endif %}
-				<h1 class="title">{{ post.title }}</h1>
-			</a>
+			<h1 class="title">
+				{% if post.format == "TEXT" %}
+				<a href="{% url 'aggregateur' %}{{ post.slug }}">
+				{% elif post.format == "LINK" %}
+				<a href="{{ post.link }}" target="_blank">
+				{% endif %}
+				{{ post.title }}
+				</a>
+			</h1>
 			{% comment %}<span class="source">(<a href="#">loremipsum.com</a>)</span> {% endcomment %}
 
 			<span class="healthbox">
@@ -75,7 +77,11 @@
 					</a>
 				</span>
 				<span class="modify link">modifier</span>
-{% comment %}	<span class="share">partager</span> {% endcomment %}
+				<span class="share link" data-url="{% url 'post' post.pk %}">partager</span>
+				{% include 'aggregateur/partager.html' %}
+
+
+
 {% comment %}	<span class="favorite">ajouter aux favoris</span> {% endcomment %}
 {% comment %}	<span class="hide">cacher</span> {% endcomment %}
 {% comment %}	<span class="report">signaler</span> {% endcomment %}

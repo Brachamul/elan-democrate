@@ -21,7 +21,7 @@ def all(request): return aggregateur(request)
 ### Channels
 
 @login_required
-def aggregateur(request, page=1, channel="accueil"):
+def aggregateur(request, page=1, channel_name="accueil"):
 	''' va chercher les posts de la chaine et les publie via un paginateur
 		l'argument 'chaine' n'est pas encore opérationnel '''
 	posts = Post.objects.all().order_by('-rank', '-health')
@@ -29,20 +29,17 @@ def aggregateur(request, page=1, channel="accueil"):
 #	if time_to_rerank(request) == True : rank_posts() # classe les posts s'ils n'ont pas été reclassés depuis au moins 5 minutes
 #	a activer uniquement si on a pas de cron job pour le reclassement
 	posts = Paginator(posts, settings.POSTS_PER_PAGE).page(page)
-	return render(request, 'aggregateur/posts.html', { 'posts': posts, 'channel': channel, } ) # 'page_title': channel.name 
+	return render(request, 'aggregateur/posts.html', { 'posts': posts, 'channel': channel_name, 'page_title': channel_name.capitalize() } )
 
 
 ### Affichage des Posts
 
-@login_required
 def afficher_le_post(request, slug):
 	''' génère la page d'affichage d'un post '''
-	try : post = Post.objects.get(slug=slug)
-	except Post.DoesNotExist : raise Http404("Ce post n'existe pas, ou plus.")
-	else :
-		post = get_post_meta(request, post)
-		post.number_of_comments = count_post_comments(post)
-		redirect = process_post_changes(request, post)
+	post = get_object_or_404(Post, slug=slug)
+	post = get_post_meta(request, post)
+	post.number_of_comments = count_post_comments(post)
+	redirect = process_post_changes(request, post)
 	if redirect : return HttpResponseRedirect(redirect)
 	else : return render(request, 'aggregateur/post.html', {
 		'post': post,
@@ -299,15 +296,17 @@ def nouveau_post(request, channel=None):
 			title = request.POST.get('Titre')
 			content = request.POST.get('Texte')
 			illustration = request.POST.get('Illustration')
-			text_data = {'title': title, 'content': content, 'illustration': illustration}
+			partageable = request.POST.get('Partageable')
+			text_data = {'title': title, 'content': content, 'illustration': illustration, 'partageable': partageable}
 			if PostTextForm(request.POST).is_valid() :
 				new_post = Post(
 					format='TEXT',
 					title=title,
 					content=content,
+					illustration=illustration,
+					shareable=(partageable==True),
 					author=request.user,
 #					channel=Channel.objects.get(pk=1), # change when adding more channels
-					illustration=illustration,
 					)
 				new_post.save()
 				new_post_adress = "/p/" + new_post.slug
@@ -326,15 +325,17 @@ def nouveau_post(request, channel=None):
 		elif format == "LINK" :
 			title = request.POST.get('Titre')
 			url = request.POST.get('Lien_URL')
-			link_data = {'title': title, 'url': url}
+			partageable = request.POST.get('Partageable')
+			link_data = {'title': title, 'url': url, 'partageable': partageable}
 			if PostLinkForm(request.POST).is_valid() :
 				new_post = Post(
 					format = 'LINK',
 					title=title,
 					content=url,
+					illustration=illustrate(url),
+					shareable=(partageable==True),
 					author=request.user,
 #					channel=Channel.objects.get(pk=1), # change when adding more channels
-					illustration=illustrate(url),
 					)
 				new_post.save()
 				new_post_adress = "/p/" + new_post.slug
@@ -351,9 +352,9 @@ def nouveau_post(request, channel=None):
 				messages.error(request, "Votre post n'a pas été publié : {}".format(PostLinkForm(request.POST).errors), extra_tags='safe')
 		else: # pas de format spécifié ?
 			messages.warning(request, "Il y a un bug dans la matrice !")
-		return render(request, 'aggregateur/nouveau_post.html', {'post_text_form': PostTextForm(initial=text_data), 'post_link_form': PostLinkForm(initial=link_data), })
+		return render(request, 'aggregateur/nouveau_post.html', {'post_text_form': PostTextForm(initial=text_data), 'post_link_form': PostLinkForm(initial=link_data), 'page_title': 'Nouveau post', })
 	else :
-		return render(request, 'aggregateur/nouveau_post.html', {'post_text_form': PostTextForm(), 'post_link_form': PostLinkForm(), })
+		return render(request, 'aggregateur/nouveau_post.html', {'post_text_form': PostTextForm(), 'post_link_form': PostLinkForm(), 'page_title': 'Nouveau post', })
 
 
 ###

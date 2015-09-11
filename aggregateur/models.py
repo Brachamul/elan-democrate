@@ -30,6 +30,7 @@ class Post(models.Model):
 	health = models.IntegerField(default=0) # votes positifs - votes négatifs
 	rank = models.IntegerField(default=0) # rang selon l'algorithme, prenant en compte le temps passé
 	illustration = models.URLField(max_length=2000, null=True, blank=True)
+	shareable = models.BooleanField(default=True)
 	def __str__(self): return self.title
 
 
