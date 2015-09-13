@@ -91,7 +91,7 @@ footer.endpage .footer-wrapper {
 footer.endpage a:not(:hover) { color: #999; }
 footer.endpage a { font-weight: bold; }
 
-.btn-primary, .btn-primary.card { background-color: #EC7C34; border-color: #E4742C; }
+.btn-primary, .btn-primary.card, .btn-primary:visited { background-color: #EC7C34; border-color: #E4742C; color: white; }
 .btn-primary:hover,
 .btn-primary:focus { background-color: #E4742C; border-color: #DC6C24; color: white; }
 .btn-primary:active,
