@@ -66,7 +66,7 @@ def SendAuthCode(user, code):
 	lien = site_url + reverse('url_connexion', kwargs={ 'username': user.username, 'code': code })
 	send_mail(
 		"[Élan Démocrate] Lien de connexion",
-		"Cliquez sur le lien suivan pour vous authentifier: \n\n"
+		"Cliquez sur le lien suivant pour vous authentifier: \n\n"
 		"{lien}\n\n"
 		"Ce code d'accès ne sera valable qu'une fois.\n\n"
 		"Les mots de passe sont fréquemment utilisés à plusieurs endroits sur internet. Il suffit qu'un seul des sites auxquels vous êtes inscrit soit piraté pour que votre mot de passe soit compromis. La méthode d'authentification utilisée ici, avec un code d'accès à utilisation unique, vous protège du vol de mot de passe.\n\n"
