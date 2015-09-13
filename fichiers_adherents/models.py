@@ -57,7 +57,7 @@ class FichierAdherents(models.Model):
 		return self.slug
 
 	class Meta:
-		verbose_name_plural = u'fichiers adhérents'
+		verbose_name_plural = 'fichiers adhérents'.encode('utf-8')
 		permissions = (('peut_televerser', 'peut téléverser'),)
 		# if request.user.has_perm('fichiers_adhérents.peut_televerser')
 
@@ -94,7 +94,7 @@ class Adherent(models.Model):
 class AdherentDuFichier(models.Model):
 
 	class Meta:
-		verbose_name_plural = u"adhérents du fichier"
+		verbose_name_plural = "adhérents du fichier".encode('utf-8')
 
 	fichier = models.ForeignKey(FichierAdherents)
 	adhérent = models.ForeignKey(Adherent, null=True)
