@@ -33,7 +33,5 @@ def pecho_les_mandats(profil, uniquement_les_mandats_actifs=False):
 			if uniquement_les_mandats_actifs :
 				if detenteur.actif() and detenteur.mandat.actif() :
 					profil.mandats.append(detenteur)
-					print ("ce mandat est ACTIF")
-				else : print ("ce mandat est INACTIF")
 			else : profil.mandats.append(detenteur)
 	return profil.mandats
