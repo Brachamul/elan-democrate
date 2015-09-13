@@ -30,6 +30,9 @@
 
 		<div class="collapse navbar-collapse" id="navbar-collapse">
 		<ul class="nav navbar-nav navbar-right">
+
+{% if user.is_authenticated %}
+
 			<li class="dropdown">
 				<a href="#" class="dropdown-toggle"
 				data-toggle="dropdown" role="button" aria-expanded="false">
@@ -112,6 +115,9 @@
 				</ul>
 			</li>
 			{% endif %}
+
+{% endif %}
+
 		</ul>
 		</div><!-- end collapse -->
 	</div>
@@ -127,13 +133,17 @@
 
 {% block footer %}
 
-<div class="footer-wrapper">
+{% if user.is_authenticated %}
 
-<p>Si vous rencontrez un bug, signalez le bugs sur <a href="https://github.com/Brachamul/elan-democrate/issues/new">GitHub</a>.  Le réseau Élan Démocrate est développé par Antonin Grêlé, des Jeunes Démocrates. Remerciements à Antoine Carette, Stéphane Manet et Stephen Daloz.</p>
+	<div class="footer-wrapper">
 
-<p>Pour participer à l'amélioration de cet outil, n'hésitez pas à <a href="mailto:antonin.grele@gmail.com">me contacter</a> !</p>
+	<p>Si vous rencontrez un bug, signalez le bugs sur <a href="https://github.com/Brachamul/elan-democrate/issues/new">GitHub</a>.  Le réseau Élan Démocrate est développé par Antonin Grêlé, des Jeunes Démocrates. Remerciements à Antoine Carette, Stéphane Manet et Stephen Daloz.</p>
 
-</div>
+	<p>Pour participer à l'amélioration de cet outil, n'hésitez pas à <a href="mailto:antonin.grele@gmail.com">me contacter</a> !</p>
+
+	</div>
+
+{% endif %}
 
 {% endblock footer %}
 

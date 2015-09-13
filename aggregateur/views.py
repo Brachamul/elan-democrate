@@ -99,7 +99,6 @@ def process_post_changes(request, post) :
 					redirect_location = '#comment-{pk}'.format(pk=comment.pk)
 
 		elif request.POST.get('action') == 'modifier_le_post' :
-			print("modifying post")
 			try : post = Post.objects.get(pk=request.POST.get('post-pk'))
 			except Post.DoesNotExist : messages.error(request, "Erreur : ce post n'existe peut-être plus.")
 			else :
@@ -118,7 +117,7 @@ def get_post_meta(request, post):
 	post.number_of_comments = count_post_comments(post)
 	if post.format == "LINK" : post.link = post.content
 	else : post.link = post.slug
-	try : vote = Vote.objects.get(post=post, user=request.user)
+	try : vote = Vote.objects.get(post=post, user=request.user.id)
 	except Vote.DoesNotExist : pass
 	else : post.color = vote.color
 	return post

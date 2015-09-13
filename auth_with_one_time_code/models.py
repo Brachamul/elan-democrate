@@ -16,9 +16,9 @@ class Credentials(models.Model):
 	def is_expired(self): return not ((self.date + timedelta(hours=settings.AUTH_CODE_LIFESPAN)) > (datetime.now())) # Code is active for 4 hours
 	def too_many_attempts(self): return (self.attempts >= settings.AUTH_CODE_MAXIMUM_ATTEMPS)
 	def regenerate(self):
-		self.code = self.code.default
+		self.code = randomly_generated_code(settings.AUTH_CODE_LENGTH)
 		self.date = datetime.now()
-		self.attempts = self.code.default
+		self.attempts = 0
 		self.save()
 	class Meta :
 		verbose_name_plural = "Credentials"

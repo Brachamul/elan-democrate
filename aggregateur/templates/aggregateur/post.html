@@ -1,7 +1,18 @@
 {% extends "aggregateur/channel.html" %}
 {% load static %}
 
+{% block head %}{{ block.super }}
+
+<meta property="og:title" content="{{ post.title }}" />
+{% if post.illustration %}<meta property="og:image" content="{{ post.illustration }}" />{% endif %}
+
+
+{% endblock %}
+
+
 {% block primary_content %}
+
+{% if user.is_authenticated %}
 
 	<article class="post card card-big" data-postid="{{ post.id }}" data-health="{{ post.health }}" data-color="{{ post.color }}">
 
@@ -104,4 +115,36 @@
 
 	</div>
 
+{% elif post.shareable %}
+
+{% comment %} Version simplifiée du post pour affichage public et partage {% endcomment %}
+
+	<article class="post card card-big" data-postid="{{ post.id }}" data-health="{{ post.health }}" data-color="{{ post.color }}">
+
+		<div class="postbox">
+
+			<h1 class="title">
+				{% if post.format == "TEXT" %}
+				<a href="{% url 'aggregateur' %}{{ post.slug }}">
+				{% elif post.format == "LINK" %}
+				<a href="{{ post.link }}" target="_blank">
+				{% endif %}
+				{{ post.title }}
+				</a>
+			</h1>
+
+			{% if post.illustration %}
+			<div class="illustration">
+				<img src="{{ post.illustration }}" />
+			</div>
+			{% endif %}
+			<div class="anchor"></div>
+
+		</div>
+
+	</article>
+
+{% endif %}
+
 {% endblock primary_content %}
+

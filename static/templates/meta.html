@@ -20,6 +20,11 @@
 	<link rel="shortcut icon" href="{% get_static_prefix %}images/favicon.ico" type="image/x-icon" />
 
 	<title>{% block title %}ÉDEM{% endblock title %} - Élan Démocrate</title>
+
+
+	<meta property="og:site_name" content="Élan Démocrate" />
+	<meta property="og:type" content="website" />
+
 	{% block head %}{% endblock head %}
 
 	{% comment %} http://writing.colin-gourlay.com/safely-using-ready-before-including-jquery/ {% endcomment %}
@@ -39,27 +44,21 @@
 <style>#noscript-dismiss:checked + .alert { display: none }</style>
 </noscript>
 
-{% if user.is_authenticated %}
-	
-	<header>
-		{% block header %}{% endblock header %}
-	</header>
-	
-	<div id="main-container" class="container-fluid main-container" >
-		{% if messages %}<div class="col-sm-12">{% include "messages.html" %}</div>{% endif %}
-		{% block content %}{% endblock content %}
-	</div>
-	
-	<footer class="endpage">
-		{% block footer %}{% endblock footer %}
-	</footer>	
 
-{% else %}
+<header>
+	{% block header %}{% endblock header %}
+</header>
 
-	{% include "membres/authenticateur.html" %}
+<div id="main-container" class="container-fluid main-container" >
+	{% if messages %}<div class="col-sm-12">{% include "messages.html" %}</div>{% endif %}
+	{% block content %}{% endblock content %}
+</div>
+
+<footer class="endpage">
+	{% block footer %}{% endblock footer %}
+</footer>	
+
 	
-{% endif %}
-
 {% block scripts %}
 
 {% include "spinner.html" %}
