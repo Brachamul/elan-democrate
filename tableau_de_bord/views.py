@@ -173,6 +173,26 @@ def initialize_base_posts(request):
 		date = datetime.datetime(year=2015, month=7, day=14),
 		)
 
+	v0_4 = Post.objects.get_or_create(
+		title = "Mise à jour v0.4 : refonte graphique, pages semi-publiques pour partager sur les réseaux sociaux public et on peut maintenant modifier ou supprimer ses posts",
+		format = "TEXT",
+		channel= channel,
+		content = markdownify(
+			"""Hello, pour la mise à jour v0.4, voici les modifications principales :
+
+			* **Refonte graphique :**
+			Un graphisme plus aéré, plus animé et moins sombre, inspiré de [Naut](www.reddit.com/r/naut).
+			
+			* **Pages semi-publiques:**
+			Lorsqu'on poste du texte ou un lien, on peut désormais le rendre "partageable" sur les réseaux sociaux, ce qui permet d'en afficher le titre et l'image. Le reste de la page reste caché aux utilisateurs non-authentifiés.
+			
+			* **Modifier et supprimer ses postsise en place des mandats :**
+			C'était impossible, maintenant c'est possible."""),
+		author = request.user,
+		illustration = illustration,
+		date = datetime.datetime(year=2015, month=9, day=13),
+		)
+
 	messages.success(request, "Les posts de mise à jour ont été installés ou mis à jour.")
 
 	return redirect('tableau_de_bord')
