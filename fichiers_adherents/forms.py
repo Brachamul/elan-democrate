@@ -1,9 +1,9 @@
 from django import forms
 
-from .models import FichierAdhérents
+from .models import FichierAdherents
 
-class TéléversementDuFichierAdhérentForm(forms.ModelForm):
+class TéléversementDuFichierAdherentForm(forms.ModelForm):
 
 	class Meta:
-		model = FichierAdhérents
+		model = FichierAdherents
 		fields = ('fichier_csv',)

@@ -3,6 +3,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render, render_to_response, redirect
 
 from .models import Credentials, EmailConfirmationInstance
@@ -62,8 +63,7 @@ def authenticate_and_login(request, username, code) :
 from django.core.mail import send_mail
 
 def SendAuthCode(user, code):
-	lien = site_url + "/m/connexion/" + user.username + "&" + code
-	print('Utilisateur n°{}, code {}, email : {}'.format(user, code, user.email))
+	lien = site_url + reverse('url_connexion', kwargs={ 'username': user.username, 'code': code })
 	send_mail(
 		"[Élan Démocrate] Lien de connexion",
 		"Cliquez sur le lien suivan pour vous authentifier: \n\n"
@@ -97,7 +97,7 @@ def SendEmailConfirmationCode(request, adherent):
 	new_email_confirmation_instance = EmailConfirmationInstance(adherent=adherent, email=adherent.email)
 	new_email_confirmation_instance.save()
 	code = new_email_confirmation_instance.code
-	lien = site_url + "/m/enregistrement/" + str(adherent.num_adhérent) + "&" + code
+	lien = site_url + reverse('url_enregistrement', kwargs={ 'num_adherent': str(adherent.num_adhérent), 'code': code })
 	send_mail(
 		"[Élan Démocrate] Création de votre compte",
 		"Bonjour,\n\n"
@@ -135,7 +135,7 @@ def SendEmailInvalidNotification(request, email):
 
 def SendEmailAlreadyRegistered(request, email):
 	# Si l'adresse correspond déjà à un adhérent
-	lien = site_url + "/m/connexion/"
+	lien = site_url + reverse('connexion')
 	send_mail(
 		"[Élan Démocrate] Votre adresse mail est déjà associée à un compte",
 		"Bonjour,\n\n"
@@ -152,7 +152,7 @@ def SendEmailAlreadyRegistered(request, email):
 
 def SendUserDoesNotExistEmail(request, email):
 	# Si l'adresse ne correspond pas à un adhérent, on ne peut pas logger l'utilisateur
-	lien = site_url + "/m/enregistrement/"
+	lien = site_url + reverse('enregistrement')
 	send_mail(
 		"[Élan Démocrate] Vous n'avez pas encore créé de compte",
 		"Bonjour,\n\n"

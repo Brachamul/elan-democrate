@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime, timedelta
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -14,28 +15,38 @@ from django.views.generic import TemplateView, DetailView
 from .models import *
 from .forms import *
 
-def all(request):
-	# temporary catch all url for posts
-	return HttpResponseRedirect('/')
+def all(request): return aggregateur(request)
 
+
+### Channels
+
+@login_required
+def aggregateur(request, page=1, channel_name="accueil"):
+	''' va chercher les posts de la chaine et les publie via un paginateur
+		l'argument 'chaine' n'est pas encore opérationnel '''
+	posts = Post.objects.all().order_by('-rank', '-health')
+	for post in posts : post = get_post_meta(request, post)
+#	if time_to_rerank(request) == True : rank_posts() # classe les posts s'ils n'ont pas été reclassés depuis au moins 5 minutes
+#	a activer uniquement si on a pas de cron job pour le reclassement
+	posts = Paginator(posts, settings.POSTS_PER_PAGE).page(page)
+	return render(request, 'aggregateur/posts.html', { 'posts': posts, 'channel': channel_name, 'page_title': channel_name.capitalize() } )
 
 
 ### Affichage des Posts
 
-@login_required
 def afficher_le_post(request, slug):
 	''' génère la page d'affichage d'un post '''
-	try : post = Post.objects.get(slug=slug)
-	except Post.DoesNotExist : raise Http404("Ce post n'existe pas, ou plus.")
-	else :
-		post = get_post_meta(request, post)
-		post.number_of_comments = count_post_comments(post)
-		redirect = process_post_changes(request, post)
+	post = get_object_or_404(Post, slug=slug)
+	post = get_post_meta(request, post)
+	post.number_of_comments = count_post_comments(post)
+	redirect = process_post_changes(request, post)
 	if redirect : return HttpResponseRedirect(redirect)
-	else : return render(request, 'aggregateur/afficher_le_post.html', {
+	else : return render(request, 'aggregateur/post.html', {
 		'post': post,
+		'page_title': post.title,
 		'profondeur_max': settings.PROFONDEUR_MAXIMALE_DES_COMMENTAIRES,
-		'comment_form': CommentForm()
+		'comment_form': CommentForm(),
+		'channel': post.channel
 		})
 
 @login_required
@@ -52,7 +63,8 @@ def afficher_le_commentaire(request, pk, slug):
 	else : return render(request, 'aggregateur/afficher_le_commentaire.html', {
 		'post': post, 'comment': comment,
 		'profondeur_max': comment.profondeur() + settings.PROFONDEUR_MAXIMALE_DES_COMMENTAIRES,
-		'comment_form': CommentForm()
+		'comment_form': CommentForm(),
+		'channel': post.channel
 		})
 
 
@@ -75,39 +87,45 @@ def process_post_changes(request, post) :
 
 		elif request.POST.get('action') == 'modifier_le_commentaire' :
 			try : comment = Comment.objects.get(pk=request.POST.get('comment-pk'))
-			except Comment.DoesNotExist : messages.error(request, "Erreur : ce commentaire n'existe peut-être plus")
+			except Comment.DoesNotExist : messages.error(request, "Erreur : ce commentaire n'existe peut-être plus.")
 			else :
 				if comment.author != request.user : messages.error(request, "Vous n'êtes pas l'auteur de ce commentaire, et ne pouvez donc pas le modifier.")
 				else :
 					comment.content = request.POST.get('content')
 					if comment.content == '' : comment.deleted = True
 					else : comment.deleted = False
-					comment.save(update_fields=['content','deleted'])
+					if (comment.date + timedelta(minutes=10)) > datetime.now() : comment.last_edit = datetime.now()
+					comment.save()
 					redirect_location = '#comment-{pk}'.format(pk=comment.pk)
+
+		elif request.POST.get('action') == 'modifier_le_post' :
+			try : post = Post.objects.get(pk=request.POST.get('post-pk'))
+			except Post.DoesNotExist : messages.error(request, "Erreur : ce post n'existe peut-être plus.")
+			else :
+				if post.author != request.user : messages.error(request, "Vous n'êtes pas l'auteur de ce post, et ne pouvez donc pas le modifier.")
+				else :
+					post.content = request.POST.get('content')
+					post.deleted = (post.content == '') # if post is empty, consider deleted
+					if (post.date + timedelta(minutes=10)) > datetime.now() : post.last_edit = datetime.now()
+					post.save()
+					redirect_location = '#' # reload page
 
 	if redirect_location : return redirect_location # si une id interne est définie, on la transmet
 	else : return False
-
-@login_required
-def aggregateur(request, page_number=1, fil=None):
-	''' va chercher les posts et les publie via un paginateur
-		l'argument "fil" n'est pas opérationnel '''
-	try : posts = Post.objects.all().order_by('-rank', '-health')
-	except Post.DoesNotExist : return False
-	else :
-		for post in posts : post = get_post_meta(request, post)
-		rank_posts(request) # classe les posts s'ils n'ont pas été reclassés depuis au moins 5 minutes
-		posts = Paginator(posts, settings.POSTS_PER_PAGE).page(page_number)
-		return { 'posts': posts, 'template': "aggregateur/carte_aggregateur.html", }
 
 def get_post_meta(request, post):
 	post.number_of_comments = count_post_comments(post)
 	if post.format == "LINK" : post.link = post.content
 	else : post.link = post.slug
-	try : vote = Vote.objects.get(post=post, user=request.user)
+	try : vote = Vote.objects.get(post=post, user=request.user.id)
 	except Vote.DoesNotExist : pass
 	else : post.color = vote.color
 	return post
+
+def comment_color(request, comment_id):
+	try : vote = CommentVote.objects.get(comment=comment_id, user=request.user)
+	except CommentVote.DoesNotExist : return HttpResponse("NEU")
+	else : return HttpResponse(vote.color)
 
 
 
@@ -166,26 +184,28 @@ def comment_vote(request, comment_id, color):
 	return HttpResponse(endcolor)
 
 
-from datetime import datetime, timedelta
-from math import log
+from math import log, sqrt
 
-def rank_posts(request, force=False):
-	''' compte le score relatif d'un post
-	straight from the reddit algorithm '''
-	if force == True or time_to_rerank(request) == True :
-		# on classe les posts s'il n'y a pas eu de classement depuis 5 minutes
-		# sauf si un post vient d'être créé, dans quel cas cette fonction est appelée avec l'argument "force"
-		bayrou_2007 = datetime(2007, 4, 22) # 18% quand même !+
-		for post in Post.objects.filter(date__gt=datetime.now()-timedelta(days=30)) : # on arrête de ranker les posts de + d'un mois
-			healthify(post) # on recalcule le score du post
-			time_since_bayrou = ( post.date - bayrou_2007 ) # quel est l'âge relatif du post ?
-			time_since_bayrou = time_since_bayrou.days * 86400 + time_since_bayrou.seconds # conversion en secondes
-			order = log(max(abs(post.health), 1), 10)
-			sign = 1 if post.health > 0 else -1 if post.health < 0 else 0
-			post.rank = round( sign * order + time_since_bayrou / 45000, 7)
-			post.save()
-			logging.info("Posts have been reranked".encode('utf8'))
+def rank_posts():
+	''' classe les posts selon leur score et leur ancienneté ''' # straight from the reddit algorithm http://amix.dk/blog/post/19588
+	bayrou_2007 = datetime(2007, 4, 22) # 18% quand même !
+	for post in Post.objects.filter(date__gt=datetime.now()-timedelta(days=30)) : # on arrête de ranker les posts de + d'un mois
+		healthify(post) # on recalcule le score du post
+		time_since_bayrou = ( post.date - bayrou_2007 ) # quel est l'âge relatif du post ?
+		time_since_bayrou = time_since_bayrou.days * 86400 + time_since_bayrou.seconds # conversion en secondes
+		order = log(max(abs(post.health), 1), 10)
+		sign = 1 if post.health > 0 else -1 if post.health < 0 else 0
+		post.rank = round( sign * order + time_since_bayrou / 45000, 7)
+		post.save()
+		logging.info("Posts have been reranked".encode('utf8'))
 	return HttpResponse()
+
+def rank_comments():
+	''' classe les commentaires selon leur score ''' # straight from the reddit algorithm http://amix.dk/blog/post/19588
+	for commentaire in Comment.objects.filter(date__gt=datetime.now()-timedelta(days=30)) : # on arrête de ranker les commentaires de + d'un mois
+		commentaire.evaluer_le_score()
+	return HttpResponse()
+
 
 def comment_medic(request):
 	for comment in Comment.objects.all() :
@@ -266,28 +286,30 @@ def count_post_comments(post):
 ### Misc
 
 @login_required
-def nouveau_post(request):
+def nouveau_post(request, channel=None):
 	# Si le formulaire a été rempli, on le traite. Sinon, on l'affiche.
 	if request.method == "POST":
 		text_data = link_data = None # les données seront renvoyées au formulaire en cas d'erreur, pour éviter d'avoir à recommencer
 		format = request.POST.get('format')
 		if format == "TEXT" :
-			title = request.POST.get('title')
-			content = request.POST.get('content')
-			illustration = request.POST.get('illustration')
-			text_data = {'title': title, 'content': content, 'illustration': illustration}
+			title = request.POST.get('Titre')
+			content = request.POST.get('Texte')
+			illustration = request.POST.get('Illustration')
+			partageable = request.POST.get('Partageable')
+			text_data = {'title': title, 'content': content, 'illustration': illustration, 'partageable': partageable}
 			if PostTextForm(request.POST).is_valid() :
 				new_post = Post(
 					format='TEXT',
 					title=title,
 					content=content,
+					illustration=illustration,
+					shareable=(partageable==True),
 					author=request.user,
 #					channel=Channel.objects.get(pk=1), # change when adding more channels
-					illustration=illustration,
 					)
 				new_post.save()
 				new_post_adress = "/p/" + new_post.slug
-				rank_posts(request, force=True)
+				rank_posts()
 				logging.info(
 					"New text link posted by {username} : {title}".format(
 						username=request.user.username,
@@ -297,24 +319,26 @@ def nouveau_post(request):
 				messages.success(request, "Votre post est publié.")
 				return HttpResponseRedirect(new_post_adress)
 			else :
-				messages.error(request, "Votre post n'a pas été publié, il semble qu'il y ait une erreur dans les champs que vous avez rempli.")
+				messages.error(request, "Votre post n'a pas été publié : {}".format(PostTextForm(request.POST).errors), extra_tags='safe')
 
 		elif format == "LINK" :
-			title = request.POST.get('title')
-			url = request.POST.get('url')
-			link_data = {'title': title, 'url': url}
+			title = request.POST.get('Titre')
+			url = request.POST.get('Lien_URL')
+			partageable = request.POST.get('Partageable')
+			link_data = {'title': title, 'url': url, 'partageable': partageable}
 			if PostLinkForm(request.POST).is_valid() :
 				new_post = Post(
 					format = 'LINK',
 					title=title,
 					content=url,
+					illustration=illustrate(url),
+					shareable=(partageable==True),
 					author=request.user,
 #					channel=Channel.objects.get(pk=1), # change when adding more channels
-					illustration=illustrate(url),
 					)
 				new_post.save()
 				new_post_adress = "/p/" + new_post.slug
-				rank_posts(request, force=True)
+				rank_posts()
 				logging.info(
 					"New link post by {username} : {title}".format(
 						username=request.user.username,
@@ -324,12 +348,12 @@ def nouveau_post(request):
 				messages.success(request, "Votre post est publié.")
 				return HttpResponseRedirect(new_post_adress)
 			else :
-				messages.error(request, "Votre post n'a pas été publié, il semble qu'il y ait une erreur dans les champs que vous avez rempli.")
+				messages.error(request, "Votre post n'a pas été publié : {}".format(PostLinkForm(request.POST).errors), extra_tags='safe')
 		else: # pas de format spécifié ?
 			messages.warning(request, "Il y a un bug dans la matrice !")
-		return render(request, 'aggregateur/nouveau_post.html', {'post_text_form': PostTextForm(initial=text_data), 'post_link_form': PostLinkForm(initial=link_data), })
+		return render(request, 'aggregateur/nouveau_post.html', {'post_text_form': PostTextForm(initial=text_data), 'post_link_form': PostLinkForm(initial=link_data), 'page_title': 'Nouveau post', })
 	else :
-		return render(request, 'aggregateur/nouveau_post.html', {'post_text_form': PostTextForm(), 'post_link_form': PostLinkForm(), })
+		return render(request, 'aggregateur/nouveau_post.html', {'post_text_form': PostTextForm(), 'post_link_form': PostLinkForm(), 'page_title': 'Nouveau post', })
 
 
 ###

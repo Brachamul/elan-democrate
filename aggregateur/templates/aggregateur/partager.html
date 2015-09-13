@@ -1,0 +1,59 @@
+<ul class="sharing-buttons">
+	<li>
+		<a class="btn btn-default btn-sm share_email" >
+			<span><i class="fa fa-envelope"></i> EMAIL</span>
+		</a>
+	</li>
+	<li>
+		<a class="btn btn-default btn-sm share_facebook">
+			<span><i class="fa fa-facebook"></i> FACEBOOK</span>
+		</a>
+	</li>	
+	<li>
+		<a class="btn btn-default btn-sm share_twitter">
+			<span><i class="fa fa-twitter"></i> TWITTER</span>
+		</a>
+	</li>
+	<li>
+		<a class="btn btn-default btn-sm share_googleplus">
+			<span><i class="fa fa-google-plus"></i> GOOGLE+</span>
+		</a>
+	</li>
+</ul>
+
+<style>
+
+.sharing-buttons { display: none; } /* S'affiche quand on clique sur "partager" */
+
+.sharing-buttons li {
+	list-style-type: none;
+	display: inline; 
+}
+
+#aggregateur .sharing-buttons a.btn-default:link,
+#aggregateur .sharing-buttons a.btn-default:visited,
+#aggregateur .sharing-buttons a.btn-default:active { border: none; color: white; }
+#aggregateur .sharing-buttons a.btn-default:hover { text-decoration: underline; }
+
+.sharing-buttons a.share_email { background-color: #ffBF00 }
+.sharing-buttons a.share_facebook { background-color: #3b5998 }
+.sharing-buttons a.share_twitter { background-color: #55acee }
+.sharing-buttons a.share_googleplus { background-color: #dd4b39 }
+
+.sharing-buttons li i { margin-right: .35em; }
+
+</style>
+
+<script>
+
+var link = window.location.origin + window.location.pathname
+var title = "{{ post.title }}"
+
+$(function() {
+	$('.share_email').attr('href', 'mailto:?subject=' + title + '&amp;body=' + link)
+	$('.share_facebook').attr('href', 'https://www.facebook.com/sharer/sharer.php?u=' + link)
+	$('.share_twitter').attr('href', 'https://twitter.com/intent/tweet?url=' + link + '&text=' + title + '&hashtags=ElanDemocrate')
+	$('.share_googleplus').attr('href', 'https://plus.google.com/share?url=' + link)
+})
+
+</script>

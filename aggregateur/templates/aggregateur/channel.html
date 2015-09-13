@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}{{ block.super }}
+
+<link rel="stylesheet" href="{% get_static_prefix %}css/aggregateur.css" >
+
+{% endblock head %}
+
+
+{% block content %}
+
+<div id="aggregateur">
+
+	<div id="primary-wrapper">
+
+		<div id="sidebar-toggle" class="btn btn-default btn-block card">Channel<span id="sidebar-back" class="glyphicon glyphicon-chevron-left"></span></div>
+
+		{% block primary_content %}
+
+			<!-- Main content displayed here -->
+
+		{% endblock primary_content %}
+
+	</div>
+
+	<div id="secondary-wrapper">
+
+		{% include 'aggregateur/channel_sidebar.html' %}
+
+	</div>
+
+	<div class="anchor"></div>
+
+</div>
+
+{% endblock content %}
+
+{% block scripts %} {{ block.super }}
+
+<script src="{% get_static_prefix %}js/aggregateur.js"></script>
+
+{% endblock scripts %}

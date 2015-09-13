@@ -6,13 +6,13 @@ from django.http import HttpResponseRedirect, HttpResponse, HttpRequest
 from django.shortcuts import get_object_or_404, render, render_to_response, redirect
 
 @login_required
-def tableau_de_bord(request):
-    return render(request, 'tableau_de_bord/tableau_de_bord.html', {'page_title': "Tableau de bord"})
+def tableau_de_bord(request): return render(request, 'tableau_de_bord/tableau_de_bord.html', {'page_title': "Tableau de bord"})
 
 from mandats.models import *
 from fichiers_adherents.models import *
 from datascope.models import *
 from membres.models import *
+from aggregateur.models import *
 
 @login_required
 def initialisation_edem(request):
@@ -86,8 +86,6 @@ def delete_all_mandates(request):
 	messages.success(request, "Les mandats ont tous été supprimés")
 	return redirect('tableau_de_bord')
 
-
-
 @login_required
 def delete_all_adherents(request):
 	Adherent.objects.all().delete()
@@ -97,4 +95,93 @@ def delete_all_adherents(request):
 	Institution.objects.filter(meta_institution=MetaInstitution.objects.get(nom="Fédération JDem")).delete()
 	VueFederation.objects.all().delete()
 	messages.success(request, "Les adherents et fichiers ont tous été supprimés")
+	return redirect('tableau_de_bord')
+
+
+
+# Posts de mise à jour
+
+import datetime
+def markdownify(multiple_string): return multiple_string.replace('\t', '').replace('\n', '  \n')
+
+@login_required
+def initialize_base_posts(request):
+
+	channel = Channel.objects.get_or_create(name="NotesDeMaj", official=True)[0]
+
+	Post.objects.filter(channel=channel).delete()
+
+	illustration = "/static/images/flat_upload.png"
+
+	v0_2 = Post.objects.get_or_create(
+		title = "Mise à jour v0.2 : notifications, illustrations et relooking des posts",
+		format = "TEXT",
+		channel= channel,
+		content = markdownify(
+			"""Hello, pour la mise à jour v0.2, voici les modifications principales :
+
+			* **Un système de notifications a été mis en place :**
+			Si vous répondez à un post ou à un commentaire, son auteur sera notifié.
+			
+			* **Les posts sont désormais illustrés :**
+			Si le post est un lien vers un article ou une page web, il sera illustré par une image provenant de cet article ou de cette page. Si le post est un texte, il sera illustré par l'avatar de l'auteur.
+			
+			* **Les posts ont été relookés :** 
+			Pour améliorer l'affichage sur mobile et afficher les commentaires plus clairement. """),
+		author = request.user,
+		illustration = illustration,
+		date = datetime.datetime(year=2015, month=6, day=7)
+		)[0]
+
+	v0_2_6 = Comment.objects.get_or_create(
+		parent_post = v0_2,
+		content = markdownify(
+			"""**Mise à jour v0.2.6 (nombreux fixes et améliorations) :**
+
+			- Illustrations possibles sur les posts "texte"
+			- Gestion des commentaires profonds
+			- Ajout de liens vers le parent de chaque commentaire
+			- Résolution du non-classement des posts de type "lien"
+			- Rajout des couleurs alternatives pour les liens
+			- Résolution du fait que les nouveaux commentaires gris ne s'affichaient
+			pas en jaune
+			- On peut maintenant clore les messages serveur"""),
+		author = request.user,
+		)[0]
+
+	v0_3 = Post.objects.get_or_create(
+		title = "Mise à jour v0.3 : refonte de l'authentification, amélioration du traitement du fichier adhérent, mise en place des mandats, et les responsables fédéraux ont désormais accès à leur partie du fichier",
+		format = "TEXT",
+		channel= channel,
+		content = markdownify(
+			"""Hello, pour la mise à jour v0.3, voici les modifications principales :
+
+			* **Authentification :**
+			Retravaillé en profondeur, le processus d'authentification a été simplifié et allégé. Il est désormais plus fluide et plus sécurisé. Par exemple, il devient impossible de "tester" une adresse mail pour voir si elle est reconnue par le fichier adhérent (donc pas de message du genre "nous avons bien envoyé un email à l'adresse patate@patate.com").
+			
+			* **Traitement automatisé du fichier adhérents :**
+			Ajout d'une étape de validation : une fois qu'on a téléversé le fichier, on peut regarder le résultat de l'import avant de le charger dans la base. De plus, on peut désormais revenir en arrière en activant un ancien fichier en cas de problème.
+			La visualisation du fichier avant sa mise en ligne permet de consulter le nombre de nouvelles adhésions, de réadhésions, et de pertes d'adhérents depuis le dernier fichier.
+			
+			* **Mise en place des mandats :**
+			Lors du chargement d'un fichier adhérent, s'il y a des nouvelles fédération, des mandats sont créés, qu'on peut ensuite attribuer aux responsables fédéraux.
+
+			* **Vues partielles du fichier :**
+			Les responsables fédéraux peuvent désormais afficher le fichier adhérent, et ne voient que la fédération à laquelle ils ont accès."""),
+		author = request.user,
+		illustration = illustration,
+		date = datetime.datetime(year=2015, month=7, day=14),
+		)
+
+	messages.success(request, "Les posts de mise à jour ont été installés ou mis à jour.")
+
+	return redirect('tableau_de_bord')
+
+@login_required
+def delete_all_posts(request):
+	Post.objects.all().delete()
+	Comment.objects.all().delete()
+	Vote.objects.all().delete()
+	CommentVote.objects.all().delete()
+	messages.success(request, "Les posts, commentaires et votes ont tous été supprimés")
 	return redirect('tableau_de_bord')

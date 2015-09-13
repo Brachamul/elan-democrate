@@ -30,7 +30,6 @@ INSTALLED_APPS = (
 	'django_gravatar', # django-gravatar2
 	'markdown_deux', # github.com/trentm/django-markdown-deux
 	'auth_with_one_time_code', 
-	'accueil',
 	'membres',
 	'fichiers_adherents',
 	'tableau_de_bord',
@@ -38,6 +37,7 @@ INSTALLED_APPS = (
     'datascope', # différents affichages de données pour les utilisateurs
 	'mandats',
 	'notifications',
+    'bootstrap3', # django-bootstrap3
 )
 
 MIDDLEWARE_CLASSES = (

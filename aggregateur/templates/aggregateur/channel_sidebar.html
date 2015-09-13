@@ -1,0 +1,33 @@
+{% load bootstrap3 %}
+
+{% comment %} <div class="alert alert-success card">Chouette!</div>	{% endcomment %} 
+
+{% if user.is_authenticated %}
+
+<div class="card card-big">
+	<h3>Accueil</h3>
+	<div class="box">
+		<p>Bienvenue sur Élan Démocrate.</p>
+		<a class="btn btn-xs btn-default"
+			{% if channel %}
+				href="{% url 'nouveau_post_avec_chaine' channel %}"
+			{% else %}
+				href="{% url 'nouveau_post' %}"
+			{% endif %}>
+			{% bootstrap_icon "plus" %} nouveau post
+			</a>
+	</div>
+</div>
+
+{% else %}
+
+<div class="card card-big">
+	<h3>Visiteur</h3>
+	<div class="box">
+		<p>Vous consultez notre site en mode visiteur.</p>
+		<p>Authentifiez-vous pour avoir accès à l'intégralité de la page.</p>
+		<p><a href="{% url 'connexion' %}" class="btn btn-primary btn-block" style="color: white;" onclick="window.open(this.href, 'Authentification', 'width=600, height=400'); return false">Authentification</a></p>
+	</div>
+</div>
+
+{% endif %}
