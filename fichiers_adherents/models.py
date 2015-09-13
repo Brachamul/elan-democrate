@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.db import models
 from django.core.exceptions import ObjectDoesNotExist
 import os
@@ -55,7 +57,7 @@ class FichierAdherents(models.Model):
 		return self.slug
 
 	class Meta:
-		verbose_name_plural = 'fichiers adhérents'
+		verbose_name_plural = u'fichiers adhérents'
 		permissions = (('peut_televerser', 'peut téléverser'),)
 		# if request.user.has_perm('fichiers_adhérents.peut_televerser')
 
@@ -92,7 +94,7 @@ class Adherent(models.Model):
 class AdherentDuFichier(models.Model):
 
 	class Meta:
-		verbose_name_plural = "adhérents du fichier"
+		verbose_name_plural = u"adhérents du fichier"
 
 	fichier = models.ForeignKey(FichierAdherents)
 	adhérent = models.ForeignKey(Adherent, null=True)
