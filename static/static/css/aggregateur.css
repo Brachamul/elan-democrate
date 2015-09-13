@@ -49,6 +49,7 @@
 .post .illustration img { max-width: 8rem; max-height: 6rem; }
 
 .actions .link, .actions a { margin-right: .5em; margin-top: .5em; font-weight: bold; }
+.actions .link.active { color: #EC7C34; }
 
 
 
@@ -57,7 +58,7 @@
 article.post { width: 100%; position: relative; text-align: center; }
 article .postbox, article .illustration { display: block; }
 article .meta { margin: 2rem auto; }
-article .content { text-align: left; font-size: 1.6rem; margin: 2rem 0; }
+article .content { display: inline-block; text-align: left; font-size: 1.6rem; margin: 2rem 0; } /* Inline-block so that the post content is centered if it is short text */
 article .content p { line-height: 1.8; }
 article.post .illustration img { max-width: 100%; max-height: none; }
 article.post .illustration { max-width: 72rem; max-width: calc(100vw - 30px); height: auto; width: auto; margin: 2rem 0; padding: 0; text-align: center; }
@@ -200,7 +201,7 @@ label:hover { cursor: pointer; }
 /*** Nouveau Post ***/
 
 .panel.nouveau-post label { display: block; }
-.panel.nouveau-post label::after { content: " :"; }
+.panel.nouveau-post label:first-child::after { content: " :"; }
 
 
 a:visited .title { color: #d2824e; }

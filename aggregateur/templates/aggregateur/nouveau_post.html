@@ -27,17 +27,24 @@
 						{{ post_text_form.Titre.field.errors }}
 						<label for="{{ post_text_form.Titre.id_for_label }}">Titre</label>
 						{{ post_text_form.Titre }}
+						<span class="help-block">Choisissez de préférence un titre court et explicite.</span>
 					</div>
 					<div class="form-group">
 						{{ post_text_form.Texte.field.errors }}
 						<label for="{{ post_text_form.Texte.id_for_label }}">Texte</label>
 						{{ post_text_form.Texte }}
+						<span class="help-block">Entourez un mot avec deux *<em>asterisques</em>* pour qu'il s'inscrive en italique, et quatre **<strong>asterisques</strong>** pour qu'il s'inscrive en gras.</span>
 					</div>
 					<div class="form-group">
 						{{ post_text_form.Illustration.field.errors }}
 						<label for="{{ post_text_form.Illustration.id_for_label }}">Illustration</label>
 						{{ post_text_form.Illustration }}
 						<span class="help-block">Facultatif. Insérez l'URL d'une image. Vous pouvez héberger vos images sur <a href="http://imgur.com" target="_blank">imgur</a>.</span>
+					</div>
+					<div class="form-group">
+						{{ post_text_form.Partageable.field.errors }}
+						<label for="{{ post_text_form.Partageable.id_for_label }}">Partageable</label>
+						<label for="{{ post_text_form.Partageable.id_for_label }}" style="display: inline; font-weight: normal;"><span class="help-block">{{ post_text_form.Partageable }} Cochez pour que le titre et l'illustration de ce post soient partageables sur les réseaux sociaux. Le texte et les commentaires ne resteront accessibles qu'aux utilisateurs authentifiés.</span></label>
 					</div>
 					<input type="hidden" name="format" value="TEXT">
 					<button type="submit" class="btn btn-primary">Poster</button>
@@ -62,11 +69,17 @@
 						{{ post_link_form.Titre.field.errors }}
 						<label for="{{ post_link_form.Titre.id_for_label }}">Titre</label>
 						{{ post_link_form.Titre }}
+						<span class="help-block">Choisissez de préférence un titre court et explicite.</span>
 					</div>
 					<div class="form-group">
 						{{ post_link_form.Lien_URL.field.errors }}
 						<label for="{{ post_link_form.Lien_URL.id_for_label }}">Lien URL</label>
 						{{ post_link_form.Lien_URL }}
+					</div>
+					<div class="form-group">
+						{{ post_text_form.Partageable.field.errors }}
+						<label for="{{ post_text_form.Partageable.id_for_label }}">Partageable</label>
+						<label for="{{ post_text_form.Partageable.id_for_label }}" style="display: inline; font-weight: normal;"><span class="help-block">{{ post_text_form.Partageable }} Cochez pour que le titre et le lien URL de ce post soient partageables sur les réseaux sociaux. Les commentaires ne resteront accessibles qu'aux utilisateurs authentifiés.</span></label>
 					</div>
 					<input type="hidden" name="format" value="LINK">
 					<button type="submit" class="btn btn-primary">Poster</button>

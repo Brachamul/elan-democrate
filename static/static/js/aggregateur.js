@@ -97,6 +97,12 @@ jQuery(function($) {
 	})
 
 
+	// PARTAGE
+
+	$('.card .share.link').click(function(){ // Affiche ou cache les boutons de partage sur les réseaux sociaux
+		$(this).toggleClass('active').next('.sharing-buttons').slideToggle()
+	})
+
 
 	// RÉACTIVITÉ
 
@@ -107,6 +113,8 @@ jQuery(function($) {
 	$('.nouveau-post .panel-heading').click(function(){
 		$(this).next('.panel-body').slideToggle()
 	})
+
+
 
 
 	

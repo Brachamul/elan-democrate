@@ -6,6 +6,7 @@ class PostTextForm(forms.Form):
 	Titre = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
 	Texte = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control'}))
 	Illustration = forms.CharField(widget=forms.URLInput(attrs={'class': 'form-control'}), required=False)
+	Partageable = forms.BooleanField(widget=forms.CheckboxInput(attrs={'checked': 'checked'}), required=False)
 
 class PostLinkForm(forms.Form):
 	Titre = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))

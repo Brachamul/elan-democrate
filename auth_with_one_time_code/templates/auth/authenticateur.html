@@ -1,0 +1,39 @@
+{% extends "meta.html" %}
+{% load static %}
+
+{% block content %}
+
+	<div class="container">
+	
+	<h1 class="elan-democrate ">
+		<a href="{% url 'connexion' %}">
+			<i class="fa fa-chevron-right"></i>
+			Élan Démocrate
+		</a>
+	</h1>
+	
+	<div id="authentication">
+	
+		{% if status == "registering" %}
+		
+			{% include "auth/auth_enregistrement.html" %}
+	
+		{% elif status == "complete" %}
+	
+			{% include "auth/auth_complete.html" %}
+		
+		{% else %}
+		
+			{% include "auth/auth_connexion.html" %}
+		
+		{% endif %}
+	
+	</div>
+	
+	{% include "spinner.html" %}
+	
+	{% include "auth/auth_css.html" %}
+	
+	</div>
+
+{% endblock content %}

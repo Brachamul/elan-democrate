@@ -7,6 +7,7 @@ admin.site.site_header = 'Élan Démocrate - Administration'
 
 urlpatterns = patterns('',
 	url(r'^$', aggregateur, name='accueil'),
+	url(r'^auth/', include('auth_with_one_time_code.urls')),
 	url(r'^m/', include('membres.urls')),
 	url(r'^p/', include('aggregateur.urls')),
 	url(r'^n/', include('notifications.urls')),
