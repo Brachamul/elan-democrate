@@ -16,7 +16,7 @@ class FichierAdherents(models.Model):
 	slug = models.SlugField(max_length=255)
 	fichier_csv = models.FileField(upload_to='fichiers_adherents/')
 	nombre_nouveaux_adherents = models.PositiveSmallIntegerField(null=True, blank=True, default=0)
-	nombre_réadhésions = models.PositiveSmallIntegerField(null=True, blank=True, default=0)
+	nombre_readhesions = models.PositiveSmallIntegerField(null=True, blank=True, default=0)
 
 	def adherents(self) :
 		''' liste les adherents ayant été importés par ce fichier '''

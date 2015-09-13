@@ -47,7 +47,7 @@ def visualisation_du_fichier_adherent(request, fichier_id):
 		'page_title': "Visualisation d'un fichier adhérent",
 		'fichier': fichier,
 		'nombre_nouveaux_adherents': len(fichier.nouveaux_adherents()),
-		'nombre_réadhésions': len(fichier.adherents_maj()),
+		'nombre_readhesions': len(fichier.adherents_maj()),
 		})
 
 @login_required
