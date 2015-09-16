@@ -30,9 +30,11 @@ h2 { font-size: 2rem; margin-bottom: 2rem; }
 
 input#numero_adherent_ou_email { margin: 2rem 0; }
 
-input.form-control { background-color: #444; border-color: #444; color: #EC7C34; }
+input.form-control,
+textarea.form-control { background-color: #444; border-color: #444; color: #EC7C34; }
 
-input.form-control:focus {
+input.form-control:focus,
+textarea.form-control:focus {
 		border-color: #ccc;
         -moz-box-shadow:    none;
         -webkit-box-shadow: none;
@@ -66,5 +68,7 @@ hr { margin-top: 3rem; border: 1px solid #808080; border-radius: 1em; }
 .spoiler p 	{ font-size: .9em; border-left: .15em solid #333; padding-left: 1rem; }
 
 input:invalid:not(:focus) { border: none; }
+
+.help-block { font-size: .8em; text-align: right; }
 
 </style>
