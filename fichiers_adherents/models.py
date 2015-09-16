@@ -87,6 +87,9 @@ class Adherent(models.Model):
 	def anciennete(self): return datetime.now() - self.date_première_adhésion
 	def actif(self): return (datetime.now().year - self.date_dernière_cotisation.year) > settings.DUREE_D_ACTIVITE
 	def jours_depuis_la_derniere_cotisation(self): return (datetime.now().date() - self.date_dernière_cotisation).days
+	def nom_courant(self):
+		try : return self.prénom + " " + self.nom
+		except NameError : return "Anonyme"
 
 	def __str__(self): return '{} {}'.format(self.prénom, self.nom)
 

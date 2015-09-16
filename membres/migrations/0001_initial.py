@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
             name='Profil',
             fields=[
                 ('id', models.AutoField(primary_key=True, verbose_name='ID', serialize=False, auto_created=True)),
-                ('nom_courant', models.CharField(max_length=255, default=membres.models.Profil.nomizateur)),
+                ('nom_courant', models.CharField(max_length=255, default="Anonyme")),
                 ('bio', models.TextField(null=True, max_length=255, blank=True)),
                 ('notes', models.TextField(null=True, blank=True)),
                 ('adherent', models.OneToOneField(to='fichiers_adherents.Adherent', on_delete=django.db.models.deletion.SET_NULL, null=True, blank=True)),

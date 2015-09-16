@@ -8,6 +8,7 @@ def randomly_generated_code(i): return ''.join(random.SystemRandom().choice(stri
 	# http://stackoverflow.com/questions/2257441/random-string-generation-with-upper-case-letters-and-digits-in-python
 
 from datetime import datetime, timedelta
+
 class Credentials(models.Model):
 	user = models.OneToOneField(User) # credentials are linked to one specific user
 	code = models.CharField(max_length=settings.AUTH_CODE_LENGTH, default=randomly_generated_code(settings.AUTH_CODE_LENGTH))

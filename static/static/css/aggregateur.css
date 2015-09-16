@@ -50,7 +50,7 @@
 
 .actions .link, .actions a { margin-right: .5em; margin-top: .5em; font-weight: bold; }
 .actions .link.active { color: #EC7C34; }
-
+.actions .link a:link, .actions .link a:visited { color: #999; }
 
 
 /* PAGE D'AFFICHAGE D'UN POST UNIQUE */
@@ -60,11 +60,12 @@ article .postbox, article .illustration { display: block; }
 article .meta { margin: 2rem auto; }
 article .content { display: inline-block; text-align: left; font-size: 1.6rem; margin: 2rem 0; } /* Inline-block so that the post content is centered if it is short text */
 article .content p { line-height: 1.8; }
+article .content p a:hover { border-bottom: 1px solid #EC7C34; }
 article.post .illustration img { max-width: 100%; max-height: none; }
 article.post .illustration { max-width: 72rem; max-width: calc(100vw - 30px); height: auto; width: auto; margin: 2rem 0; padding: 0; text-align: center; }
 article .vote { font-size: 1.2em; }
 article .postbox { width: 72rem; max-width: 100%; margin: auto; padding: 0 1rem;}
-article .postbox h1.title { max-width: 72rem; font-size: 2.8rem; text-align: center; margin-right: auto; margin-left: auto; }
+article .postbox h1.title { max-width: 72rem; font-size: 2.8rem; text-align: center; margin-right: auto; margin-left: auto; color: #EC7C34; }
 article .healthbox, .comment .meta { display: inline-block; vertical-align: middle; margin-right: .5rem; }
 article .healthbox div { display: inline-block; color: #999; }
 article .health { vertical-align: .2rem; margin: 0 .5rem;}
@@ -144,7 +145,7 @@ article .actions { margin: 2rem 0; }
 #aggregateur .meta,
 #aggregateur .actions { color: #999; }
 #aggregateur .actions { font-size: .8em; }
-#aggregateur a:not(:hover) { color: inherit; }
+#aggregateur .posts a:not(:hover) { color: inherit; }
 
 
 

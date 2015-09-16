@@ -37,17 +37,18 @@ def enregistrement(request):
 	# regardons si c'est un numéro adhérent (donc isdigit) ou une adresse mail (avec un @)
 		if numero_ou_email.isdigit() :
 			# Cela ressemble à un numéro adhérent !
-			num_adhérent = numero_ou_email
-			try : user = User.objects.get(username=num_adhérent)
+			num_adherent = numero_ou_email
+			try : user = User.objects.get(username=num_adherent)
 			except User.DoesNotExist :
 				# Ce numéro n'existe pas dans la base utilisateur
 				# Regardons si c'est un adhérent existant dans la base
-				try : adherent = Adherent.objects.get(num_adhérent=num_adhérent)
+				try : adherent = Adherent.objects.get(num_adhérent=num_adherent)
 				except Adherent.DoesNotExist : messages.error(request, "Ce numéro adhérent n'existe pas dans la base de données des Jeunes Démocrates.")
 				else :
 					if "@" in adherent.email :
 						backend.SendEmailConfirmationCode(request, adherent)
 						messages.success(request, "Un email a été envoyé à l'adresse correspondant à ce numéro dans le fichier adhérent. Merci de suivre les instructions contenues dans cet email.")
+						status = "complete"
 					else : messages.error(request, "Notre fichier adhérent ne contient pas d'adresse email valide pour ce numéro adhérent. Nous ne pouvons donc pas vous authentifier.")
 			else : messages.info(request, "Cet adhérent est déjà enregistré sur Élan Démocrate.")
 
@@ -74,7 +75,7 @@ def enregistrement(request):
 
 
 
-def url_enregistrement(request, num_adherent, email_confirmation_code):
+def url_enregistrement(request, num_adherent, code):
 	# intervient lorsqu'un utilisateur clique sur le lien de validation de son adresse mail dans sa boîte de messagerie
 	context = RequestContext(request)
 	status = "registering"
@@ -82,9 +83,9 @@ def url_enregistrement(request, num_adherent, email_confirmation_code):
 	
 	try : user = User.objects.get(username=num_adherent)
 	except User.DoesNotExist : 
-		if backend.EmailConfirmationCheck(request, adherent=adherent, code=email_confirmation_code) :
+		if backend.EmailConfirmationCheck(request, adherent=adherent, code=code) :
 			backend.Register(request, adherent=adherent, email=adherent.email)
-			user = User.objects.get(username=num_adhérent)
+			user = User.objects.get(username=num_adherent)
 			messages.success(request, "Votre compte a bien été créé. Un email vous a été envoyé pour votre première connexion.")
 			backend.AskForAuthCode(request, user)
 			status = "complete"
@@ -109,7 +110,7 @@ def connexion(request):
 		# regardons si c'est un numéro adhérent (donc isdigit) ou une adresse mail (avec un @)
 		if numero_ou_email.isdigit() :
 			try : user = User.objects.get(username=numero_ou_email)
-			except User.DoesNotExist : messages.error(request, "Ce numéro ne correspond pas à un adhérent de notre fichier.")
+			except User.DoesNotExist : messages.error(request, "Aucun compte n'est lié à ce numéro d'adhérent. Avez-vous déjà créé un compte ?")
 		elif "@" in numero_ou_email :
 			try : user = User.objects.get(email=numero_ou_email)
 			except User.DoesNotExist : code_sent = backend.SendUserDoesNotExistEmail(request, numero_ou_email) 
