@@ -24,7 +24,7 @@
 					<h1>{{ profil.nom_courant }}</h1>
 				{% endif%}
 			</div>
-			{% if user == membre %}
+			{% if user.is_staff %}
 			<form class="pas-public" method="POST" action="" enctype="multipart/form-data">
 				<div class="form-group">
 					{% csrf_token %}
@@ -45,7 +45,7 @@
 			</form>
 			<label for="profil-nom-courant" class="btn btn-default make-edit" style="margin-bottom: 1rem;">
 				<span class="glyphicon glyphicon-pencil"></span>
-				Modifier mon nom courant
+				Modifier le nom courant
 			</label>
 			{% endif %}
 		</div>
@@ -198,6 +198,13 @@
 			{% endif %}
 		</div>
 		{% endcomment %}
+
+		{% if membre.profil.twitter %}
+		<div class="twitterfeed">
+			<a class="twitter-timeline" href="https://twitter.com/{{ membre.profil.twitter }}" data-widget-id="646092784185810944">Chargement des tweets de @{{ membre.profil.twitter }}...</a>
+			<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+		</div>
+		{% endif %}
 
 	</div>
 </div>

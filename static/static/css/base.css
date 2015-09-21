@@ -15,6 +15,7 @@ footer { margin-top: 4em; }
 .navbar .navbar-brand .glyphicon { font-size: .88em; margin-right: -.2em; }
 .navbar .navbar-brand { font-size: 2.4rem; }
 .navbar { text-transform: uppercase; }
+.navbar #notifications { text-transform: none; }
 .navbar a { transition: color 1s; }
 .navbar a:not(:hover) { color: #999; }
 .navbar a:hover { color: #EC7C34; background: none; }

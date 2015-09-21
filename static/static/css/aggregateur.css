@@ -48,7 +48,7 @@
 .post .illustration { text-align: center; min-width: 9.5rem; }
 .post .illustration img { max-width: 8rem; max-height: 6rem; }
 
-.actions .link, .actions a { margin-right: .5em; margin-top: .5em; font-weight: bold; }
+.actions .link { margin-right: .5em; margin-top: .5em; font-weight: bold; }
 .actions .link.active { color: #EC7C34; }
 .actions .link a:link, .actions .link a:visited { color: #999; }
 
@@ -165,7 +165,7 @@ article .actions { margin: 2rem 0; }
 
 .comment-form { display: none; }
 
-.comments .comment:target { background-color: lightyellow !important; }
+.comments .comment.card:target { border-left: .25em solid #EC7C34; }
 
 .comments .comments-wrapper > .comment > .comment { background-color: #f6f6f6; }
 .comments .comments-wrapper > .comment > .comment > .comment { background-color: #ffffff; }

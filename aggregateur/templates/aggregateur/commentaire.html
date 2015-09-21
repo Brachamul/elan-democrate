@@ -2,7 +2,7 @@
 
 	<div class="card comment-shower link"><span class="glyphicon glyphicon-plus"></span></div>
 
-<div class="comment card" data-commentid="{{ comment.id }}" data-health="{{ comment.health }}" data-color="{{ comment.color }}">
+<div id="comment-{{ comment.id }}" class="comment card" data-commentid="{{ comment.id }}" data-health="{{ comment.health }}" data-color="{{ comment.color }}">
 
 	<span class="healthbox">
 		<div class="vote pos" data-color="POS"><span class="glyphicon glyphicon-circle-arrow-up"></span></div>
@@ -13,7 +13,7 @@
 	<span class="meta">
 		<span class="author">Par <a href="{% url 'membres' %}{{ comment.author.id }}">{{ comment.author.profil.nom_courant }}</a></span>
 		<span class="date">, il y a <time datetime="{{ comment.date }}">{{ comment.date|timesince }}</time></span>
-		{% if comment.last_edit != comment.date %}
+		{% if comment.last_edit and comment.last_edit != comment.date %}
 		<span class="last-edit">, modifié il y a <time datetime="{{ comment.last_edit }}">{{ comment.last_edit|timesince }}</time></span>
 		{% endif %}
 	</span>
@@ -48,13 +48,14 @@
 
 	<div class="actions">
 		<span class="hider link">cacher</span>
-		<a href="{% url 'commentaire' post.slug comment.pk %}"><span class="permalink">lien</span></a>
-		{% if comment.parent_comment %}
-			<a href="{% url 'commentaire' post.slug comment.parent_comment.pk %}">
-			{% elif comment.parent_post %}
-			<a href="{% url 'post' post.slug %}">
-			{% endif %}
-			<span class="parent">parent</span></a>
+		<span class="permalink link"><a href="{% url 'commentaire' post.slug comment.pk %}">lien</a></span>
+		<span class="parent link">
+			{% if comment.parent_comment %}
+				<a href="{% url 'commentaire' post.slug comment.parent_comment.pk %}">
+				{% elif comment.parent_post %}
+				<a href="{% url 'post' post.slug %}">
+				{% endif %}
+				parent</a></span>
 		{% if user == comment.author %}
 			{% if not comment.deleted %}
 			<form class="supprimer form-inline" method="POST" action="" enctype="multipart/form-data">

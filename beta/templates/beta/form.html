@@ -9,33 +9,43 @@
 	<div class="container">
 	
 	<h1 class="elan-democrate ">
-		<a href="{% url 'connexion' %}">
+		<a href="/">
 			<i class="fa fa-chevron-right"></i>
 			Élan Démocrate
 		</a>
 	</h1>
 
-	{% include "messages.html" %}
+	<h2>Inscription à la beta</h2>
 
-	<h2>Inscription à la phase de test </h2>
+	{% include "messages.html" %}
 
 
 	<div id="authentication">
-	<form class="ajax-form" action="{% url 'beta' %}"
-	method="POST" role="form" enctype="multipart/form-data">{% csrf_token %}
-		{% csrf_token %}
-		{% bootstrap_form form %}
-		<p style="margin-top: 2rem; "><button type="submit" class="btn btn-block orange"><i class="fa fa-paper-plane"></i> Envoyer</button></p>
-		</form>
-	</div>
-	
-	<style>.form-group { margin-bottom: 1.5rem }</style>
 
-	{% include "spinner.html" %}
+		{% if success %}
+
+			<p>Y'a plus qu'à attendre qu'on vous envoie une invitation, une fois votre demande validée.</p>
+			<p>En attendant, voici un lapin qui danse :</p>
+			<p><img src="https://38.media.tumblr.com/7ec73010d9f1f6d932250a97e47f525d/tumblr_nk8g2ywu591u7qlf3o1_400.gif" style="border-radius: 4px;"></p>
+
+		{% else  %}
+
+			<form class="ajax-form" action=""
+			method="POST" role="form" enctype="multipart/form-data">{% csrf_token %}
+				{% csrf_token %}
+				{% bootstrap_form form %}
+				<p style="margin-top: 2rem; "><button type="submit" class="btn btn-block orange"><i class="fa fa-paper-plane"></i> Envoyer</button></p>
+			</form>
+	
+		{% endif %}
+
+	</div>
+
+	
+	
+	<style> .form-group { margin-bottom: 1.5rem } </style>
 	
 	{% include "auth/auth_css.html" %}
-
-	{% include "auth/auth_scripts_and_styles.html" %}
 
 	</div>
 

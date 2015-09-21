@@ -14,6 +14,7 @@ class Profil(models.Model):
 	adherent = models.OneToOneField(Adherent, blank=True, null=True, on_delete=models.SET_NULL)
 	nom_courant = models.CharField(default="Anonyme", max_length=255)
 	bio = models.TextField(max_length=255, blank=True, null=True)
+	twitter = models.CharField(max_length=255, blank=True, null=True, help_text='Sans le @')
 	notes = models.TextField(blank=True, null=True) # Visible uniquement par les responsables
 	def email(self):
 		email = None

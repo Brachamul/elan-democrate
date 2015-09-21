@@ -69,6 +69,7 @@ hr { margin-top: 3rem; border: 1px solid #808080; border-radius: 1em; }
 
 input:invalid:not(:focus) { border: none; }
 
-.help-block { font-size: .8em; text-align: right; }
+.help-block { max-height: 0; display: block; font-size: .8em; color: transparent; text-align: right; transition: .5s all; }
+input:focus + .help-block { color: inherit; max-height: 5rem; margin-top: 5px; }
 
 </style>

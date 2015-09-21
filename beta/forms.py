@@ -5,4 +5,4 @@ from .models import *
 class BetaForm(forms.ModelForm):
 	class Meta:
 		model = BetaCandidat
-		fields = ['email', 'nom_courant', 'departement', 'telephone','fonctions', 'bio']
+		fields = ['email', 'nom_courant', 'telephone', 'fonctions']

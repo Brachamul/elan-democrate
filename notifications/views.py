@@ -33,23 +33,28 @@ def marquer_vues(request):
 
 def notification_fulltext(request, notification):
 
-	acteur = notification.acteur
-	if notification.type_acteur.name == "utilisateur" : acteur = User.objects.get(pk=notification.id_acteur).profil.nom_courant
-
 	action = notification.action
+
+	acteur = notification.acteur
+	if acteur:
+		type_acteur = notification.type_acteur.name
+		if type_acteur == "utilisateur" :
+			acteur = User.objects.get(pk=notification.id_acteur).profil.nom_courant
 
 	cible = notification.cible
 	if cible :
-		if notification.type_cible.name == "post" :
+		type_cible = notification.type_cible.name
+		if type_cible == "post" :
 			if cible.author == request.user : cible = ('à votre post "{titre_du_post}"'.format(titre_du_post=cible))
 			else : cible = ('au post "{titre_du_post}"'.format(titre_du_post=cible))
-		if notification.type_cible.name == "comment" :
+		if type_cible == "comment" :
 			if cible.author == request.user : cible = ('à votre commentaire')
 			else : cible = ('à un commentaire')
 
 	lieu = notification.lieu
 	if lieu :
-		if notification.type_lieu.name == "post" :
+		type_lieu = notification.type_lieu.name
+		if type_lieu == "post" :
 			if lieu.author == request.user : lieu = ('sur votre post "{titre_du_post}"'.format(titre_du_post=lieu))
 			else : lieu = ('sur le post "{titre_du_post}"'.format(titre_du_post=lieu))
 
@@ -57,7 +62,8 @@ def notification_fulltext(request, notification):
 	if cible and lieu : return '%(acteur)s %(action)s %(cible)s %(lieu)s' % variables
 	elif cible : return '%(acteur)s %(action)s %(cible)s' % variables
 	elif lieu : return '%(acteur)s %(action)s %(lieu)s' % variables
-	else : return '%(acteur)s %(action)s' % variables
+	elif acteur : return '%(acteur)s %(action)s' % variables
+	else : return 'Annonce : %(action)s' % variables # S'il n'y a qu'une action, c'est un message système
 
 
 def notification_url(notification):
