@@ -113,6 +113,71 @@ def initialize_base_posts(request):
 
 	illustration = "/static/images/flat_upload.png"
 
+	v0_5 = Post.objects.get_or_create(
+		title = "Mise à jour v0.5 : inscriptions à la beta, intégration Twitter et notification de bienvenue",
+		format = "TEXT",
+		channel= channel,
+		content = markdownify(
+			"""Hello, pour la mise à jour v0.5, voici les modifications principales :
+
+			* **Inscription à la beta :**
+			Il est désormais possible de renseigner le formulaire d'inscription à la beta, pour obtenir un compte et pouvoir tester Élan Démocrate.
+			
+			* **Intégration Twitter :**
+			Il est désormais possible de renseigner son nom d'utilisateur Twitter afin d'afficher son fil Twitter sur le profil Élan Démocrate.
+			
+			* **Notification de bienvenue :**
+			Lors de la création du compte, une notification souhaite désormais la bienvenue au nouvel utilisateur et l'invite à renseigner son profil."""),
+		author = request.user,
+		illustration = illustration,
+		date = datetime.datetime(year=2015, month=9, day=21),
+		)
+
+
+	v0_4 = Post.objects.get_or_create(
+		title = "Mise à jour v0.4 : refonte graphique, pages semi-publiques pour partager sur les réseaux sociaux public et on peut maintenant modifier ou supprimer ses posts",
+		format = "TEXT",
+		channel= channel,
+		content = markdownify(
+			"""Hello, pour la mise à jour v0.4, voici les modifications principales :
+
+			* **Refonte graphique :**
+			Un graphisme plus aéré, plus animé et moins sombre, inspiré de [Naut](www.reddit.com/r/naut).
+			
+			* **Pages semi-publiques :**
+			Lorsqu'on poste du texte ou un lien, on peut désormais le rendre "partageable" sur les réseaux sociaux, ce qui permet d'en afficher le titre et l'image. Le reste de la page reste caché aux utilisateurs non-authentifiés.
+			
+			* **Modifier et supprimer ses postsise en place des mandats :**
+			C'était impossible, maintenant c'est possible."""),
+		author = request.user,
+		illustration = illustration,
+		date = datetime.datetime(year=2015, month=9, day=13),
+		)
+
+	v0_3 = Post.objects.get_or_create(
+		title = "Mise à jour v0.3 : refonte de l'authentification, amélioration du traitement du fichier adhérent, mise en place des mandats, et les responsables fédéraux ont désormais accès à leur partie du fichier",
+		format = "TEXT",
+		channel= channel,
+		content = markdownify(
+			"""Hello, pour la mise à jour v0.3, voici les modifications principales :
+
+			* **Authentification :**
+			Retravaillé en profondeur, le processus d'authentification a été simplifié et allégé. Il est désormais plus fluide et plus sécurisé. Par exemple, il devient impossible de "tester" une adresse mail pour voir si elle est reconnue par le fichier adhérent (donc pas de message du genre "nous avons bien envoyé un email à l'adresse patate@patate.com").
+			
+			* **Traitement automatisé du fichier adhérents :**
+			Ajout d'une étape de validation : une fois qu'on a téléversé le fichier, on peut regarder le résultat de l'import avant de le charger dans la base. De plus, on peut désormais revenir en arrière en activant un ancien fichier en cas de problème.
+			La visualisation du fichier avant sa mise en ligne permet de consulter le nombre de nouvelles adhésions, de réadhésions, et de pertes d'adhérents depuis le dernier fichier.
+			
+			* **Mise en place des mandats :**
+			Lors du chargement d'un fichier adhérent, s'il y a des nouvelles fédération, des mandats sont créés, qu'on peut ensuite attribuer aux responsables fédéraux.
+
+			* **Vues partielles du fichier :**
+			Les responsables fédéraux peuvent désormais afficher le fichier adhérent, et ne voient que la fédération à laquelle ils ont accès."""),
+		author = request.user,
+		illustration = illustration,
+		date = datetime.datetime(year=2015, month=7, day=14),
+		)
+
 	v0_2 = Post.objects.get_or_create(
 		title = "Mise à jour v0.2 : notifications, illustrations et relooking des posts",
 		format = "TEXT",
@@ -149,49 +214,6 @@ def initialize_base_posts(request):
 		author = request.user,
 		)[0]
 
-	v0_3 = Post.objects.get_or_create(
-		title = "Mise à jour v0.3 : refonte de l'authentification, amélioration du traitement du fichier adhérent, mise en place des mandats, et les responsables fédéraux ont désormais accès à leur partie du fichier",
-		format = "TEXT",
-		channel= channel,
-		content = markdownify(
-			"""Hello, pour la mise à jour v0.3, voici les modifications principales :
-
-			* **Authentification :**
-			Retravaillé en profondeur, le processus d'authentification a été simplifié et allégé. Il est désormais plus fluide et plus sécurisé. Par exemple, il devient impossible de "tester" une adresse mail pour voir si elle est reconnue par le fichier adhérent (donc pas de message du genre "nous avons bien envoyé un email à l'adresse patate@patate.com").
-			
-			* **Traitement automatisé du fichier adhérents :**
-			Ajout d'une étape de validation : une fois qu'on a téléversé le fichier, on peut regarder le résultat de l'import avant de le charger dans la base. De plus, on peut désormais revenir en arrière en activant un ancien fichier en cas de problème.
-			La visualisation du fichier avant sa mise en ligne permet de consulter le nombre de nouvelles adhésions, de réadhésions, et de pertes d'adhérents depuis le dernier fichier.
-			
-			* **Mise en place des mandats :**
-			Lors du chargement d'un fichier adhérent, s'il y a des nouvelles fédération, des mandats sont créés, qu'on peut ensuite attribuer aux responsables fédéraux.
-
-			* **Vues partielles du fichier :**
-			Les responsables fédéraux peuvent désormais afficher le fichier adhérent, et ne voient que la fédération à laquelle ils ont accès."""),
-		author = request.user,
-		illustration = illustration,
-		date = datetime.datetime(year=2015, month=7, day=14),
-		)
-
-	v0_4 = Post.objects.get_or_create(
-		title = "Mise à jour v0.4 : refonte graphique, pages semi-publiques pour partager sur les réseaux sociaux public et on peut maintenant modifier ou supprimer ses posts",
-		format = "TEXT",
-		channel= channel,
-		content = markdownify(
-			"""Hello, pour la mise à jour v0.4, voici les modifications principales :
-
-			* **Refonte graphique :**
-			Un graphisme plus aéré, plus animé et moins sombre, inspiré de [Naut](www.reddit.com/r/naut).
-			
-			* **Pages semi-publiques:**
-			Lorsqu'on poste du texte ou un lien, on peut désormais le rendre "partageable" sur les réseaux sociaux, ce qui permet d'en afficher le titre et l'image. Le reste de la page reste caché aux utilisateurs non-authentifiés.
-			
-			* **Modifier et supprimer ses postsise en place des mandats :**
-			C'était impossible, maintenant c'est possible."""),
-		author = request.user,
-		illustration = illustration,
-		date = datetime.datetime(year=2015, month=9, day=13),
-		)
 
 	messages.success(request, "Les posts de mise à jour ont été installés ou mis à jour.")
 

@@ -27,24 +27,28 @@ def profil(request, pk):
 		try : profil = Profil.objects.get(user=user)
 		except Profil.DoesNotExist : raise Http404("Ce profil n'existe pas.")
 		else :
-			if request.method == "POST" and user == request.user : process_profil_changes(request, user, profil)
+			if request.method == "POST" :
+				if user == request.user or request.user.is_staff : process_profil_changes(request, user, profil)
 			profil.mandats = pecho_les_mandats(profil)
 			return render(request, 'membres/profil.html', {'membre': user, 'profil': profil, 'page_title': profil.nom_courant})
 
 def process_profil_changes(request, user, profil) :
 
+	changes = False # Il n'y a pas eu de changement, par défaut
+
 	new_bio = request.POST.get('bio')
 	if new_bio :
 		profil.bio = new_bio
 		profil.save()
-		messages.success(request, "Votre message de présentation a bien été modifié.")
-
+		changes = True
 
 	new_nom_courant = request.POST.get('nom_courant')
 	if new_nom_courant :
 		profil.nom_courant = new_nom_courant
 		profil.save()
-		messages.success(request, "Votre nom courant a bien été modifié.")
+		changes = True
+
+	messages.success(request, "Vos modifications ont bien été prises en compte.")
 
 def form_test(request):
 	if request.method == 'POST': return HttpResponse('Truly, this was a %s.' % request.POST.get('potato'))

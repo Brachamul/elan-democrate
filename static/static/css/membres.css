@@ -19,6 +19,8 @@
 
 .profil .profil-body { text-align: center; }
 
+.profil .profil-body > div { margin-bottom: 2rem; }
+
 .profil .profil-body h2 {  }
 
 input.spoiler,
