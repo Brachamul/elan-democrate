@@ -24,7 +24,7 @@ def all(request): return aggregateur(request)
 def aggregateur(request, page=1, channel_name="accueil"):
 	''' va chercher les posts de la chaine et les publie via un paginateur
 		l'argument 'chaine' n'est pas encore opérationnel '''
-	posts = Post.objects.all().order_by('-rank', '-health')
+	posts = Post.objects.all()
 	for post in posts : post = get_post_meta(request, post)
 #	if time_to_rerank(request) == True : rank_posts() # classe les posts s'ils n'ont pas été reclassés depuis au moins 5 minutes
 #	a activer uniquement si on a pas de cron job pour le reclassement
@@ -68,7 +68,7 @@ def afficher_le_commentaire(request, pk, slug):
 		})
 
 
-
+@login_required
 def process_post_changes(request, post) :
 	''' Ajout ou modification de commentaire '''
 	redirect_location = False # de base, on ne redirige pas vers une #id interne
@@ -131,6 +131,7 @@ def comment_color(request, comment_id):
 
 ### Traitement des votes
 
+@login_required
 def vote(request, post_id, color):
 	context = RequestContext(request)
 	try : post = Post.objects.get(id=int(post_id))
@@ -157,6 +158,7 @@ def vote(request, post_id, color):
 	# return the endcolor of the vote so that we can light up the up/down arrows
 	return HttpResponse(endcolor)
 
+@login_required
 def comment_vote(request, comment_id, color):
 	context = RequestContext(request)
 	try : comment = Comment.objects.get(id=int(comment_id))

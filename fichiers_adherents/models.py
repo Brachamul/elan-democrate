@@ -16,7 +16,7 @@ class FichierAdherents(models.Model):
 	slug = models.SlugField(max_length=255)
 	fichier_csv = models.FileField(upload_to='fichiers_adherents/')
 	nombre_nouveaux_adherents = models.PositiveSmallIntegerField(null=True, blank=True, default=0)
-	nombre_réadhésions = models.PositiveSmallIntegerField(null=True, blank=True, default=0)
+	nombre_readhesions = models.PositiveSmallIntegerField(null=True, blank=True, default=0)
 
 	def adherents(self) :
 		''' liste les adherents ayant été importés par ce fichier '''
@@ -57,7 +57,7 @@ class FichierAdherents(models.Model):
 		return self.slug
 
 	class Meta:
-		verbose_name_plural = u'fichiers adhérents'
+		verbose_name_plural = 'fichiers adhérents'.encode('utf-8')
 		permissions = (('peut_televerser', 'peut téléverser'),)
 		# if request.user.has_perm('fichiers_adhérents.peut_televerser')
 
@@ -87,6 +87,9 @@ class Adherent(models.Model):
 	def anciennete(self): return datetime.now() - self.date_première_adhésion
 	def actif(self): return (datetime.now().year - self.date_dernière_cotisation.year) > settings.DUREE_D_ACTIVITE
 	def jours_depuis_la_derniere_cotisation(self): return (datetime.now().date() - self.date_dernière_cotisation).days
+	def nom_courant(self):
+		try : return self.prénom + " " + self.nom
+		except NameError : return "Anonyme"
 
 	def __str__(self): return '{} {}'.format(self.prénom, self.nom)
 
@@ -94,7 +97,7 @@ class Adherent(models.Model):
 class AdherentDuFichier(models.Model):
 
 	class Meta:
-		verbose_name_plural = u"adhérents du fichier"
+		verbose_name_plural = "adhérents du fichier".encode('utf-8')
 
 	fichier = models.ForeignKey(FichierAdherents)
 	adhérent = models.ForeignKey(Adherent, null=True)

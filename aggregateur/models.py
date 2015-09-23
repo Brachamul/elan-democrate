@@ -32,6 +32,8 @@ class Post(models.Model):
 	illustration = models.URLField(max_length=2000, null=True, blank=True)
 	shareable = models.BooleanField(default=True)
 	def __str__(self): return self.title
+	class Meta:
+		 ordering = ['-rank', '-date']
 
 
 

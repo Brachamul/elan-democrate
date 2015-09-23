@@ -7,13 +7,13 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('aggregateur', '0002_auto_20150904_0053'),
+        ('membres', '0003_auto_20150916_2152'),
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='post',
-            name='shareable',
-            field=models.BooleanField(default=True),
+        migrations.AlterField(
+            model_name='profil',
+            name='nom_courant',
+            field=models.CharField(max_length=255),
         ),
     ]

@@ -12,10 +12,14 @@
 .profil.editable .profile-picture.editable .gravatar-edit { position: absolute; width: 100%; text-align: center; }
 .profil.editable .profile-picture.editable .gravatar-edit p { margin: 1em auto 0 auto; max-width: 30em; }
 
+.profil.editable .profile-picture.editable img { transition: all 1s; }
 .profil.editable .profile-picture.editable:hover img { opacity: .2; }
-.profil.editable .profile-picture.editable:not(:hover) .gravatar-edit { display: none; }
+.profil.editable .profile-picture.editable .gravatar-edit { opacity: 0; transition: all 1s; }
+.profil.editable .profile-picture.editable:hover .gravatar-edit { opacity: 1; }
 
 .profil .profil-body { text-align: center; }
+
+.profil .profil-body > div { margin-bottom: 2rem; }
 
 .profil .profil-body h2 {  }
 

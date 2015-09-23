@@ -1,0 +1,22 @@
+{% if post.author == user and post.format == "TEXT" %}
+<!-- Ce post est modifiable ! -->
+<form class="modifier" method="POST" action="" enctype="multipart/form-data">
+	<div class="form-group">
+		{% csrf_token %}
+		<textarea id="post-input" name="content" rows="5" class="form-control" maxlength="10000">{{ post.content }}</textarea>
+		<input type="hidden" name="action" value="modifier_le_post">
+		<input type="hidden" name="post-pk" value="{{ post.pk }}">
+	</div>
+	<div class="form-group">
+		<button type="submit" class="btn btn-default btn-sm">
+			<span class="glyphicon glyphicon-ok"></span>
+			Enregistrer
+		</button>
+		</input>
+		<span class="btn btn-default btn-sm cancel-edit">
+			<span class="glyphicon glyphicon-remove"></span>
+			Annuler
+		</span>
+	</div>
+</form>
+{% endif %}

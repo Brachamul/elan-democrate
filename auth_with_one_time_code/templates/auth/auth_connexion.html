@@ -8,7 +8,8 @@
 	<p style="text-align: center;">
 		<button type="submit" class="btn orange">
 			<span class="glyphicon glyphicon-off" aria-hidden="true"></span> Connexion</button>
-		<a class="btn orange action-button" href="{% url 'enregistrement' %}">
+{% comment %}<a class="btn orange action-button" href="{% url 'enregistrement' %}">{% endcomment %}
+		<a class="btn orange" href="{% url 'beta' %}">
 			<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span> Je créé mon compte</a>
 	</p>
 </form>
@@ -21,4 +22,4 @@
 	<a href="mailto:{{ help_adress }}?Subject=J'ai un problème !">{{ help_adress }}</a></p>
 </div>
 
-{% include "auth/auth_scripts_and_styles.html" %}
+{% include "auth/auth_js.html" %}

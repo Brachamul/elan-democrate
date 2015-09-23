@@ -1,5 +1,6 @@
 import logging
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.urlresolvers import reverse
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.db import models
@@ -24,6 +25,7 @@ class Notification(models.Model):
 
 	# Action
 	action = models.CharField(max_length=255)
+	### Create action ID to recall old notifications
 	
 	# Cible
 	id_cible = models.CharField(max_length=255, blank=True, null=True)
@@ -54,7 +56,9 @@ class Notification(models.Model):
 			return u'%(acteur)s %(action)s %(cible)s' % variables
 		if self.lieu:
 			return u'%(acteur)s %(action)s %(lieu)s' % variables
-		return u'%(acteur)s %(action)s' % variables
+		if self.acteur:
+			return u'%(acteur)s %(action)s' % variables
+		return u'%(action)s' % variables
 
 	def marquer_lu(self):
 		if self.non_lu:
@@ -88,3 +92,13 @@ def notifier_lauteur_du_parent(sender, created, **kwargs):
 				)
 		if nouvelle_notif.destinataire != nouvelle_notif.acteur : # On ne notifie pas celui qui a généré la notif !
 			nouvelle_notif.save()
+
+@receiver(post_save, sender=User)
+def notification_apres_creation_de_compte(sender, created, **kwargs):
+	if created :
+		user = kwargs.get('instance')
+		nouvelle_notif = Notification(
+			destinataire = user,
+			action = 'Bienvenue sur Élan Démocrate ! Pour commencer, vous pouvez renseigner votre profil en cliquant sur votre nom.'.format(lien=reverse('profil', kwargs={ 'pk': user.pk })),
+			)
+		nouvelle_notif.save()

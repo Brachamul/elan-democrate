@@ -15,6 +15,7 @@ footer { margin-top: 4em; }
 .navbar .navbar-brand .glyphicon { font-size: .88em; margin-right: -.2em; }
 .navbar .navbar-brand { font-size: 2.4rem; }
 .navbar { text-transform: uppercase; }
+.navbar #notifications { text-transform: none; }
 .navbar a { transition: color 1s; }
 .navbar a:not(:hover) { color: #999; }
 .navbar a:hover { color: #EC7C34; background: none; }
@@ -91,7 +92,7 @@ footer.endpage .footer-wrapper {
 footer.endpage a:not(:hover) { color: #999; }
 footer.endpage a { font-weight: bold; }
 
-.btn-primary, .btn-primary.card { background-color: #EC7C34; border-color: #E4742C; }
+.btn-primary, .btn-primary.card, .btn-primary:visited { background-color: #EC7C34; border-color: #E4742C; color: white; }
 .btn-primary:hover,
 .btn-primary:focus { background-color: #E4742C; border-color: #DC6C24; color: white; }
 .btn-primary:active,
@@ -118,17 +119,12 @@ a:active { color: #D5651D; outline: 0; }
 .link { transition: color 1s; }
 .link:hover { color: #E4742C; cursor: pointer; }
 
-a h1 { color: #EC7C34 !important; }
-
-.panel-heading a,
-.panel-heading a:visited { color: #777; }
-.panel-heading a:hover,
-.panel-heading a:focus { color: #DC6C24; }
-.panel-heading a:active { color: #D5651D; }
-
-.panel-primary { border-color: #EC7C34; }
-
 .form-control:focus {
 	border-color: #FFA961;
 	box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px rgba(236, 124, 52, 0.25);
 }
+
+a.btn-default:link,
+a.btn-default:active,
+a.btn-default:visited { color: #999; transition: all .5s; }
+a.btn-default:hover { background-color: #EC7C34; color: white; border-color: #D5651D; }

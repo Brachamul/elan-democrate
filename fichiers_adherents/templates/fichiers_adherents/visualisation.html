@@ -24,7 +24,7 @@
 	</div>
 	
 	<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 col-centered">
-		<div class="bignumber">{{ fichier.nombre_réadhésions|length }}</div>
+		<div class="bignumber">{{ fichier.nombre_readhesions|length }}</div>
 		<h4>Réadhésions</h4>
 	</div>
 
@@ -62,7 +62,7 @@ ce fichier est daté du <strong>même jour</strong> que le fichier actuel (ou il
 	</tr>
 	</thead>
 	<tbody>
-	{% for adherent in fichier.adhérentdufichier_set.all %}
+	{% for adherent in fichier.adherentdufichier_set.all %}
 	<tr>
 		<td>{{ adherent.num_adhérent }}</td>
 		<td>{{ adherent.nom }}</td>

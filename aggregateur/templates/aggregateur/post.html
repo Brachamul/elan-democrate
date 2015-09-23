@@ -18,15 +18,15 @@
 
 		<div class="postbox">
 
-			<h1 class="title">
-				{% if post.format == "TEXT" %}
-				<a href="{% url 'aggregateur' %}{{ post.slug }}">
-				{% elif post.format == "LINK" %}
-				<a href="{{ post.link }}" target="_blank">
-				{% endif %}
-				{{ post.title }}
-				</a>
-			</h1>
+			
+			{% if post.format == "TEXT" %}
+			<a href="{% url 'aggregateur' %}{{ post.slug }}">
+			{% elif post.format == "LINK" %}
+			<a href="{{ post.link }}" target="_blank">
+			{% endif %}
+				<h1 class="title">{{ post.title }}</h1>
+			</a>
+			
 			{% comment %}<span class="source">(<a href="#">loremipsum.com</a>)</span> {% endcomment %}
 
 			<span class="healthbox">
@@ -55,27 +55,7 @@
 			</div>
 			{% endif %}
 
-			{% if post.author == user %}
-			<form class="modifier" method="POST" action="" enctype="multipart/form-data">
-				<div class="form-group">
-					{% csrf_token %}
-					<textarea id="post-input" name="content" rows="5" class="form-control" maxlength="10000">{{ post.content }}</textarea>
-					<input type="hidden" name="action" value="modifier_le_post">
-					<input type="hidden" name="post-pk" value="{{ post.pk }}">
-				</div>
-				<div class="form-group">
-					<button type="submit" class="btn btn-default btn-sm">
-						<span class="glyphicon glyphicon-ok"></span>
-						Enregistrer
-					</button>
-					</input>
-					<span class="btn btn-default btn-sm cancel-edit">
-						<span class="glyphicon glyphicon-remove"></span>
-						Annuler
-					</span>
-				</div>
-			</form>
-			{% endif %}
+			{% include 'aggregateur/modifier-le-post.html' %}
 
 			<div class="actions">
 				<span class="nombre-de-commentaires link">
@@ -87,7 +67,9 @@
 					{% endif %}
 					</a>
 				</span>
-				<span class="modify link">modifier</span>
+				{% if post.author == user and post.format == "TEXT" %}
+					<span class="modify link">modifier</span>
+				{% endif %}
 				<span class="share link" data-url="{% url 'post' post.pk %}">partager</span>
 				{% include 'aggregateur/partager.html' %}
 

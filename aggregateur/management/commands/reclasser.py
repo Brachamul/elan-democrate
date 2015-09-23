@@ -8,4 +8,4 @@ class Command(BaseCommand):
 	def handle(self, *args, **options):
 		rank_posts()
 		rank_comments()
-		self.stdout.write("Les posts et commentaires ont été classés !")
+		self.stdout.write("Relassement les posts : ok")

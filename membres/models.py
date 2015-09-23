@@ -7,15 +7,14 @@ from django.dispatch import receiver
 from django.contrib.auth.models import User
 from fichiers_adherents.models import Adherent
 
+
 class Profil(models.Model):
 	# Ce profil est rempli par l'utilisateur ou un administrateur lorsque le modèle officiel n'est pas à jour
 	user = models.OneToOneField(User, blank=True, null=True)
 	adherent = models.OneToOneField(Adherent, blank=True, null=True, on_delete=models.SET_NULL)
-	def nomizateur():
-		try : return adherent.prénom + " " + adherent.nom
-		except NameError : return "Anonyme"
-	nom_courant = models.CharField(default=nomizateur, max_length=255)
+	nom_courant = models.CharField(default="Anonyme", max_length=255)
 	bio = models.TextField(max_length=255, blank=True, null=True)
+	twitter = models.CharField(max_length=255, blank=True, null=True, help_text='Sans le @')
 	notes = models.TextField(blank=True, null=True) # Visible uniquement par les responsables
 	def email(self):
 		email = None
@@ -31,7 +30,7 @@ def generer_le_profil_d_un_adherent(sender, created, **kwargs):
 	if created :
 		adherent = kwargs.get('instance')
 		try : user = User.objects.get(email=adherent.email) # a t-on déjà un utilisateur avec cette adresse mail ?
-		except User.DoesNotExist : Profil.objects.create(adherent=adherent) # si non, on peut créer le profil
+		except User.DoesNotExist : Profil.objects.create(adherent=adherent, nom_courant=adherent.nom_courant()) # si non, on peut créer le profil
 		else : logging.warning("Un nouvel adhérent a indiqué une adresse mail déjà présente dans la base de donnée, il faut peut-être fusionner le Membre avec l'Adherent".encode('utf8'))
 #		if user didn't have an adhérent, then merge them
 

@@ -40,7 +40,7 @@ jQuery(function($) {
 		$.get(url, function(color){
 			comment.attr('data-color', color)
 			if (color == "POS") { health = health + 1 } else if (color == "NEG") { health = health - 1 }
-			comment.find('.health').hide().html(health).fadeIn()
+			comment.children('.healthbox').children('.health').hide().html(health).fadeIn()
 		})
 	})
 
@@ -53,7 +53,7 @@ jQuery(function($) {
 		$.get(url, function(color){
 			comment.attr('data-color', color)
 			if (color == "POS") { health = health + 1 } else if (color == "NEG") { health = health - 1 }
-			comment.find('.health').hide().html(health).fadeIn()
+			comment.children('.healthbox').children('.health').hide().html(health).fadeIn()
 		})
 	})
 
