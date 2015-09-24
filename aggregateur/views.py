@@ -21,7 +21,7 @@ def all(request): return aggregateur(request)
 ### Channels
 
 @login_required
-def aggregateur(request, page=1, channel_name="accueil"):
+def aggregateur(request, page=1, channel="accueil"):
 	''' va chercher les posts de la chaine et les publie via un paginateur
 		l'argument 'chaine' n'est pas encore opérationnel '''
 	posts = Post.objects.all()
@@ -29,7 +29,7 @@ def aggregateur(request, page=1, channel_name="accueil"):
 #	if time_to_rerank(request) == True : rank_posts() # classe les posts s'ils n'ont pas été reclassés depuis au moins 5 minutes
 #	a activer uniquement si on a pas de cron job pour le reclassement
 	posts = Paginator(posts, settings.POSTS_PER_PAGE).page(page)
-	return render(request, 'aggregateur/posts.html', { 'posts': posts, 'channel': channel_name, 'page_title': channel_name.capitalize() } )
+	return render(request, 'aggregateur/posts.html', { 'posts': posts, 'channel': channel, 'page_title': channel.capitalize() } )
 
 
 ### Affichage des Posts
@@ -383,3 +383,16 @@ def content_type(url):
 	if link_data['type'] :
 		return link_data['type']
 	return None
+
+
+
+### CHANNELS
+
+@login_required
+def channel_details(request, slug):
+	channel = get_object_or_404(Channel, slug=slug)
+	return render(request, 'aggregateur/channel.html', { 'channel': channel, 'page_title': channel.name } )
+
+@login_required
+def channel_list(request):
+	return HttpResponse('Channel list !')

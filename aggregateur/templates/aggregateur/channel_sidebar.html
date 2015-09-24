@@ -5,18 +5,21 @@
 {% if user.is_authenticated %}
 
 <div class="card card-big">
+
+	{% if channel == "accueil" %}
 	<h3>Accueil</h3>
 	<div class="box">
 		<p>Bienvenue sur Élan Démocrate.</p>
-		<a class="btn btn-xs btn-default"
-			{% if channel %}
-				href="{% url 'nouveau_post_avec_chaine' channel %}"
-			{% else %}
-				href="{% url 'nouveau_post' %}"
-			{% endif %}>
-			{% bootstrap_icon "plus" %} nouveau post
-			</a>
+		<a class="btn btn-xs btn-default" href="{% url 'nouveau_post' %}">
+			<i class="fa fa-plus"></i> nouveau post </a>
+	{% elif channel %}
+	<h3>{{ channel.name }}</h3>
+	<div class="box">
+		<p>{{ channel.description}}</p>
+		<a class="btn btn-xs btn-default" href="{% url 'nouveau_post_avec_chaine' channel %}">
+			<i class="fa fa-plus"></i> nouveau post </a>
 	</div>
+	{% endif %}
 </div>
 
 {% else %}
