@@ -11,7 +11,15 @@ from django.contrib.auth.models import User
 
 class Channel(models.Model):
 	name = models.CharField(max_length=255)
+	slug = AutoSlugField(populate_from=('name'), max_length=255)
+	date = models.DateTimeField(auto_now_add=True)
+	description = models.CharField(max_length=255, default="Cette chaîne n'a pas encore de description.")
 	official = models.BooleanField(default=False)
+	is_default = models.BooleanField(default=False) # If a channel is default, it will be seen by users without needing subscription
+	moderators = models.ManyToManyField(User, related_name='moderated_channels')
+	subscribers = models.ManyToManyField(User, related_name='subscribed_channels')
+
+	ignorers = models.ManyToManyField(User, related_name='ignored_channels') # users can still choose not to view the channel if they wish 
 
 	def __str__(self): return self.name
 
