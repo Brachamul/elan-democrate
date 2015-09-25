@@ -18,7 +18,7 @@
 	<div class="clearfix text-center">
 
 		<div class="nom-courant">
-			<input id="profil-nom-courant" class="spoiler" type="checkbox"/>
+			<input id="profil-nom-courant" class="spoiler" type="checkbox"></i>
 			<div class="public">
 				{% if profil.nom_courant %}
 					<h1>{{ profil.nom_courant }}</h1>
@@ -29,22 +29,22 @@
 				<div class="form-group">
 					{% csrf_token %}
 					<input id="nom-courant-input" name="nom_courant" class="form-control" maxlength="64"
-					placeholder="Je m'appelle..." value="{{ profil.nom_courant }}" style="height: 6rem; text-align: center; font-size: 3.6rem; margin-top: 10px; "/>
+					placeholder="Je m'appelle..." value="{{ profil.nom_courant }}" style="height: 6rem; text-align: center; font-size: 3.6rem; margin-top: 10px; "></i>
 				</div>
 				<div class="form-group">
 					<button type="submit" class="btn btn-default btn-sm">
-						<span class="glyphicon glyphicon-ok"></span>
+						<i class="fa fa-ok"></i>
 						Enregistrer
 					</button>
 					</input>
 					<label for="profil-nom-courant" class="btn btn-default btn-sm cancel-edit">
-						<span class="glyphicon glyphicon-remove"></span>
+						<i class="fa fa-remove"></i>
 						Annuler
 					</label>
 				</div>
 			</form>
 			<label for="profil-nom-courant" class="btn btn-default make-edit" style="margin-bottom: 1rem;">
-				<span class="glyphicon glyphicon-pencil"></span>
+				<i class="fa fa-pencil"></i>
 				Modifier le nom courant
 			</label>
 			{% endif %}
@@ -81,18 +81,18 @@
 						<span id="bio-counter"></span>/255
 					</button>
 					<button type="submit" class="btn btn-default btn-sm">
-						<span class="glyphicon glyphicon-ok"></span>
+						<i class="fa fa-ok"></i>
 						Enregistrer
 					</button>
 					</input>
 					<label for="profil-bio" class="btn btn-default btn-sm cancel-edit">
-						<span class="glyphicon glyphicon-remove"></span>
+						<i class="fa fa-remove"></i>
 						Annuler
 					</label>
 				</div>
 			</form>
 			<label for="profil-bio" class="btn btn-default make-edit">
-				<span class="glyphicon glyphicon-pencil"></span>
+				<i class="fa fa-pencil"></i>
 				Modifier mon message de présentation
 			</label>
 			{% endif %}
@@ -112,12 +112,12 @@
 					<h2>Mandat{{ profil.mandats|pluralize }}</h2>
 					<p>Il n'est pas encore possible de modifier manuellement les mandats.</p>
 					<label for="profil-mandats" class="btn btn-default btn-sm cancel-edit">
-						<span class="glyphicon glyphicon-remove"></span>
+						<i class="fa fa-remove"></i>
 						Annuler
 					</label>
 				</div>
 				<label for="profil-mandats" class="btn btn-default make-edit">
-					<span class="glyphicon glyphicon-pencil"></span>
+					<i class="fa fa-pencil"/>
 					Modifier mes mandats
 				</label>
 			{% endif %}
@@ -137,12 +137,12 @@
 				<div class="pas-public">
 					<h2>Occupation{{ profil.occupations|pluralize }}</h2>
 					<label for="profil-occupations" class="btn btn-default btn-sm cancel-edit">
-						<span class="glyphicon glyphicon-remove"></span>
+						<i class="fa fa-remove"></i>
 						Annuler la modification
 					</label>
 				</div>
 				<label for="profil-occupations" class="btn btn-default make-edit">
-					<span class="glyphicon glyphicon-pencil"></span>
+					<i class="fa fa-pencil"></i>
 					Modifier mes occupations
 				</label>
 			{% endif %}
@@ -162,12 +162,12 @@
 				<div class="pas-public">
 					<h2>Intérêt{{ profil.interets|pluralize }}</h2>
 					<label for="profil-interets" class="btn btn-default btn-sm cancel-edit">
-						<span class="glyphicon glyphicon-remove"></span>
+						<i class="fa fa-remove"></i>
 						Annuler la modification
 					</label>
 				</div>
 				<label for="profil-interets" class="btn btn-default make-edit">
-					<span class="glyphicon glyphicon-pencil"></span>
+					<i class="fa fa-pencil"></i>
 					Modifier mes intérêts
 				</label>
 			{% endif %}
@@ -187,12 +187,12 @@
 				<div class="pas-public">
 					<h2>Compétences{{ profil.competences|pluralize }}</h2>
 					<label for="profil-competences" class="btn btn-default btn-sm cancel-edit">
-						<span class="glyphicon glyphicon-remove"></span>
+						<i class="fa fa-remove"></i>
 						Annuler la modification
 					</label>
 				</div>
 				<label for="profil-competences" class="btn btn-default make-edit">
-					<span class="glyphicon glyphicon-pencil"></span>
+					<i class="fa fa-pencil"></i>
 					Modifier mes compétences
 				</label>
 			{% endif %}

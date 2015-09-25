@@ -30,11 +30,10 @@
 			{% comment %}<span class="source">(<a href="#">loremipsum.com</a>)</span> {% endcomment %}
 
 			<span class="healthbox">
-				<span class="vote pos" data-color="POS"><span class="glyphicon glyphicon-circle-arrow-up"></span></span>
+				<span class="vote pos" data-color="POS"><i class="fa fa-circle-arrow-up"></i></span>
 				<span class="health">{{ post.health }}</span>
-				<span class="vote neg" data-color="NEG"><span class="glyphicon glyphicon-circle-arrow-down"></span></span>
+				<span class="vote neg" data-color="NEG"><i class="fa fa-circle-arrow-down"></i></span>
 			</span>
-
 			<div class="meta">
 				<span class="author">Par <a href="{% url 'membres' %}{{ post.author.id }}">{{ post.author.profil.nom_courant }}</a>
 				</span><span class="date">, il y a <time datetime="{{ post.date }}">{{ post.date|timesince }}</time>
