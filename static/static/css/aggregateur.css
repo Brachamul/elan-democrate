@@ -1,6 +1,6 @@
 /* STRUCTURE EXTERNE */
 
-#main-container.container-fluid { padding: 0; }
+#main-container.container-fluid { padding: 0; overflow-x: auto; max-width: 100%; }
 #primary-wrapper, #secondary-wrapper { float: left; margin-left: 2%; }
 #primary-wrapper { width: 72%; }
 #secondary-wrapper { width: 22%; }
@@ -21,10 +21,10 @@
 	#secondary-wrapper { width: 42.70%; }
 	#aggregateur { width: 179%;	}
 	#aggregateur.sidebar-show { margin-left: -77.5%; }
-	#sidebar-toggle::before { content: "En savoir plus sur la chaîne "; }
+/*	#sidebar-toggle::before { content: "À propos de : "; } */
 }
 
-#sidebar-back { position: absolute; right: 1rem; top: .7rem; color: white; transition: all 1s ease-in-out; }
+#sidebar-back { position: absolute; right: 1rem; top: .65em; color: transparent; transition: all 1s ease-in-out; }
 .sidebar-show #sidebar-back { color: #EC7C34; }
 
 /* Page de nouveau post*/
@@ -58,6 +58,8 @@
 article.post { width: 100%; position: relative; text-align: center; }
 article .postbox, article .illustration { display: block; }
 article .meta { margin: 2rem auto; }
+article .meta .channel a { color: inherit; }
+article .meta span a:hover { color: #EC7C34; }
 article .content { display: inline-block; text-align: left; font-size: 1.6rem; margin: 2rem 0; } /* Inline-block so that the post content is centered if it is short text */
 article .content p { line-height: 1.8; }
 article .content p a:hover { border-bottom: 1px solid #EC7C34; }
@@ -84,6 +86,7 @@ article .actions { margin: 2rem 0; }
 .posts .vote .glyphicon { padding: .1em .1em 0 0; }
 .posts .title { display: inline-block; margin-top: 0; margin-bottom: 0; color: #EC7C34; line-height: 1.25;}
 .posts .meta { font-size: .8em; }
+.posts .actions { font-weight: bold; }
 @media screen and (max-width: 450px) {
 	.posts .healthbox { display: none; }
 	.posts .illustration { padding-left: 5px; }

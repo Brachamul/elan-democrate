@@ -25,7 +25,7 @@ class Notification(models.Model):
 
 	# Action
 	action = models.CharField(max_length=255)
-	### Create action ID to recall old notifications
+#	is_system = models.BooleanField(default=False)
 	
 	# Cible
 	id_cible = models.CharField(max_length=255, blank=True, null=True)
@@ -49,6 +49,7 @@ class Notification(models.Model):
 			'action': self.action,
 			'cible': self.cible,
 			'lieu': self.lieu,
+			'destinataire': self.destinataire.profil,
 		}
 		if self.cible:
 			if self.lieu:
@@ -58,7 +59,7 @@ class Notification(models.Model):
 			return u'%(acteur)s %(action)s %(lieu)s' % variables
 		if self.acteur:
 			return u'%(acteur)s %(action)s' % variables
-		return u'%(action)s' % variables
+		return u'%(action)s pour %(destinataire)s' % variables
 
 	def marquer_lu(self):
 		if self.non_lu:
@@ -99,6 +100,6 @@ def notification_apres_creation_de_compte(sender, created, **kwargs):
 		user = kwargs.get('instance')
 		nouvelle_notif = Notification(
 			destinataire = user,
-			action = 'Bienvenue sur Élan Démocrate ! Pour commencer, vous pouvez renseigner votre profil en cliquant sur votre nom.'.format(lien=reverse('profil', kwargs={ 'pk': user.pk })),
+			action = "welcome-notification"
 			)
 		nouvelle_notif.save()

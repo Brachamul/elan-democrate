@@ -5,18 +5,29 @@
 {% if user.is_authenticated %}
 
 <div class="card card-big">
+
+	{% if channel %}
+	<h3>{{ channel.name }}</h3>
+	{% else %}
 	<h3>Accueil</h3>
+	{% endif %}
+
 	<div class="box">
+		{% if channel %}
+		<p>{{ channel.description}}</p>
+		<p style="margin: 1em 0;">Animateurs :<br/>{% for actor in channel.moderators.all %}{% include 'actor.html' %} {% endfor %}</p>
+		<p><a class="btn btn-xs btn-default btn-block" href="{% url 'nouveau_post_avec_chaine' channel.slug %}"><i class="fa fa-plus"></i> nouveau post </a></p>
+		<p><a class="btn btn-xs btn-default btn-block" href="sub">
+			<i class="fa fa-edit"></i> s'abonner</a></p>
+		{% else %}
 		<p>Bienvenue sur Élan Démocrate.</p>
-		<a class="btn btn-xs btn-default"
-			{% if channel %}
-				href="{% url 'nouveau_post_avec_chaine' channel %}"
-			{% else %}
-				href="{% url 'nouveau_post' %}"
-			{% endif %}>
-			{% bootstrap_icon "plus" %} nouveau post
-			</a>
+		<p><a class="btn btn-xs btn-default btn-block" href="{% url 'nouveau_post' %}">
+			<i class="fa fa-plus"></i> nouveau post</a></p>
+		{% endif %}
+		<p><a class="btn btn-xs btn-default btn-block" href="{% url 'liste_des_chaines' %}">
+			<i class="fa fa-arrow-right"></i> toutes les chaînes</a></p>
 	</div>
+
 </div>
 
 {% else %}

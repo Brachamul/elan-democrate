@@ -9,7 +9,8 @@
 		{% if not notification.vue %} non-vue{% endif %}
 		">
 	<a href="{{ notification.url }}">
-		{% if notification.type_acteur.name == "utilisateur" %}<img src="{% gravatar_url notification.acteur.email 44 %}"/>{% endif %}
+		{% if notification.type_acteur.name == "utilisateur" %}<img src="{% gravatar_url notification.acteur.email 44 %}"/>
+		{% elif notification.icon %}<i class="fa fa-{{ notification.icon }} fa-2x"/></i>{% endif %}
 		<p>{{ notification.fulltext }}</p>
 		<div class="anchor"></div>
 	</a></li>
@@ -18,6 +19,6 @@
 {% comment %}
 <li>
 	<a href="{% url 'notifications' %}">
-	<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span> Anciennes notifications
+	<i class="fa fa-arrow-right" aria-hidden="true"></i> Anciennes notifications
 	</a></li>
 {% endcomment %}

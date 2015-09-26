@@ -14,8 +14,10 @@ def notifications(request):
 	"""	Réponse data contenant des notifications selon un filtre """
 	notifications = []
 	for notification in Notification.objects.filter(destinataire=request.user) : # try reducing it with [:12]
-		notification.fulltext = notification_fulltext(request, notification)
-		notification.url = notification_url(notification)
+		notification = check_if_is_system_notification(request, notification)
+		if not notification.is_system :
+			notification.fulltext = notification_fulltext(request, notification)
+			notification.url = notification_url(notification)
 		notifications.append(notification)
 	return render(request, 'notifications/notifications.html', {'notifications': notifications})
 
@@ -63,7 +65,7 @@ def notification_fulltext(request, notification):
 	elif cible : return '%(acteur)s %(action)s %(cible)s' % variables
 	elif lieu : return '%(acteur)s %(action)s %(lieu)s' % variables
 	elif acteur : return '%(acteur)s %(action)s' % variables
-	else : return 'Annonce : %(action)s' % variables # S'il n'y a qu'une action, c'est un message système
+	else : return '%(action)s' % variables # S'il n'y a qu'une action, c'est un message système
 
 
 def notification_url(notification):
@@ -71,3 +73,13 @@ def notification_url(notification):
 	if cible :
 		if notification.type_cible.name == "post" : return reverse('post', args=(cible.slug,))
 		if notification.type_cible.name == "comment" : return reverse('commentaire', args=(cible.post_racine().slug, cible.pk,))
+
+def check_if_is_system_notification(request, notification):
+	notification.is_system = False # by default, it's not a system notification, let's check if it is
+	if notification.action == "welcome-notification" :
+		notification.is_system = True
+		notification.fulltext = 'Bienvenue sur Élan Démocrate ! Pour commencer, cliquez ici pour renseigner votre profil !'
+		notification.url = reverse('profil', kwargs={ 'pk': request.user.pk })
+	if notification.is_system : notification.icon = "cogs"
+	return notification
+
