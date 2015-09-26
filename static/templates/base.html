@@ -32,12 +32,10 @@
 
 			<li class="dropdown">
 				<a href="#" class="dropdown-toggle"
-				data-toggle="dropdown" role="button" aria-expanded="false"
-				style="position: relative; padding-left: 32px">
+				data-toggle="dropdown" role="button" aria-expanded="false">
 					{% load gravatar %}
-					<img src="{% gravatar_url user.email 24 %}"
-					style="border-radius: 100%; opacity: .9;
-					position: absolute; top: 13px; left: 0px" />
+					<span class="actor">
+					<img src="{% gravatar_url user.email 24 %}"/>
 					{{ user.profil.nom_courant }}
 				</a>
 				<ul class="dropdown-menu" role="menu">
@@ -139,7 +137,9 @@
 
 	<div class="footer-wrapper">
 
-	<p>Si vous rencontrez un bug, signalez le bugs sur <a href="https://github.com/Brachamul/elan-democrate/issues/new">GitHub</a>.  Le réseau Élan Démocrate est développé par Antonin Grêlé, des Jeunes Démocrates. Remerciements à Antoine Carette, Stéphane Manet et Stephen Daloz.</p>
+	<p>Si vous rencontrez un <strong>bug</strong>, signalez le sur <a href="https://github.com/Brachamul/elan-democrate/issues/new">GitHub</a>.</p>
+
+	<p>Le réseau Élan Démocrate est développé par Antonin Grêlé, des Jeunes Démocrates. Remerciements à Antoine Carette, Stéphane Manet et Stephen Daloz.</p>
 
 	<p>Pour participer à l'amélioration de cet outil, n'hésitez pas à <a href="mailto:antonin.grele@gmail.com">me contacter</a> !</p>
 

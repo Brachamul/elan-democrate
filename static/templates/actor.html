@@ -1,0 +1,4 @@
+{% load gravatar %}
+<a class="actor" href="{% url 'profil' actor.pk %}">
+	<img src="{% gravatar_url actor.email 20 %}"/>
+	{{ actor.profil.nom_courant }}</a>

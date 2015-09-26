@@ -10,29 +10,30 @@ from django.contrib.auth.models import User
 
 
 class Channel(models.Model):
-	name = models.CharField(max_length=255)
-	slug = AutoSlugField(populate_from=('name'), max_length=255)
+	name = models.CharField(max_length=32, verbose_name="nom", unique=True)
+	slug = AutoSlugField(populate_from=('name'), unique=True, editable=True, max_length=64)
 	date = models.DateTimeField(auto_now_add=True)
-	description = models.CharField(max_length=255, default="Cette chaîne n'a pas encore de description.")
+	description = models.CharField(max_length=255)
 	official = models.BooleanField(default=False)
 	is_default = models.BooleanField(default=False) # If a channel is default, it will be seen by users without needing subscription
 	moderators = models.ManyToManyField(User, related_name='moderated_channels')
 	subscribers = models.ManyToManyField(User, related_name='subscribed_channels')
-
 	ignorers = models.ManyToManyField(User, related_name='ignored_channels') # users can still choose not to view the channel if they wish 
-
+	illustration = models.URLField(default="/static/images/default_channel_illustration.png")
 	def __str__(self): return self.name
+	class Meta:
+		 ordering = ['-is_default']
 
 
 
 class Post(models.Model):
+	date = models.DateTimeField(default=timezone.now)
 	format = models.CharField(max_length=255, choices=(("LINK", "link"), ("TEXT", "text")))
 	title = models.CharField(max_length=144)
-	slug = AutoSlugField(populate_from=('title'), unique_with='date', max_length=255)
+	slug = AutoSlugField(populate_from=('title'), unique_with='date__year', max_length=255)
 	content = models.TextField(max_length=10000, null=True, blank=True)
 	author = models.ForeignKey(User)
 	channel = models.ForeignKey(Channel, null=True, blank=True)
-	date = models.DateTimeField(default=timezone.now)
 	last_edit = models.DateTimeField(null=True, blank=True)
 	deleted = models.BooleanField(default=False)
 	health = models.IntegerField(default=0) # votes positifs - votes négatifs

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}{{ block.super }}
+
+<link rel="stylesheet" href="{% get_static_prefix %}css/aggregateur.css" >
+
+{% endblock head %}
+
+
+{% block content %}
+
+<div id="aggregateur">
+
+	<div id="primary-wrapper">
+
+		<div class="card card-big" style="text-align: center;">
+
+		<h1>Liste des chaînes</h1>
+		{% for channel in channels %}
+			<hr/>
+			<div class="channel" style="margin: 1em;">
+				<a href="{% url 'chaine' channel.slug %}">
+					<strong style="font-size: 1.2em">{{ channel.name }}</strong><br/>
+				</a>
+				Animateur{{ channel.moderators.all|pluralize }} :
+				{% for actor in channel.moderators.all %}{% include 'actor.html' %} {% endfor %}
+				<br/>
+				{% if channel.is_default %}Visible par défaut
+				{% else %}{{ channel.num_subscribers }} inscrit{{ channel.num_subscribers|pluralize }}
+				{% endif %}
+				<br/>
+				<span style="font-size: 0.8em; font-style: italic;">{{ channel.description }}</span>
+			</div>
+		{% endfor %}
+		</div>
+
+	</div>
+
+	<div id="secondary-wrapper">
+
+		<div class="card card-big">
+
+		<h3>À propos</h3>
+		<div class="box">
+			<p>Les chaînes sont crées et gérées par les utilisateurs du site.</p>
+			<p>Ce sont les contenus de ces chaînes qui forment la page d'accueil.</p>
+		</div>
+
+		<a href="" class="btn btn-default btn-sm btn-block">
+			<i class="fa fa-plus"></i> Nouvelle chaîne
+		</a>
+
+		</div>
+
+	</div>
+
+	<div class="anchor"></div>
+
+</div>
+
+{% endblock content %}

@@ -107,22 +107,50 @@ def markdownify(multiple_string): return multiple_string.replace('\t', '').repla
 @login_required
 def initialize_base_posts(request):
 
-	channel = Channel.objects.get_or_create(name="NotesDeMaj", official=True)[0]
+	Channel.objects.get_or_create(
+		name="Actualités",
+		description="Pour parler de l'actualité interne, nationale ou internationale.",
+		official=True, is_default=True, illustration="/static/images/flat_upload.png")
+
+	Channel.objects.get_or_create(
+		name="Élan Démocrate",
+		description="Bugs, suggestions pour améliorer la plateforme, c'est ici !",
+		official=True, is_default=True, illustration="/static/images/flat_upload.png")
+
+	channel = Channel.objects.get_or_create(
+		name="Notes de mise à jour",
+		description="Lorsque Élan Démocrate est mis à jour, les modifications sont répertoriées ici.",
+		official=True, is_default=True, illustration="/static/images/flat_upload.png")[0]
 
 	Post.objects.filter(channel=channel).delete()
 
 	illustration = "/static/images/flat_upload.png"
 
-	v0_5 = Post.objects.get_or_create(
-		title = "Mise à jour v0.5 : inscriptions à la beta, intégration Twitter et notification de bienvenue",
+	v0_6 = Post.objects.get_or_create(
+		title = "Mise à jour v0.6 : inscriptions à la beta et activation des chaînes",
 		format = "TEXT",
 		channel= channel,
 		content = markdownify(
-			"""Hello, pour la mise à jour v0.5, voici les modifications principales :
+			"""Hello, pour la mise à jour v0.6, voici les modifications principales :
 
 			* **Inscription à la beta :**
 			Il est désormais possible de renseigner le formulaire d'inscription à la beta, pour obtenir un compte et pouvoir tester Élan Démocrate.
 			
+			* **Activation des chaînes :**
+			Les utilisateurs peuvent désormais créer des chaînes de discussion et filter les posts par chaîne."""),
+		author = request.user,
+		illustration = illustration,
+		date = datetime.datetime(year=2015, month=9, day=25),
+		)
+
+
+	v0_5 = Post.objects.get_or_create(
+		title = "Mise à jour v0.5 : intégration Twitter et notification de bienvenue",
+		format = "TEXT",
+		channel= channel,
+		content = markdownify(
+			"""Hello, pour la mise à jour v0.5, voici les modifications principales :
+		
 			* **Intégration Twitter :**
 			Il est désormais possible de renseigner son nom d'utilisateur Twitter afin d'afficher son fil Twitter sur le profil Élan Démocrate.
 			

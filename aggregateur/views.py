@@ -21,22 +21,40 @@ def all(request): return aggregateur(request)
 ### Channels
 
 @login_required
-def aggregateur(request, page=1, channel="accueil"):
+def aggregateur(request, page=1, channel_slug=False):
 	''' va chercher les posts de la chaine et les publie via un paginateur
 		l'argument 'chaine' n'est pas encore opérationnel '''
-	posts = Post.objects.all()
+	if channel_slug :
+		channel = get_object_or_404(Channel, slug=channel_slug)
+		posts = Post.objects.filter(channel=channel)
+		page_title = channel.name.capitalize()
+	else :
+		channel = False
+		posts = Post.objects.all()
+		page_title = "Accueil"
+
 	for post in posts : post = get_post_meta(request, post)
 #	if time_to_rerank(request) == True : rank_posts() # classe les posts s'ils n'ont pas été reclassés depuis au moins 5 minutes
 #	a activer uniquement si on a pas de cron job pour le reclassement
 	posts = Paginator(posts, settings.POSTS_PER_PAGE).page(page)
-	return render(request, 'aggregateur/posts.html', { 'posts': posts, 'channel': channel, 'page_title': channel.capitalize() } )
+	return render(request, 'aggregateur/posts.html', {
+		'posts': posts,
+		'channel': channel,
+		'page_title': page_title
+		} )
 
+@login_required
+def rank(request):
+	rank_posts()
+	rank_comments()
+	messages.success(request, 'Classement des posts et des commentaires réalisé avec succès.')
+	return HttpResponseRedirect('/')
 
 ### Affichage des Posts
 
-def afficher_le_post(request, slug):
+def afficher_le_post(request, slug, year):
 	''' génère la page d'affichage d'un post '''
-	post = get_object_or_404(Post, slug=slug)
+	post = get_object_or_404(Post, slug=slug, date__year=year)
 	post = get_post_meta(request, post)
 	post.number_of_comments = count_post_comments(post)
 	redirect = process_post_changes(request, post)
@@ -50,7 +68,7 @@ def afficher_le_post(request, slug):
 		})
 
 @login_required
-def afficher_le_commentaire(request, pk, slug):
+def afficher_le_commentaire(request, pk, slug, year):
 	''' génère la page d'affichage d'un commentaire '''
 	try : comment = Comment.objects.get(pk=pk)
 	except Comment.DoesNotExist : raise Http404("Ce commentaire n'existe pas, ou plus.")
@@ -290,11 +308,12 @@ def count_post_comments(post):
 @login_required
 def nouveau_post(request, channel=None):
 	# Si le formulaire a été rempli, on le traite. Sinon, on l'affiche.
+	text_data = link_data = None # les données seront renvoyées au formulaire en cas d'erreur, pour éviter d'avoir à recommencer
 	if request.method == "POST":
-		text_data = link_data = None # les données seront renvoyées au formulaire en cas d'erreur, pour éviter d'avoir à recommencer
 		format = request.POST.get('format')
 		if format == "TEXT" :
 			title = request.POST.get('Titre')
+			channel = Channel.objects.get(slug=request.POST.get('Chaîne'))
 			content = request.POST.get('Texte')
 			illustration = request.POST.get('Illustration')
 			partageable = request.POST.get('Partageable')
@@ -307,10 +326,9 @@ def nouveau_post(request, channel=None):
 					illustration=illustration,
 					shareable=(partageable==True),
 					author=request.user,
-#					channel=Channel.objects.get(pk=1), # change when adding more channels
+					channel=channel,
 					)
 				new_post.save()
-				new_post_adress = "/p/" + new_post.slug
 				rank_posts()
 				logging.info(
 					"New text link posted by {username} : {title}".format(
@@ -319,7 +337,7 @@ def nouveau_post(request, channel=None):
 						).encode('utf8')
 					)
 				messages.success(request, "Votre post est publié.")
-				return HttpResponseRedirect(new_post_adress)
+				return HttpResponseRedirect(reverse('post', kwargs={ 'slug': new_post.slug, 'year': new_post.date.year }))
 			else :
 				messages.error(request, "Votre post n'a pas été publié : {}".format(PostTextForm(request.POST).errors), extra_tags='safe')
 
@@ -339,7 +357,6 @@ def nouveau_post(request, channel=None):
 #					channel=Channel.objects.get(pk=1), # change when adding more channels
 					)
 				new_post.save()
-				new_post_adress = "/p/" + new_post.slug
 				rank_posts()
 				logging.info(
 					"New link post by {username} : {title}".format(
@@ -348,14 +365,17 @@ def nouveau_post(request, channel=None):
 						).encode('utf8')
 					)
 				messages.success(request, "Votre post est publié.")
-				return HttpResponseRedirect(new_post_adress)
+				return HttpResponseRedirect(reverse('post', kwargs={ 'slug': new_post.slug, 'year': new_post.date.year }))
 			else :
 				messages.error(request, "Votre post n'a pas été publié : {}".format(PostLinkForm(request.POST).errors), extra_tags='safe')
 		else: # pas de format spécifié ?
 			messages.warning(request, "Il y a un bug dans la matrice !")
-		return render(request, 'aggregateur/nouveau_post.html', {'post_text_form': PostTextForm(initial=text_data), 'post_link_form': PostLinkForm(initial=link_data), 'page_title': 'Nouveau post', })
-	else :
-		return render(request, 'aggregateur/nouveau_post.html', {'post_text_form': PostTextForm(), 'post_link_form': PostLinkForm(), 'page_title': 'Nouveau post', })
+	channels = Channel.objects.all().annotate(num_subscribers=Count('subscribers')).order_by('-is_default', '-num_subscribers')
+	return render(request, 'aggregateur/nouveau_post.html', {
+		'post_text_form': PostTextForm(initial=text_data),
+		'post_link_form': PostLinkForm(initial=link_data),
+		'page_title': 'Nouveau post',
+		'channel': channel, 'channels': channels, })
 
 
 ###
@@ -388,11 +408,36 @@ def content_type(url):
 
 ### CHANNELS
 
-@login_required
-def channel_details(request, slug):
-	channel = get_object_or_404(Channel, slug=slug)
-	return render(request, 'aggregateur/channel.html', { 'channel': channel, 'page_title': channel.name } )
-
+from django.db.models import Count
 @login_required
 def channel_list(request):
-	return HttpResponse('Channel list !')
+	return render(request, 'aggregateur/channel_list.html', {
+		'channels' : Channel.objects.all().annotate(num_subscribers=Count('subscribers')).order_by('-is_default', '-num_subscribers'),
+		'page_title': "Liste des chaînes",
+		} )
+
+@login_required
+def nouvelle_chaine(request):
+	if request.method == "POST":
+		form = ChannelForm(request.POST)
+		success = process_nouvelle_chaine(request, form)
+		if success : return HttpResponseRedirect(reverse('chaine', kwargs={ 'channel_slug': success.slug }))
+	else :
+		form = ChannelForm()
+	return render(request, 'aggregateur/form.html', {
+		'form': form,
+		'page_title': "Créer une nouvelle chaîne",
+ })
+
+def process_nouvelle_chaine(request, form):
+	if form.is_valid():
+		nouvelle_chaine = form
+		nouvelle_chaine.moderators.add(user)
+		nouvelle_chaine.subscribers.add(user)
+		nouvelle_chaine.save()
+		messages.success(request, 'Votre chaîne a bien été crée !')
+		return nouvelle_chaine
+	else :
+		return False
+
+

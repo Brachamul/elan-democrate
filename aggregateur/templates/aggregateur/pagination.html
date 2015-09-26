@@ -6,7 +6,9 @@
 		&nbsp;
 	{% endif %}
 
+	{% if posts.paginator.num_pages > 1 %}
 	Page {{ posts.number }} / {{ posts.paginator.num_pages }}
+	{% endif %}
 
 	{% if posts.has_next %} 
 		&nbsp;

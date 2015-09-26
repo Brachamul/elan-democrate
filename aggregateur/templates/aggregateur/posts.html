@@ -9,6 +9,10 @@
 			{% include "aggregateur/pagination.html" %}
 		{% endif %}
 	
+		{% if not posts %}
+			<p style="text-align: center;">Rien n'a été posté ici, pour l'instant.</p>
+		{% endif %}
+
 		{% for post in posts %}
 			<div class="post" data-postid="{{ post.id }}" data-health="{{ post.health }}" data-color="{{ post.color }}">
 				<div class="healthbox">
@@ -19,13 +23,13 @@
 				<div class="illustration">
 					<img src="
 						{% if post.illustration %}{{ post.illustration }}
-						{% else %}{% load gravatar %}{% gravatar_url user.author.email 52 %}
+						{% else %}{% load gravatar %}{% gravatar_url post.author.email 52 %}
 						{% endif %}
 						"/>
 				</div>
 				<div class="postbox">
 					{% if post.format == "TEXT" %}
-						<a href="{% url 'aggregateur' %}{{ post.slug }}">
+						<a href="{% url 'post' post.date.year post.slug %}">
 					{% elif post.format == "LINK" %}
 						<a href="{{ post.link }}" target="_blank">
 					{% endif %}
@@ -33,13 +37,21 @@
 						</a>
 	{% comment %}		<span class="source">(<a href="#">loremipsum.com</a>)</span> {% endcomment %}
 					<div class="meta">
-						<span class="author">Par <a href="{% url 'membres' %}{{ post.author.id }}">{{ post.author.profil.nom_courant }}</a>
-						</span><span class="date">, il y a <time datetime="{{ post.date }}">{{ post.date|timesince }}</time>
-						</span>{% if post.channel %}, <span class="channel">dans /c/{{ post.channel }}</span>{% endif %}
+						{% spaceless %}
+						<span class="author">
+							Par <a href="{% url 'profil' post.author.id %}">{{ post.author.profil.nom_courant }}</a>
+						</span>
+						<span class="date">
+							, il y a <time datetime="{{ post.date }}">{{ post.date|timesince }}</time>
+						</span>
+						{% if post.channel %}, <span class="channel">
+						dans <a href="{% url 'chaine' post.channel.slug %}">{{ post.channel }}</a>
+						</span>{% endif %}
+						{% endspaceless %}
 					</div>
 					<div class="actions">
 						<span class="nombre-de-commentaires">
-							<a href="{% url 'aggregateur' %}{{ post.slug }}">
+							<a href="{% url 'post' post.date.year post.slug %}">
 							{% if post.number_of_comments = 0 %}
 								commenter
 							{% else %}

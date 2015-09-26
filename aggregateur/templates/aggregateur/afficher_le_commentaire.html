@@ -6,7 +6,7 @@
 <div class="aggregateur self">
 
 	<div class="alert alert-warning card">
-		<i class="fa fa-warning-sign"></i> Vous consultez un commentaire appartenant aux réponses d'un post. Pour revenir au post et voir les autres commentaires, cliquez <a href="{% url 'post' post.slug %}"><strong>ici</strong></a>.
+		<i class="fa fa-warning-sign"></i> Vous consultez un commentaire appartenant aux réponses d'un post. Pour revenir au post et voir les autres commentaires, cliquez <a href="{% url 'post' post.date.year post.slug %}"><strong>ici</strong></a>.
 	</div>
 
 	<div class="comments">

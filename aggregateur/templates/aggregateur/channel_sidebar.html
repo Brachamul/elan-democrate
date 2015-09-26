@@ -6,20 +6,28 @@
 
 <div class="card card-big">
 
-	{% if channel == "accueil" %}
-	<h3>Accueil</h3>
-	<div class="box">
-		<p>Bienvenue sur Élan Démocrate.</p>
-		<a class="btn btn-xs btn-default" href="{% url 'nouveau_post' %}">
-			<i class="fa fa-plus"></i> nouveau post </a>
-	{% elif channel %}
+	{% if channel %}
 	<h3>{{ channel.name }}</h3>
-	<div class="box">
-		<p>{{ channel.description}}</p>
-		<a class="btn btn-xs btn-default" href="{% url 'nouveau_post_avec_chaine' channel %}">
-			<i class="fa fa-plus"></i> nouveau post </a>
-	</div>
+	{% else %}
+	<h3>Accueil</h3>
 	{% endif %}
+
+	<div class="box">
+		{% if channel %}
+		<p>{{ channel.description}}</p>
+		<p style="margin: 1em 0;">Animateurs :<br/>{% for actor in channel.moderators.all %}{% include 'actor.html' %} {% endfor %}</p>
+		<p><a class="btn btn-xs btn-default btn-block" href="{% url 'nouveau_post_avec_chaine' channel.slug %}"><i class="fa fa-plus"></i> nouveau post </a></p>
+		<p><a class="btn btn-xs btn-default btn-block" href="sub">
+			<i class="fa fa-edit"></i> s'abonner</a></p>
+		{% else %}
+		<p>Bienvenue sur Élan Démocrate.</p>
+		<p><a class="btn btn-xs btn-default btn-block" href="{% url 'nouveau_post' %}">
+			<i class="fa fa-plus"></i> nouveau post</a></p>
+		{% endif %}
+		<p><a class="btn btn-xs btn-default btn-block" href="{% url 'liste_des_chaines' %}">
+			<i class="fa fa-arrow-right"></i> toutes les chaînes</a></p>
+	</div>
+
 </div>
 
 {% else %}

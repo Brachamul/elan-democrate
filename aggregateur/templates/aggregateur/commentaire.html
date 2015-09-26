@@ -5,9 +5,9 @@
 <div id="comment-{{ comment.id }}" class="comment card" data-commentid="{{ comment.id }}" data-health="{{ comment.health }}" data-color="{{ comment.color }}">
 
 	<span class="healthbox">
-		<div class="vote pos" data-color="POS"><i class="fa fa-circle-arrow-up"></i></div>
+		<div class="vote pos" data-color="POS"><i class="fa fa-arrow-up"></i></div>
 		<div class="health">{{ comment.health }}</div>
-		<div class="vote neg" data-color="NEG"><i class="fa fa-circle-arrow-down"></i></div>
+		<div class="vote neg" data-color="NEG"><i class="fa fa-arrow-down"></i></div>
 	</span>
 
 	<span class="meta">
@@ -48,12 +48,12 @@
 
 	<div class="actions">
 		<span class="hider link">cacher</span>
-		<span class="permalink link"><a href="{% url 'commentaire' post.slug comment.pk %}">lien</a></span>
+		<span class="permalink link"><a href="{% url 'commentaire' post.date.year post.slug comment.pk %}">lien</a></span>
 		<span class="parent link">
 			{% if comment.parent_comment %}
-				<a href="{% url 'commentaire' post.slug comment.parent_comment.pk %}">
+				<a href="{% url 'commentaire' post.date.year post.slug comment.parent_comment.pk %}">
 				{% elif comment.parent_post %}
-				<a href="{% url 'post' post.slug %}">
+				<a href="{% url 'post' post.date.year post.slug %}">
 				{% endif %}
 				parent</a></span>
 		{% if user == comment.author %}
