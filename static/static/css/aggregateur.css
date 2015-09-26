@@ -88,9 +88,17 @@ article .actions { margin: 2rem 0; }
 .posts .meta { font-size: .8em; }
 .posts .actions { font-weight: bold; }
 @media screen and (max-width: 450px) {
-	.posts .healthbox { display: none; }
-	.posts .illustration { padding-left: 5px; }
-	.posts .illustration { text-align: center; min-width: 4.75rem; padding-top: 3px; }
+	.posts .healthbox {
+		position: absolute;
+		top: 4em;
+		left: 0px;
+		font-size: 1em;
+		padding: 0px;
+		width: 2.8em;
+	}
+	.posts .post { padding-right: 10px; position: relative; }
+	.posts .illustration { padding-left: 5px; height: 6em; }
+	.posts .illustration { text-align: center; min-width: 4.75rem; padding-top: 3px; }	
 	.posts .illustration img { max-width: 4rem; max-height: 3rem; }
 }
 

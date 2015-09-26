@@ -21,11 +21,12 @@
 				<div class="vote neg" data-color="NEG"><i class="fa fa-arrow-down"></i></div>
 				</div>
 				<div class="illustration">
-					<img src="
-						{% if post.illustration %}{{ post.illustration }}
+					{% if post.illustration %}<img src="{{ post.illustration }}"/>
+					{% else %}<img src="
+						{% if author.profil.twitter %}https://twitter.com/{{ author.profil.twitter }}/profile_image?size=original
 						{% else %}{% load gravatar %}{% gravatar_url post.author.email 52 %}
-						{% endif %}
-						"/>
+						{% endif %}" style="border-radius: 100%;"/>
+					{% endif %}
 				</div>
 				<div class="postbox">
 					{% if post.format == "TEXT" %}
