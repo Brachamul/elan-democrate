@@ -16,6 +16,7 @@ class PostTextForm(forms.Form):
 class PostLinkForm(forms.Form):
 	Titre = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
 	Lien_URL = forms.URLField(widget=forms.URLInput(attrs={'class': 'form-control'}))
+	Partageable = forms.BooleanField(widget=forms.CheckboxInput(attrs={'checked': 'checked'}), required=False)
 
 class CommentForm(forms.Form):
 	content = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 5}))

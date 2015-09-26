@@ -344,6 +344,7 @@ def nouveau_post(request, channel=None):
 		elif format == "LINK" :
 			title = request.POST.get('Titre')
 			url = request.POST.get('Lien_URL')
+			channel = Channel.objects.get(slug=request.POST.get('Chaîne'))
 			partageable = request.POST.get('Partageable')
 			link_data = {'title': title, 'url': url, 'partageable': partageable}
 			if PostLinkForm(request.POST).is_valid() :
@@ -354,7 +355,7 @@ def nouveau_post(request, channel=None):
 					illustration=illustrate(url),
 					shareable=(partageable==True),
 					author=request.user,
-#					channel=Channel.objects.get(pk=1), # change when adding more channels
+					channel=channel,
 					)
 				new_post.save()
 				rank_posts()

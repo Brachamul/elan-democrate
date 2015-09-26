@@ -43,9 +43,20 @@
 			</div>
 
 			{% if post.illustration %}
-			<div class="illustration">
-				<img src="{{ post.illustration }}" />
-			</div>
+
+				{% if post.format == "LINK" %}
+				<a href="{{ post.link }}" target="_blank">
+					<div class="illustration">
+						<img src="{{ post.illustration }}" />
+					</div>
+				</a>
+				{% else %}
+				<div class="illustration">
+					<img src="{{ post.illustration }}" />
+				</div>
+				{% endif %}
+				
+
 			{% endif %}
 			<div class="anchor"></div>
 

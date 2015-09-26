@@ -21,12 +21,20 @@
 				<div class="vote neg" data-color="NEG"><i class="fa fa-arrow-down"></i></div>
 				</div>
 				<div class="illustration">
-					{% if post.illustration %}<img src="{{ post.illustration }}"/>
-					{% else %}<img src="
-						{% if author.profil.twitter %}https://twitter.com/{{ author.profil.twitter }}/profile_image?size=original
-						{% else %}{% load gravatar %}{% gravatar_url post.author.email 52 %}
-						{% endif %}" style="border-radius: 100%;"/>
+				{% if post.illustration %}
+					{% if post.format == "TEXT" %}
+					<a href="{% url 'post' post.date.year post.slug %}">
+					{% elif post.format == "LINK" %}
+					<a href="{{ post.link }}" target="_blank">
 					{% endif %}
+						<img src="{{ post.illustration }}"/>
+						{% else %}<img src="
+							{% if post.author.profil.twitter %}https://twitter.com/{{ post.author.profil.twitter }}/profile_image?size=original
+							{% else %}{% load gravatar %}{% gravatar_url post.author.email 52 %}
+							{% endif %}" style="border-radius: 100%;"/>
+					</a>
+				{% endif %}
+				
 				</div>
 				<div class="postbox">
 					{% if post.format == "TEXT" %}

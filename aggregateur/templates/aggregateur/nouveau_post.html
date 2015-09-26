@@ -84,14 +84,26 @@
 						<span class="help-block">Choisissez de préférence un titre court et explicite.</span>
 					</div>
 					<div class="form-group">
+						{{ post_link_form.Chaîne.field.errors }}
+						<label for="{{ post_link_form.Chaîne.id_for_label }}">Chaîne</label>
+						<select class="form-control" id="id_Chaîne" name="Chaîne">
+							{% for option in channels %}
+							<option value="{{ option.slug }}"
+							{% if option == channel %}selected="selected"{% endif %}>
+							{{ option.name }}
+							</option>
+							{% endfor %}
+						</select>
+					</div>
+					<div class="form-group">
 						{{ post_link_form.Lien_URL.field.errors }}
 						<label for="{{ post_link_form.Lien_URL.id_for_label }}">Lien URL</label>
 						{{ post_link_form.Lien_URL }}
 					</div>
 					<div class="form-group">
-						{{ post_text_form.Partageable.field.errors }}
-						<label for="{{ post_text_form.Partageable.id_for_label }}">Partageable</label>
-						<label for="{{ post_text_form.Partageable.id_for_label }}" style="display: inline; font-weight: normal;"><span class="help-block">{{ post_text_form.Partageable }} Cochez pour que le titre et le lien URL de ce post soient partageables sur les réseaux sociaux. Les commentaires ne resteront accessibles qu'aux utilisateurs authentifiés.</span></label>
+						{{ post_link_form.Partageable.field.errors }}
+						<label for="{{ post_link_form.Partageable.id_for_label }}">Partageable</label>
+						<label for="{{ post_link_form.Partageable.id_for_label }}" style="display: inline; font-weight: normal;"><span class="help-block">{{ post_link_form.Partageable }} Cochez pour que le titre et le lien URL de ce post soient partageables sur les réseaux sociaux. Les commentaires ne resteront accessibles qu'aux utilisateurs authentifiés.</span></label>
 					</div>
 					<input type="hidden" name="format" value="LINK">
 					<button type="submit" class="btn btn-primary">Poster</button>
