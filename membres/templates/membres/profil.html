@@ -16,7 +16,6 @@
 
 <div class="profil {% if user == membre %}editable{% endif %}">
 	<div class="clearfix text-center">
-
 		<div class="nom-courant">
 			<input id="profil-nom-courant" class="spoiler" type="checkbox"></i>
 			<div class="public">
@@ -33,7 +32,7 @@
 				</div>
 				<div class="form-group">
 					<button type="submit" class="btn btn-default btn-sm">
-						<i class="fa fa-ok"></i>
+						<i class="fa fa-check"></i>
 						Enregistrer
 					</button>
 					</input>
@@ -51,14 +50,19 @@
 		</div>
 
 		<div class="editable profile-picture">
+		{% if membre.profil.twitter %}
+			<img class="img-responsive center-block"
+			style="border-radius: 100%; max-width: 128px; max-height: 128px;"
+			src="https://twitter.com/{{ membre.profil.twitter }}/profile_image?size=original"/>
+		{% else %}
 			{% load gravatar %}
 			{% if user == membre %}
 			<div class="gravatar-edit">
-				<p>Votre avatar est géré par <strong>Gravatar</strong>.</p>
-				<p>Il dépend de votre adresse mail.</p>
-				<p>Pour modifier votre avatar, cliquez <a href="{% gravatar_profile_url user.email %}">ici</a>.</p>
+				<p>Votre avatar vient de <strong>Gravatar</strong> ou <strong>Twitter</strong>.</p>
+				<p>Pour ajouter un avatar, renseignez votre compte<br/>Twitter, ou inscrivez-vous à <a href="{% gravatar_profile_url user.email %}">Gravatar</a>.</p>
 			</div>{% endif %}
 			<img class="gravatar img-responsive center-block" src="{% gravatar_url membre.email 128 %}" />
+		{% endif %}
 		</div>
 	</div>
 	<div class="profil-body">
@@ -81,7 +85,7 @@
 						<span id="bio-counter"></span>/255
 					</button>
 					<button type="submit" class="btn btn-default btn-sm">
-						<i class="fa fa-ok"></i>
+						<i class="fa fa-check"></i>
 						Enregistrer
 					</button>
 					</input>
@@ -97,6 +101,41 @@
 			</label>
 			{% endif %}
 		</div>
+
+		<div class="twitter">
+			<input id="profil-twitter" class="spoiler" type="checkbox"/>
+			<div class="public">
+				{% if profil.twitter %}
+					<p class="twitter-content">
+					Sur Twitter : <a href="https://twitter.com/{{ profil.twitter }}" target="_blank">@{{ profil.twitter }}</a></p>
+				{% endif %}
+			</div>
+			{% if user == membre or user.is_staff %}
+			<form class="pas-public" method="POST" action="" enctype="multipart/form-data">
+				<div class="form-group">
+					{% csrf_token %}
+					<input id="twitter-input" name="twitter" class="form-control" maxlength="34"
+					placeholder="@...">{% if profil.twitter %}{{ profil.twitter }}{% endif %}</input>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-default btn-sm">
+						<i class="fa fa-check"></i>
+						Enregistrer
+					</button>
+					</input>
+					<label for="profil-twitter" class="btn btn-default btn-sm cancel-edit">
+						<i class="fa fa-remove"></i>
+						Annuler
+					</label>
+				</div>
+			</form>
+			<label for="profil-twitter" class="btn btn-default make-edit">
+				<i class="fa fa-pencil"></i>
+				Modifier mon compte Twitter
+			</label>
+			{% endif %}
+		</div>
+
 
 		<div class="mandats">
 			<input id="profil-mandats" class="spoiler" type="checkbox"/>
@@ -201,7 +240,7 @@
 
 		{% if membre.profil.twitter %}
 		<div class="twitterfeed">
-			<a class="twitter-timeline" href="https://twitter.com/{{ membre.profil.twitter }}" data-widget-id="646092784185810944">Chargement des tweets de @{{ membre.profil.twitter }}...</a>
+			<a class="twitter-timeline" href="https://twitter.com/{{ membre.profil.twitter }}" data-widget-id="646092784185810944" data-screen-name="{{ membre.profil.twitter }}">Chargement des tweets de @{{ membre.profil.twitter }}...</a>
 			<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 		</div>
 		{% endif %}

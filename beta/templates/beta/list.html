@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="card card-big" style="text-align: center;">
+
+	<h1>{{ page_title }}</h1>
+	<ul>
+	{% for object in objects %}
+		<li>
+			{% if object.converted == False %}
+			<a href="{% url 'activate_beta_candidate' object.pk %}">
+				{{ object }}
+			</a>
+			{% else %}
+				{{ object }}
+			{% endif %}
+		</li>
+	{% endfor %}
+	</ul>
+
+</div>
+
+{% endblock content %}

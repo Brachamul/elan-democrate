@@ -57,6 +57,12 @@ $( document ).ready(function() {
 	
 	$('#messages').append($('#inbox').html()) // after reload, place messages in the right container
 
+	$('#beta').click(function(){
+		window.location = $(this).attr('href') + $('#numero_ou_email').val()
+		return false
+	})
+
+
 });
 
 

@@ -48,6 +48,12 @@ def process_profil_changes(request, user, profil) :
 		profil.save()
 		changes = True
 
+	new_twitter = request.POST.get('twitter').strip('@').strip(' ')
+	if new_twitter :
+		profil.twitter = new_twitter
+		profil.save()
+		changes = True
+
 	messages.success(request, "Vos modifications ont bien été prises en compte.")
 
 def form_test(request):
