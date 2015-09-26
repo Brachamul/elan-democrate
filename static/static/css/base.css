@@ -135,6 +135,7 @@ a.btn-default:hover { background-color: #EC7C34; color: white; border-color: #D5
 }
 
 .nav .actor { padding-left: 34px; }
+.nav .actor img { top: -2px; }
 
 .actor img {
 	position: absolute; top: 0; left: 4px;
