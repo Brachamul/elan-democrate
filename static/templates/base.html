@@ -35,7 +35,10 @@
 				data-toggle="dropdown" role="button" aria-expanded="false">
 					{% load gravatar %}
 					<span class="actor">
-					<img src="{% gravatar_url user.email 24 %}"/>
+						<img src="
+						{% if user.profil.twitter %}https://twitter.com/{{ user.profil.twitter }}/profile_image?size=normal
+						{% else %}{% load gravatar %}{% gravatar_url user.email 20 %}
+						{% endif %}" style="border-radius: 100%;"/>
 					{{ user.profil.nom_courant }}
 				</a>
 				<ul class="dropdown-menu" role="menu">

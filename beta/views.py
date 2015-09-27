@@ -46,7 +46,7 @@ def activate_beta_candidate(request, pk):
 	candidat = get_object_or_404(BetaCandidat, pk=pk)
 	new_user = User.objects.get_or_create(
 		username=randomly_generated_digits(12),
-		email=candidat.email,
+		email=candidat.email.lower().strip(' '),
 		)[0]
 	profil = new_user.profil 
 	profil.nom_courant = candidat.nom_courant
@@ -54,8 +54,30 @@ def activate_beta_candidate(request, pk):
 	profil.save()
 	candidat.converted = True
 	candidat.save()
+	SendBetaInvitation(new_user)
 	messages.success(request, 'Le candidat a bien été ajouté.')
 	return HttpResponseRedirect(reverse(beta_candidate_list))
 
 import string, random
 def randomly_generated_digits(i): return ''.join(random.SystemRandom().choice(string.digits) for _ in range(i))
+
+# EMAIL
+
+from django.core.mail import send_mail
+from django.conf import settings
+from django.contrib import messages
+
+site_url = settings.SITE_URL
+emailer = settings.EMAIL_HOST_USER
+
+def SendBetaInvitation(user):
+	send_mail(
+		"[Élan Démocrate] Invitation à a Bêta",
+		"Merci d'avoir postulé à la Bêta d'Élan Démocrate !\n\n"
+		"Votre inscription a été validée, et vous pouvez désormais vous connecter :\n\n"
+		"{lien}".format(lien=site_url),
+		emailer,
+		[user.email],
+		fail_silently=False
+		)
+	return True

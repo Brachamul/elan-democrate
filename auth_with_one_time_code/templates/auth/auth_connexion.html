@@ -2,7 +2,8 @@
 
 <form class="ajax-form" action="{% url 'connexion' %}"
 	method="POST" role="form" enctype="multipart/form-data">{% csrf_token %}
-	<input name="numero_ou_email" placeholder="Email ou n° adhérent" id="numero_ou_email"
+	{% comment %}Email ou n° adhérent {% endcomment %}
+	<input name="numero_ou_email" placeholder="Adresse email" id="numero_ou_email"
 			value="{% if numero_ou_email %}{{ numero_ou_email }}{% endif %}" class="form-control" type="text" autofocus required>
 	<input type="hidden" name="form_type" value="send_code">
 	<p style="text-align: center;">

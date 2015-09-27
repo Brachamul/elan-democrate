@@ -29,7 +29,7 @@ def auth_template(request, status):
 
 def enregistrement(request):
 	context = RequestContext(request)
-	numero_ou_email = request.POST.get('numero_ou_email')
+	numero_ou_email = request.POST.get('numero_ou_email').lower().strip(' ')
 	status = "registering"
 	if numero_ou_email :
 	# on a une demande d'enregistrement avec un numéro d'adhérent ou un email
@@ -54,7 +54,7 @@ def enregistrement(request):
 
 		elif "@" in numero_ou_email :
 			# Cela ressemble à une adresse mail
-			email = numero_ou_email.lower()
+			email = numero_ou_email
 			try : user = User.objects.get(email=email)
 			except User.DoesNotExist :
 				# Cet email n'existe pas dans la base utilisateur
@@ -104,7 +104,7 @@ def connexion(request):
 	user = False # si on ne trouve pas d'user, c'est que numero / email sont faux
 	code_sent = False # default to no code sent
 	status = False
-	numero_ou_email = request.POST.get('numero_ou_email')
+	numero_ou_email = request.POST.get('numero_ou_email').lower().strip(' ')
 	if numero_ou_email :
 		# on a une demande de connexion avec un numéro d'adhérent ou un email
 		# regardons si c'est un numéro adhérent (donc isdigit) ou une adresse mail (avec un @)

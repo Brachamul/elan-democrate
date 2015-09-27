@@ -80,6 +80,17 @@ def check_if_is_system_notification(request, notification):
 		notification.is_system = True
 		notification.fulltext = 'Bienvenue sur Élan Démocrate ! Pour commencer, cliquez ici pour renseigner votre profil !'
 		notification.url = reverse('profil', kwargs={ 'pk': request.user.pk })
+	if notification.action == "dummy-notification" :
+		notification.is_system = True
+		notification.fulltext = 'Ceci est une notification test !'
+		notification.url = '/'
 	if notification.is_system : notification.icon = "cogs"
 	return notification
 
+def notifyme(request):
+	'''Dummy notification used for testing purposes'''
+	Notification.objects.create(
+		destinataire = request.user,
+		action = "dummy-notification"
+	)
+	return HttpResponseRedirect('/')

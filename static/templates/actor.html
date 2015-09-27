@@ -1,4 +1,8 @@
 {% load gravatar %}
 <a class="actor" href="{% url 'profil' actor.pk %}">
-	<img src="{% gravatar_url actor.email 20 %}"/>
+	<img src="
+		{% if actor.profil.twitter %}https://twitter.com/{{ actor.profil.twitter }}/profile_image?size=normal
+		{% else %}{% load gravatar %}{% gravatar_url actor.email 20 %}
+		{% endif %}" style="border-radius: 100%;"/>
 	{{ actor.profil.nom_courant }}</a>
+</a>
