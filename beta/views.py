@@ -72,10 +72,13 @@ emailer = settings.EMAIL_HOST_USER
 
 def SendBetaInvitation(user):
 	send_mail(
-		"[Élan Démocrate] Invitation à a Bêta",
+		"[Élan Démocrate] Une humble invitation",
+		"Bonjour,\n\n"
 		"Merci d'avoir postulé à la Bêta d'Élan Démocrate !\n\n"
-		"Votre inscription a été validée, et vous pouvez désormais vous connecter :\n\n"
-		"{lien}".format(lien=site_url),
+		"J'ai validé ton inscription, et tu peux désormais te connecter :\n\n"
+		"{lien}\n\n"
+		"À bientôt,\n"
+		"- Antonin\n\n".format(lien=site_url),
 		emailer,
 		[user.email],
 		fail_silently=False

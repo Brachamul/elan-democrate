@@ -115,7 +115,9 @@ def connexion(request):
 			except User.DoesNotExist : messages.error(request, "Aucun compte n'est lié à ce numéro d'adhérent. Avez-vous déjà créé un compte ?")
 		elif "@" in numero_ou_email :
 			try : user = User.objects.get(email=numero_ou_email)
-			except User.DoesNotExist : code_sent = backend.SendUserDoesNotExistEmail(request, numero_ou_email) 
+			except User.DoesNotExist :
+				return HttpResponseRedirect(reverse('beta_with_email', kwargs={ 'email': email }))
+				code_sent = backend.SendUserDoesNotExistEmail(request, numero_ou_email) 
 		elif numero_ou_email == "" : pass
 		# on ne met pas de message d'erreur si l'utilisateur a directement cliqué sur le bouton de connexion sans remplir le champs
 		else : messages.error(request, "Vous semblez avoir entré quelque chose qui n'est ni un numéro adhérent, ni une adresse mail...")

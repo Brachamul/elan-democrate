@@ -65,7 +65,7 @@ from django.core.mail import send_mail
 def SendAuthCode(user, code):
 	lien = site_url + reverse('url_connexion', kwargs={ 'username': user.username, 'code': code })
 	send_mail(
-		"[Élan Démocrate] Lien de connexion",
+		"[Élan Démocrate] Lien de connexion - {code}".format(code=code),
 		"Cliquez sur le lien suivant pour vous authentifier: \n\n"
 		"{lien}\n\n"
 		"Ce code d'accès ne sera valable qu'une fois.\n\n"
