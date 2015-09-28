@@ -116,7 +116,7 @@ def connexion(request):
 		elif "@" in numero_ou_email :
 			try : user = User.objects.get(email=numero_ou_email)
 			except User.DoesNotExist :
-				return HttpResponseRedirect(reverse('beta_with_email', kwargs={ 'email': email }))
+				return HttpResponseRedirect(reverse('beta_with_email', kwargs={ 'email': numero_ou_email }))
 				code_sent = backend.SendUserDoesNotExistEmail(request, numero_ou_email) 
 		elif numero_ou_email == "" : pass
 		# on ne met pas de message d'erreur si l'utilisateur a directement cliqué sur le bouton de connexion sans remplir le champs
