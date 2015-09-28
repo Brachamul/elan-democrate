@@ -152,7 +152,7 @@ def SendEmailAlreadyRegistered(request, email):
 
 def SendUserDoesNotExistEmail(request, email):
 	# Si l'adresse ne correspond pas à un adhérent, on ne peut pas logger l'utilisateur
-	lien = site_url + reverse('enregistrement')
+	lien = site_url + reverse('beta_with_email', kwargs={ 'email': numero_ou_email }) # after beta, switch back to "enregistrement"
 	send_mail(
 		"[Élan Démocrate] Vous n'avez pas encore créé de compte",
 		"Bonjour,\n\n"
