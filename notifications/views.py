@@ -89,8 +89,5 @@ def check_if_is_system_notification(request, notification):
 
 def notifyme(request):
 	'''Dummy notification used for testing purposes'''
-	Notification.objects.create(
-		destinataire = request.user,
-		action = "dummy-notification"
-	)
+	Notification.objects.create( destinataire = request.user, action = "dummy-notification" )
 	return HttpResponseRedirect('/')
