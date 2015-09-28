@@ -8,7 +8,7 @@
 .notificateur.navbar-toggle:not(.tout-vu) { background-color: #EC7C34; } /* Le bouton mobile de menu aussi */
 
 .navbar-toggle { position: relative; }
-.navbar-toggle .icon-counter { position: absolute; bottom: 0; right: 0; font-size: .7em; }
+.navbar-toggle .icon-counter { position: absolute; bottom: 0; right: 1px; font-size: .7em; }
 
 #notifications li.notification a { padding: 8px 10px; border-bottom: 1px solid #eee; }
 #notifications li.notification a p { line-height: 1.2; margin-top: -2px; }

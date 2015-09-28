@@ -16,3 +16,10 @@ class BetaCandidat(models.Model):
 	def __str__(self) : return self.nom_courant + ', ' + self.fonctions
 	class Meta:
 		ordering = ['-converted', '-date']
+
+''' Pour arrêter la bêta :
+- Charger le fichier Adhérents
+- Rattacher les utilisateurs à leurs numéro adhérent
+- Rétablir le "email ou numero adherent" dans le champs de connexion
+- Rétabir le bouton et le mail d'enregistrement au lieu de beta
+'''
