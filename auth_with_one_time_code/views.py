@@ -29,9 +29,10 @@ def auth_template(request, status):
 
 def enregistrement(request):
 	context = RequestContext(request)
-	numero_ou_email = request.POST.get('numero_ou_email').lower().strip(' ')
+	numero_ou_email = request.POST.get('numero_ou_email')
 	status = "registering"
 	if numero_ou_email :
+		numero_ou_email = numero_ou_email.lower().strip(' ')
 	# on a une demande d'enregistrement avec un numéro d'adhérent ou un email
 		
 	# regardons si c'est un numéro adhérent (donc isdigit) ou une adresse mail (avec un @)
@@ -104,15 +105,16 @@ def connexion(request):
 	user = False # si on ne trouve pas d'user, c'est que numero / email sont faux
 	code_sent = False # default to no code sent
 	status = False
-	numero_ou_email = request.POST.get('numero_ou_email').lower().strip(' ')
+	numero_ou_email = request.POST.get('numero_ou_email')
 	if numero_ou_email :
+		numero_ou_email = numero_ou_email.lower().strip(' ')
 		# on a une demande de connexion avec un numéro d'adhérent ou un email
 		# regardons si c'est un numéro adhérent (donc isdigit) ou une adresse mail (avec un @)
 		if numero_ou_email.isdigit() :
 			try : user = User.objects.get(username=numero_ou_email)
 			except User.DoesNotExist : messages.error(request, "Aucun compte n'est lié à ce numéro d'adhérent. Avez-vous déjà créé un compte ?")
 		elif "@" in numero_ou_email :
-			try : user = User.objects.get(email=numero_ou_email.lower())
+			try : user = User.objects.get(email=numero_ou_email)
 			except User.DoesNotExist : code_sent = backend.SendUserDoesNotExistEmail(request, numero_ou_email) 
 		elif numero_ou_email == "" : pass
 		# on ne met pas de message d'erreur si l'utilisateur a directement cliqué sur le bouton de connexion sans remplir le champs
