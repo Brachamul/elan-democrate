@@ -16,7 +16,7 @@ footer { margin-top: 4em; }
 .navbar .navbar-brand { font-size: 2.4rem; }
 .navbar { text-transform: uppercase; }
 .navbar #notifications { text-transform: none; }
-.navbar a { transition: color .5s; }
+.navbar a { transition: color .5s; border-radius: .2em; }
 .navbar a:not(:hover) { color: #999; }
 .navbar a:hover { color: #EC7C34; background: none; }
 .navbar .btn.focus, .navbar .btn:focus { color: #666; }
@@ -133,8 +133,10 @@ a.btn-default:hover { background-color: #EC7C34; color: white; border-color: #D5
 	padding-left: 28px;
 }
 
+.actor img { height: 1.428em; } /* Avatar sizing based on font-size */
+
 .nav .actor { padding-left: 34px; }
-.nav .actor img { top: -2px; }
+.nav .actor img { top: -2px; height: auto; } /* Override the relative sizing of the avatar */
 
 .actor img {
 	position: absolute; top: 0; left: 4px;
@@ -147,4 +149,5 @@ a.btn-default:hover { background-color: #EC7C34; color: white; border-color: #D5
 .actor:after { content:","; }
 .actor:last-of-type:after { content:""; }
 
-a.actor { color: inherit; }
+a:link.actor, a:visited.actor { color: inherit; }
+a:hover.actor { color: #DC6C24; }

@@ -169,9 +169,9 @@ DUREE_D_ACTIVITE = 2 # Nombre d'années d'activité des adhérents après leur d
 AUTHENTICATION_BACKENDS = ('auth_with_one_time_code.backend.OneTimeCodeBackend',) # Pas personnalisé, juste là pour info
 AUTH_CODE_LENGTH = 6 # longueur du code d'authentification, par exemple '6' donne 'J2DH92'
 AUTH_CODE_LIFESPAN = 1 # les codes d'authentification sont valides X heures
-AUTH_CODE_MAXIMUM_ATTEMPS = 3 # au bout de 3 essais, le code expire
+AUTH_CODE_MAXIMUM_ATTEMPS = 12 # au bout de 3 essais, le code expire
 
-HELP_EMAIL_ADRESS = "[ Demandez à Antoine de créer une adresse d'aide, on en a pas encore ! ]"
+HELP_EMAIL_ADRESS = "contact@elandemocrate.fr"
 
 # API EMBEDLY
 EMBEDLY_KEY = "111e2b3ee0714950ad122d221fa7d444"

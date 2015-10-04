@@ -36,21 +36,18 @@ def process_profil_changes(request, user, profil) :
 
 	changes = False # Il n'y a pas eu de changement, par défaut
 
-	new_bio = request.POST.get('bio')
-	if new_bio :
-		profil.bio = new_bio
+	if request.POST.get('bio') :
+		profil.bio = request.POST.get('bio')
 		profil.save()
 		changes = True
 
-	new_nom_courant = request.POST.get('nom_courant')
-	if new_nom_courant :
-		profil.nom_courant = new_nom_courant
+	if request.POST.get('nom_courant') :
+		profil.nom_courant = request.POST.get('nom_courant')
 		profil.save()
 		changes = True
 
-	new_twitter = request.POST.get('twitter').strip('@').strip(' ')
-	if new_twitter :
-		profil.twitter = new_twitter
+	if request.POST.get('twitter') :
+		profil.twitter = request.POST.get('twitter').strip('@').strip(' ')
 		profil.save()
 		changes = True
 

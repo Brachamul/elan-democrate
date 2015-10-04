@@ -1,5 +1,6 @@
 from math import sqrt
 
+from django.conf import settings
 from django.db import models
 from django.utils import timezone
 
@@ -14,12 +15,12 @@ class Channel(models.Model):
 	slug = AutoSlugField(populate_from=('name'), unique=True, editable=True, max_length=64)
 	date = models.DateTimeField(auto_now_add=True)
 	description = models.CharField(max_length=255)
-	official = models.BooleanField(default=False)
+	is_official = models.BooleanField(default=False)
 	is_default = models.BooleanField(default=False) # If a channel is default, it will be seen by users without needing subscription
-	moderators = models.ManyToManyField(User, related_name='moderated_channels')
-	subscribers = models.ManyToManyField(User, related_name='subscribed_channels')
-	ignorers = models.ManyToManyField(User, related_name='ignored_channels') # users can still choose not to view the channel if they wish 
-	illustration = models.URLField(default="/static/images/default_channel_illustration.png")
+	moderators = models.ManyToManyField(User, related_name='moderated_channels', blank=True)
+	subscribers = models.ManyToManyField(User, related_name='subscribed_channels', blank=True)
+	ignorers = models.ManyToManyField(User, related_name='ignored_channels', blank=True) # users can still choose not to view the channel if they wish 
+	illustration = models.URLField(default=settings.SITE_URL+"/static/images/default_channel_illustration.png")
 	def __str__(self): return self.name
 	class Meta:
 		 ordering = ['-is_default']

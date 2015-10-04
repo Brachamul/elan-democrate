@@ -20,18 +20,35 @@ def all(request): return aggregateur(request)
 
 ### Channels
 
+def default_channels(request) :		return Channel.objects.filter(is_default=True)
+def official_channels(request) :	return Channel.objects.filter(is_official=True)
+def subbed_channels(request):		return Channel.objects.filter(subscribers=request.user)
+def ignored_channels(request) : 	return Channel.objects.filter(ignorers=request.user)
+def moderated_channels(request):	return Channel.objects.filter(moderators=request.user)
+
 @login_required
-def aggregateur(request, page=1, channel_slug=False):
-	''' va chercher les posts de la chaine et les publie via un paginateur
-		l'argument 'chaine' n'est pas encore opérationnel '''
+def aggregateur(request, page=1, channel_slug=False, special=False):
+	''' va chercher les posts de la chaine et les publie via un paginateur '''
 	if channel_slug :
 		channel = get_object_or_404(Channel, slug=channel_slug)
-		posts = Post.objects.filter(channel=channel)
+		channels = (channel,)
 		page_title = channel.name.capitalize()
 	else :
-		channel = False
-		posts = Post.objects.all()
-		page_title = "Accueil"
+		channel = False # l'URL n'appelle pas une chaîne
+		print(special)
+		if special :
+			if special == "all_channels" :
+				channels = Channel.objects.all()
+				page_title = "Toutes les chaînes"
+			if special == "default_channels" :
+				page_title = "Chaînes par défaut"
+				channels = default_channels(request)
+		else :
+			channels = default_channels(request) | subbed_channels(request) # De base, on prends les chaînes par défaut + les chaînes souscrits
+			page_title = "Accueil"
+			channels = channels.exclude(id__in=ignored_channels(request)) # Et on enlève les chaînes 
+	
+	posts = Post.objects.filter(channel__in=channels)
 
 	for post in posts : post = get_post_meta(request, post)
 #	if time_to_rerank(request) == True : rank_posts() # classe les posts s'ils n'ont pas été reclassés depuis au moins 5 minutes
@@ -432,11 +449,11 @@ def nouvelle_chaine(request):
 
 def process_nouvelle_chaine(request, form):
 	if form.is_valid():
-		nouvelle_chaine = form
-		nouvelle_chaine.moderators.add(user)
-		nouvelle_chaine.subscribers.add(user)
+		nouvelle_chaine = form.save()
+		nouvelle_chaine.moderators.add(request.user)
+		nouvelle_chaine.subscribers.add(request.user)
 		nouvelle_chaine.save()
-		messages.success(request, 'Votre chaîne a bien été crée !')
+		messages.success(request, 'Votre chaîne "{}"" a bien été crée !'.format(nouvelle_chaine.name))
 		return nouvelle_chaine
 	else :
 		return False
