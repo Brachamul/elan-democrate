@@ -73,7 +73,7 @@ def notification_url(notification):
 	cible = notification.cible
 	if cible :
 		if notification.type_cible.name == "post" : return reverse('post', args=(cible.date.year, cible.slug,))
-		if notification.type_cible.name == "comment" : return reverse('commentaire', args=(cible.post_racine().slug, cible.pk,))
+		if notification.type_cible.name == "comment" : return reverse('commentaire', kwargs={ 'year': cible.post_racine().date.year, 'slug': cible.post_racine().slug, 'pk': cible.pk })
 		if notification.type_cible.name == "channel" : return reverse('chaine', kwargs={ 'channel_slug': cible.slug })
 		if notification.type_cible.name == "want_to_join_channel" : return reverse ('wanttojoin_channel', args=(cible.channel.slug))
 	else : return False
