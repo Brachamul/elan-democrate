@@ -105,17 +105,17 @@ def notification_apres_creation_de_compte(sender, created, **kwargs):
 		nouvelle_notif.save()
 
 @receiver(post_save, sender=WantToJoinChannel)
-def want_to_join_channl_notification(sender, created, **kwargs):
+def want_to_join_channel_notification(sender, created, **kwargs):
 	if created :
 		joining_instance = kwargs.get('instance')
 		user = joining_instance.user
 		channel = joining_instance.channel
-		action = 'a demandé à rejoindre votre chaîne \"{}\"'.format(channel.name)
+		action = 'a demandé à rejoindre'
 		for moderator in channel.moderators.all() :
 			nouvelle_notif = Notification(
 				destinataire = moderator,
 				acteur = user,
 				action = action,
-				cible = joining_instance,
+				cible = channel,
 				)
 		nouvelle_notif.save()

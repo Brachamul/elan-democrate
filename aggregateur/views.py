@@ -15,9 +15,6 @@ from django.views.generic import TemplateView, DetailView
 from .models import *
 from .forms import *
 
-def all(request): return aggregateur(request)
-
-
 ### Channels
 
 def default_channels(request) :		return Channel.objects.filter(is_default=True)
@@ -323,8 +320,9 @@ def count_post_comments(post):
 ### Misc
 
 @login_required
-def nouveau_post(request, channel=None):
+def nouveau_post(request, channel_slug=None):
 	# Si le formulaire a été rempli, on le traite. Sinon, on l'affiche.
+	posting_channel = Channel.objects.filter(slug=channel_slug)[0]
 	text_data = link_data = None # les données seront renvoyées au formulaire en cas d'erreur, pour éviter d'avoir à recommencer
 	if request.method == "POST":
 		format = request.POST.get('format')
@@ -393,7 +391,7 @@ def nouveau_post(request, channel=None):
 		'post_text_form': PostTextForm(initial=text_data),
 		'post_link_form': PostLinkForm(initial=link_data),
 		'page_title': 'Nouveau post',
-		'channel': channel, 'channels': channels, })
+		'posting_channel': posting_channel, 'channels': channels, })
 
 
 ###
@@ -510,7 +508,7 @@ def allow_user_to_join_channel(request, channel_slug, user_pk):
 	channel.subscribers.add(candidate)
 	WantToJoinChannel.objects.filter(channel=channel, user=candidate).delete()
 	join_private_channel_allowed(request, channel, candidate)
-	message.success('{} est désormais abonné à \"{}\"'.format(candidate.profil.nom_courant, channel.name))
+	messages.success(request, '{} est désormais abonné à \"{}\".'.format(candidate.profil.nom_courant, channel.name))
 	return HttpResponseRedirect(reverse('chaine', kwargs={ 'channel_slug': channel.slug }))
 
 @login_required

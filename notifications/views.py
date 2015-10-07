@@ -48,11 +48,15 @@ def notification_fulltext(request, notification):
 	if cible :
 		type_cible = notification.type_cible.name
 		if type_cible == "post" :
-			if cible.author == request.user : cible = ('à votre post "{titre_du_post}"'.format(titre_du_post=cible))
-			else : cible = ('au post "{titre_du_post}"'.format(titre_du_post=cible))
+			if cible.author == request.user : cible = 'à votre post "{titre_du_post}"'.format(titre_du_post=cible)
+			else : cible = 'au post "{titre_du_post}"'.format(titre_du_post=cible)
 		if type_cible == "comment" :
-			if cible.author == request.user : cible = ('à votre commentaire')
-			else : cible = ('à un commentaire')
+			if cible.author == request.user : cible = 'à votre commentaire'
+			else : cible = 'à un commentaire'
+		if type_cible == "channel" :
+			if request.user in cible.moderators.all() : cible = 'votre chaîne \"{}\"'.format(cible.name)
+			else : cible = 'la chaîne \"{}\"'.format(cible.name)
+			
 
 	lieu = notification.lieu
 	if lieu :

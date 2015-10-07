@@ -144,8 +144,19 @@ article .actions { margin: 2rem 0; }
 #secondary-wrapper { color: #999; }
 #secondary-wrapper .box { color: #999; padding: 0 1rem 1rem; }
 #secondary-wrapper h3 { padding: 0 1rem 2rem; border-bottom: 1px solid #F2F2F2; }
+#secondary-wrapper h3 a:link,
+#secondary-wrapper h3 a:visited  { color: inherit; }
+#secondary-wrapper h3 a:hover,
+#secondary-wrapper h3 a:active { color: #EC7C34; }
+
 
 .box .moderators { font-size: .8em; }
+.box hr {
+	margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
+    margin-left: -1rem;
+    margin-right: -1rem;
+}
 
 /****************/
 

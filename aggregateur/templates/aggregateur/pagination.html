@@ -1,6 +1,10 @@
 <p class="pagination">
 	{% if posts.has_previous %}
-		<a href="{% url 'accueil' page_number=posts.previous_page_number %}">
+		{% if channel %}
+			<a href="{% url 'channel_page' channel_slug=channel.slug page=posts.previous_page_number %}">
+		{% else %}
+			<a href="{% url 'aggregateur_page' page=posts.next_page_number %}">
+		{% endif %}
 		<i class="fa fa-chevron-left"></i>
 		</a>
 		&nbsp;
@@ -12,7 +16,11 @@
 
 	{% if posts.has_next %} 
 		&nbsp;
-		<a href="{% url 'accueil' page_number=posts.next_page_number %}">
+		{% if channel %}
+			<a href="{% url 'channel_page' channel_slug=channel.slug page=posts.next_page_number %}">
+		{% else %}
+			<a href="{% url 'aggregateur_page' page=posts.next_page_number %}">
+		{% endif %}
 		<i class="fa fa-chevron-right"></i>
 		</a>
 	{% endif %}

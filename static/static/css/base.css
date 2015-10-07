@@ -130,7 +130,7 @@ a.btn-default:hover { background-color: #EC7C34; color: white; border-color: #D5
 
 .actor {
 	position: relative;
-	padding-left: 2em;
+	padding-left: 2.2em;
 }
 
 .actor img { height: 1.428em; } /* Avatar sizing based on font-size */

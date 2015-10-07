@@ -6,7 +6,11 @@
 
 <div class="card card-big">
 
-	<h3>{{ page_title }}</h3>
+	{% if channel %}
+		<h3><a href="{% url 'chaine' channel.slug %}">{{ channel.name }}</a></h3>
+	{% else %}
+		<h3>{{ page_title }}</h3>
+	{% endif %}
 
 	<div class="box">
 
@@ -17,7 +21,15 @@
 			{% else %}
 
 				<p>{{ channel.description}}</p>
-				<p style="margin: 1em 0;">Animateurs :<br/><span class="moderators">{% for actor in channel.moderators.all %}{% include 'actor.html' %} {% endfor %}</span></p>
+
+				<p style="margin: 1em 0; font-size: .8em; ">{{ channel.subscribers.all.count }} abonnés</p>
+
+				<hr>
+
+				<p>Animateurs :<br/><span class="moderators">{% for actor in channel.moderators.all %}{% include 'actor.html' %} {% endfor %}</span></p>
+
+				<hr>
+
 				<p><a class="btn btn-xs btn-default btn-block" href="{% url 'nouveau_post_avec_chaine' channel.slug %}"><i class="fa fa-plus"></i> nouveau post </a></p>
 			
 				{% if user in channel.subscribers.all %}	
@@ -32,6 +44,12 @@
 
 			{% if user in channel.moderators.all %}
 			<hr>
+
+				{% if channel.want_to_join.all %}
+					<p><a href="{% url 'wanttojoin_channel' channel.slug %}">
+						<i class="fa fa-warning"></i> {{ channel.want_to_join.all.count }} utilisateur{{ channel.want_to_join.all.count|pluralize }} souhaite{{ channel.want_to_join.all.count|pluralize:"nt" }} rejoindre la chaîne !</a></p>	
+				{% endif %}
+
 			<p><strong>Message aux animateurs de chaînes :</strong></p>
 			<p>La fonctionnalité "chaînes" vient d'être créée et est encore en beta.</p>
 			<p> Les aspects d'administration de la chaîne, notamment, ne sont pas encore totalement aboutis.</p>
