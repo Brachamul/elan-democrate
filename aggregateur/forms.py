@@ -24,4 +24,4 @@ class CommentForm(forms.Form):
 class ChannelForm(forms.ModelForm):
 	class Meta:
 		model = Channel
-		fields = ['name', 'description']
+		fields = ['name', 'description', 'is_private']

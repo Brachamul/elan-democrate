@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="card card-big" style="text-align: center;">
+
+	<h1>{{ page_title }}</h1>
+	
+	{% if objects %}
+	<ul>
+		{% for user in objects %}
+			<li>
+				<span>{% with user as actor %}{% include 'actor.html' %}{% endwith %}</span>
+				<a class="btn btn-default btn-xs" href="{% url 'allow_user_to_join_channel' channel.slug user.pk  %}"><i class="fa fa-check"></i></a>
+				<a class="btn btn-default btn-xs" href="{% url 'deny_user_from_channel' channel.slug user.pk  %}"><i class="fa fa-times"></i></a>
+			</li>
+		{% endfor %}
+	</ul>
+	{% else %}
+	<p>Il n'y a pas de demande active pour l'instant</p>
+	{% endif %}
+
+
+</div>
+
+{% endblock content %}

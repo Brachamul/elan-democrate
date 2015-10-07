@@ -145,6 +145,7 @@ article .actions { margin: 2rem 0; }
 #secondary-wrapper .box { color: #999; padding: 0 1rem 1rem; }
 #secondary-wrapper h3 { padding: 0 1rem 2rem; border-bottom: 1px solid #F2F2F2; }
 
+.box .moderators { font-size: .8em; }
 
 /****************/
 
@@ -241,6 +242,11 @@ a:visited .title { color: #d2824e; }
 
 .card.btn-primary { }
 .card.btn:hover { }
+
+.card .card-announcement { text-align: center; color: #999; }
+.card .card-announcement:first-child { margin-top: 4em; }
+.card .card-announcement:last-child { margin-bottom: 3.5em; }
+
 
 @-webkit-keyframes fadein { 0% { opacity: 0; transform: translateY(48px); -webkit-transform: translateY(48px); } 100% { opacity: 1; transform: translateY(0px); -webkit-transform: translateY(0px); } }
 @-moz-keyframes fadein { 0% { opacity: 0; transform: translateY(48px); -webkit-transform: translateY(48px); } 100% { opacity: 1; transform: translateY(0px); -webkit-transform: translateY(0px); } }

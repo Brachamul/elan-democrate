@@ -107,24 +107,46 @@ def markdownify(multiple_string): return multiple_string.replace('\t', '').repla
 @login_required
 def initialize_base_posts(request):
 
-	Channel.objects.get_or_create(
-		name="Actualités",
-		description="Pour parler de l'actualité interne, nationale ou internationale.",
-		official=True, is_default=True, illustration="/static/images/flat_upload.png")
+	try : actus = Channel.objects.filter(name="Actualités")
+	except ObjectDoesNotExist :
+		Channel.objects.get_or_create(
+			name="Actualités",
+			description="Pour parler de l'actualité interne, nationale ou internationale.",
+			is_official=True, is_default=True, illustration="/static/images/flat_upload.png")
 
-	Channel.objects.get_or_create(
-		name="Élan Démocrate",
-		description="Bugs, suggestions pour améliorer la plateforme, c'est ici !",
-		official=True, is_default=True, illustration="/static/images/flat_upload.png")
+	try : edem = Channel.objects.filter(name="Élan Démocrate")
+	except ObjectDoesNotExist :
+		Channel.objects.get_or_create(
+			name="Élan Démocrate",
+			description="Bugs, suggestions pour améliorer la plateforme, c'est ici !",
+			is_official=True, is_default=True, illustration="/static/images/flat_upload.png")
 
-	channel = Channel.objects.get_or_create(
-		name="Notes de mise à jour",
-		description="Lorsque Élan Démocrate est mis à jour, les modifications sont répertoriées ici.",
-		official=True, is_default=True, illustration="/static/images/flat_upload.png")[0]
+	try : channel = Channel.objects.get(name="Notes de mise à jour")
+	except ObjectDoesNotExist :
+		channel = Channel.objects.get_or_create(
+			name="Notes de mise à jour",
+			description="Lorsque Élan Démocrate est mis à jour, les modifications sont répertoriées ici.",
+			is_official=True, is_default=True, illustration="/static/images/flat_upload.png")[0]
 
-	Post.objects.filter(channel=channel).delete()
+#	Post.objects.filter(channel=channel).delete()
 
 	illustration = "/static/images/flat_upload.png"
+
+
+	v0_7 = Post.objects.get_or_create(
+		title = "Mise à jour v0.7 : chaînes privées",
+		format = "TEXT",
+		channel= channel,
+		content = markdownify(
+			"""Hello, pour la mise à jour v0.7, voici la modification principale :
+
+			* **Chaînes privées :**
+			Il est désormais possible de créer une chaîne privée et d'y inviter des membres."""),
+		author = request.user,
+		illustration = illustration,
+		date = datetime.datetime(year=2015, month=10, day=7),
+		)
+
 
 	v0_6 = Post.objects.get_or_create(
 		title = "Mise à jour v0.6 : inscriptions à la beta et activation des chaînes",

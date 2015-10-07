@@ -427,11 +427,18 @@ def content_type(url):
 ### CHANNELS
 
 from django.db.models import Count
+
 @login_required
-def channel_list(request):
+def channel_list(request, channels=False):
+	if channels == "my-channels" :
+		channels = Channel.objects.filter(subscribers=request.user) | Channel.objects.filter(moderators=request.user)
+		page_title = "Mes chaînes"
+	else :
+		channels = Channel.objects.all()
+		page_title = "Chaînes publiques"	
 	return render(request, 'aggregateur/channel_list.html', {
-		'channels' : Channel.objects.all().annotate(num_subscribers=Count('subscribers')).order_by('-is_default', '-num_subscribers'),
-		'page_title': "Liste des chaînes",
+		'channels' : channels.annotate(num_subscribers=Count('subscribers')).order_by('-is_default', '-num_subscribers'),
+		'page_title': page_title,
 		} )
 
 @login_required
@@ -453,9 +460,70 @@ def process_nouvelle_chaine(request, form):
 		nouvelle_chaine.moderators.add(request.user)
 		nouvelle_chaine.subscribers.add(request.user)
 		nouvelle_chaine.save()
-		messages.success(request, 'Votre chaîne "{}"" a bien été crée !'.format(nouvelle_chaine.name))
+		messages.success(request, 'Votre chaîne "{}" a bien été crée !'.format(nouvelle_chaine.name))
 		return nouvelle_chaine
 	else :
 		return False
 
+@login_required
+def join_channel(request, channel_slug):
+	channel = get_object_or_404(Channel, slug=channel_slug)
+	if request.user in channel.subscribers.all() : messages.info(request, "Vous êtes déjà abonné à \"{}\".".format(channel.name))
+	else :
+		if channel.is_private :
+			if request.user in channel.moderators.all() :
+				channel.subscribers.add(request.user)
+				messages.success(request, "Vous êtes désormais abonné à \"{}\", dont vous êtes animateur.".format(channel.name))
+			elif request.user in channel.want_to_join.all() : messages.info(request, "Vous avez déjà demandé à rejoindre cette chaîne, mais ses animateurs ne vous ont pas encore validé.")
+			else :
+				WantToJoinChannel(channel=channel, user=request.user).save()
+				messages.success(request, "Votre demande a été envoyée aux animateurs de la chaîne.")
+		else : 
+			channel.subscribers.add(request.user)
+			messages.success(request, "Vous êtes désormais abonné à \"{}\".".format(channel.name))
+	return HttpResponseRedirect(reverse('chaine', kwargs={ 'channel_slug': channel.slug }))
 
+@login_required
+def leave_channel(request, channel_slug):
+	channel = get_object_or_404(Channel, slug=channel_slug)
+	if request.user not in channel.subscribers.all() : messages.info(request, "Vous ne pouvez pas quitter une chaîne dont vous n'êtes pas abonné.")
+	else :
+		channel.subscribers.remove(request.user)
+		messages.success(request, "Vous n'êtes plus abonné à \"{}\".".format(channel.name))
+	return HttpResponseRedirect(reverse('chaine', kwargs={ 'channel_slug': channel.slug }))
+
+@login_required
+def wanttojoin_channel(request, channel_slug):
+	channel = get_object_or_404(Channel, slug=channel_slug)
+	check_if_current_user_is_moderator(request, channel) # Otherwise, redirect to channel with error message
+	candidats = channel.want_to_join.all()
+	print(candidats)
+	return render(request, 'aggregateur/list.html', {'objects': candidats, 'channel': channel, 'page_title': 'Liste des utilisateurs souhaitant rejoindre la chaîne'})
+
+from notifications.triggers import join_private_channel_allowed, join_private_channel_denied
+
+@login_required
+def allow_user_to_join_channel(request, channel_slug, user_pk):
+	channel = get_object_or_404(Channel, slug=channel_slug)
+	check_if_current_user_is_moderator(request, channel) # Otherwise, redirect to channel with error message
+	candidate = get_object_or_404(User, pk=user_pk)
+	channel.subscribers.add(candidate)
+	WantToJoinChannel.objects.filter(channel=channel, user=candidate).delete()
+	join_private_channel_allowed(request, channel, candidate)
+	message.success('{} est désormais abonné à \"{}\"'.format(candidate.profil.nom_courant, channel.name))
+	return HttpResponseRedirect(reverse('chaine', kwargs={ 'channel_slug': channel.slug }))
+
+@login_required
+def deny_user_from_channel(request, channel_slug, user_pk):
+	channel = get_object_or_404(Channel, slug=channel_slug)
+	check_if_current_user_is_moderator(request, channel) # Otherwise, redirect to channel with error message
+	candidate = get_object_or_404(User, pk=user_pk)
+	WantToJoinChannel.objects.filter(channel=channel, user=candidate).delete()
+	join_private_channel_denied(request, channel, candidate)
+	return HttpResponseRedirect(reverse('chaine', kwargs={ 'channel_slug': channel.slug }))
+
+def check_if_current_user_is_moderator(request, channel):
+	if request.user in channel.moderators.all() : return True
+	else :
+		messages.error(request, "Vous n'êtes pas modérateur de la chaîne \"{}\".".format(channel.name))
+		return HttpResponseRedirect(reverse('chaine', kwargs={ 'channel_slug': channel.slug }))

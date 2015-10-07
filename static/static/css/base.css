@@ -130,7 +130,7 @@ a.btn-default:hover { background-color: #EC7C34; color: white; border-color: #D5
 
 .actor {
 	position: relative;
-	padding-left: 28px;
+	padding-left: 2em;
 }
 
 .actor img { height: 1.428em; } /* Avatar sizing based on font-size */
@@ -147,7 +147,7 @@ a.btn-default:hover { background-color: #EC7C34; color: white; border-color: #D5
 .actor:hover img { opacity: .85; }
 
 .actor:after { content:","; }
-.actor:last-of-type:after { content:""; }
+.actor:last-child:after { content:""; }
 
 a:link.actor, a:visited.actor { color: inherit; }
 a:hover.actor { color: #DC6C24; }

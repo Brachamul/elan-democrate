@@ -43,15 +43,24 @@
 					{{ user.profil.nom_courant }}
 				</a>
 				<ul class="dropdown-menu" role="menu">
-					<li><a href="{% url 'membres' %}{{ user.pk }}">
+
+					<li><a href="{% url 'profil' user.pk %}">
 						<i class="fa fa-user" aria-hidden="true"></i>
 						Mon profil</a>
 					</li>
+
+					<li><a href="{% url 'my_channels' %}">
+						<i class="fa fa-heart" aria-hidden="true"></i>
+						Mes chaînes</a>
+					</li>
+
 					<li class="divider"></li>
+
 					<li><a href="{% url 'deconnexion' %}">
 						<i class="fa fa-power-off" aria-hidden="true"></i>
 						Déconnexion</a>
 					</li>
+
 				</ul>
 			</li>
 

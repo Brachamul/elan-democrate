@@ -15,16 +15,22 @@ class Channel(models.Model):
 	slug = AutoSlugField(populate_from=('name'), unique=True, editable=True, max_length=64)
 	date = models.DateTimeField(auto_now_add=True)
 	description = models.CharField(max_length=255)
-	is_official = models.BooleanField(default=False)
-	is_default = models.BooleanField(default=False) # If a channel is default, it will be seen by users without needing subscription
+	is_official = models.BooleanField(default=False, verbose_name='Officielle')
+	is_default = models.BooleanField(default=False, verbose_name='Par défaut') # If a channel is default, it will be seen by users without needing subscription
+	is_private = models.BooleanField(default=False, verbose_name='Privée') # If a channel is private, only moderators and subscribers will see it
 	moderators = models.ManyToManyField(User, related_name='moderated_channels', blank=True)
 	subscribers = models.ManyToManyField(User, related_name='subscribed_channels', blank=True)
-	ignorers = models.ManyToManyField(User, related_name='ignored_channels', blank=True) # users can still choose not to view the channel if they wish 
+	ignorers = models.ManyToManyField(User, related_name='ignored_channels', blank=True) # users can still choose not to view the channel if they wish
+	want_to_join = models.ManyToManyField(User, related_name='applied_to_channels', blank=True, through='WantToJoinChannel')
 	illustration = models.URLField(default=settings.SITE_URL+"/static/images/default_channel_illustration.png")
 	def __str__(self): return self.name
 	class Meta:
 		 ordering = ['-is_default']
 
+class WantToJoinChannel(models.Model):
+	''' We have a specific M2M model so that we can easily send a notification signal when this is changed '''
+	user = models.ForeignKey(User)
+	channel = models.ForeignKey(Channel)
 
 
 class Post(models.Model):

@@ -17,7 +17,8 @@ def notifications(request):
 		notification = check_if_is_system_notification(request, notification)
 		if not notification.is_system :
 			notification.fulltext = notification_fulltext(request, notification)
-			notification.url = notification_url(notification)
+			url = notification_url(notification)
+			if url : notification.url = url
 		notifications.append(notification)
 	return render(request, 'notifications/notifications.html', {'notifications': notifications})
 
@@ -61,18 +62,21 @@ def notification_fulltext(request, notification):
 			else : lieu = ('sur le post "{titre_du_post}"'.format(titre_du_post=lieu))
 
 	variables = { 'acteur': acteur, 'action': action, 'cible': cible, 'lieu': lieu }
-	if cible and lieu : return '%(acteur)s %(action)s %(cible)s %(lieu)s' % variables
-	elif cible : return '%(acteur)s %(action)s %(cible)s' % variables
-	elif lieu : return '%(acteur)s %(action)s %(lieu)s' % variables
-	elif acteur : return '%(acteur)s %(action)s' % variables
-	else : return '%(action)s' % variables # S'il n'y a qu'une action, c'est un message système
+	if cible and lieu : return '%(acteur)s %(action)s %(cible)s %(lieu)s.' % variables
+	elif cible : return '%(acteur)s %(action)s %(cible)s.' % variables
+	elif lieu : return '%(acteur)s %(action)s %(lieu)s.' % variables
+	elif acteur : return '%(acteur)s %(action)s.' % variables
+	else : return '%(action)s.' % variables # S'il n'y a qu'une action, c'est un message système
 
 
 def notification_url(notification):
 	cible = notification.cible
 	if cible :
-		if notification.type_cible.name == "post" : return reverse('post', args=(cible.slug,))
+		if notification.type_cible.name == "post" : return reverse('post', args=(cible.date.year, cible.slug,))
 		if notification.type_cible.name == "comment" : return reverse('commentaire', args=(cible.post_racine().slug, cible.pk,))
+		if notification.type_cible.name == "channel" : return reverse('chaine', kwargs={ 'channel_slug': cible.slug })
+		if notification.type_cible.name == "want_to_join_channel" : return reverse ('wanttojoin_channel', args=(cible.channel.slug))
+	else : return False
 
 def check_if_is_system_notification(request, notification):
 	notification.is_system = False # by default, it's not a system notification, let's check if it is

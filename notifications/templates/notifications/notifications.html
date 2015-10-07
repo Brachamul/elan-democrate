@@ -7,19 +7,21 @@
 		{% if not notification.lue %} non-lue{% endif %}
 		{% if not notification.vue %} non-vue{% endif %}
 		">
-	<a href="{{ notification.url }}">
+	{% if notification.url %}<a href="{{ notification.url }}"{% else %}<div{% endif %} class="content">
 		{% if notification.type_acteur.name == "utilisateur" %}
 		{% load gravatar %}
 		<img src="
 			{% if notification.acteur.profil.twitter %}https://twitter.com/{{ notification.acteur.profil.twitter }}/profile_image?size=bigger
 			{% else %}{% load gravatar %}{% gravatar_url notification.acteur.email 44 %}
-			{% endif %}" style="border-radius: 100%;"/>
+			{% endif %}" style="border-radius: 100%; max-width: 44px; max-height: 44px;"/>
 		{% elif notification.icon %}
 		<i class="fa fa-{{ notification.icon }} fa-2x"/></i>
 		{% endif %}
 		<p>{{ notification.fulltext }}</p>
 		<div class="anchor"></div>
-	</a></li>
+	{% if notification.url %}</a>{% else %}</div>{% endif %}
+
+	</li>
 {% endfor %}
 
 {% comment %}
