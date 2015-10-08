@@ -493,17 +493,16 @@ def leave_channel(request, channel_slug):
 @login_required
 def wanttojoin_channel(request, channel_slug):
 	channel = get_object_or_404(Channel, slug=channel_slug)
-	check_if_current_user_is_moderator(request, channel) # Otherwise, redirect to channel with error message
+	if not current_user_is_moderator(request, channel) : return HttpResponseRedirect(reverse('chaine', kwargs={ 'channel_slug': channel.slug }))
 	candidats = channel.want_to_join.all()
-	print(candidats)
-	return render(request, 'aggregateur/list.html', {'objects': candidats, 'channel': channel, 'page_title': 'Liste des utilisateurs souhaitant rejoindre la chaîne'})
+	return render(request, 'aggregateur/list.html', {'objects': candidats, 'channel': channel, 'page_title': 'Utilisateurs souhaitant rejoindre la chaîne "{}"'.format(channel.name)})
 
 from notifications.triggers import join_private_channel_allowed, join_private_channel_denied
 
 @login_required
 def allow_user_to_join_channel(request, channel_slug, user_pk):
 	channel = get_object_or_404(Channel, slug=channel_slug)
-	check_if_current_user_is_moderator(request, channel) # Otherwise, redirect to channel with error message
+	if not current_user_is_moderator(request, channel) : return HttpResponseRedirect(reverse('chaine', kwargs={ 'channel_slug': channel.slug }))
 	candidate = get_object_or_404(User, pk=user_pk)
 	channel.subscribers.add(candidate)
 	WantToJoinChannel.objects.filter(channel=channel, user=candidate).delete()
@@ -514,14 +513,14 @@ def allow_user_to_join_channel(request, channel_slug, user_pk):
 @login_required
 def deny_user_from_channel(request, channel_slug, user_pk):
 	channel = get_object_or_404(Channel, slug=channel_slug)
-	check_if_current_user_is_moderator(request, channel) # Otherwise, redirect to channel with error message
+	if not current_user_is_moderator(request, channel) : return HttpResponseRedirect(reverse('chaine', kwargs={ 'channel_slug': channel.slug }))
 	candidate = get_object_or_404(User, pk=user_pk)
 	WantToJoinChannel.objects.filter(channel=channel, user=candidate).delete()
 	join_private_channel_denied(request, channel, candidate)
 	return HttpResponseRedirect(reverse('chaine', kwargs={ 'channel_slug': channel.slug }))
 
-def check_if_current_user_is_moderator(request, channel):
+def current_user_is_moderator(request, channel):
 	if request.user in channel.moderators.all() : return True
 	else :
 		messages.error(request, "Vous n'êtes pas modérateur de la chaîne \"{}\".".format(channel.name))
-		return HttpResponseRedirect(reverse('chaine', kwargs={ 'channel_slug': channel.slug }))
+		return False
