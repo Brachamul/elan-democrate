@@ -321,7 +321,8 @@ def count_post_comments(post):
 @login_required
 def nouveau_post(request, channel_slug=None):
 	# Si le formulaire a été rempli, on le traite. Sinon, on l'affiche.
-	posting_channel = Channel.objects.filter(slug=channel_slug)[0]
+	if channel_slug : posting_channel = Channel.objects.get(slug=channel_slug)
+	else : posting_channel = None
 	text_data = link_data = None # les données seront renvoyées au formulaire en cas d'erreur, pour éviter d'avoir à recommencer
 	if request.method == "POST":
 		format = request.POST.get('format')
