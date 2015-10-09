@@ -16,7 +16,7 @@ from datetime import datetime, timedelta
 class Credentials(models.Model):
 	user = models.OneToOneField(User) # credentials are linked to one specific user
 	code = models.CharField(max_length=settings.AUTH_CODE_LENGTH, default=credentials_code)
-	date = models.DateTimeField(auto_now=True)
+	date = models.DateTimeField(auto_now_add=True)
 	attempts = models.PositiveSmallIntegerField(default=0) # increments each time a user attempts to log in with a code
 	def is_expired(self): return not ((self.date + timedelta(hours=settings.AUTH_CODE_LIFESPAN)) > (datetime.now())) # Code is active for 4 hours
 	def too_many_attempts(self): return (self.attempts >= settings.AUTH_CODE_MAXIMUM_ATTEMPS)

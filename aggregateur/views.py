@@ -32,7 +32,6 @@ def aggregateur(request, page=1, channel_slug=False, special=False):
 		page_title = channel.name.capitalize()
 	else :
 		channel = False # l'URL n'appelle pas une chaîne
-		print(special)
 		if special :
 			if special == "all_channels" :
 				channels = Channel.objects.all()

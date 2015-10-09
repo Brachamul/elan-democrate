@@ -24,7 +24,6 @@ def profil(request, pk):
 	try : user = User.objects.get(pk=pk)
 	except User.DoesNotExist : raise Http404("Cet utilisateur n'existe pas.")
 	else :
-		print("USER : " + str(user.pk))
 		try : profil = Profil.objects.get(user=user)
 		except Profil.DoesNotExist : raise Http404("Ce profil n'existe pas.")
 		else :

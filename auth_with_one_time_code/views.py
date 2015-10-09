@@ -19,7 +19,7 @@ from auth_with_one_time_code import backend
 
 ### Enregistrement
 
-def auth_template(request, status):
+def auth_template(request, status=False):
 	# Si on est en train de répondre 
 	if request.is_ajax() : 
 		if status == "registering" : return 'auth/auth_enregistrement.html'
@@ -131,10 +131,9 @@ def connexion(request):
 
 def url_connexion(request, username, code):
 	if request.user.is_authenticated() : return redirect('accueil') # S'active seulement si on recharge la page après s'être loggé, pour éviter la boucle
-	context = RequestContext(request)
 	auth_result = backend.authenticate_and_login(request, username, code)
-	if auth_result == "connected" : return HttpResponseRedirect('') # Recharge la page actuelle, mais sans l'authentification !
-	else : return render(request, auth_template(request, status), {'numero_ou_email': username, 'help_adress': settings.HELP_EMAIL_ADRESS })
+	if auth_result == "connected" :return HttpResponseRedirect('') # Recharge la page actuelle, mais sans l'authentification !
+	else : return render(request, auth_template(request), {'numero_ou_email': username, 'help_adress': settings.HELP_EMAIL_ADRESS })
 
 
 ### Deconnexion
