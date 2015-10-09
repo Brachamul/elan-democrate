@@ -11,7 +11,7 @@
 	</span>
 
 	<span class="meta">
-		<span class="author">Par <a href="{% url 'membres' %}{{ comment.author.id }}">{{ comment.author.profil.nom_courant }}</a></span>
+		<span class="author">Par {% with comment.author as actor %}{% include 'actor.html' %}{% endwith %}</span>
 		<span class="date">, il y a <time datetime="{{ comment.date }}">{{ comment.date|timesince }}</time></span>
 		{% if comment.last_edit and comment.last_edit != comment.date %}
 		<span class="last-edit">, modifié il y a <time datetime="{{ comment.last_edit }}">{{ comment.last_edit|timesince }}</time></span>
