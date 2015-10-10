@@ -57,7 +57,9 @@
 						{% elif post.format == "LINK" %}
 							<a href="{{ post.link }}" target="_blank">
 						{% endif %}
-								<h4 class="title">{{ post.title }}</h4>
+								<h4 class="title"  alt="lien externe">{{ post.title }}
+									{% if post.format == "LINK" %}<i style="font-size: .6em" class="fa fa-external-link"></i>{% endif %}
+								</h4>
 							</a>
 		{% comment %}		<span class="source">(<a href="#">loremipsum.com</a>)</span> {% endcomment %}
 						<div class="meta">
