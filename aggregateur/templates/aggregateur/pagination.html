@@ -3,7 +3,7 @@
 		{% if channel %}
 			<a href="{% url 'channel_page' channel_slug=channel.slug page=posts.previous_page_number %}">
 		{% else %}
-			<a href="{% url 'aggregateur_page' page=posts.next_page_number %}">
+			<a href="{% url 'aggregateur_page' page=posts.previous_page_number %}">
 		{% endif %}
 		<i class="fa fa-chevron-left"></i>
 		</a>

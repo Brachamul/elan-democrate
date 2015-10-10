@@ -69,6 +69,7 @@
 								, il y a <time datetime="{{ post.date }}">{{ post.date|timesince }}</time>
 							</span>
 							{% if post.channel %}, <span class="channel">
+							{% if post.is_pinned %}fixé{% endif %}
 							dans <a href="{% url 'chaine' post.channel.slug %}">{{ post.channel }}</a>
 							</span>{% endif %}
 							{% endspaceless %}
@@ -83,6 +84,7 @@
 								{% endif %}
 								</a>
 							</span>
+							{% if user.is_staff %}<span style="font-weight: normal;">[{{ post.rank }}]</span>{% endif %}
 		{% comment %}		<span class="share">partager</span> {% endcomment %}
 		{% comment %}		<span class="favorite">ajouter aux favoris</span> {% endcomment %}
 		{% comment %}		<span class="hide">cacher</span> {% endcomment %}

@@ -18,6 +18,7 @@ class Channel(models.Model):
 	is_official = models.BooleanField(default=False, verbose_name='Officielle')
 	is_default = models.BooleanField(default=False, verbose_name='Par défaut') # If a channel is default, it will be seen by users without needing subscription
 	is_private = models.BooleanField(default=False, verbose_name='Privée') # If a channel is private, only moderators and subscribers will see it
+	only_mods_can_post = models.BooleanField(default=False, verbose_name='Seuls les modérateurs peuvent poster') # For channels that are for downwards communications
 	moderators = models.ManyToManyField(User, related_name='moderated_channels', blank=True)
 	subscribers = models.ManyToManyField(User, related_name='subscribed_channels', blank=True)
 	ignorers = models.ManyToManyField(User, related_name='ignored_channels', blank=True) # users can still choose not to view the channel if they wish
@@ -41,6 +42,7 @@ class Post(models.Model):
 	content = models.TextField(max_length=10000, null=True, blank=True)
 	author = models.ForeignKey(User)
 	channel = models.ForeignKey(Channel, null=True, blank=True)
+	is_pinned = models.BooleanField(default=False, verbose_name='Maintenir en haut')
 	last_edit = models.DateTimeField(null=True, blank=True)
 	deleted = models.BooleanField(default=False)
 	health = models.IntegerField(default=0) # votes positifs - votes négatifs
@@ -49,9 +51,7 @@ class Post(models.Model):
 	shareable = models.BooleanField(default=True)
 	def __str__(self): return self.title
 	class Meta:
-		 ordering = ['-rank', '-date']
-
-
+		 ordering = ['-is_pinned', '-rank', '-date']
 
 class Vote(models.Model):
 	user = models.ForeignKey(User)

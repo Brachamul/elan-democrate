@@ -162,6 +162,10 @@ LOGGING = {
 
 ### Paramètres personnalisés
 
+POST_RANKING_COEFFICIENT = 100000 # 45000 by default on reddit, this is meant so that a post with a score of 4 goes lower than a post with a score of 1 after about 32 hours
+POST_HEALTH_MULTIPLIER = 2 # If more than 1, gives posts more momentum
+POST_ORDER_LOG = 2 # Governs the influence of more posts on the relevancy (needs twice more votes instead of 10 times more, the default)
+
 POSTS_PER_PAGE = 12 # nombre de posts qui s'affichent en page d'accueil
 PROFONDEUR_MAXIMALE_DES_COMMENTAIRES = 6 # niveau max de décente dans l'affichage des commentaires pour une même page
 DUREE_D_ACTIVITE = 2 # Nombre d'années d'activité des adhérents après leur dernière cotisation (année actuelle - année de cotisation > x)

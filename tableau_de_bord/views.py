@@ -128,6 +128,7 @@ def initialize_base_posts(request):
 	chaine_maj.description = "Lorsque Élan Démocrate est mis à jour, les modifications sont répertoriées ici."
 	chaine_maj.is_official = True
 	chaine_maj.is_default = True
+	chaine_maj.only_mods_can_post = True
 	chaine_maj.illustration = illustration
 	chaine_maj.save()
 

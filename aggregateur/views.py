@@ -45,6 +45,7 @@ def aggregateur(request, page=1, channel_slug=False, special=False):
 			channels = channels.exclude(id__in=ignored_channels(request)) # Et on enlève les chaînes 
 	
 	posts = Post.objects.filter(channel__in=channels)
+	if channel_slug == False : posts = posts.order_by('-rank', '-date')
 
 	for post in posts : post = get_post_meta(request, post)
 #	if time_to_rerank(request) == True : rank_posts() # classe les posts s'ils n'ont pas été reclassés depuis au moins 5 minutes
@@ -158,6 +159,13 @@ def comment_color(request, comment_id):
 	except CommentVote.DoesNotExist : return HttpResponse("NEU")
 	else : return HttpResponse(vote.color)
 
+def pin_post(request, post_id):
+	post = get_object_or_404(Post, id=post_id)
+	if request.user in post.channel.moderators.all() :
+		post.is_pinned = not post.is_pinned
+		post.save()
+	else : messages.error(request, "Vous n'êtes pas modérateur de cette chaîne.")
+	return HttpResponseRedirect(reverse('post', kwargs={ 'slug': post.slug, 'year': post.date.year }))
 
 
 ### Traitement des votes
@@ -226,11 +234,11 @@ def rank_posts():
 		healthify(post) # on recalcule le score du post
 		time_since_bayrou = ( post.date - bayrou_2007 ) # quel est l'âge relatif du post ?
 		time_since_bayrou = time_since_bayrou.days * 86400 + time_since_bayrou.seconds # conversion en secondes
-		order = log(max(abs(post.health), 1), 10)
+		order = log(max(abs(post.health*settings.POST_HEALTH_MULTIPLIER), 1), settings.POST_ORDER_LOG)
 		sign = 1 if post.health > 0 else -1 if post.health < 0 else 0
-		post.rank = round( sign * order + time_since_bayrou / 45000, 7)
+		post.rank = round( sign * order + time_since_bayrou / settings.POST_RANKING_COEFFICIENT, 7)
 		post.save()
-		logging.info("Posts have been reranked".encode('utf8'))
+	logging.info("Posts have been reranked".encode('utf8'))
 	return HttpResponse()
 
 def rank_comments():
