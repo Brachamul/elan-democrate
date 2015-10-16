@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-from django.views.generic.base import RedirectView
+from django.views.generic.base import RedirectView, TemplateView
 from aggregateur.views import aggregateur
 
 admin.site.site_header = 'Élan Démocrate - Administration'
@@ -20,6 +20,7 @@ urlpatterns = patterns('',
 	url(r'^fichiers-adherents/', include('fichiers_adherents.urls')),
 	url(r'^mandats/', include('mandats.urls')),
 	url(r'^admin/', include(admin.site.urls), name='admin'),
+	url(r'^todo/', TemplateView.as_view(template_name='todo/index.html'), name='home'),
 )
 
 from django.conf import settings

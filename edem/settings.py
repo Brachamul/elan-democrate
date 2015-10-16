@@ -39,6 +39,8 @@ INSTALLED_APPS = (
 	'notifications',
     'beta',
     'bootstrap3', # django-bootstrap3
+    'swampdragon',
+    'todo',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -157,6 +159,10 @@ LOGGING = {
     }
 }
 
+
+
+SWAMP_DRAGON_CONNECTION = ('swampdragon.connections.sockjs_connection.DjangoSubscriberConnection', '/data')
+DRAGON_URL = 'http://localhost:9999/'
 
 
 
