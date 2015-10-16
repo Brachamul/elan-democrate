@@ -1,0 +1,35 @@
+{% extends "aggregateur/channel.html" %}
+{% load static %}
+
+{% block head %}{{ block.super }}
+
+{% endblock %}
+
+
+{% block primary_content %}
+
+	<article class="card card-big">
+
+	<div id="chatfeed"></div>
+
+	</article>
+
+{% endblock primary_content %}
+
+
+
+{% block scripts %} {{ block.super }}
+
+<script>
+
+var url = "{% url 'chatroom_feed' channel.slug %}"
+$.ajax({url: url,}).done(function(data) {
+	$.each(data, function( i, message ) {
+		$('#chatfeed').append(message.fields.content);
+	});
+});
+
+</script>
+
+{% endblock scripts %}
+
