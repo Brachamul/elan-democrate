@@ -30,6 +30,7 @@ def BetaSignupForm(request, email=False):
 def processSignUp(request, form):
 	if form.is_valid():
 		nouveau_candidat = form.save()
+		WarnAdminOfBetaSignup()
 		messages.success(request, 'Votre inscription à la beta a bien été enregistrée !')
 		return True
 	else : return False
@@ -81,6 +82,17 @@ def SendBetaInvitation(user):
 		"- Antonin\n\n".format(lien=site_url),
 		emailer,
 		[user.email],
+		fail_silently=False
+		)
+	return True
+
+def WarnAdminOfBetaSignup():
+	lien = site_url + reverse('beta_candidate_list')
+	send_mail(
+		"[Élan Démocrate] Un nouveau beta-candidat",
+		"A valider sur {}".format(lien),
+		emailer,
+		['admin@elandemocrate.fr'],
 		fail_silently=False
 		)
 	return True

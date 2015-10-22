@@ -8,6 +8,11 @@ from autoslug.fields import AutoSlugField
 
 from django.contrib.auth.models import User
 
+class Settings(models.Model):
+	''' We'll use this to manage settings from inside the app
+		Only the first instance of this model will be used '''
+	main_settings = models.BooleanField(unique=True, default=True)
+	welcome_text = models.TextField(max_length=1024, default="Bienvenue sur Élan Démocrate.")
 
 
 class Channel(models.Model):
@@ -29,7 +34,8 @@ class Channel(models.Model):
 		 ordering = ['-is_default']
 
 class WantToJoinChannel(models.Model):
-	''' We have a specific M2M model so that we can easily send a notification signal when this is changed '''
+	''' We have a specific M2M model so that we can easily send
+		a notification signal when this is changed '''
 	user = models.ForeignKey(User)
 	channel = models.ForeignKey(Channel)
 

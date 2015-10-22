@@ -1,4 +1,5 @@
 {% load bootstrap3 %}
+{% load markdown_deux_tags %}
 
 {% comment %} <div class="alert alert-success card">Chouette!</div>	{% endcomment %} 
 
@@ -20,7 +21,7 @@
 
 			{% else %}
 
-				<p>{{ channel.description}}</p>
+				<p>{{ channel.description|markdown }}</p>
 
 				<p style="margin: 1em 0; font-size: .8em; ">{{ channel.subscribers.all.count }} abonnés</p>
 
@@ -32,12 +33,26 @@
 
 				<p><a class="btn btn-xs btn-default btn-block" href="{% url 'nouveau_post_avec_chaine' channel.slug %}"><i class="fa fa-plus"></i> nouveau post </a></p>
 			
-				{% if user in channel.subscribers.all %}	
-					<p><a class="btn btn-xs btn-default btn-block" href="{% url 'leave_channel' channel.slug %}">
-						<i class="fa fa-times"></i> se désabonner</a></p>				
+				{% if channel.is_default %}
+
+					{% if user in channel.ignorers.all %}	
+						<p><a class="btn btn-xs btn-default btn-block" href="{% url 'stop_ignoring_channel' channel.slug %}">
+							<i class="fa fa-edit"></i> ne plus ignorer</a></p>				
+					{% else %}
+						<p><a class="btn btn-xs btn-default btn-block" href="{% url 'ignore_channel' channel.slug %}">
+							<i class="fa fa-ban"></i> ignorer</a></p>
+					{% endif %}
+
 				{% else %}
-					<p><a class="btn btn-xs btn-default btn-block" href="{% url 'join_channel' channel.slug %}">
-						<i class="fa fa-edit"></i> s'abonner</a></p>
+
+					{% if user in channel.subscribers.all %}	
+						<p><a class="btn btn-xs btn-default btn-block" href="{% url 'leave_channel' channel.slug %}">
+							<i class="fa fa-times"></i> se désabonner</a></p>				
+					{% else %}
+						<p><a class="btn btn-xs btn-default btn-block" href="{% url 'join_channel' channel.slug %}">
+							<i class="fa fa-edit"></i> s'abonner</a></p>
+					{% endif %}
+
 				{% endif %}
 
 			{% endif %}
@@ -59,7 +74,8 @@
 
 		{% else %}
 
-			<p>Bienvenue sur Élan Démocrate.</p>
+			<p>{{ app_settings.welcome_text|markdown }}</p>
+
 			<p><a class="btn btn-xs btn-default btn-block" href="{% url 'nouveau_post' %}">
 				<i class="fa fa-plus"></i> nouveau post</a></p>
 

@@ -40,7 +40,7 @@ def aggregateur(request, page=1, channel_slug=False, special=False):
 				page_title = "Chaînes par défaut"
 				channels = default_channels(request)
 		else :
-			channels = default_channels(request) | subbed_channels(request) # De base, on prends les chaînes par défaut + les chaînes souscrits
+			channels = default_channels(request) | subbed_channels(request) # De base, on prends les chaînes par défaut + les chaînes souscrites
 			page_title = "Accueil"
 			channels = channels.exclude(id__in=ignored_channels(request)) # Et on enlève les chaînes 
 	
@@ -54,8 +54,12 @@ def aggregateur(request, page=1, channel_slug=False, special=False):
 	return render(request, 'aggregateur/posts.html', {
 		'posts': posts,
 		'channel': channel,
-		'page_title': page_title
+		'page_title': page_title,
+		'app_settings': app_settings(),
 		} )
+
+def app_settings():
+	return Settings.objects.get_or_create(main_settings=True)[0]
 
 @login_required
 def rank(request):
@@ -440,7 +444,7 @@ def channel_list(request, channels=False):
 		channels = Channel.objects.filter(subscribers=request.user) | Channel.objects.filter(moderators=request.user)
 		page_title = "Mes chaînes"
 	else :
-		channels = Channel.objects.all()
+		channels = default_channels(request) | subbed_channels(request) | moderated_channels(request) # On affiche pas les chaînes privées auxquelle je ne suis pas inscrit
 		page_title = "Chaînes publiques"	
 	return render(request, 'aggregateur/channel_list.html', {
 		'channels' : channels.annotate(num_subscribers=Count('subscribers')).order_by('-is_default', '-num_subscribers'),
@@ -526,6 +530,28 @@ def deny_user_from_channel(request, channel_slug, user_pk):
 	WantToJoinChannel.objects.filter(channel=channel, user=candidate).delete()
 	join_private_channel_denied(request, channel, candidate)
 	return HttpResponseRedirect(reverse('chaine', kwargs={ 'channel_slug': channel.slug }))
+
+@login_required
+def ignore_channel(request, channel_slug):
+	channel = get_object_or_404(Channel, slug=channel_slug)
+	if request.user in channel.ignorers.all() : messages.info(request, "Vous ignorez déjà \"{}\".".format(channel.name))
+	elif channel.is_default :
+		if request.user in channel.moderators.all() : messages.error(request, "Vous ne pouvez pas ignorer une chaîne dont vous êtes animateur !")
+		else :
+			channel.ignorers.add(request.user)
+			messages.success(request, "Vous ignorez désormais \"{}\".".format(channel.name))
+	return HttpResponseRedirect(reverse('chaine', kwargs={ 'channel_slug': channel.slug }))
+
+@login_required
+def stop_ignoring_channel(request, channel_slug):
+	channel = get_object_or_404(Channel, slug=channel_slug)
+	if request.user not in channel.ignorers.all() : messages.info(request, "Vous n'ignoriez pas \"{}\".".format(channel.name))
+	else :
+		channel.ignorers.remove(request.user)
+		messages.success(request, "Vous n'ignorez plus \"{}\".".format(channel.name))
+	return HttpResponseRedirect(reverse('chaine', kwargs={ 'channel_slug': channel.slug }))
+
+
 
 def current_user_is_moderator(request, channel):
 	if request.user in channel.moderators.all() : return True
