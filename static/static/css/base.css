@@ -16,7 +16,7 @@ footer { margin-top: 4em; }
 .navbar .navbar-brand { font-size: 2.4rem; }
 .navbar { text-transform: uppercase; }
 .navbar #notifications { text-transform: none; }
-.navbar a { transition: color 1s; }
+.navbar a { transition: color .5s; border-radius: .2em; }
 .navbar a:not(:hover) { color: #999; }
 .navbar a:hover { color: #EC7C34; background: none; }
 .navbar .btn.focus, .navbar .btn:focus { color: #666; }
@@ -25,13 +25,12 @@ footer { margin-top: 4em; }
 .navbar .navbar-brand:focus { color: #E4742C; }
 
 @media screen and (max-width: 767px) {
-	.navbar li { text-align: right; border-top: .25em solid #999; }
+	.navbar li { text-align: right; border-top: .25em solid #F2F2F2; box-shadow: 0px 0.5em 2em rgba(0, 0, 0, 0.025) inset; }
 	.navbar li li { text-align: left; border-top: 0px solid white; }
-	.navbar-nav { border-bottom: .25em solid #999; }
-
+	.navbar-nav { border-bottom: .25em solid #eee; }
 }
 
-.navbar-toggle { background-color: #999; transition: all 1s; }
+.navbar-toggle { color: white; background-color: #999; transition: all .5s; text-align: center; }
 .navbar-toggle .icon-bar { background-color: white; }
 
 .navbar .form-control:focus {
@@ -107,14 +106,14 @@ footer.endpage a { font-weight: bold; }
 
 .form-group { margin-bottom: 1rem; }
 
-a { transition: color 1s;}
+a { transition: color .5s;}
 a,
 a:visited { outline: 0; color: #E4742C; }
 a:hover,
 a:focus { color: #DC6C24; text-decoration: none; outline: 0; }
 a:active { color: #D5651D; outline: 0; }
 
-.link { transition: color 1s; }
+.link { transition: color .5s; }
 .link:hover { color: #E4742C; cursor: pointer; }
 
 .form-control:focus {
@@ -131,10 +130,13 @@ a.btn-default:hover { background-color: #EC7C34; color: white; border-color: #D5
 
 .actor {
 	position: relative;
-	padding-left: 28px;
+	padding-left: 2.2em;
 }
 
+.actor img { height: 1.428em; } /* Avatar sizing based on font-size */
+
 .nav .actor { padding-left: 34px; }
+.nav .actor img { top: -2px; height: auto; } /* Override the relative sizing of the avatar */
 
 .actor img {
 	position: absolute; top: 0; left: 4px;
@@ -145,6 +147,7 @@ a.btn-default:hover { background-color: #EC7C34; color: white; border-color: #D5
 .actor:hover img { opacity: .85; }
 
 .actor:after { content:","; }
-.actor:last-of-type:after { content:""; }
+.actor:last-child:after { content:""; }
 
-a.actor { color: inherit; }
+a:link.actor, a:visited.actor { color: inherit; }
+a:hover.actor { color: #DC6C24; }

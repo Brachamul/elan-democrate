@@ -70,7 +70,7 @@ from django.contrib import admin
 admin.site.register(Notification)
 
 ### Signals
-from aggregateur.models import Comment, Post
+from aggregateur.models import Comment, Post, Channel, WantToJoinChannel
 
 @receiver(post_save, sender=Comment)
 def notifier_lauteur_du_parent(sender, created, **kwargs):
@@ -102,4 +102,20 @@ def notification_apres_creation_de_compte(sender, created, **kwargs):
 			destinataire = user,
 			action = "welcome-notification"
 			)
+		nouvelle_notif.save()
+
+@receiver(post_save, sender=WantToJoinChannel)
+def want_to_join_channel_notification(sender, created, **kwargs):
+	if created :
+		joining_instance = kwargs.get('instance')
+		user = joining_instance.user
+		channel = joining_instance.channel
+		action = 'a demandé à rejoindre'
+		for moderator in channel.moderators.all() :
+			nouvelle_notif = Notification(
+				destinataire = moderator,
+				acteur = user,
+				action = action,
+				cible = channel,
+				)
 		nouvelle_notif.save()

@@ -19,7 +19,7 @@ from auth_with_one_time_code import backend
 
 ### Enregistrement
 
-def auth_template(request, status):
+def auth_template(request, status=False):
 	# Si on est en train de répondre 
 	if request.is_ajax() : 
 		if status == "registering" : return 'auth/auth_enregistrement.html'
@@ -32,6 +32,7 @@ def enregistrement(request):
 	numero_ou_email = request.POST.get('numero_ou_email')
 	status = "registering"
 	if numero_ou_email :
+		numero_ou_email = numero_ou_email.lower().strip(' ')
 	# on a une demande d'enregistrement avec un numéro d'adhérent ou un email
 		
 	# regardons si c'est un numéro adhérent (donc isdigit) ou une adresse mail (avec un @)
@@ -106,6 +107,7 @@ def connexion(request):
 	status = False
 	numero_ou_email = request.POST.get('numero_ou_email')
 	if numero_ou_email :
+		numero_ou_email = numero_ou_email.lower().strip(' ')
 		# on a une demande de connexion avec un numéro d'adhérent ou un email
 		# regardons si c'est un numéro adhérent (donc isdigit) ou une adresse mail (avec un @)
 		if numero_ou_email.isdigit() :
@@ -129,10 +131,9 @@ def connexion(request):
 
 def url_connexion(request, username, code):
 	if request.user.is_authenticated() : return redirect('accueil') # S'active seulement si on recharge la page après s'être loggé, pour éviter la boucle
-	context = RequestContext(request)
 	auth_result = backend.authenticate_and_login(request, username, code)
-	if auth_result == "connected" : return HttpResponseRedirect('') # Recharge la page actuelle, mais sans l'authentification !
-	else : return render(request, auth_template(request, status), {'numero_ou_email': username, 'help_adress': settings.HELP_EMAIL_ADRESS })
+	if auth_result == "connected" :return HttpResponseRedirect('') # Recharge la page actuelle, mais sans l'authentification !
+	else : return render(request, auth_template(request), {'numero_ou_email': username, 'help_adress': settings.HELP_EMAIL_ADRESS })
 
 
 ### Deconnexion
@@ -150,14 +151,22 @@ def deconnexion(request):
 	return HttpResponseRedirect('/')
 
 
+# Force connections when DEBUG = True
+
 from auth_with_one_time_code.models import Credentials
 
 def force_connect_username(request, username):
-	user = User.objects.get(username=username)
-	backend.authenticate_and_login(request, user.username, Credentials.objects.get_or_create(user=user)[0].code)
+	if settings.DEBUG :
+		user = User.objects.get(username=username)
+		Credentials.objects.filter(user=user).delete()
+		backend.authenticate_and_login(request, user.username, Credentials.objects.get_or_create(user=user)[0].code)
+	else : messages.success(request, "Cette fonctionnalité n'est pas active en production.")
 	return HttpResponseRedirect('/')
 
 def force_connect_pk(request, pk):
-	user = User.objects.get(pk=pk)
-	backend.authenticate_and_login(request, user.username, Credentials.objects.get_or_create(user=user)[0].code)
+	if settings.DEBUG :
+		user = User.objects.get(pk=pk)
+		Credentials.objects.filter(user=user).delete()
+		backend.authenticate_and_login(request, user.username, Credentials.objects.get_or_create(user=user)[0].code)
+	else : messages.success(request, "Cette fonctionnalité n'est pas active en production.")
 	return HttpResponseRedirect('/')

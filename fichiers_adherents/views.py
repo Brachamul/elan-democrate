@@ -78,7 +78,7 @@ def importation(fichier):
 			nouvel_adherent.tel_portable = row['Tel portable']
 			nouvel_adherent.tel_bureau = row['Tel bureau']
 			nouvel_adherent.tel_domicile = row['Tel domicile']
-			nouvel_adherent.email = row['Email']
+			nouvel_adherent.email = row['Email'].lower()
 			nouvel_adherent.mandats = row['Mandats'].replace("\n", ", ")
 			nouvel_adherent.commune = row['Commune']
 			nouvel_adherent.save()

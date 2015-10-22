@@ -39,7 +39,7 @@ class Detenteur(models.Model):
 	date_de_debut = models.DateField(blank=True, null=True, help_text="En cas d'arrivée après le début du mandat") # en cas de début différent du mandat
 	date_de_fin = models.DateField(blank=True, null=True, help_text="En cas de départ avant la fin du mandat") # en cas de fin différente du mandat
 	def peut_voir_le_fichier_national(self): return self.mandat.institution.nom == "Jeunes Démocrates" and self.titre.nom == "Président(e)" or self.titre.nom == "Secrétaire"
-	def __str__(self): return "{titre} {prefixe} {institution}".format(titre=self.titre, prefixe=self.mandat.institution.prefixe, institution=self.mandat.institution.nom)
+	def __str__(self): return "{nom}, {titre} {prefixe} {institution}".format(nom=self.profil.nom_courant, titre=self.titre, prefixe=self.mandat.institution.prefixe, institution=self.mandat.institution.nom)
 	def actif(self):
 		if self.date_de_fin : return datetime.now().date() < self.date_de_fin # Vrai si la date de fin n'est pas encore passée
 		else : return True # Vrai également s'il n'y a pas de date de fin

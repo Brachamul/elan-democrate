@@ -43,9 +43,20 @@
 			</div>
 
 			{% if post.illustration %}
-			<div class="illustration">
-				<img src="{{ post.illustration }}" />
-			</div>
+
+				{% if post.format == "LINK" %}
+				<a href="{{ post.link }}" target="_blank">
+					<div class="illustration">
+						<img src="{{ post.illustration }}" />
+					</div>
+				</a>
+				{% else %}
+				<div class="illustration">
+					<img src="{{ post.illustration }}" />
+				</div>
+				{% endif %}
+				
+
 			{% endif %}
 			<div class="anchor"></div>
 
@@ -71,9 +82,15 @@
 				{% if post.author == user and post.format == "TEXT" %}
 					<span class="modify link">modifier</span>
 				{% endif %}
+				{% if user in post.channel.moderators.all %}
+					<span class="pin link">
+					<a href="{% url 'pin_post' post.id %}">
+							{% if post.is_pinned %}fixé{% else %}fixer{% endif %}
+					</a>
+					</span>
+				{% endif %}
 				<span class="share link" data-url="{% url 'post' post.date.year post.slug %}">partager</span>
 				{% include 'aggregateur/partager.html' %}
-
 
 
 {% comment %}	<span class="favorite">ajouter aux favoris</span> {% endcomment %}

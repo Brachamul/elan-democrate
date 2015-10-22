@@ -88,9 +88,17 @@ article .actions { margin: 2rem 0; }
 .posts .meta { font-size: .8em; }
 .posts .actions { font-weight: bold; }
 @media screen and (max-width: 450px) {
-	.posts .healthbox { display: none; }
-	.posts .illustration { padding-left: 5px; }
-	.posts .illustration { text-align: center; min-width: 4.75rem; padding-top: 3px; }
+	.posts .healthbox {
+		position: absolute;
+		top: 4em;
+		left: 0px;
+		font-size: 1em;
+		padding: 0px;
+		width: 2.8em;
+	}
+	.posts .post { padding-right: 10px; position: relative; }
+	.posts .illustration { padding-left: 5px; height: 6em; }
+	.posts .illustration { text-align: center; min-width: 4.75rem; padding-top: 3px; }	
 	.posts .illustration img { max-width: 4rem; max-height: 3rem; }
 }
 
@@ -136,7 +144,19 @@ article .actions { margin: 2rem 0; }
 #secondary-wrapper { color: #999; }
 #secondary-wrapper .box { color: #999; padding: 0 1rem 1rem; }
 #secondary-wrapper h3 { padding: 0 1rem 2rem; border-bottom: 1px solid #F2F2F2; }
+#secondary-wrapper h3 a:link,
+#secondary-wrapper h3 a:visited  { color: inherit; }
+#secondary-wrapper h3 a:hover,
+#secondary-wrapper h3 a:active { color: #EC7C34; }
 
+
+.box .moderators { font-size: .8em; }
+.box hr {
+	margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
+    margin-left: -1rem;
+    margin-right: -1rem;
+}
 
 /****************/
 
@@ -233,6 +253,11 @@ a:visited .title { color: #d2824e; }
 
 .card.btn-primary { }
 .card.btn:hover { }
+
+.card .card-announcement { text-align: center; color: #999; }
+.card .card-announcement:first-child { margin-top: 4em; }
+.card .card-announcement:last-child { margin-bottom: 3.5em; }
+
 
 @-webkit-keyframes fadein { 0% { opacity: 0; transform: translateY(48px); -webkit-transform: translateY(48px); } 100% { opacity: 1; transform: translateY(0px); -webkit-transform: translateY(0px); } }
 @-moz-keyframes fadein { 0% { opacity: 0; transform: translateY(48px); -webkit-transform: translateY(48px); } 100% { opacity: 1; transform: translateY(0px); -webkit-transform: translateY(0px); } }

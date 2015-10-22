@@ -16,23 +16,35 @@
 
 		<div class="card card-big" style="text-align: center;">
 
-		<h1>Liste des chaînes</h1>
-		{% for channel in channels %}
-			<hr/>
-			<div class="channel" style="margin: 1em;">
-				<a href="{% url 'chaine' channel.slug %}">
-					<strong style="font-size: 1.2em">{{ channel.name }}</strong><br/>
-				</a>
-				Animateur{{ channel.moderators.all|pluralize }} :
-				{% for actor in channel.moderators.all %}{% include 'actor.html' %} {% endfor %}
-				<br/>
-				{% if channel.is_default %}Visible par défaut
-				{% else %}{{ channel.num_subscribers }} inscrit{{ channel.num_subscribers|pluralize }}
-				{% endif %}
-				<br/>
-				<span style="font-size: 0.8em; font-style: italic;">{{ channel.description }}</span>
-			</div>
-		{% endfor %}
+		<h1>{{ page_title }}</h1>
+
+		{% if channels %}
+
+			{% for channel in channels %}
+				<hr/>
+				<div class="channel" style="margin: 1em;">
+					<a href="{% url 'chaine' channel.slug %}">
+						<strong style="font-size: 1.2em">{{ channel.name }}</strong><br/>
+					</a>
+					Animateur{{ channel.moderators.all|pluralize }} :
+					{% for actor in channel.moderators.all %}{% include 'actor.html' %} {% endfor %}
+					<br/>
+					{% if channel.is_default %}Visible par défaut
+					{% else %}{{ channel.num_subscribers }} inscrit{{ channel.num_subscribers|pluralize }}
+					{% endif %}
+					<br/>
+					<span style="font-size: 0.8em; font-style: italic;">{{ channel.description }}</span>
+				</div>
+			{% endfor %}
+		
+		{% else %}
+
+			<p class="card-announcement">
+				Vous n'êtes pas encore abonné à une chaîne. Retrouvez toutes les chaînes {% url 'public_channels' %}ici.
+			</p>
+		
+		{% endif %}
+
 		</div>
 
 	</div>
@@ -47,7 +59,15 @@
 			<p>Ce sont les contenus de ces chaînes qui forment la page d'accueil.</p>
 		</div>
 
-		<a href="" class="btn btn-default btn-sm btn-block">
+		<a href="{% url 'public_channels' %}" class="btn btn-default btn-sm btn-block">
+			<i class="fa fa-link"></i> Chaînes publiques
+		</a>
+
+		<a href="{% url 'my_channels' %}" class="btn btn-default btn-sm btn-block">
+			<i class="fa fa-heart"></i> Mes chaînes
+		</a>
+
+		<a href="{% url 'nouvelle_chaine' %}" class="btn btn-default btn-sm btn-block">
 			<i class="fa fa-plus"></i> Nouvelle chaîne
 		</a>
 

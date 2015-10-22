@@ -7,25 +7,66 @@
 <div class="card card-big">
 
 	{% if channel %}
-	<h3>{{ channel.name }}</h3>
+		<h3><a href="{% url 'chaine' channel.slug %}">{{ channel.name }}</a></h3>
 	{% else %}
-	<h3>Accueil</h3>
+		<h3>{{ page_title }}</h3>
 	{% endif %}
 
 	<div class="box">
+
 		{% if channel %}
-		<p>{{ channel.description}}</p>
-		<p style="margin: 1em 0;">Animateurs :<br/>{% for actor in channel.moderators.all %}{% include 'actor.html' %} {% endfor %}</p>
-		<p><a class="btn btn-xs btn-default btn-block" href="{% url 'nouveau_post_avec_chaine' channel.slug %}"><i class="fa fa-plus"></i> nouveau post </a></p>
-		<p><a class="btn btn-xs btn-default btn-block" href="sub">
-			<i class="fa fa-edit"></i> s'abonner</a></p>
+
+			{% if channel.is_private and user not in channel.subscribers.all and user not in channel.moderators.all %}
+
+			{% else %}
+
+				<p>{{ channel.description}}</p>
+
+				<p style="margin: 1em 0; font-size: .8em; ">{{ channel.subscribers.all.count }} abonnés</p>
+
+				<hr>
+
+				<p>Animateurs :<br/><span class="moderators">{% for actor in channel.moderators.all %}{% include 'actor.html' %} {% endfor %}</span></p>
+
+				<hr>
+
+				<p><a class="btn btn-xs btn-default btn-block" href="{% url 'nouveau_post_avec_chaine' channel.slug %}"><i class="fa fa-plus"></i> nouveau post </a></p>
+			
+				{% if user in channel.subscribers.all %}	
+					<p><a class="btn btn-xs btn-default btn-block" href="{% url 'leave_channel' channel.slug %}">
+						<i class="fa fa-times"></i> se désabonner</a></p>				
+				{% else %}
+					<p><a class="btn btn-xs btn-default btn-block" href="{% url 'join_channel' channel.slug %}">
+						<i class="fa fa-edit"></i> s'abonner</a></p>
+				{% endif %}
+
+			{% endif %}
+
+			{% if user in channel.moderators.all %}
+			<hr>
+
+				{% if channel.want_to_join.all %}
+					<p><a href="{% url 'wanttojoin_channel' channel.slug %}">
+						<i class="fa fa-warning"></i> {{ channel.want_to_join.all.count }} utilisateur{{ channel.want_to_join.all.count|pluralize }} souhaite{{ channel.want_to_join.all.count|pluralize:"nt" }} rejoindre la chaîne !</a></p>	
+				{% endif %}
+
+			<p><strong>Message aux animateurs de chaînes :</strong></p>
+			<p>La fonctionnalité "chaînes" vient d'être créée et est encore en beta.</p>
+			<p> Les aspects d'administration de la chaîne, notamment, ne sont pas encore totalement aboutis.</p>
+			<p>Si vous avez besoin d'aide pour modifier un aspect de votre chaîne, n'hésitez pas à écrire directement à contact@elandemocrate.fr</p>
+			<hr>
+			{% endif %}
+
 		{% else %}
-		<p>Bienvenue sur Élan Démocrate.</p>
-		<p><a class="btn btn-xs btn-default btn-block" href="{% url 'nouveau_post' %}">
-			<i class="fa fa-plus"></i> nouveau post</a></p>
+
+			<p>Bienvenue sur Élan Démocrate.</p>
+			<p><a class="btn btn-xs btn-default btn-block" href="{% url 'nouveau_post' %}">
+				<i class="fa fa-plus"></i> nouveau post</a></p>
+
 		{% endif %}
-		<p><a class="btn btn-xs btn-default btn-block" href="{% url 'liste_des_chaines' %}">
-			<i class="fa fa-arrow-right"></i> toutes les chaînes</a></p>
+
+			<p><a class="btn btn-xs btn-default btn-block" href="{% url 'public_channels' %}">
+				<i class="fa fa-arrow-right"></i> toutes les chaînes</a></p>
 	</div>
 
 </div>

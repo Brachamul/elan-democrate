@@ -3,11 +3,15 @@
 #notifications .notification img,
 #notifications .notification i { float: left; margin-right: 8px; border-radius: 4px; }
 /*	#loaded-notifications .notification.non-lue a { font-weight: bold; } */
-#notifications.tout-vu #non-vues.icon-counter { display: none; }
-#notifications:not(.open):not(.tout-vu) .dropdown-toggle { color: #EC7C34; }
+.notificateur.tout-vu .icon-counter { display: none; }
+.notificateur.dropdown:not(.open):not(.tout-vu) > a { color: #EC7C34; } /* La cloche est orange quand y'a une notif */
+.notificateur.navbar-toggle:not(.tout-vu) { background-color: #EC7C34; } /* Le bouton mobile de menu aussi */
 
-#notifications li.notification a { padding: 8px 10px; border-bottom: 1px solid #eee; }
-#notifications li.notification a p { line-height: 1.2; margin-top: -2px; }
-#notifications li.notification:last-child a p { margin-bottom: 0; }
+.navbar-toggle { position: relative; }
+.navbar-toggle .icon-counter { position: absolute; bottom: 0; right: 1px; font-size: .7em; }
+
+#notifications li.notification .content { padding: 8px 10px; border-bottom: 1px solid #eee; }
+#notifications li.notification .content p { line-height: 1.2; margin-top: -2px; }
+#notifications li.notification:last-child .content p { margin-bottom: 0; }
 /* #notifications li.notification.non-lue a { border-left: 4px solid #EC7C34; padding-left: 6px; } */
-#notifications li.notification.non-vue a { border-left: 2px solid #EC7C34; padding-left: 8px; } 
+#notifications li.notification.non-vue .content { border-left: 2px solid #EC7C34; padding-left: 8px; } 

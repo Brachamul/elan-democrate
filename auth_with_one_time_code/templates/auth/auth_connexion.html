@@ -2,14 +2,15 @@
 
 <form class="ajax-form" action="{% url 'connexion' %}"
 	method="POST" role="form" enctype="multipart/form-data">{% csrf_token %}
-	<input name="numero_ou_email" placeholder="Email ou n° adhérent"
+	{% comment %}Email ou n° adhérent {% endcomment %}
+	<input name="numero_ou_email" placeholder="Adresse email" id="numero_ou_email"
 			value="{% if numero_ou_email %}{{ numero_ou_email }}{% endif %}" class="form-control" type="text" autofocus required>
 	<input type="hidden" name="form_type" value="send_code">
 	<p style="text-align: center;">
 		<button type="submit" class="btn orange">
-			<i class="fa fa-off" aria-hidden="true"></i> Connexion</button>
+			<i class="fa fa-power-off" aria-hidden="true"></i> Connexion</button>
 {% comment %}<a class="btn orange action-button" href="{% url 'enregistrement' %}">{% endcomment %}
-		<a class="btn orange" href="{% url 'beta' %}">
+		<a id="beta" class="btn orange" href="{% url 'beta' %}">
 			<i class="fa fa-arrow-right" aria-hidden="true"></i> Je créé mon compte</a>
 	</p>
 </form>

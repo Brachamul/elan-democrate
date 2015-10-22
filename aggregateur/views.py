@@ -15,23 +15,37 @@ from django.views.generic import TemplateView, DetailView
 from .models import *
 from .forms import *
 
-def all(request): return aggregateur(request)
-
-
 ### Channels
 
+def default_channels(request) :		return Channel.objects.filter(is_default=True)
+def official_channels(request) :	return Channel.objects.filter(is_official=True)
+def subbed_channels(request):		return Channel.objects.filter(subscribers=request.user)
+def ignored_channels(request) : 	return Channel.objects.filter(ignorers=request.user)
+def moderated_channels(request):	return Channel.objects.filter(moderators=request.user)
+
 @login_required
-def aggregateur(request, page=1, channel_slug=False):
-	''' va chercher les posts de la chaine et les publie via un paginateur
-		l'argument 'chaine' n'est pas encore opérationnel '''
+def aggregateur(request, page=1, channel_slug=False, special=False):
+	''' va chercher les posts de la chaine et les publie via un paginateur '''
 	if channel_slug :
 		channel = get_object_or_404(Channel, slug=channel_slug)
-		posts = Post.objects.filter(channel=channel)
+		channels = (channel,)
 		page_title = channel.name.capitalize()
 	else :
-		channel = False
-		posts = Post.objects.all()
-		page_title = "Accueil"
+		channel = False # l'URL n'appelle pas une chaîne
+		if special :
+			if special == "all_channels" :
+				channels = Channel.objects.all()
+				page_title = "Toutes les chaînes"
+			if special == "default_channels" :
+				page_title = "Chaînes par défaut"
+				channels = default_channels(request)
+		else :
+			channels = default_channels(request) | subbed_channels(request) # De base, on prends les chaînes par défaut + les chaînes souscrits
+			page_title = "Accueil"
+			channels = channels.exclude(id__in=ignored_channels(request)) # Et on enlève les chaînes 
+	
+	posts = Post.objects.filter(channel__in=channels)
+	if channel_slug == False : posts = posts.order_by('-rank', '-date')
 
 	for post in posts : post = get_post_meta(request, post)
 #	if time_to_rerank(request) == True : rank_posts() # classe les posts s'ils n'ont pas été reclassés depuis au moins 5 minutes
@@ -145,6 +159,13 @@ def comment_color(request, comment_id):
 	except CommentVote.DoesNotExist : return HttpResponse("NEU")
 	else : return HttpResponse(vote.color)
 
+def pin_post(request, post_id):
+	post = get_object_or_404(Post, id=post_id)
+	if request.user in post.channel.moderators.all() :
+		post.is_pinned = not post.is_pinned
+		post.save()
+	else : messages.error(request, "Vous n'êtes pas modérateur de cette chaîne.")
+	return HttpResponseRedirect(reverse('post', kwargs={ 'slug': post.slug, 'year': post.date.year }))
 
 
 ### Traitement des votes
@@ -213,11 +234,11 @@ def rank_posts():
 		healthify(post) # on recalcule le score du post
 		time_since_bayrou = ( post.date - bayrou_2007 ) # quel est l'âge relatif du post ?
 		time_since_bayrou = time_since_bayrou.days * 86400 + time_since_bayrou.seconds # conversion en secondes
-		order = log(max(abs(post.health), 1), 10)
+		order = log(max(abs(post.health*settings.POST_HEALTH_MULTIPLIER), 1), settings.POST_ORDER_LOG)
 		sign = 1 if post.health > 0 else -1 if post.health < 0 else 0
-		post.rank = round( sign * order + time_since_bayrou / 45000, 7)
+		post.rank = round( sign * order + time_since_bayrou / settings.POST_RANKING_COEFFICIENT, 7)
 		post.save()
-		logging.info("Posts have been reranked".encode('utf8'))
+	logging.info("Posts have been reranked".encode('utf8'))
 	return HttpResponse()
 
 def rank_comments():
@@ -306,8 +327,10 @@ def count_post_comments(post):
 ### Misc
 
 @login_required
-def nouveau_post(request, channel=None):
+def nouveau_post(request, channel_slug=None):
 	# Si le formulaire a été rempli, on le traite. Sinon, on l'affiche.
+	if channel_slug : posting_channel = Channel.objects.get(slug=channel_slug)
+	else : posting_channel = None
 	text_data = link_data = None # les données seront renvoyées au formulaire en cas d'erreur, pour éviter d'avoir à recommencer
 	if request.method == "POST":
 		format = request.POST.get('format')
@@ -344,6 +367,7 @@ def nouveau_post(request, channel=None):
 		elif format == "LINK" :
 			title = request.POST.get('Titre')
 			url = request.POST.get('Lien_URL')
+			channel = Channel.objects.get(slug=request.POST.get('Chaîne'))
 			partageable = request.POST.get('Partageable')
 			link_data = {'title': title, 'url': url, 'partageable': partageable}
 			if PostLinkForm(request.POST).is_valid() :
@@ -354,7 +378,7 @@ def nouveau_post(request, channel=None):
 					illustration=illustrate(url),
 					shareable=(partageable==True),
 					author=request.user,
-#					channel=Channel.objects.get(pk=1), # change when adding more channels
+					channel=channel,
 					)
 				new_post.save()
 				rank_posts()
@@ -375,7 +399,7 @@ def nouveau_post(request, channel=None):
 		'post_text_form': PostTextForm(initial=text_data),
 		'post_link_form': PostLinkForm(initial=link_data),
 		'page_title': 'Nouveau post',
-		'channel': channel, 'channels': channels, })
+		'posting_channel': posting_channel, 'channels': channels, })
 
 
 ###
@@ -409,11 +433,18 @@ def content_type(url):
 ### CHANNELS
 
 from django.db.models import Count
+
 @login_required
-def channel_list(request):
+def channel_list(request, channels=False):
+	if channels == "my-channels" :
+		channels = Channel.objects.filter(subscribers=request.user) | Channel.objects.filter(moderators=request.user)
+		page_title = "Mes chaînes"
+	else :
+		channels = Channel.objects.all()
+		page_title = "Chaînes publiques"	
 	return render(request, 'aggregateur/channel_list.html', {
-		'channels' : Channel.objects.all().annotate(num_subscribers=Count('subscribers')).order_by('-is_default', '-num_subscribers'),
-		'page_title': "Liste des chaînes",
+		'channels' : channels.annotate(num_subscribers=Count('subscribers')).order_by('-is_default', '-num_subscribers'),
+		'page_title': page_title,
 		} )
 
 @login_required
@@ -431,13 +462,73 @@ def nouvelle_chaine(request):
 
 def process_nouvelle_chaine(request, form):
 	if form.is_valid():
-		nouvelle_chaine = form
-		nouvelle_chaine.moderators.add(user)
-		nouvelle_chaine.subscribers.add(user)
+		nouvelle_chaine = form.save()
+		nouvelle_chaine.moderators.add(request.user)
+		nouvelle_chaine.subscribers.add(request.user)
 		nouvelle_chaine.save()
-		messages.success(request, 'Votre chaîne a bien été crée !')
+		messages.success(request, 'Votre chaîne "{}" a bien été crée !'.format(nouvelle_chaine.name))
 		return nouvelle_chaine
 	else :
 		return False
 
+@login_required
+def join_channel(request, channel_slug):
+	channel = get_object_or_404(Channel, slug=channel_slug)
+	if request.user in channel.subscribers.all() : messages.info(request, "Vous êtes déjà abonné à \"{}\".".format(channel.name))
+	else :
+		if channel.is_private :
+			if request.user in channel.moderators.all() :
+				channel.subscribers.add(request.user)
+				messages.success(request, "Vous êtes désormais abonné à \"{}\", dont vous êtes animateur.".format(channel.name))
+			elif request.user in channel.want_to_join.all() : messages.info(request, "Vous avez déjà demandé à rejoindre cette chaîne, mais ses animateurs ne vous ont pas encore validé.")
+			else :
+				WantToJoinChannel(channel=channel, user=request.user).save()
+				messages.success(request, "Votre demande a été envoyée aux animateurs de la chaîne.")
+		else : 
+			channel.subscribers.add(request.user)
+			messages.success(request, "Vous êtes désormais abonné à \"{}\".".format(channel.name))
+	return HttpResponseRedirect(reverse('chaine', kwargs={ 'channel_slug': channel.slug }))
 
+@login_required
+def leave_channel(request, channel_slug):
+	channel = get_object_or_404(Channel, slug=channel_slug)
+	if request.user not in channel.subscribers.all() : messages.info(request, "Vous ne pouvez pas quitter une chaîne dont vous n'êtes pas abonné.")
+	else :
+		channel.subscribers.remove(request.user)
+		messages.success(request, "Vous n'êtes plus abonné à \"{}\".".format(channel.name))
+	return HttpResponseRedirect(reverse('chaine', kwargs={ 'channel_slug': channel.slug }))
+
+@login_required
+def wanttojoin_channel(request, channel_slug):
+	channel = get_object_or_404(Channel, slug=channel_slug)
+	if not current_user_is_moderator(request, channel) : return HttpResponseRedirect(reverse('chaine', kwargs={ 'channel_slug': channel.slug }))
+	candidats = channel.want_to_join.all()
+	return render(request, 'aggregateur/list.html', {'objects': candidats, 'channel': channel, 'page_title': 'Utilisateurs souhaitant rejoindre la chaîne "{}"'.format(channel.name)})
+
+from notifications.triggers import join_private_channel_allowed, join_private_channel_denied
+
+@login_required
+def allow_user_to_join_channel(request, channel_slug, user_pk):
+	channel = get_object_or_404(Channel, slug=channel_slug)
+	if not current_user_is_moderator(request, channel) : return HttpResponseRedirect(reverse('chaine', kwargs={ 'channel_slug': channel.slug }))
+	candidate = get_object_or_404(User, pk=user_pk)
+	channel.subscribers.add(candidate)
+	WantToJoinChannel.objects.filter(channel=channel, user=candidate).delete()
+	join_private_channel_allowed(request, channel, candidate)
+	messages.success(request, '{} est désormais abonné à \"{}\".'.format(candidate.profil.nom_courant, channel.name))
+	return HttpResponseRedirect(reverse('chaine', kwargs={ 'channel_slug': channel.slug }))
+
+@login_required
+def deny_user_from_channel(request, channel_slug, user_pk):
+	channel = get_object_or_404(Channel, slug=channel_slug)
+	if not current_user_is_moderator(request, channel) : return HttpResponseRedirect(reverse('chaine', kwargs={ 'channel_slug': channel.slug }))
+	candidate = get_object_or_404(User, pk=user_pk)
+	WantToJoinChannel.objects.filter(channel=channel, user=candidate).delete()
+	join_private_channel_denied(request, channel, candidate)
+	return HttpResponseRedirect(reverse('chaine', kwargs={ 'channel_slug': channel.slug }))
+
+def current_user_is_moderator(request, channel):
+	if request.user in channel.moderators.all() : return True
+	else :
+		messages.error(request, "Vous n'êtes pas modérateur de la chaîne \"{}\".".format(channel.name))
+		return False

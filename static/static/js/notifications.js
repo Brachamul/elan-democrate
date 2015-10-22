@@ -1,15 +1,19 @@
 jQuery(function($) {
 
+	var title_text = $('title').text() // On enregistre le titre pour pouvoir mettre des (1) quand il y a des notifications
+
 	// Charger les notifs au premier chargement de la page
 	$.get("/n/", function(data){
 		// Récupérer le nombre de notification non vues pour les afficher dans la barre
 		$('#loaded-notifications').html(data);
 		$.get("/n/non_vues", function(data){ // Compter le nombre de notifs non vues
-			$('#non-vues').html(data);
+			$('.nombre-de-notifications-non-vues').html(data);
 			if (data == '0') {
-				$('#notifications').addClass('tout-vu')
+				$('.notificateur').addClass('tout-vu')
+				$('title').text(title_text)
 			} else {
-				$('#notifications').removeClass('tout-vu');
+				$('.notificateur').removeClass('tout-vu');
+				$('title').text('(' + data + ') ' + title_text)
 			};
 		}); 
 	});
@@ -24,10 +28,12 @@ jQuery(function($) {
 					// Récupérer le nombre de notification non vues pour les afficher dans la barre
 					$('#loaded-notifications').html(data);
 					$.get("/n/non_vues", function(data){ // Compter le nombre de notifs non vues
-						$('#non-vues').html(data);
-						$('#notifications').removeClass('tout-vu');
+						$('.nombre-de-notifications-non-vues').html(data);
+						$('.notificateur').removeClass('tout-vu');
+						$('title').text('(' + data + ') ' + title_text)
 						if (data == '0') {
-							$('#notifications').addClass('tout-vu')
+							$('.notificateur').addClass('tout-vu')
+							$('title').text(title_text)
 						};
 					});
 				}); 

@@ -21,7 +21,7 @@ class OneTimeCodeBackend :
 		user = get_object_or_404(User, username=username)
 		auth_successful = False # unless specified otherwise, we assume the authentication has failed
 		try : credentials = Credentials.objects.get(user=user, code=code)
-		except Credentials.DoesNotExist : messages.error(request, "Ce lien de connexion a expiré, car lien plus récent vous a déjà été envoyé.")
+		except Credentials.DoesNotExist : messages.error(request, "Ce lien de connexion a expiré, car un lien plus récent vous a déjà été envoyé.")
 		else :
 			if credentials.too_many_attempts() : messages.error(request, "Vous avez essayé de vous connecter plus de {} fois. Par mesure de sécurité, votre compte sera verouillé pendant {}h.".format(settings.AUTH_CODE_MAXIMUM_ATTEMPS, settings.AUTH_CODE_LIFESPAN))
 			elif credentials.is_expired() : messages.error(request, "Votre lien de connexion a expiré, car il vous a été envoyé il y a plus d'{}h. Merci de vous reconnecter.".format(settings.AUTH_CODE_LIFESPAN))
@@ -65,10 +65,10 @@ from django.core.mail import send_mail
 def SendAuthCode(user, code):
 	lien = site_url + reverse('url_connexion', kwargs={ 'username': user.username, 'code': code })
 	send_mail(
-		"[Élan Démocrate] Lien de connexion",
+		"[Élan Démocrate] Lien de connexion - {code}".format(code=code),
 		"Cliquez sur le lien suivant pour vous authentifier: \n\n"
 		"{lien}\n\n"
-		"Ce code d'accès ne sera valable qu'une fois.\n\n"
+		"Ce code d'accès ne sera valable que quelques heures.\n\n"
 		"Les mots de passe sont fréquemment utilisés à plusieurs endroits sur internet. Il suffit qu'un seul des sites auxquels vous êtes inscrit soit piraté pour que votre mot de passe soit compromis. La méthode d'authentification utilisée ici, avec un code d'accès à utilisation unique, vous protège du vol de mot de passe.\n\n"
 		"N'oubliez pas de changer souvent le mot de passe de votre boîte email !".format(lien=lien),
 		emailer,
@@ -152,7 +152,7 @@ def SendEmailAlreadyRegistered(request, email):
 
 def SendUserDoesNotExistEmail(request, email):
 	# Si l'adresse ne correspond pas à un adhérent, on ne peut pas logger l'utilisateur
-	lien = site_url + reverse('enregistrement')
+	lien = site_url + reverse('beta_with_email', kwargs={ 'email': email }) # after beta, switch back to "enregistrement"
 	send_mail(
 		"[Élan Démocrate] Vous n'avez pas encore créé de compte",
 		"Bonjour,\n\n"

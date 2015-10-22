@@ -1,4 +1,5 @@
 import logging
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
@@ -107,24 +108,48 @@ def markdownify(multiple_string): return multiple_string.replace('\t', '').repla
 @login_required
 def initialize_base_posts(request):
 
-	Channel.objects.get_or_create(
-		name="Actualités",
-		description="Pour parler de l'actualité interne, nationale ou internationale.",
-		official=True, is_default=True, illustration="/static/images/flat_upload.png")
+	illustration = settings.SITE_URL + "/static/images/flat_upload.png"
 
-	Channel.objects.get_or_create(
-		name="Élan Démocrate",
-		description="Bugs, suggestions pour améliorer la plateforme, c'est ici !",
-		official=True, is_default=True, illustration="/static/images/flat_upload.png")
+	chaine_actus = Channel.objects.get_or_create(name="Actualités")[0]
+	chaine_actus.description = "Pour parler de l'actualité interne, nationale ou internationale."
+	chaine_actus.is_official = True
+	chaine_actus.is_default = True
+	chaine_actus.illustration = illustration
+	chaine_actus.save()
 
-	channel = Channel.objects.get_or_create(
-		name="Notes de mise à jour",
-		description="Lorsque Élan Démocrate est mis à jour, les modifications sont répertoriées ici.",
-		official=True, is_default=True, illustration="/static/images/flat_upload.png")[0]
+	chaine_edem = Channel.objects.get_or_create(name="Élan Démocrate")[0]
+	chaine_edem.description = "Bugs, suggestions pour améliorer la plateforme, c'est ici !"
+	chaine_edem.is_official = True
+	chaine_edem.is_default = True
+	chaine_edem.illustration = illustration
+	chaine_edem.save()
+
+	chaine_maj = Channel.objects.get_or_create(name="Notes de mise à jour")[0]
+	chaine_maj.description = "Lorsque Élan Démocrate est mis à jour, les modifications sont répertoriées ici."
+	chaine_maj.is_official = True
+	chaine_maj.is_default = True
+	chaine_maj.only_mods_can_post = True
+	chaine_maj.illustration = illustration
+	chaine_maj.save()
+
+	channel = chaine_maj
 
 	Post.objects.filter(channel=channel).delete()
 
-	illustration = "/static/images/flat_upload.png"
+	v0_7 = Post.objects.get_or_create(
+		title = "Mise à jour v0.7 : chaînes privées",
+		format = "TEXT",
+		channel= channel,
+		content = markdownify(
+			"""Hello, pour la mise à jour v0.7, voici la modification principale :
+
+			* **Chaînes privées :**
+			Il est désormais possible de créer une chaîne privée et d'y inviter des membres."""),
+		author = request.user,
+		illustration = illustration,
+		date = datetime.datetime(year=2015, month=10, day=7),
+		)
+
 
 	v0_6 = Post.objects.get_or_create(
 		title = "Mise à jour v0.6 : inscriptions à la beta et activation des chaînes",
