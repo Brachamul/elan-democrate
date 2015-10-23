@@ -27,7 +27,7 @@
 						<strong style="font-size: 1.2em">{{ channel.name }}</strong><br/>
 					</a>
 					Animateur{{ channel.moderators.all|pluralize }} :
-					{% for actor in channel.moderators.all %}{% include 'actor.html' %} {% endfor %}
+					<span class="moderators">{% for actor in channel.moderators.all %}{% include 'actor.html' %} {% endfor %}</span>
 					<br/>
 					{% if channel.is_default %}Visible par défaut
 					{% else %}{{ channel.num_subscribers }} inscrit{{ channel.num_subscribers|pluralize }}
