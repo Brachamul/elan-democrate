@@ -19,11 +19,13 @@ from .models import *
 from datetime import datetime, timedelta
 max_message_age = datetime.now() - timedelta(hours=5)
 
+@login_required
 def ChatRoomFeed(request, channel_slug):
 	channel = get_object_or_404(Channel, slug=channel_slug)
 	messages = serializers.serialize("json", Message.objects.filter(channel=channel, date__gt=max_message_age)[:12])
 	return HttpResponse(messages, content_type="application/json")
 
+@login_required
 def ChatRoomView(request, channel_slug):
 	channel = get_object_or_404(Channel, slug=channel_slug)
 	page_title = "Salle de discussion pour la chaîne {}".format(channel.name.capitalize())
@@ -32,10 +34,12 @@ def ChatRoomView(request, channel_slug):
 		'page_title': page_title
 		} )
 
+@login_required
 def NewMessage(request, channel_slug):
 	channel = get_object_or_404(Channel, slug=channel_slug)
-	if request.method == "POST" and request.user in channel.subscribers.all() :
-		new_message = Message(author=request.user, channel=channel, content=request.POST.get('message'))
-		new_message.save()
+	if request.method == "POST" :
+		if channel.is_default or request.user in channel.subscribers.all() :
+			new_message = Message(author=request.user, channel=channel, content=request.POST.get('message'))
+			new_message.save()
 	else : messages.error(request, "Une erreur s'est produite. Vous n'avez peut-être pas les droits pour envoyer ce message.")
 	return HttpResponseRedirect(reverse('chatroom', kwargs={ 'channel_slug': channel_slug }))

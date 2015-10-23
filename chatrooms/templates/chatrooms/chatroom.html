@@ -62,6 +62,8 @@ spawnedMessages = []
 
 fetchMessages()
 
+authorCards = {}
+
 $('form.new-message').submit(function(){
 	$('#loading-messages-spinner .spinner').fadeIn('slow')
 	$.ajax({
@@ -87,8 +89,9 @@ function fetchMessages() {
 		$('#loading-messages-spinner .spinner').fadeOut() /* Hide the loading spinner */
 		$.each(data.reverse(), function( i, message ) { 
 			if ( $.inArray(message.pk, spawnedMessages) == -1) spawnMessage(message) // if the message is not yet spawned, do it
-		});
-	});
+		})
+		loadActorCards()
+	})
 
 	if (atBottom === true) stayDown() 
 
@@ -109,7 +112,6 @@ function spawnMessage(message) {
 		'</div>'
 	$('#loading-messages-spinner').before(message)
 	$('#message-' + pk).delay(150).fadeIn('slow') // delay to give time for loading user avatar
-	loadActorCards()
 	spawnedMessages.push(pk)
 }
 
@@ -124,12 +126,25 @@ function formatTime(date) {
 }
 
 function loadActorCards() {
-	var url = "{% url 'membres' %}" 
-	$('.author.new').each(function(){
+	var url = "{% url 'membres' %}"
+	var authors = []
+	var authorBoxes = $('.author')
+	authorBoxes.each(function(){
+		var author = $(this).attr('data-author')
+		if ($.inArray(author, authors) === -1) authors.push(author)
+	})		
+	var newAuthorBoxes = $('.author.new')
+	newAuthorBoxes.each(function() {
 		var authorBox = $(this)
-		$.ajax({url: url + $(this).attr('data-author') + '/card/' ,}).done(function(card) {
-			authorBox.html(card)
-		})
+		var author = authorBox.attr('data-author')
+		if (author in authorCards) {
+			authorBox.html(authorCards[author])
+		} else {
+			$.ajax({url: url + author + '/card/' ,}).done(function(card) {
+				authorCards[author] = card
+				authorBox.html(authorCards[author])
+			})
+		}
 	})
 }
 
