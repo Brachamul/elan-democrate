@@ -520,7 +520,7 @@ def allow_user_to_join_channel(request, channel_slug, user_pk):
 	WantToJoinChannel.objects.filter(channel=channel, user=candidate).delete()
 	join_private_channel_allowed(request, channel, candidate)
 	messages.success(request, '{} est désormais abonné à \"{}\".'.format(candidate.profil.nom_courant, channel.name))
-	return HttpResponseRedirect(reverse('chaine', kwargs={ 'channel_slug': channel.slug }))
+	return HttpResponseRedirect(reverse('wanttojoin_channel', kwargs={ 'channel_slug': channel.slug }))
 
 @login_required
 def deny_user_from_channel(request, channel_slug, user_pk):
@@ -529,7 +529,7 @@ def deny_user_from_channel(request, channel_slug, user_pk):
 	candidate = get_object_or_404(User, pk=user_pk)
 	WantToJoinChannel.objects.filter(channel=channel, user=candidate).delete()
 	join_private_channel_denied(request, channel, candidate)
-	return HttpResponseRedirect(reverse('chaine', kwargs={ 'channel_slug': channel.slug }))
+	return HttpResponseRedirect(reverse('wanttojoin_channel', kwargs={ 'channel_slug': channel.slug }))
 
 @login_required
 def ignore_channel(request, channel_slug):
