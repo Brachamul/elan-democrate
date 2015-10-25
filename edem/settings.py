@@ -63,15 +63,20 @@ ROOT_URLCONF = 'edem.urls'
 WSGI_APPLICATION = 'edem.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/1.7/ref/settings/#databases
+### DATABASE
+
+DB_NAME = "edem_database.sqlite3" # The SQLite3 filename
+
+SQLITE3_DB_LOCATION = os.path.join(BASE_DIR, DB_NAME) # The local filepath to the database file
 
 DATABASES = {
 	'default': {
 		'ENGINE': 'django.db.backends.sqlite3',
-		'NAME': os.path.join(BASE_DIR, 'edem_database.sqlite3'),
+		'NAME': SQLITE3_DB_LOCATION,
 	}
 }
+
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
@@ -167,7 +172,7 @@ POST_RANKING_COEFFICIENT = 100000 # 45000 by default on reddit, this is meant so
 POST_HEALTH_MULTIPLIER = 2 # If more than 1, gives posts more momentum
 POST_ORDER_LOG = 2 # Governs the influence of more posts on the relevancy (needs twice more votes instead of 10 times more, the default)
 
-POSTS_PER_PAGE = 12 # nombre de posts qui s'affichent en page d'accueil
+POSTS_PER_PAGE = 24 # nombre de posts qui s'affichent en page d'accueil
 PROFONDEUR_MAXIMALE_DES_COMMENTAIRES = 6 # niveau max de décente dans l'affichage des commentaires pour une même page
 DUREE_D_ACTIVITE = 2 # Nombre d'années d'activité des adhérents après leur dernière cotisation (année actuelle - année de cotisation > x)
 
@@ -178,8 +183,15 @@ AUTH_CODE_MAXIMUM_ATTEMPS = 12 # au bout de 3 essais, le code expire
 
 HELP_EMAIL_ADRESS = "contact@elandemocrate.fr"
 
+
 # API EMBEDLY
 EMBEDLY_KEY = "111e2b3ee0714950ad122d221fa7d444"
+
+
+# AWS (Amazon Web Services)
+AWS_ACCESS_KEY_ID = 'not_set'
+AWS_SECRET_ACCESS_KEY = 'not_set'
+
 
 ##########################
 #  Settings localisables :
