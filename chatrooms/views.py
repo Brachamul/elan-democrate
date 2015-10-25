@@ -34,12 +34,16 @@ def ChatRoomView(request, channel_slug):
 		'page_title': page_title
 		} )
 
+
+from markdown_deux import markdown
+
 @login_required
 def NewMessage(request, channel_slug):
 	channel = get_object_or_404(Channel, slug=channel_slug)
 	if request.method == "POST" :
 		if channel.is_default or request.user in channel.subscribers.all() :
-			new_message = Message(author=request.user, channel=channel, content=request.POST.get('message'))
+			content = markdown(request.POST.get('message'))
+			new_message = Message(author=request.user, channel=channel, content=content)
 			new_message.save()
 	else : messages.error(request, "Une erreur s'est produite. Vous n'avez peut-être pas les droits pour envoyer ce message.")
 	return HttpResponseRedirect(reverse('chatroom', kwargs={ 'channel_slug': channel_slug }))

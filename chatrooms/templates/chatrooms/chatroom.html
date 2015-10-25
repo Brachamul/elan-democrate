@@ -34,11 +34,16 @@
 		#chatfeed .message { margin: .65em 0; line-height: 1.35; font-size: .85em; }
 		#chatfeed .message .time, 
 		#chatfeed .message .author { color: #999;  }
-		#chatfeed .message .content {  }
+		#chatfeed .message .content { padding-left: .25em; }
 		#chat-no-activity { margin: 4em 0; }
 		div + div + #chat-no-activity { display: none; }
 		#loading-messages-spinner { text-align: center; }
 		footer.endpage { display: none; }
+
+		/* Countering the markdown */
+		#chatfeed .message p,
+		#chatfeed ul,
+		#chatfeed li { display: inline; margin: 0; padding: 0; list-style-type: none; }
 
 	</style>
 
