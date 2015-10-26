@@ -30,10 +30,11 @@ class Command(BaseCommand):
 			aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
 			aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
 			host="s3-eu-west-1.amazonaws.com",
+			is_secure=False,
 			).get_bucket("elan-democrate-db")
 		k = Key(bucket)
 		k.key = str(datetime.datetime.now()) + ' ' + settings.DB_NAME
-		k.set_contents_from_filename(settings.SQLITE3_DB_LOCATION, cb=percent_cb, num_cb=10)
+		k.set_contents_from_file(settings.SQLITE3_DB_LOCATION, cb=percent_cb, num_cb=10)
 #		if options['status']:
 #			retrieve_job = vault.retrieve_archive(archive)
 		self.stdout.write("Backup process complete with key {}".format(k.key))
