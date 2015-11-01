@@ -31,14 +31,14 @@
 
 		{% if channels %}
 
-			<div class="channels row">
+			<div class="channels row" style="display: flex; flex-wrap: wrap;">
 
 			{% for channel in channels %}
 
 				<div class="channel card col-xs-12 col-sm-6 col-md-4 col-lg-3">
 	
-						<div>
-							<a href="{% url 'chaine' channel.slug %}" class="title">{{ channel.name }}</a>
+						<div class="title">
+							<a href="{% url 'chaine' channel.slug %}">{{ channel.name }}</a>
 						</div>
 
 						<div>
