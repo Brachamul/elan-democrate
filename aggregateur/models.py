@@ -23,6 +23,7 @@ class Channel(models.Model):
 	is_official = models.BooleanField(default=False, verbose_name='Officielle')
 	is_default = models.BooleanField(default=False, verbose_name='Par défaut') # If a channel is default, it will be seen by users without needing subscription
 	is_private = models.BooleanField(default=False, verbose_name='Privée') # If a channel is private, only moderators and subscribers will see it
+	is_secret = models.BooleanField(default=False, verbose_name='Secrète') # If a channel is secret, it will not show in lists of channels unless a member
 	only_mods_can_post = models.BooleanField(default=False, verbose_name='Seuls les modérateurs peuvent poster') # For channels that are for downwards communications
 	moderators = models.ManyToManyField(User, related_name='moderated_channels', blank=True)
 	subscribers = models.ManyToManyField(User, related_name='subscribed_channels', blank=True)

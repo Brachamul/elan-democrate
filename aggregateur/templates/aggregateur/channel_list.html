@@ -14,34 +14,65 @@
 
 	<div id="primary-wrapper">
 
-		<div class="card card-big" style="text-align: center;">
+		<div class="card card-big" style="text-align: center; margin-bottom: 0;">
 
 		<h1>{{ page_title }}</h1>
 
-		{% if channels %}
-
-			{% for channel in channels %}
-				<hr/>
-				<div class="channel" style="margin: 1em;">
-					<a href="{% url 'chaine' channel.slug %}">
-						<strong style="font-size: 1.2em">{{ channel.name }}</strong><br/>
-					</a>
-					Animateur{{ channel.moderators.all|pluralize }} :
-					<span class="moderators">{% for actor in channel.moderators.all %}{% include 'actor.html' %} {% endfor %}</span>
-					<br/>
-					{% if channel.is_default %}Visible par défaut, {% endif %}
-					{{ channel.num_subscribers }} inscrit{{ channel.num_subscribers|pluralize }}
-					<br/>
-					<span style="font-size: 0.8em; font-style: italic;">{{ channel.description }}</span>
-				</div>
-			{% endfor %}
-		
-		{% else %}
+		{% if not channels %}
 
 			<p class="card-announcement">
 				Vous n'êtes pas encore abonné à une chaîne. Retrouvez toutes les chaînes {% url 'public_channels' %}ici.
 			</p>
 		
+		{% endif %}
+
+		</div>
+
+
+		{% if channels %}
+
+			<div class="channels row">
+
+			{% for channel in channels %}
+
+				<div class="channel card col-xs-12 col-sm-6 col-md-4 col-lg-3">
+	
+						<div>
+							<a href="{% url 'chaine' channel.slug %}" class="title">{{ channel.name }}</a>
+						</div>
+
+						<div>
+							<span>{{ channel.num_subscribers }} inscrit{{ channel.num_subscribers|pluralize }} | </span>
+							{% if channel.is_default %}
+								<span data-toggle="tooltip" data-placement="top" title="par défaut">
+									<i class="fa fa-newspaper-o"></i>
+								</span>
+							{% endif %}
+	
+							{% if channel.is_private %}
+								<span data-toggle="tooltip" data-placement="top" title="privée">
+									<i class="fa fa-lock"></i>
+								</span>
+							{% endif %}
+	
+							{% if channel.is_secret %}
+								<span data-toggle="tooltip" data-placement="top" title="secrète">
+									<i class="fa fa-eye-slash"></i>
+								</span>
+							{% endif %}
+						</div>
+	
+						<div style="font-size: 0.8em;" >
+							Animateur{{ channel.moderators.all|pluralize }} :
+							<span class="moderators">{% for actor in channel.moderators.all %}{% include 'actor.html' %} {% endfor %}</span>
+						</div>
+
+						<div style="font-size: 0.8em; font-style: italic; margin: .5em 0;">{{ channel.description }}</div>
+	
+				</div>
+
+			{% endfor %}
+
 		{% endif %}
 
 		</div>
@@ -52,23 +83,33 @@
 
 		<div class="card card-big">
 
-		<h3>À propos</h3>
-		<div class="box">
-			<p>Les chaînes sont crées et gérées par les utilisateurs du site.</p>
-			<p>Ce sont les contenus de ces chaînes qui forment la page d'accueil.</p>
-		</div>
+			<h3>À propos</h3>
+			
+			<div class="box">
+				<p>Les chaînes sont crées et gérées par les utilisateurs du site.</p>
+				<p>Ce sont les contenus de ces chaînes qui forment la page d'accueil.</p>
+			</div>
 
-		<a href="{% url 'public_channels' %}" class="btn btn-default btn-sm btn-block">
-			<i class="fa fa-link"></i> Chaînes publiques
-		</a>
 
-		<a href="{% url 'my_channels' %}" class="btn btn-default btn-sm btn-block">
-			<i class="fa fa-heart"></i> Mes chaînes
-		</a>
+			<a href="{% url 'public_channels' %}" class="btn btn-default btn-sm btn-block">
+				<i class="fa fa-link"></i> Toutes les chaînes
+			</a>
 
-		<a href="{% url 'nouvelle_chaine' %}" class="btn btn-default btn-sm btn-block">
-			<i class="fa fa-plus"></i> Nouvelle chaîne
-		</a>
+			<a href="{% url 'my_channels' %}" class="btn btn-default btn-sm btn-block">
+				<i class="fa fa-heart"></i> Mes chaînes
+			</a>
+
+			<a href="{% url 'nouvelle_chaine' %}" class="btn btn-default btn-sm btn-block">
+				<i class="fa fa-plus"></i> Nouvelle chaîne
+			</a>
+
+			<hr/>
+
+			<div class="box">
+				<p>Les chaînes <i class="fa fa-eye-slash"></i> secrètes ne sont pas affichées ici, car elles sont... secrètes !</p>
+				<p>Les posts que vous voyez en page d'accueil viennent soit des chaînes auxquelles vous avez <i class="fa fa-heart"></i> souscrites, soit des chaînes <i class="fa fa-newspaper-o"></i> par défaut.</p>
+				<p>Vous pouvez <i class="fa fa-ban"></i> ignorer une chaîne par défaut, si ses contenus ne vous intéressent pas.</p>
+			</div>
 
 		</div>
 
@@ -77,5 +118,28 @@
 	<div class="anchor"></div>
 
 </div>
+
+
+<style>
+
+.channels.row { margin-left: 0px; margin-right: 0px; padding-bottom: 1em; }
+
+.channels .channel.card { line-height: 1.2; margin-bottom: 0; padding: 1em; }
+.channel > div { margin-bottom: .5rem; }
+
+
+.channel .title { font-size: 1.5em; transition: all .5s; }
+.channel .title:hover { margin-left: .1em; }
+
+
+</style>
+
+<script>
+
+	$(function () {
+		$('[data-toggle="tooltip"]').tooltip()
+	})
+
+</script>
 
 {% endblock content %}

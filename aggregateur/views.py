@@ -445,7 +445,7 @@ def channel_list(request, channels=False):
 		page_title = "Mes chaînes"
 	else :
 		channels = default_channels(request) | subbed_channels(request) | moderated_channels(request) # On affiche pas les chaînes privées auxquelle je ne suis pas inscrit
-		page_title = "Chaînes publiques"	
+		page_title = "Toutes les chaînes"	
 	return render(request, 'aggregateur/channel_list.html', {
 		'channels' : channels.annotate(num_subscribers=Count('subscribers')).order_by('-is_default', '-num_subscribers'),
 		'page_title': page_title,
