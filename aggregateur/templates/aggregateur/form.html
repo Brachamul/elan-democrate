@@ -22,7 +22,12 @@
 		<div class="form-group">
 			{% csrf_token %}
 			{% bootstrap_form form %}
-			<button type="submit" class="btn btn-primary">{{ form_action }}</button>
+			<p style="text-align: right;">
+				<button type="submit" class="btn btn-primary btn-block">
+				<i class="fa fa-{% if form_send_icon %}{{ form_send_icon }}{% else %}paper-plane{% endif %}"></i>
+				{% if form_action %} {{ form_action }} {% else %} Envoyer {% endif %}
+				</button>
+			</p>
 		</div>
 	</form>
 

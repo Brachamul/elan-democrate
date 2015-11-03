@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import Select
 from django.db.models import Count
 
 from .models import *
@@ -29,4 +30,7 @@ class ChannelForm(forms.ModelForm):
 class ChannelAdminForm(forms.ModelForm):
 	class Meta:
 		model = Channel
-		fields = ['description', 'is_private', 'is_secret', 'only_mods_can_post', 'moderators', 'illustration']
+		fields = ['description', 'is_secret', 'only_mods_can_post', 'moderators', 'illustration']
+		help_texts = {
+			'moderators': "Maintenez la touche Ctrl ou Cmd appuyée pour en choisir plusieurs.",
+		}

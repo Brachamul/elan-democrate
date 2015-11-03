@@ -14,7 +14,7 @@
 
 	<div id="primary-wrapper">
 
-		<div class="card card-big" style="text-align: center; margin-bottom: 0;">
+		<div class="card card-big" style="text-align: center; ">
 
 		<h1>{{ page_title }}</h1>
 
@@ -43,26 +43,7 @@
 							<a href="{% url 'chaine' channel.slug %}">{{ channel.name }}</a>
 						</div>
 
-						<div>
-							<span>{{ channel.num_subscribers }} inscrit{{ channel.num_subscribers|pluralize }} | </span>
-							{% if channel.is_default %}
-								<span data-toggle="tooltip" data-placement="top" title="par défaut">
-									<i class="fa fa-newspaper-o"></i>
-								</span>
-							{% endif %}
-	
-							{% if channel.is_private %}
-								<span data-toggle="tooltip" data-placement="top" title="privée">
-									<i class="fa fa-lock"></i>
-								</span>
-							{% endif %}
-	
-							{% if channel.is_secret %}
-								<span data-toggle="tooltip" data-placement="top" title="secrète">
-									<i class="fa fa-eye-slash"></i>
-								</span>
-							{% endif %}
-						</div>
+						{% include "aggregateur/channel_icons.html" %}
 	
 						<div style="font-size: 0.8em;" >
 							Animateur{{ channel.moderators.all|pluralize }} :

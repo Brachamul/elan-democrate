@@ -12,6 +12,10 @@ from django.template import RequestContext
 from django.views import generic
 from django.views.generic import TemplateView, DetailView
 
+from django.contrib.auth.models import User
+
+import user_str
+
 from .models import *
 from .forms import *
 
@@ -28,6 +32,7 @@ def aggregateur(request, page=1, channel_slug=False, special=False):
 	''' va chercher les posts de la chaine et les publie via un paginateur '''
 	if channel_slug :
 		channel = get_object_or_404(Channel, slug=channel_slug)
+		channel.num_subscribers = channel.subscribers.count()
 		channels = (channel,)
 		page_title = channel.name.capitalize()
 	else :
@@ -462,7 +467,7 @@ def nouvelle_chaine(request):
 	return render(request, 'aggregateur/form.html', {
 		'form': form,
 		'page_title': "Créer une nouvelle chaîne",
-		'form_action': "Créer"
+		'form_action': "Créer",
 		})
 
 def process_nouvelle_chaine(request, form):
@@ -488,17 +493,24 @@ def channel_admin(request, channel_slug):
 		return HttpResponseRedirect(reverse('chaine', kwargs={ 'channel_slug': channel.slug }))
 
 	if request.method == "POST":
-		form = ChannelAdminForm(request.POST)
-#		success = process_nouvelle_chaine(request, form)
-#		if success : return HttpResponseRedirect(reverse('chaine', kwargs={ 'channel_slug': success.slug }))
+		form = ChannelAdminForm(request.POST, instance=channel)
+		if form.is_valid() :
+			form.save()
+			messages.success(request, "Vos modifications ont bien été prises en compte.")
+			return HttpResponseRedirect(reverse('chaine', kwargs={ 'channel_slug': channel.slug }))
 	else :
 		form = ChannelAdminForm(instance=channel)
+
+	form.fields["moderators"].queryset = channel.subscribers.all() 
 
 	return render(request, 'aggregateur/form.html', {
 		'form': form,
 		'page_title': "Administrer la chaîne \"{}\"".format(channel.name),
-		'form_action': "Mettre à jour"
+		'form_action': "Mettre à jour",
+		'form_send_icon': "refresh",
 		})
+
+
 
 @login_required
 def channel_members(request, channel_slug):
