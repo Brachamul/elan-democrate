@@ -462,7 +462,8 @@ def nouvelle_chaine(request):
 	return render(request, 'aggregateur/form.html', {
 		'form': form,
 		'page_title': "Créer une nouvelle chaîne",
- })
+		'form_action': "Créer"
+		})
 
 def process_nouvelle_chaine(request, form):
 	if form.is_valid():
@@ -474,6 +475,40 @@ def process_nouvelle_chaine(request, form):
 		return nouvelle_chaine
 	else :
 		return False
+
+
+
+@login_required
+def channel_admin(request, channel_slug):
+
+	channel = get_object_or_404(Channel, slug=channel_slug)
+
+	if not request.user in channel.moderators.all() :
+		# If the user is not an moderator, send them back to the channel
+		return HttpResponseRedirect(reverse('chaine', kwargs={ 'channel_slug': channel.slug }))
+
+	if request.method == "POST":
+		form = ChannelAdminForm(request.POST)
+#		success = process_nouvelle_chaine(request, form)
+#		if success : return HttpResponseRedirect(reverse('chaine', kwargs={ 'channel_slug': success.slug }))
+	else :
+		form = ChannelAdminForm(instance=channel)
+
+	return render(request, 'aggregateur/form.html', {
+		'form': form,
+		'page_title': "Administrer la chaîne \"{}\"".format(channel.name),
+		'form_action': "Mettre à jour"
+		})
+
+@login_required
+def channel_members(request, channel_slug):
+	channel = get_object_or_404(Channel, slug=channel_slug)
+	if not current_user_is_moderator(request, channel) :
+		messages.error(request, "Vous n'êtes pas animateur de cette chaîne, et ne pouvez voir la liste des membres.")
+		return HttpResponseRedirect(reverse('chaine', kwargs={ 'channel_slug': channel.slug }))
+	members = channel.subscribers.all()
+	return render(request, 'aggregateur/list.html', {'objects': members, 'channel': channel, 'page_title': 'Membres de la chaîne "{}"'.format(channel.name)})
+
 
 @login_required
 def join_channel(request, channel_slug):
@@ -507,7 +542,7 @@ def wanttojoin_channel(request, channel_slug):
 	channel = get_object_or_404(Channel, slug=channel_slug)
 	if not current_user_is_moderator(request, channel) : return HttpResponseRedirect(reverse('chaine', kwargs={ 'channel_slug': channel.slug }))
 	candidats = channel.want_to_join.all()
-	return render(request, 'aggregateur/list.html', {'objects': candidats, 'channel': channel, 'page_title': 'Utilisateurs souhaitant rejoindre la chaîne "{}"'.format(channel.name)})
+	return render(request, 'aggregateur/candidate_list.html', {'objects': candidats, 'channel': channel, 'page_title': 'Utilisateurs souhaitant rejoindre la chaîne "{}"'.format(channel.name)})
 
 from notifications.triggers import join_private_channel_allowed, join_private_channel_denied
 

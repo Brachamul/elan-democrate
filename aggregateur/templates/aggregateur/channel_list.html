@@ -35,8 +35,10 @@
 
 			{% for channel in channels %}
 
-				<div class="channel card col-xs-12 col-sm-6 col-md-4 col-lg-3">
+				<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
 	
+					<div class="channel card">
+
 						<div class="title">
 							<a href="{% url 'chaine' channel.slug %}">{{ channel.name }}</a>
 						</div>
@@ -64,11 +66,13 @@
 	
 						<div style="font-size: 0.8em;" >
 							Animateur{{ channel.moderators.all|pluralize }} :
-							<span class="moderators">{% for actor in channel.moderators.all %}{% include 'actor.html' %} {% endfor %}</span>
+							<span class="moderators actors">{% for actor in channel.moderators.all %}{% include 'actor.html' %} {% endfor %}</span>
 						</div>
 
 						<div style="font-size: 0.8em; font-style: italic; margin: .5em 0;">{{ channel.description }}</div>
 	
+					</div>
+
 				</div>
 
 			{% endfor %}
@@ -122,9 +126,13 @@
 
 <style>
 
-.channels.row { margin-left: 0px; margin-right: 0px; padding-bottom: 1em; }
 
-.channels .channel.card { line-height: 1.2; margin-bottom: 0; padding: 1em; }
+
+.channels.row { margin: 4px -4px; padding-bottom: 1em; }
+
+.channels.row [class^="col"] { padding: 0;}
+
+.channels .channel.card { line-height: 1.2; margin: 4px; padding: 1em; }
 .channel > div { margin-bottom: .5rem; }
 
 

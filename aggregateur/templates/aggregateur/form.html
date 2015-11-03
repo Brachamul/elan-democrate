@@ -14,7 +14,7 @@
 
 {{ form.non_field_errors }}
 
-<div class="card" style="margin: 0 2%">
+<div class="card" style="margin: 4px 2%;">
 
 	<h1>{{ page_title }}</h1>
 
@@ -22,7 +22,7 @@
 		<div class="form-group">
 			{% csrf_token %}
 			{% bootstrap_form form %}
-			<button type="submit" class="btn btn-primary">Créer</button>
+			<button type="submit" class="btn btn-primary">{{ form_action }}</button>
 		</div>
 	</form>
 

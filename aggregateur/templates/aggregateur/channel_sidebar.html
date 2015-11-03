@@ -64,11 +64,14 @@
 					<p><a href="{% url 'wanttojoin_channel' channel.slug %}">
 						<i class="fa fa-warning"></i> {{ channel.want_to_join.all.count }} utilisateur{{ channel.want_to_join.all.count|pluralize }} souhaite{{ channel.want_to_join.all.count|pluralize:"nt" }} rejoindre la chaîne !</a></p>	
 				{% endif %}
-
 			<p><strong>Message aux animateurs de chaînes :</strong></p>
 			<p>La fonctionnalité "chaînes" vient d'être créée et est encore en beta.</p>
 			<p> Les aspects d'administration de la chaîne, notamment, ne sont pas encore totalement aboutis.</p>
 			<p>Si vous avez besoin d'aide pour modifier un aspect de votre chaîne, n'hésitez pas à écrire directement à contact@elandemocrate.fr</p>
+			{% if channel.is_private %}
+				<p><a class="btn btn-xs btn-default btn-block" href="{% url 'channel_members' channel.slug %}">
+					<i class="fa fa-users"></i> membres de la chaîne</a></p>
+			{% endif %}
 			<hr>
 			{% endif %}
 

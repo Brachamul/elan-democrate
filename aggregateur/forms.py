@@ -25,3 +25,8 @@ class ChannelForm(forms.ModelForm):
 	class Meta:
 		model = Channel
 		fields = ['name', 'description', 'is_private']
+
+class ChannelAdminForm(forms.ModelForm):
+	class Meta:
+		model = Channel
+		fields = ['description', 'is_private', 'is_secret', 'only_mods_can_post', 'moderators', 'illustration']
