@@ -14,7 +14,8 @@ from django.views.generic import TemplateView, DetailView
 
 from django.contrib.auth.models import User
 
-import user_str
+def user_str(self): return self.profil.nom_courant
+User.__str__ = user_str
 
 from .models import *
 from .forms import *
