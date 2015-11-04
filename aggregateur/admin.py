@@ -2,8 +2,7 @@ from django.contrib import admin
 
 from .models import *
 
-def user_str(self): return self.profil.nom_courant
-User.__str__ = user_str
+import user_str
 
 class PostAdmin(admin.ModelAdmin):
 	readonly_fields = ('date',)
