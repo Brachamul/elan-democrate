@@ -10,7 +10,7 @@ from django.utils.timesince import timesince
 from django.contrib.auth.models import User
 from fichiers_adherents.models import Adherent
 
-class Notification(models.Model):
+class NotificationEvent(models.Model):
 
 	# Destinataire
 	destinataire = models.ForeignKey(User, related_name='destinataire_de_la_notif')

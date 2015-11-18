@@ -11,12 +11,12 @@ from django.contrib.auth.models import User
 from fichiers_adherents.models import Adherent
 from aggregateur.models import Comment, Post, Channel, WantToJoinChannel
 
-from .views import Notification
+from .views import NotificationEvent
 
 def join_private_channel_allowed(request, channel, candidate):
 	action = "Votre abonnement à la chaîne \"{}\" a été validé.".format(channel.name)
-	nouvelle_notif = Notification( destinataire = candidate, action = action, cible = channel )
+	nouvelle_notif = NotificationEvent( destinataire = candidate, action = action, cible = channel )
 
 def join_private_channel_denied(request, channel, candidate):
 	action = "Votre abonnement à la chaîne \"{}\" a été refusé.".format(channel.name)
-	nouvelle_notif = Notification( destinataire = candidate, action = action, cible = channel )
+	nouvelle_notif = NotificationEvent( destinataire = candidate, action = action, cible = channel )

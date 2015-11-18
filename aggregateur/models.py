@@ -27,12 +27,24 @@ class Channel(models.Model):
 	only_mods_can_post = models.BooleanField(default=False, verbose_name='Seuls les modérateurs peuvent poster') # For channels that are for downwards communications
 	moderators = models.ManyToManyField(User, related_name='moderated_channels', blank=True, verbose_name='Modérateurs')
 	subscribers = models.ManyToManyField(User, related_name='subscribed_channels', blank=True, verbose_name='Inscrits')
+	num_subscribers = models.PositiveIntegerField(default=0, editable=False)
 	ignorers = models.ManyToManyField(User, related_name='ignored_channels', blank=True, verbose_name='Ignoreurs') # users can still choose not to view the channel if they wish
 	want_to_join = models.ManyToManyField(User, related_name='applied_to_channels', blank=True, through='WantToJoinChannel', verbose_name='Veulent rejoindre')
 	illustration = models.URLField(default=settings.SITE_URL+"/static/images/default_channel_illustration.png")
+
 	def __str__(self): return self.name
+
+#	def save(self, *args, **kwargs):
+#		self.num_subscribers = self.subscribers.count()
+#		return super(Channel, self).save(*args, **kwargs)
+
+	def count_subscribers(self):
+		self.num_subscribers = self.subscribers.count()
+		self.save()
+
+
 	class Meta:
-		 ordering = ['-is_default']
+		 ordering = ['-is_default', '-num_subscribers']
 
 class WantToJoinChannel(models.Model):
 	''' We have a specific M2M model so that we can easily send

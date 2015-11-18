@@ -86,7 +86,10 @@ def SendBetaInvitation(user):
 		)
 	return True
 
+from notifications.models import NotificationEvent
+
 def WarnAdminOfBetaSignup():
+	NotificationEvent.objects.create( destinataire = User.objects.get(email="antonin.grele@gmail.com"), action = "new-beta-signup" )
 	lien = site_url + reverse('beta_candidate_list')
 	send_mail(
 		"[Élan Démocrate] Un nouveau beta-candidat",

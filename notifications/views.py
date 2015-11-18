@@ -13,7 +13,7 @@ from .models import *
 def notifications(request):
 	"""	Réponse data contenant des notifications selon un filtre """
 	notifications = []
-	for notification in Notification.objects.filter(destinataire=request.user) : # try reducing it with [:12]
+	for notification in NotificationEvent.objects.filter(destinataire=request.user) : # try reducing it with [:12]
 		notification = check_if_is_system_notification(request, notification)
 		if not notification.is_system :
 			notification.fulltext = notification_fulltext(request, notification)
@@ -24,11 +24,11 @@ def notifications(request):
 
 def non_vues(request):
 	"""	Réponse data donnant le nombre de notification non vues """
-	return HttpResponse(Notification.objects.filter(destinataire=request.user, vue=False).count())
+	return HttpResponse(NotificationEvent.objects.filter(destinataire=request.user, vue=False).count())
 
 def marquer_vues(request):
 	"""	Marque toutes les notifications de l'utilisateur comme étant vues """
-	notifications_non_vues = Notification.objects.filter(destinataire=request.user, vue=False)
+	notifications_non_vues = NotificationEvent.objects.filter(destinataire=request.user, vue=False)
 	for notification in notifications_non_vues :
 		notification.vue = True
 		notification.save()
@@ -92,10 +92,14 @@ def check_if_is_system_notification(request, notification):
 		notification.is_system = True
 		notification.fulltext = 'Ceci est une notification test !'
 		notification.url = '/'
+	if notification.action == "new-beta-signup" :
+		notification.is_system = True
+		notification.fulltext = "Quelqu'un s'est inscrit à la beta !"
+		notification.url = '/beta/list'
 	if notification.is_system : notification.icon = "cogs"
 	return notification
 
 def notifyme(request):
 	'''Dummy notification used for testing purposes'''
-	Notification.objects.create( destinataire = request.user, action = "dummy-notification" )
+	NotificationEvent.objects.create( destinataire = request.user, action = "dummy-notification" )
 	return HttpResponseRedirect('/')

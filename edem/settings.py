@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'beta',
     'chatrooms',
     'bootstrap3', # django-bootstrap3
+    'debug_toolbar', # django-debug-toolbar
 )
 
 MIDDLEWARE_CLASSES = (

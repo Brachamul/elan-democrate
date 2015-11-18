@@ -159,3 +159,11 @@ a.btn-default:hover { background-color: #EC7C34; color: white; border-color: #D5
 
 a:link.actor, a:visited.actor { color: inherit; }
 a:hover.actor { color: #DC6C24; }
+
+
+
+
+
+/* NOTIFICATIONS */
+
+#loaded-notifications { max-height: 50vh; overflow-y: scroll; border-radius: 3px; }
