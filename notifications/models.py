@@ -67,7 +67,7 @@ class NotificationEvent(models.Model):
 			self.save()
 
 from django.contrib import admin
-admin.site.register(Notification)
+admin.site.register(NotificationEvent)
 
 ### Signals
 from aggregateur.models import Comment, Post, Channel, WantToJoinChannel
@@ -77,14 +77,14 @@ def notifier_lauteur_du_parent(sender, created, **kwargs):
 	if created :
 		commentaire = kwargs.get('instance')
 		if commentaire.parent_post :
-			nouvelle_notif = Notification(
+			nouvelle_notif = NotificationEvent(
 				destinataire = commentaire.parent_post.author,
 				acteur = commentaire.author,
 				action = "a répondu",
 				cible = commentaire.parent_post,
 				)
 		else :
-			nouvelle_notif = Notification(
+			nouvelle_notif = NotificationEvent(
 				destinataire = commentaire.parent_comment.author,
 				acteur = commentaire.author,
 				action = "a répondu",
@@ -98,7 +98,7 @@ def notifier_lauteur_du_parent(sender, created, **kwargs):
 def notification_apres_creation_de_compte(sender, created, **kwargs):
 	if created :
 		user = kwargs.get('instance')
-		nouvelle_notif = Notification(
+		nouvelle_notif = NotificationEvent(
 			destinataire = user,
 			action = "welcome-notification"
 			)
@@ -112,7 +112,7 @@ def want_to_join_channel_notification(sender, created, **kwargs):
 		channel = joining_instance.channel
 		action = 'a demandé à rejoindre'
 		for moderator in channel.moderators.all() :
-			nouvelle_notif = Notification(
+			nouvelle_notif = NotificationEvent(
 				destinataire = moderator,
 				acteur = user,
 				action = action,

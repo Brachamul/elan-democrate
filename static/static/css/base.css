@@ -166,4 +166,4 @@ a:hover.actor { color: #DC6C24; }
 
 /* NOTIFICATIONS */
 
-#loaded-notifications { max-height: 50vh; overflow-y: scroll; border-radius: 3px; }
+#loaded-notifications { min-height: 3em; max-height: 50vh; overflow-y: auto; border-radius: 3px; }

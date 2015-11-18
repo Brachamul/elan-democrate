@@ -1,28 +1,45 @@
-{% for notification in notifications %}
-<li 
-	id="notification-{{ notification.pk }}"
-	class="
-		notification
-		clearfix
-		{% if not notification.lue %} non-lue{% endif %}
-		{% if not notification.vue %} non-vue{% endif %}
-		">
-	{% if notification.url %}<a href="{{ notification.url }}"{% else %}<div{% endif %} class="content">
-		{% if notification.type_acteur.name == "utilisateur" %}
-		{% load gravatar %}
-		<img src="
-			{% if notification.acteur.profil.twitter %}https://twitter.com/{{ notification.acteur.profil.twitter }}/profile_image?size=bigger
-			{% else %}{% load gravatar %}{% gravatar_url notification.acteur.email 44 %}
-			{% endif %}" style="border-radius: 100%; max-width: 44px; max-height: 44px;"/>
-		{% elif notification.icon %}
-		<i class="fa fa-{{ notification.icon }} fa-2x"/></i>
-		{% endif %}
-		<p>{{ notification.fulltext }}</p>
-		<div class="anchor"></div>
-	{% if notification.url %}</a>{% else %}</div>{% endif %}
 
+{% if notifications %}
+
+	{% for notification in notifications %}
+
+	<li 
+		id="notification-{{ notification.pk }}"
+		class="
+			notification
+			clearfix
+			{% if not notification.lue %} non-lue{% endif %}
+			{% if not notification.vue %} non-vue{% endif %}
+			">
+		{% if notification.url %}<a href="{{ notification.url }}"{% else %}<div{% endif %} class="content">
+			{% if notification.type_acteur.name == "utilisateur" %}
+			{% load gravatar %}
+			<img src="
+				{% if notification.acteur.profil.twitter %}https://twitter.com/{{ notification.acteur.profil.twitter }}/profile_image?size=bigger
+				{% else %}{% load gravatar %}{% gravatar_url notification.acteur.email 44 %}
+				{% endif %}" style="border-radius: 100%; max-width: 44px; max-height: 44px;"/>
+			{% elif notification.icon %}
+			<i class="fa fa-{{ notification.icon }} fa-2x"/></i>
+			{% endif %}
+			<p>{{ notification.fulltext }}</p>
+			<div class="anchor"></div>
+		{% if notification.url %}</a>{% else %}</div>{% endif %}
+	
 	</li>
-{% endfor %}
+
+	{% endfor %}
+
+{% else %}
+
+	<!-- Empty Notification -->
+	<li id="notification-0" class="notification clearfix">
+		<div class="content">
+			<p><em>Vous n'avez pas encore reçu de notifications !</em></p>
+			<div class="anchor"></div>
+		</div>
+	</li>
+
+{% endif %}
 
 {% comment %}
 <li>

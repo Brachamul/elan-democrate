@@ -12,14 +12,17 @@ from .models import *
 @login_required
 def notifications(request):
 	"""	Réponse data contenant des notifications selon un filtre """
-	notifications = []
-	for notification in NotificationEvent.objects.filter(destinataire=request.user) : # try reducing it with [:12]
-		notification = check_if_is_system_notification(request, notification)
-		if not notification.is_system :
-			notification.fulltext = notification_fulltext(request, notification)
-			url = notification_url(notification)
-			if url : notification.url = url
-		notifications.append(notification)
+	notification_events = NotificationEvent.objects.filter(destinataire=request.user)
+	if notification_events :
+		notifications = []
+		for notification in notification_events  : # try reducing it with [:12]
+			notification = check_if_is_system_notification(request, notification)
+			if not notification.is_system :
+				notification.fulltext = notification_fulltext(request, notification)
+				url = notification_url(notification)
+				if url : notification.url = url
+			notifications.append(notification)
+	else : notifications = False
 	return render(request, 'notifications/notifications.html', {'notifications': notifications})
 
 def non_vues(request):
