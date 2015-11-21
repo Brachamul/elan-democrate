@@ -137,3 +137,19 @@ class CommentVote(models.Model):
 	comment = models.ForeignKey(Comment)
 	color = models.CharField(max_length=24, choices=(("POS", "positif"), ("NEG", "négatif"), ("NEU", "neutre")))
 	def __str__(self): return self.color
+
+
+
+
+settings.NOTIFICATION_EVENT_CATEGORIES += (
+
+	('NEW_POST', 'A post has been created'),
+	('UVPOTED', 'A post has been upvoted'),
+	('NEW_REPLY_TO_POST', 'Someone has replied to a post'),
+	('NEW_REPLY_TO_COMMENT', 'Someone has replied to a comment'),
+
+	('CHANNEL_JOIN_REQUEST', 'Someone wants to join a channel'),
+	('CHANNEL_JOIN_REQUEST_DENIED', 'A request to join a channel has been denied'),
+	('CHANNEL_JOIN_REQUEST_ACCEPTED', 'A request to join a channel has been accepted'),
+
+	)

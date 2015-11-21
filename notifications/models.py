@@ -1,6 +1,7 @@
 import logging
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
+from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.db import models
@@ -10,7 +11,13 @@ from django.utils.timesince import timesince
 from django.contrib.auth.models import User
 from fichiers_adherents.models import Adherent
 
+settings.NOTIFICATION_EVENT_CATEGORIES += ('OLD', 'A legacy notification'),
+
 class NotificationEvent(models.Model):
+
+	''' Notification events are usually triggered by user actions and kept as a log of what has happened '''
+
+	category = models.CharField(max_length=255, choices=settings.NOTIFICATION_EVENT_CATEGORIES, default='OLD')
 
 	# Destinataire
 	destinataire = models.ForeignKey(User, related_name='destinataire_de_la_notif')
@@ -23,10 +30,6 @@ class NotificationEvent(models.Model):
 	type_acteur = models.ForeignKey(ContentType, related_name='acteur_de_la_notif', blank=True, null=True)
 	acteur = GenericForeignKey('type_acteur', 'id_acteur')
 
-	# Action
-	action = models.CharField(max_length=255)
-#	is_system = models.BooleanField(default=False)
-	
 	# Cible
 	id_cible = models.CharField(max_length=255, blank=True, null=True)
 	type_cible = models.ForeignKey(ContentType, related_name='cible_de_la_notif', blank=True, null=True)
@@ -46,25 +49,41 @@ class NotificationEvent(models.Model):
 	def __str__(self):
 		variables = {
 			'acteur': self.acteur,
-			'action': self.action,
+#			'action': self.action,
 			'cible': self.cible,
 			'lieu': self.lieu,
 			'destinataire': self.destinataire.profil,
 		}
+#		if self.cible:
+#			if self.lieu:
+#				return u'%(acteur)s %(action)s %(lieu)s sur %(cible)s' % variables
+#			return u'%(acteur)s %(action)s %(cible)s' % variables
+#		if self.lieu:
+#			return u'%(acteur)s %(action)s %(lieu)s' % variables
+#		if self.acteur:
+#			return u'%(acteur)s %(action)s' % variables
+#		return u'%(action)s pour %(destinataire)s' % variables
+
 		if self.cible:
 			if self.lieu:
-				return u'%(acteur)s %(action)s %(lieu)s sur %(cible)s' % variables
-			return u'%(acteur)s %(action)s %(cible)s' % variables
+				return u'%(acteur)s %(lieu)s sur %(cible)s' % variables
+			return u'%(acteur)s %(cible)s' % variables
 		if self.lieu:
-			return u'%(acteur)s %(action)s %(lieu)s' % variables
+			return u'%(acteur)s %(lieu)s' % variables
 		if self.acteur:
-			return u'%(acteur)s %(action)s' % variables
+			return u'%(acteur)s' % variables
 		return u'%(action)s pour %(destinataire)s' % variables
 
 	def marquer_lu(self):
 		if self.non_lu:
 			self.non_lu = False
 			self.save()
+
+class Notification(models.Model):
+
+	''' Notifications display data from NotificationEvents in a focused way '''
+
+
 
 from django.contrib import admin
 admin.site.register(NotificationEvent)
@@ -78,16 +97,16 @@ def notifier_lauteur_du_parent(sender, created, **kwargs):
 		commentaire = kwargs.get('instance')
 		if commentaire.parent_post :
 			nouvelle_notif = NotificationEvent(
+				category = "NEW_REPLY_TO_POST",
 				destinataire = commentaire.parent_post.author,
 				acteur = commentaire.author,
-				action = "a répondu",
 				cible = commentaire.parent_post,
 				)
 		else :
 			nouvelle_notif = NotificationEvent(
+				category = "NEW_REPLY_TO_COMMENT",
 				destinataire = commentaire.parent_comment.author,
 				acteur = commentaire.author,
-				action = "a répondu",
 				cible = commentaire.parent_comment,
 				lieu = commentaire.post_racine(),
 				)
@@ -98,10 +117,7 @@ def notifier_lauteur_du_parent(sender, created, **kwargs):
 def notification_apres_creation_de_compte(sender, created, **kwargs):
 	if created :
 		user = kwargs.get('instance')
-		nouvelle_notif = NotificationEvent(
-			destinataire = user,
-			action = "welcome-notification"
-			)
+		nouvelle_notif = NotificationEvent(category="WELCOME", destinataire=user)
 		nouvelle_notif.save()
 
 @receiver(post_save, sender=WantToJoinChannel)
@@ -110,12 +126,11 @@ def want_to_join_channel_notification(sender, created, **kwargs):
 		joining_instance = kwargs.get('instance')
 		user = joining_instance.user
 		channel = joining_instance.channel
-		action = 'a demandé à rejoindre'
 		for moderator in channel.moderators.all() :
 			nouvelle_notif = NotificationEvent(
+				category = 'CHANNEL_JOIN_REQUEST',
 				destinataire = moderator,
 				acteur = user,
-				action = action,
 				cible = channel,
 				)
 		nouvelle_notif.save()

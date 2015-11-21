@@ -36,9 +36,9 @@ INSTALLED_APPS = (
 	'aggregateur',
     'datascope', # différents affichages de données pour les utilisateurs
 	'mandats',
-	'notifications',
     'beta',
     'chatrooms',
+    'notifications',
     'bootstrap3', # django-bootstrap3
     'debug_toolbar', # django-debug-toolbar
 )
@@ -184,7 +184,6 @@ AUTH_CODE_MAXIMUM_ATTEMPS = 12 # au bout de 3 essais, le code expire
 
 HELP_EMAIL_ADRESS = "contact@elandemocrate.fr"
 
-
 # API EMBEDLY
 EMBEDLY_KEY = "111e2b3ee0714950ad122d221fa7d444"
 
@@ -192,6 +191,13 @@ EMBEDLY_KEY = "111e2b3ee0714950ad122d221fa7d444"
 # AWS (Amazon Web Services)
 AWS_ACCESS_KEY_ID = 'not_set'
 AWS_SECRET_ACCESS_KEY = 'not_set'
+
+
+
+# NOTIFICATIONS
+
+NOTIFICATION_EVENT_CATEGORIES = (('WELCOME', 'A new user has joined'),)
+
 
 
 ##########################

@@ -14,9 +14,9 @@ from aggregateur.models import Comment, Post, Channel, WantToJoinChannel
 from .views import NotificationEvent
 
 def join_private_channel_allowed(request, channel, candidate):
-	action = "Votre abonnement à la chaîne \"{}\" a été validé.".format(channel.name)
-	nouvelle_notif = NotificationEvent( destinataire = candidate, action = action, cible = channel )
+	nouvelle_notif = NotificationEvent( category = CHANNEL_JOIN_REQUEST_DENIED, destinataire = candidate, cible = channel )
+	nouvelle_notif.save()
 
 def join_private_channel_denied(request, channel, candidate):
-	action = "Votre abonnement à la chaîne \"{}\" a été refusé.".format(channel.name)
-	nouvelle_notif = NotificationEvent( destinataire = candidate, action = action, cible = channel )
+	nouvelle_notif = NotificationEvent( category = CHANNEL_JOIN_REQUEST_ACCEPTED, destinataire = candidate, cible = channel )
+	nouvelle_notif.save()
