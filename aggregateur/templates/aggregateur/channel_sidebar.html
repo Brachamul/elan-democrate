@@ -29,33 +29,31 @@
 
 				<hr>
 
-
-
 				<p>Animateurs :<br/><span class="moderators">{% for actor in channel.moderators.all %}{% include 'actor.html' %} {% endfor %}</span></p>
 
 				<hr>
 
 				<p><a class="btn btn-xs btn-default btn-block" href="{% url 'nouveau_post_avec_chaine' channel.slug %}"><i class="fa fa-plus"></i> nouveau post </a></p>
 			
+				{% if user in channel.subscribers.all %}	
+					<p><a class="btn btn-xs btn-default btn-block" href="{% url 'leave_channel' channel.slug %}">
+						<i class="fa fa-times"></i> se désabonner</a></p>				
+				{% else %}
+					<p><a class="btn btn-xs btn-default btn-block" href="{% url 'join_channel' channel.slug %}">
+						<i class="fa fa-edit"></i> s'abonner</a></p>
+				{% endif %}
+
 				{% if channel.is_default %}
 
+					<p title="Cette chaîne remonte sur votre page d'accueil par défaut.&#013;Pour ne plus voir ses posts, vous pouvez l'ignorer.">
 					{% if user in channel.ignorers.all %}	
-						<p><a class="btn btn-xs btn-default btn-block" href="{% url 'stop_ignoring_channel' channel.slug %}">
-							<i class="fa fa-edit"></i> ne plus ignorer</a></p>				
+						<a class="btn btn-xs btn-default btn-block" href="{% url 'stop_ignoring_channel' channel.slug %}">
+							<i class="fa fa-edit"></i> ne plus ignorer</a>				
 					{% else %}
-						<p><a class="btn btn-xs btn-default btn-block" href="{% url 'ignore_channel' channel.slug %}">
-							<i class="fa fa-ban"></i> ignorer</a></p>
+						<a class="btn btn-xs btn-default btn-block" href="{% url 'ignore_channel' channel.slug %}">
+							<i class="fa fa-ban"></i> ignorer</a>
 					{% endif %}
-
-				{% else %}
-
-					{% if user in channel.subscribers.all %}	
-						<p><a class="btn btn-xs btn-default btn-block" href="{% url 'leave_channel' channel.slug %}">
-							<i class="fa fa-times"></i> se désabonner</a></p>				
-					{% else %}
-						<p><a class="btn btn-xs btn-default btn-block" href="{% url 'join_channel' channel.slug %}">
-							<i class="fa fa-edit"></i> s'abonner</a></p>
-					{% endif %}
+					</p>
 
 				{% endif %}
 
