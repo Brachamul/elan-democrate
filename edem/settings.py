@@ -38,7 +38,7 @@ INSTALLED_APPS = (
 	'mandats',
     'beta',
     'chatrooms',
-    'notifications',
+#    'notifications',
     'bootstrap3', # django-bootstrap3
     'debug_toolbar', # django-debug-toolbar
 )
@@ -196,8 +196,7 @@ AWS_SECRET_ACCESS_KEY = 'not_set'
 
 # NOTIFICATIONS
 
-NOTIFICATION_EVENT_CATEGORIES = (('WELCOME', 'A new user has joined'),)
-
+NOTIFICATION_EVENTS = ()
 
 
 ##########################

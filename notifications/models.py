@@ -1,4 +1,5 @@
 import logging
+import uuid
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.conf import settings
@@ -11,34 +12,53 @@ from django.utils.timesince import timesince
 from django.contrib.auth.models import User
 from fichiers_adherents.models import Adherent
 
-settings.NOTIFICATION_EVENT_CATEGORIES += ('OLD', 'A legacy notification'),
+class NotificationEventCategory:
+	def __init__(self, name, description):
+		self.name = name
+		self.description = description
+#		self.choice = (name, description) # A tuple used for category choices in the NotificationEvent model
+
+
+settings.NOTIFICATION_EVENTS += (
+	NotificationEventCategory(name="WELCOME", description="A new user has joined"),
+	NotificationEventCategory(name="OLD", description="A legacy notification"),
+	NotificationEventCategory(name="TEST", description="A test notification"),
+ 	)
+
+def NotificationEventsCategoryChoices(events=settings.NOTIFICATION_EVENTS):
+	choices = []
+	for event in events :
+		choices += (event.name, event.description),
+	return choices
 
 class NotificationEvent(models.Model):
 
 	''' Notification events are usually triggered by user actions and kept as a log of what has happened '''
 
-	category = models.CharField(max_length=255, choices=settings.NOTIFICATION_EVENT_CATEGORIES, default='OLD')
+	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
-	# Destinataire
-	destinataire = models.ForeignKey(User, related_name='destinataire_de_la_notif')
-	lue = models.BooleanField(default=False) # lue implique que l'utilisateur ait cliqué dessus
-	vue = models.BooleanField(default=False) # vue implique que l'utilisateur l'a simplement affichée
-	prevenu_par_email = models.BooleanField(default=False)
+	category = models.CharField(max_length=255, choices=NotificationEventsCategoryChoices(), default='OLD')
 
-	# Acteur
-	id_acteur = models.CharField(max_length=255, blank=True, null=True) # Check it's not sending to self
-	type_acteur = models.ForeignKey(ContentType, related_name='acteur_de_la_notif', blank=True, null=True)
-	acteur = GenericForeignKey('type_acteur', 'id_acteur')
+	# Recipient
+	recipient = models.ForeignKey(User)
+	seen = models.BooleanField(default=False) # vue implique que l'utilisateur l'a simplement affichée
+	read = models.BooleanField(default=False) # lue implique que l'utilisateur ait cliqué dessus
+	emailed = models.BooleanField(default=False)
 
-	# Cible
-	id_cible = models.CharField(max_length=255, blank=True, null=True)
-	type_cible = models.ForeignKey(ContentType, related_name='cible_de_la_notif', blank=True, null=True)
-	cible = GenericForeignKey('type_cible', 'id_cible')
+	# Sender
+	sender_id = models.CharField(max_length=255, blank=True, null=True) # Check it's not sending to self
+	sender_type = models.ForeignKey(ContentType, related_name='notification_sender', blank=True, null=True)
+	sender = GenericForeignKey('sender_type', 'sender_id')
 
-	# Lieu
-	id_lieu = models.CharField(max_length=255, blank=True, null=True)
-	type_lieu = models.ForeignKey(ContentType, related_name='lieu_de_la_notif', blank=True, null=True)
-	lieu = GenericForeignKey('type_lieu', 'id_lieu')
+	# Target
+	target_id = models.CharField(max_length=255, blank=True, null=True) # Check it's not sending to self
+	target_type = models.ForeignKey(ContentType, related_name='notification_target', blank=True, null=True)
+	target = GenericForeignKey('target_type', 'target_id')
+
+	# Accessory
+	accessory_id = models.CharField(max_length=255, blank=True, null=True) # Check it's not sending to self
+	accessory_type = models.ForeignKey(ContentType, related_name='notification_accessory', blank=True, null=True)
+	accessory = GenericForeignKey('accessory_type', 'accessory_id')
 
 	# Date
 	date = models.DateTimeField(auto_now_add=True)
@@ -47,43 +67,13 @@ class NotificationEvent(models.Model):
 		ordering = ('-date', )
 
 	def __str__(self):
-		variables = {
-			'acteur': self.acteur,
-#			'action': self.action,
-			'cible': self.cible,
-			'lieu': self.lieu,
-			'destinataire': self.destinataire.profil,
-		}
-#		if self.cible:
-#			if self.lieu:
-#				return u'%(acteur)s %(action)s %(lieu)s sur %(cible)s' % variables
-#			return u'%(acteur)s %(action)s %(cible)s' % variables
-#		if self.lieu:
-#			return u'%(acteur)s %(action)s %(lieu)s' % variables
-#		if self.acteur:
-#			return u'%(acteur)s %(action)s' % variables
-#		return u'%(action)s pour %(destinataire)s' % variables
-
-		if self.cible:
-			if self.lieu:
-				return u'%(acteur)s %(lieu)s sur %(cible)s' % variables
-			return u'%(acteur)s %(cible)s' % variables
-		if self.lieu:
-			return u'%(acteur)s %(lieu)s' % variables
-		if self.acteur:
-			return u'%(acteur)s' % variables
-		return u'%(action)s pour %(destinataire)s' % variables
+		"[{date}] {category} - From {actor} to {sender} through {accessory}".format(
+			self.date, self.category, self.actor, self.sender, self.accessory)
 
 	def marquer_lu(self):
 		if self.non_lu:
 			self.non_lu = False
 			self.save()
-
-class Notification(models.Model):
-
-	''' Notifications display data from NotificationEvents in a focused way '''
-
-
 
 from django.contrib import admin
 admin.site.register(NotificationEvent)
@@ -98,26 +88,26 @@ def notifier_lauteur_du_parent(sender, created, **kwargs):
 		if commentaire.parent_post :
 			nouvelle_notif = NotificationEvent(
 				category = "NEW_REPLY_TO_POST",
-				destinataire = commentaire.parent_post.author,
-				acteur = commentaire.author,
-				cible = commentaire.parent_post,
+				receiver = commentaire.parent_post.author,
+				sender = commentaire.author,
+				target = commentaire.parent_post,
 				)
 		else :
 			nouvelle_notif = NotificationEvent(
 				category = "NEW_REPLY_TO_COMMENT",
-				destinataire = commentaire.parent_comment.author,
-				acteur = commentaire.author,
-				cible = commentaire.parent_comment,
-				lieu = commentaire.post_racine(),
+				receiver = commentaire.parent_comment.author,
+				sender = commentaire.author,
+				target = commentaire.parent_comment,
+				accessory = commentaire.post_racine(),
 				)
-		if nouvelle_notif.destinataire != nouvelle_notif.acteur : # On ne notifie pas celui qui a généré la notif !
+		if nouvelle_notif.receiver != nouvelle_notif.sender : # On ne notifie pas celui qui a généré la notif !
 			nouvelle_notif.save()
 
 @receiver(post_save, sender=User)
 def notification_apres_creation_de_compte(sender, created, **kwargs):
 	if created :
 		user = kwargs.get('instance')
-		nouvelle_notif = NotificationEvent(category="WELCOME", destinataire=user)
+		nouvelle_notif = NotificationEvent(category="WELCOME", receiver=user)
 		nouvelle_notif.save()
 
 @receiver(post_save, sender=WantToJoinChannel)
@@ -129,8 +119,8 @@ def want_to_join_channel_notification(sender, created, **kwargs):
 		for moderator in channel.moderators.all() :
 			nouvelle_notif = NotificationEvent(
 				category = 'CHANNEL_JOIN_REQUEST',
-				destinataire = moderator,
-				acteur = user,
-				cible = channel,
+				receiver = moderator,
+				sender = user,
+				target = channel,
 				)
 		nouvelle_notif.save()

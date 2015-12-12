@@ -8,11 +8,11 @@
 		class="
 			notification
 			clearfix
-			{% if not notification.lue %} non-lue{% endif %}
-			{% if not notification.vue %} non-vue{% endif %}
+			{% if not notification.read %} non-lue{% endif %}
+			{% if not notification.seen %} non-vue{% endif %}
 			">
 		{% if notification.url %}<a href="{{ notification.url }}"{% else %}<div{% endif %} class="content">
-			{% if notification.type_acteur.name == "utilisateur" %}
+			{% if notification.sender_type.name == "utilisateur" %}
 			{% load gravatar %}
 			<img src="
 				{% if notification.acteur.profil.twitter %}https://twitter.com/{{ notification.acteur.profil.twitter }}/profile_image?size=bigger

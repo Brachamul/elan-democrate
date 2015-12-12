@@ -5,7 +5,7 @@ from . import views
 
 urlpatterns = patterns('',
 	url(r'^$', views.notifications, name='notifications'),
-	url(r'^non_vues/$', views.non_vues, name='non_vues'),
-	url(r'^marquer_vues/$', views.marquer_vues, name='marquer_vues'),
-	url(r'^dummy/$', views.notifyme, name='notifyme'),
+	url(r'^number_of_unseen_notifications/$', views.number_of_unseen_notifications, name='number_of_unseen_notifications'),
+	url(r'^mark_all_notifications_as_seen/$', views.mark_all_notifications_as_seen, name='mark_all_notifications_as_seen'),
+	url(r'^notifyme/$', views.notifyme, name='notifyme'),
 )

@@ -140,16 +140,17 @@ class CommentVote(models.Model):
 
 
 
+from notifications.models import NotificationEventCategory
 
-settings.NOTIFICATION_EVENT_CATEGORIES += (
+settings.NOTIFICATION_EVENTS += (
 
-	('NEW_POST', 'A post has been created'),
-	('UVPOTED', 'A post has been upvoted'),
-	('NEW_REPLY_TO_POST', 'Someone has replied to a post'),
-	('NEW_REPLY_TO_COMMENT', 'Someone has replied to a comment'),
+	NotificationEventCategory(name="NEW_POST", description="A post has been created"),
+	NotificationEventCategory(name="UVPOTED", description="A post has been upvoted"),
+	NotificationEventCategory(name="NEW_REPLY_TO_POST", description="Someone has replied to a post"),
+	NotificationEventCategory(name="NEW_REPLY_TO_COMMENT", description="Someone has replied to a comment"),
 
-	('CHANNEL_JOIN_REQUEST', 'Someone wants to join a channel'),
-	('CHANNEL_JOIN_REQUEST_DENIED', 'A request to join a channel has been denied'),
-	('CHANNEL_JOIN_REQUEST_ACCEPTED', 'A request to join a channel has been accepted'),
+	NotificationEventCategory(name="CHANNEL_JOIN_REQUEST", description="Someone wants to join a channel"),
+	NotificationEventCategory(name="CHANNEL_JOIN_REQUEST_DENIED", description="A request to join a channel has been denied"),
+	NotificationEventCategory(name="CHANNEL_JOIN_REQUEST_ACCEPTED", description="A request to join a channel has been accepted"),
 
-	)
+ 	)
