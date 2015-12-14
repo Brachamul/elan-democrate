@@ -19,3 +19,8 @@ def email_confirmation_attempt(sender, created, **kwargs):
 			)
 		new_email.save()
 		
+
+
+# Démarrage des signaux pour nourrir le tableau de bord
+#		from tableau_de_bord import signals
+
