@@ -6,11 +6,16 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
+from django.db.models import Q
 from django.http import HttpResponseRedirect, HttpResponse, HttpRequest, Http404
 from django.shortcuts import get_object_or_404, render, render_to_response, redirect
 from django.template import RequestContext
 from django.views import generic
 from django.views.generic import TemplateView, DetailView
+
+from django.contrib.auth.models import User
+
+import user_str
 
 from .models import *
 from .forms import *
@@ -33,9 +38,9 @@ def aggregateur(request, page=1, channel_slug=False, special=False):
 	else :
 		channel = False # l'URL n'appelle pas une chaîne
 		if special :
-			if special == "all_channels" :
-				channels = Channel.objects.all()
-				page_title = "Toutes les chaînes"
+#			if special == "all_channels" :
+#				channels = Channel.objects.all()
+#				page_title = "Toutes les chaînes"
 			if special == "default_channels" :
 				page_title = "Chaînes par défaut"
 				channels = default_channels(request)
@@ -65,6 +70,7 @@ def app_settings():
 def rank(request):
 	rank_posts()
 	rank_comments()
+	rank_channels()
 	messages.success(request, 'Classement des posts et des commentaires réalisé avec succès.')
 	return HttpResponseRedirect('/')
 
@@ -398,7 +404,7 @@ def nouveau_post(request, channel_slug=None):
 				messages.error(request, "Votre post n'a pas été publié : {}".format(PostLinkForm(request.POST).errors), extra_tags='safe')
 		else: # pas de format spécifié ?
 			messages.warning(request, "Il y a un bug dans la matrice !")
-	channels = Channel.objects.all().annotate(num_subscribers=Count('subscribers')).order_by('-is_default', '-num_subscribers')
+	channels = default_channels(request) | subbed_channels(request) | moderated_channels(request)
 	return render(request, 'aggregateur/nouveau_post.html', {
 		'post_text_form': PostTextForm(initial=text_data),
 		'post_link_form': PostLinkForm(initial=link_data),
@@ -445,9 +451,9 @@ def channel_list(request, channels=False):
 		page_title = "Mes chaînes"
 	else :
 		channels = default_channels(request) | subbed_channels(request) | moderated_channels(request) # On affiche pas les chaînes privées auxquelle je ne suis pas inscrit
-		page_title = "Chaînes publiques"	
+		page_title = "Toutes les chaînes"
 	return render(request, 'aggregateur/channel_list.html', {
-		'channels' : channels.annotate(num_subscribers=Count('subscribers')).order_by('-is_default', '-num_subscribers'),
+		'channels' : channels.distinct(),
 		'page_title': page_title,
 		} )
 
@@ -462,7 +468,8 @@ def nouvelle_chaine(request):
 	return render(request, 'aggregateur/form.html', {
 		'form': form,
 		'page_title': "Créer une nouvelle chaîne",
- })
+		'form_action': "Créer",
+		})
 
 def process_nouvelle_chaine(request, form):
 	if form.is_valid():
@@ -474,6 +481,47 @@ def process_nouvelle_chaine(request, form):
 		return nouvelle_chaine
 	else :
 		return False
+
+
+
+@login_required
+def channel_admin(request, channel_slug):
+
+	channel = get_object_or_404(Channel, slug=channel_slug)
+
+	if not request.user in channel.moderators.all() :
+		# If the user is not an moderator, send them back to the channel
+		return HttpResponseRedirect(reverse('chaine', kwargs={ 'channel_slug': channel.slug }))
+
+	if request.method == "POST":
+		form = ChannelAdminForm(request.POST, instance=channel)
+		if form.is_valid() :
+			form.save()
+			messages.success(request, "Vos modifications ont bien été prises en compte.")
+			return HttpResponseRedirect(reverse('chaine', kwargs={ 'channel_slug': channel.slug }))
+	else :
+		form = ChannelAdminForm(instance=channel)
+
+	form.fields["moderators"].queryset = channel.subscribers.all() 
+
+	return render(request, 'aggregateur/form.html', {
+		'form': form,
+		'page_title': "Administrer la chaîne \"{}\"".format(channel.name),
+		'form_action': "Mettre à jour",
+		'form_send_icon': "refresh",
+		})
+
+
+
+@login_required
+def channel_members(request, channel_slug):
+	channel = get_object_or_404(Channel, slug=channel_slug)
+	if not current_user_is_moderator(request, channel) :
+		messages.error(request, "Vous n'êtes pas animateur de cette chaîne, et ne pouvez voir la liste des membres.")
+		return HttpResponseRedirect(reverse('chaine', kwargs={ 'channel_slug': channel.slug }))
+	members = channel.subscribers.all()
+	return render(request, 'aggregateur/list.html', {'objects': members, 'channel': channel, 'page_title': 'Membres de la chaîne "{}"'.format(channel.name)})
+
 
 @login_required
 def join_channel(request, channel_slug):
@@ -507,7 +555,7 @@ def wanttojoin_channel(request, channel_slug):
 	channel = get_object_or_404(Channel, slug=channel_slug)
 	if not current_user_is_moderator(request, channel) : return HttpResponseRedirect(reverse('chaine', kwargs={ 'channel_slug': channel.slug }))
 	candidats = channel.want_to_join.all()
-	return render(request, 'aggregateur/list.html', {'objects': candidats, 'channel': channel, 'page_title': 'Utilisateurs souhaitant rejoindre la chaîne "{}"'.format(channel.name)})
+	return render(request, 'aggregateur/candidate_list.html', {'objects': candidats, 'channel': channel, 'page_title': 'Utilisateurs souhaitant rejoindre la chaîne "{}"'.format(channel.name)})
 
 from notifications.triggers import join_private_channel_allowed, join_private_channel_denied
 
@@ -551,10 +599,12 @@ def stop_ignoring_channel(request, channel_slug):
 		messages.success(request, "Vous n'ignorez plus \"{}\".".format(channel.name))
 	return HttpResponseRedirect(reverse('chaine', kwargs={ 'channel_slug': channel.slug }))
 
-
-
 def current_user_is_moderator(request, channel):
 	if request.user in channel.moderators.all() : return True
 	else :
 		messages.error(request, "Vous n'êtes pas modérateur de la chaîne \"{}\".".format(channel.name))
 		return False
+
+def rank_channels():
+	''' classe les chaînes selon leur nombre d'inscrits ''' # straight from the reddit algorithm http://amix.dk/blog/post/19588
+	for channel in Channel.objects.all() : channel.count_subscribers()

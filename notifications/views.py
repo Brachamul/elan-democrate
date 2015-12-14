@@ -12,66 +12,78 @@ from .models import *
 @login_required
 def notifications(request):
 	"""	Réponse data contenant des notifications selon un filtre """
-	notifications = []
-	for notification in Notification.objects.filter(destinataire=request.user) : # try reducing it with [:12]
-		notification = check_if_is_system_notification(request, notification)
-		if not notification.is_system :
+	notification_events = NotificationEvent.objects.filter(recipient=request.user)
+	if notification_events :
+		notifications = []
+		for notification in notification_events  : # try reducing it with [:12]
+#			notification = check_if_is_system_notification(request, notification)
+#			if not notification.is_system :
+			
 			notification.fulltext = notification_fulltext(request, notification)
-			url = notification_url(notification)
-			if url : notification.url = url
-		notifications.append(notification)
+#				url = notification_url(notification)
+#				if url : notification.url = url
+			notifications.append(notification)
+	else : notifications = False
 	return render(request, 'notifications/notifications.html', {'notifications': notifications})
 
-def non_vues(request):
-	"""	Réponse data donnant le nombre de notification non vues """
-	return HttpResponse(Notification.objects.filter(destinataire=request.user, vue=False).count())
+def number_of_unseen_notifications(request):
+	"""	Counts the number of unseen notifications """
+	return HttpResponse(NotificationEvent.objects.filter(recipient=request.user, seen=False).count())
 
-def marquer_vues(request):
-	"""	Marque toutes les notifications de l'utilisateur comme étant vues """
-	notifications_non_vues = Notification.objects.filter(destinataire=request.user, vue=False)
-	for notification in notifications_non_vues :
-		notification.vue = True
+def mark_all_notifications_as_seen(request):
+	"""	Marks all of the user's notifications as seen """
+	unseen_notifications = NotificationEvent.objects.filter(recipient=request.user, seen=False)
+	for notification in unseen_notifications :
+		notification.seen = True
 		notification.save()
 	return HttpResponse()
 
 def notification_fulltext(request, notification):
 
-	action = notification.action
+	if notification.category == "OLD" : return "This is a legacy notification"
+	if notification.category == "TEST" : return "This is a test notification"
+	return "Le texte de cette notification n'a pas pu être généré."
 
-	acteur = notification.acteur
-	if acteur:
-		type_acteur = notification.type_acteur.name
-		if type_acteur == "utilisateur" :
-			acteur = User.objects.get(pk=notification.id_acteur).profil.nom_courant
+#	action = notification.action
+#
+#	acteur = notification.acteur
+#	if acteur:
+#		type_acteur = notification.type_acteur.name
+#		if type_acteur == "utilisateur" :
+#			acteur = User.objects.get(pk=notification.id_acteur).profil.nom_courant
+#
+#	cible = notification.cible
+#	if cible :
+#		type_cible = notification.type_cible.name
+#		if type_cible == "post" :
+#			if cible.author == request.user : cible = 'à votre post "{titre_du_post}"'.format(titre_du_post=cible)
+#			else : cible = 'au post "{titre_du_post}"'.format(titre_du_post=cible)
+#		if type_cible == "comment" :
+#			if cible.author == request.user : cible = 'à votre commentaire'
+#			else : cible = 'à un commentaire'
+#		if type_cible == "channel" :
+#			if request.user in cible.moderators.all() : cible = 'votre chaîne \"{}\"'.format(cible.name)
+#			else : cible = 'la chaîne \"{}\"'.format(cible.name)
+#			
+#
+#	lieu = notification.lieu
+#	if lieu :
+#		type_lieu = notification.type_lieu.name
+#		if type_lieu == "post" :
+#			if lieu.author == request.user : lieu = ('sur votre post "{titre_du_post}"'.format(titre_du_post=lieu))
+#			else : lieu = ('sur le post "{titre_du_post}"'.format(titre_du_post=lieu))
+#
+#	variables = { 'acteur': acteur, 'action': action, 'cible': cible, 'lieu': lieu }
+#	if cible and lieu : return '%(acteur)s %(action)s %(cible)s %(lieu)s.' % variables
+#	elif cible : return '%(acteur)s %(action)s %(cible)s.' % variables
+#	elif lieu : return '%(acteur)s %(action)s %(lieu)s.' % variables
+#	elif acteur : return '%(acteur)s %(action)s.' % variables
+#	else : return '%(action)s.' % variables # S'il n'y a qu'une action, c'est un message système
 
-	cible = notification.cible
-	if cible :
-		type_cible = notification.type_cible.name
-		if type_cible == "post" :
-			if cible.author == request.user : cible = 'à votre post "{titre_du_post}"'.format(titre_du_post=cible)
-			else : cible = 'au post "{titre_du_post}"'.format(titre_du_post=cible)
-		if type_cible == "comment" :
-			if cible.author == request.user : cible = 'à votre commentaire'
-			else : cible = 'à un commentaire'
-		if type_cible == "channel" :
-			if request.user in cible.moderators.all() : cible = 'votre chaîne \"{}\"'.format(cible.name)
-			else : cible = 'la chaîne \"{}\"'.format(cible.name)
-			
-
-	lieu = notification.lieu
-	if lieu :
-		type_lieu = notification.type_lieu.name
-		if type_lieu == "post" :
-			if lieu.author == request.user : lieu = ('sur votre post "{titre_du_post}"'.format(titre_du_post=lieu))
-			else : lieu = ('sur le post "{titre_du_post}"'.format(titre_du_post=lieu))
-
-	variables = { 'acteur': acteur, 'action': action, 'cible': cible, 'lieu': lieu }
-	if cible and lieu : return '%(acteur)s %(action)s %(cible)s %(lieu)s.' % variables
-	elif cible : return '%(acteur)s %(action)s %(cible)s.' % variables
-	elif lieu : return '%(acteur)s %(action)s %(lieu)s.' % variables
-	elif acteur : return '%(acteur)s %(action)s.' % variables
-	else : return '%(action)s.' % variables # S'il n'y a qu'une action, c'est un message système
-
+def notifyme(request):
+	'''Dummy notification used for testing purposes'''
+	NotificationEvent.objects.create( recipient = request.user, category = "TEST")
+	return HttpResponseRedirect('/')
 
 def notification_url(notification):
 	cible = notification.cible
@@ -92,10 +104,10 @@ def check_if_is_system_notification(request, notification):
 		notification.is_system = True
 		notification.fulltext = 'Ceci est une notification test !'
 		notification.url = '/'
+	if notification.action == "new-beta-signup" :
+		notification.is_system = True
+		notification.fulltext = "Quelqu'un s'est inscrit à la beta !"
+		notification.url = '/beta/list'
 	if notification.is_system : notification.icon = "cogs"
 	return notification
 
-def notifyme(request):
-	'''Dummy notification used for testing purposes'''
-	Notification.objects.create( destinataire = request.user, action = "dummy-notification" )
-	return HttpResponseRedirect('/')

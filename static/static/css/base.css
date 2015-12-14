@@ -134,9 +134,12 @@ a.btn-default:hover { background-color: #EC7C34; color: white; border-color: #D5
 /* ACTOR TEMPLATE */
 
 .actor {
+	display: inline-block;
 	position: relative;
 	padding-left: 2.2em;
 }
+
+.actors .actor { line-height: 1.5; } /* When there are multiple actors in a row, we assume they might cover several lines */
 
 .actor img { height: 1.428em; } /* Avatar sizing based on font-size */
 
@@ -156,3 +159,11 @@ a.btn-default:hover { background-color: #EC7C34; color: white; border-color: #D5
 
 a:link.actor, a:visited.actor { color: inherit; }
 a:hover.actor { color: #DC6C24; }
+
+
+
+
+
+/* NOTIFICATIONS */
+
+#loaded-notifications { min-height: 3em; max-height: 50vh; overflow-y: auto; border-radius: 3px; }
