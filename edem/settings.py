@@ -20,7 +20,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
-	'django_admin_bootstrapped', # bootstrap that admin !
 	'django.contrib.admin',
 	'django.contrib.auth',
 	'django.contrib.contenttypes',
@@ -38,7 +37,7 @@ INSTALLED_APPS = (
 	'mandats',
     'beta',
     'chatrooms',
-#    'notifications',
+    'notifications',
     'bootstrap3', # django-bootstrap3
     'debug_toolbar', # django-debug-toolbar
 )
