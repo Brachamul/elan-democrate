@@ -1,4 +1,5 @@
 Django==1.9
+django-autofixture==0.11.0
 django-autoslug==1.9.3
 django-bootstrap3==6.2.2
 django-debug-toolbar==1.4
