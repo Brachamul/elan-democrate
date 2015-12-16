@@ -1,6 +1,6 @@
 {% include "messages.html" %}
 
-<form class="ajax-form" action="{% url 'connexion' %}"
+<form class="ajax-form" action="{% url 'login' %}"
 	method="POST" role="form" enctype="multipart/form-data">{% csrf_token %}
 	{% comment %}Email ou n° adhérent {% endcomment %}
 	<input name="numero_ou_email" placeholder="Adresse email" id="numero_ou_email"
@@ -9,8 +9,7 @@
 	<p style="text-align: center;">
 		<button type="submit" class="btn orange">
 			<i class="fa fa-power-off" aria-hidden="true"></i> Connexion</button>
-{% comment %}<a class="btn orange action-button" href="{% url 'enregistrement' %}">{% endcomment %}
-		<a id="beta" class="btn orange" href="{% url 'beta' %}">
+		<a class="btn orange action-button" href="{% url 'signup' %}">
 			<i class="fa fa-arrow-right" aria-hidden="true"></i> Je créé mon compte</a>
 	</p>
 </form>

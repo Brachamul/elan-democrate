@@ -117,8 +117,8 @@ MESSAGE_LEVEL = messages.DEBUG
 
 MESSAGE_TAGS = { messages.ERROR: 'danger' }
 
-LOGIN_URL = 'connexion'
-LOGOUT_URL = 'deconnexion'
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
 LOGIN_REDIRECT_URL = 'accueil'
 
 

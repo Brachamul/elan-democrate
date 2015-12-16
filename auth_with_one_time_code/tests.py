@@ -11,7 +11,7 @@ from fichiers_adherents.models import Adherent
 from django.contrib.messages.storage.fallback import FallbackStorage
 
 #	from models import *
-from .views import enregistrement
+from .views import signup
 
 class RegistrationTestCases(TestCase):
 
@@ -28,11 +28,11 @@ class RegistrationTestCases(TestCase):
 			else :
 				key = adherent.num_adhérent
 
-			request = self.factory.post('/auth/enregistrement', data={'numero_ou_email': 'key'})
+			request = self.factory.post(reverse('signup'), data={'numero_ou_email': 'key'})
 			setattr(request, 'session', 'session')
 			messages = FallbackStorage(request)
 			setattr(request, '_messages', messages)
 
-			enregistrement(request)
+			signup(request)
 
 		print(mail.outbox)

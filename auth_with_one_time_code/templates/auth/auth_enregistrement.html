@@ -1,7 +1,7 @@
 {% include "messages.html" %}
 
 <h2>Créer un compte</h2>
-<form class="ajax-form" action="{% url 'enregistrement' %}"
+<form class="ajax-form" action="{% url 'signup' %}"
 	method="POST" role="form" enctype="multipart/form-data">{% csrf_token %}
 	<div class="form-group">
 		<label class="control-label">Veuillez indiquer votre numéro d'adhérent, ou l'adresse mail que vous avez fourni au MoDem lors de votre adhésion :</label>
@@ -10,7 +10,7 @@
 	</div>
 	<p>
 		<button type="submit" class="btn orange"><i class="fa fa-pencil" aria-hidden="true"></i> Je créé mon compte</button>
-		<a class="btn orange action-button" href="{% url 'connexion' %}">
+		<a class="btn orange action-button" href="{% url 'login' %}">
 			<i class="fa fa-arrow-right" aria-hidden="true"></i> J'ai déjà un compte !</a>
 	</p>
 </form>

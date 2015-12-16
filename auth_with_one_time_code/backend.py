@@ -63,7 +63,7 @@ def authenticate_and_login(request, username, code) :
 from django.core.mail import send_mail
 
 def SendAuthCode(user, code):
-	lien = site_url + reverse('url_connexion', kwargs={ 'username': user.username, 'code': code })
+	lien = site_url + reverse('confirm_login', kwargs={ 'username': user.username, 'code': code })
 	send_mail(
 		"[Élan Démocrate] Lien de connexion - {code}".format(code=code),
 		"Cliquez sur le lien suivant pour vous authentifier: \n\n"
@@ -97,7 +97,7 @@ def SendEmailConfirmationCode(request, adherent):
 	new_email_confirmation_instance = EmailConfirmationInstance(adherent=adherent, email=adherent.email)
 	new_email_confirmation_instance.save()
 	code = new_email_confirmation_instance.code
-	lien = site_url + reverse('url_enregistrement', kwargs={ 'num_adherent': str(adherent.num_adhérent), 'code': code })
+	lien = site_url + reverse('confirm_signup', kwargs={ 'num_adherent': str(adherent.num_adhérent), 'code': code })
 	send_mail(
 		"[Élan Démocrate] Création de votre compte",
 		"Bonjour,\n\n"
@@ -135,7 +135,7 @@ def SendEmailInvalidNotification(request, email):
 
 def SendEmailAlreadyRegistered(request, email):
 	# Si l'adresse correspond déjà à un adhérent
-	lien = site_url + reverse('connexion')
+	lien = site_url + reverse('login')
 	send_mail(
 		"[Élan Démocrate] Votre adresse mail est déjà associée à un compte",
 		"Bonjour,\n\n"
